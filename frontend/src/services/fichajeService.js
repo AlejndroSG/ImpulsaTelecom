@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost/ImpulsaTelecom/backend/api/fichajes.php';
+const API_URL = 'http://localhost/ImpulsaTelecom/backend/api/Fichaje.php';
 
 // Obtener fichaje actual del usuario
 export const getFichajeActual = async (id_usuario) => {

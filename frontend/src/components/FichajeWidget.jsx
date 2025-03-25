@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
-import { 
-  getFichajeActual, 
-  registrarEntrada, 
-  registrarSalida, 
-  registrarPausa 
-} from '../services/fichajeService';
+import axios from 'axios';
+const API_URL = 'http://localhost/ImpulsaTelecom/backend/api/Fichaje.php';
 
 const FichajeWidget = () => {
   const { user } = useAuth();
@@ -27,37 +23,37 @@ const FichajeWidget = () => {
       if (user && user.id) {
         try {
           setLoading(true);
-          const response = await getFichajeActual(user.id);
+          const response = await axios.get(`${API_URL}?route=actual&id_usuario=${user.id}`);
           
-          if (response.success && response.fichaje) {
-            setFichajeActual(response.fichaje);
-            setEstado(response.estado);
+          if (response.data.success && response.data.fichaje) {
+            setFichajeActual(response.data.fichaje);
+            setEstado(response.data.estado);
             setError(null); // Limpiar errores anteriores
             
             // Configurar tiempos
             const horaEntrada = new Date();
             horaEntrada.setHours(
-              parseInt(response.fichaje.hora_entrada.split(':')[0]),
-              parseInt(response.fichaje.hora_entrada.split(':')[1]),
-              parseInt(response.fichaje.hora_entrada.split(':')[2] || 0)
+              parseInt(response.data.fichaje.hora_entrada.split(':')[0]),
+              parseInt(response.data.fichaje.hora_entrada.split(':')[1]),
+              parseInt(response.data.fichaje.hora_entrada.split(':')[2] || 0)
             );
             setEntrada(horaEntrada);
             
-            if (response.fichaje.hora_salida) {
+            if (response.data.fichaje.hora_salida) {
               const horaSalida = new Date();
               horaSalida.setHours(
-                parseInt(response.fichaje.hora_salida.split(':')[0]),
-                parseInt(response.fichaje.hora_salida.split(':')[1]),
-                parseInt(response.fichaje.hora_salida.split(':')[2] || 0)
+                parseInt(response.data.fichaje.hora_salida.split(':')[0]),
+                parseInt(response.data.fichaje.hora_salida.split(':')[1]),
+                parseInt(response.data.fichaje.hora_salida.split(':')[2] || 0)
               );
               setSalida(horaSalida);
             }
             
             // Calcular tiempo pausado
-            if (response.pausas && response.pausas.length > 0) {
+            if (response.data.pausas && response.data.pausas.length > 0) {
               let tiempoPausadoTotal = 0;
               
-              response.pausas.forEach(pausa => {
+              response.data.pausas.forEach(pausa => {
                 if (pausa.hora_inicio && pausa.hora_fin) {
                   const inicioPausa = new Date();
                   inicioPausa.setHours(
@@ -144,14 +140,14 @@ const FichajeWidget = () => {
     
     try {
       setLoading(true);
-      const response = await registrarEntrada(user.id);
+      const response = await axios.get(`${API_URL}?route=entrada&id_usuario=${user.id}`);
       
-      if (response.success) {
+      if (response.data.success) {
         setEntrada(new Date());
         setEstado('trabajando');
-        setFichajeActual({ id: response.id_fichaje });
+        setFichajeActual({ id: response.data.id_fichaje });
       } else {
-        setError(response.message || 'Error al registrar entrada');
+        setError(response.data.message || 'Error al registrar entrada');
       }
     } catch (err) {
       console.error('Error al registrar entrada:', err);
@@ -166,13 +162,13 @@ const FichajeWidget = () => {
     
     try {
       setLoading(true);
-      const response = await registrarSalida(user.id, fichajeActual.id);
+      const response = await axios.get(`${API_URL}?route=salida&id_usuario=${user.id}&id_fichaje=${fichajeActual.id}`);
       
-      if (response.success) {
+      if (response.data.success) {
         setSalida(new Date());
         setEstado('finalizado');
       } else {
-        setError(response.message || 'Error al registrar salida');
+        setError(response.data.message || 'Error al registrar salida');
       }
     } catch (err) {
       console.error('Error al registrar salida:', err);
@@ -190,25 +186,25 @@ const FichajeWidget = () => {
       
       if (estado === 'trabajando') {
         // Iniciar pausa
-        const response = await registrarPausa(user.id, fichajeActual.id, 'inicio');
+        const response = await axios.get(`${API_URL}?route=pausa&id_usuario=${user.id}&id_fichaje=${fichajeActual.id}&tipo=inicio`);
         
-        if (response.success) {
+        if (response.data.success) {
           setPausaInicio(new Date());
           setEstado('pausado');
         } else {
-          setError(response.message || 'Error al iniciar pausa');
+          setError(response.data.message || 'Error al iniciar pausa');
         }
       } else if (estado === 'pausado') {
         // Finalizar pausa
-        const response = await registrarPausa(user.id, fichajeActual.id, 'fin');
+        const response = await axios.get(`${API_URL}?route=pausa&id_usuario=${user.id}&id_fichaje=${fichajeActual.id}&tipo=fin`);
         
-        if (response.success) {
+        if (response.data.success) {
           const tiempoPausaActual = (new Date() - pausaInicio);
           setTiempoPausado(prev => prev + tiempoPausaActual);
           setPausaInicio(null);
           setEstado('trabajando');
         } else {
-          setError(response.message || 'Error al finalizar pausa');
+          setError(response.data.message || 'Error al finalizar pausa');
         }
       }
     } catch (err) {

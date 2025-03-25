@@ -14,21 +14,6 @@
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Accept");
     header("Content-Type: application/json; charset=UTF-8");
-
-    // if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
-    //     exit(0);
-    // }
-
-    // function comprobarSesion(){
-    //     $response = array(
-    //         'id' => isset($_SESSION['id']) ? $_SESSION['id'] : null,
-    //         'username' => isset($_SESSION['username']) ? $_SESSION['username'] : null,
-    //         'tipo_usuario' => isset($_SESSION['tipo_usuario']) ? $_SESSION['tipo_usuario'] : null,
-    //         'sessionId' => session_id()
-    //     );
-        
-    //     echo json_encode($response);
-    // }
     
     function iniciarSesion(){
         if (!isset($_POST["email"]) || !isset($_POST["password"])) {
@@ -55,6 +40,50 @@
         
         $response = array('NIF' => $_SESSION['NIF'], 'tipo_usuario' => $_SESSION['tipo_usuario'], 'avatar' => $_SESSION['avatar'], 'nombre' => $_SESSION['nombre'], 'apellidos' => $_SESSION['apellidos']);
         echo json_encode($response);
+    }
+
+    function actual(){
+        if (!isset($_GET['id_usuario'])) {
+            echo json_encode(["error" => "Datos de fichaje incompletos"]);
+            return;
+        }
+        
+        require_once("../modelos/Fichaje.php");
+        $fichaje = new Fichaje();
+        echo json_encode($fichaje->getFichajeActual($_SESSION['NIF']));
+    }
+
+    function iniciarFichaje(){
+        if (!isset($_GET['id_usuario'])) {
+            echo json_encode(["error" => "Datos de fichaje incompletos"]);
+            return;
+        }
+        
+        require_once("../modelos/Fichaje.php");
+        $fichaje = new Fichaje();
+        $fichaje->iniciarFichaje($_GET['id_usuario']);
+    }
+
+    function pausarFichaje(){
+        if (!isset($_GET['id_usuario'])) {
+            echo json_encode(["error" => "Datos de fichaje incompletos"]);
+            return;
+        }
+        
+        require_once("../modelos/Fichaje.php");
+        $fichaje = new Fichaje();
+        $fichaje->pausarFichaje($_GET['id_usuario']);
+    }
+
+    function finalizarFichaje(){
+        if (!isset($_GET['id_usuario'])) {
+            echo json_encode(["error" => "Datos de fichaje incompletos"]);
+            return;
+        }
+        
+        require_once("../modelos/Fichaje.php");
+        $fichaje = new Fichaje();
+        $fichaje->finalizarFichaje($_GET['id_usuario']);
     }
 
     // function obtenerCursos(){
@@ -110,4 +139,12 @@
         $action = $_REQUEST["action"];
         $action(); //La cabra del sistema, lo acciona absolutamente todo
     }
+
+    // if ($_GET['route'] === 'actual') {
+    //     $id_usuario = $_GET['id_usuario'];
+    //     require_once("./modelos/Fichaje.php");
+    //     $fichaje = new Fichaje();
+    //     $resultado = $fichaje->getFichajeActual($id_usuario);
+    //     echo json_encode($resultado);
+    // }
 ?>

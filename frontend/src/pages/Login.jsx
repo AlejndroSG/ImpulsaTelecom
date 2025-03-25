@@ -26,7 +26,6 @@ const Login = () => {
         try {
             console.log('Intentando iniciar sesión con:', { email, password });
             const result = await login(email, password);
-            
             if (result.success) {
                 setMensaje('Credenciales correctas');
                 navigate('/inicio');
