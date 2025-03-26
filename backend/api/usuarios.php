@@ -1,9 +1,21 @@
 <?php
-// Configuración de CORS
+// Configurar cookies antes de cualquier salida
+ini_set('session.cookie_lifetime', '86400');    // 24 horas
+ini_set('session.gc_maxlifetime', '86400');     // 24 horas
+ini_set('session.use_strict_mode', '1');        // Modo estricto para seguridad
+ini_set('session.cookie_httponly', '1');        // Prevenir acceso JS a la cookie
+ini_set('session.use_only_cookies', '1');       // Solo usar cookies para sesiones
+ini_set('session.cookie_samesite', 'Lax');      // Configuración más compatible
+
+// Iniciar sesión
+session_start();
+
+// Configurar CORS
 header('Access-Control-Allow-Origin: http://localhost:5173');
 header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 header('Access-Control-Allow-Credentials: true');
+header('Content-Type: application/json; charset=UTF-8');
 
 // Manejar solicitud OPTIONS (pre-flight)
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -11,13 +23,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// Establecer tipo de contenido para respuestas no-OPTIONS
-header('Content-Type: application/json');
-
-include_once '../modelos/bd.php';
-
-$database = new db();
-$conn = $database->getConn();
+require_once "../modelos/bd.php";
+$modelo = new db();
 
 // Inicio de sesión
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'login') {
@@ -33,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
     
     // Verificar si la tabla tiene la estructura esperada
     $checkTableQuery = "SHOW COLUMNS FROM usuarios";
-    $tableResult = $conn->query($checkTableQuery);
+    $tableResult = $modelo->getConn()->query($checkTableQuery);
     $columns = [];
     
     if ($tableResult) {
@@ -59,12 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
     }
     
     // Preparar y ejecutar la consulta con manejo de errores
-    $stmt = $conn->prepare($query);
+    $stmt = $modelo->getConn()->prepare($query);
     
     if ($stmt === false) {
         echo json_encode([
             'success' => false, 
-            'message' => 'Error en la preparación de la consulta: ' . $conn->error,
+            'message' => 'Error en la preparación de la consulta: ' . $modelo->getConn()->error,
             'query' => $query,
             'columns' => $columns
         ]);
@@ -90,6 +97,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
         $storedPassword = $usuario[$passwordField] ?? '';
         
         if (password_verify($password, $storedPassword) || $password === $storedPassword) {
+            // Generar un ID de sesión seguro
+            session_regenerate_id(true);
+            
+            // Establecer variables de sesión
+            $_SESSION['NIF'] = $usuario[$idField];
+            $_SESSION['tipo_usuario'] = $usuario['tipo_Usu'] ?? $usuario['tipo_usuario'] ?? 'empleado';
+            $_SESSION['avatar'] = $usuario[$avatarField] ?? null;
+            $_SESSION['nombre'] = $usuario['nombre'];
+            $_SESSION['apellidos'] = $usuario['apellidos'] ?? '';
+            
+            // Verificar que la sesión se ha iniciado correctamente
+            if (!isset($_SESSION['NIF']) || empty($_SESSION['NIF'])) {
+                echo json_encode(["error" => "Error al iniciar sesión"]);
+                exit();
+            }
+            
             // Crear objeto de respuesta sin incluir la contraseña
             $usuarioResponse = [
                 'id' => $usuario[$idField],
@@ -150,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
     
     // Verificar si la tabla tiene la estructura esperada
     $checkTableQuery = "SHOW COLUMNS FROM usuarios";
-    $tableResult = $conn->query($checkTableQuery);
+    $tableResult = $modelo->getConn()->query($checkTableQuery);
     $columns = [];
     
     if ($tableResult) {
@@ -166,7 +189,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
     $avatarField = 'id_avatar'; // Usar siempre id_avatar como nombre de columna
     
     // Iniciar transacción
-    $conn->begin_transaction();
+    $modelo->getConn()->begin_transaction();
     
     try {
         // Preparar la consulta base según la estructura real de la base de datos
@@ -220,10 +243,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
         $types .= "s";
         
         // Preparar y ejecutar la consulta
-        $stmt = $conn->prepare($query);
+        $stmt = $modelo->getConn()->prepare($query);
         
         if ($stmt === false) {
-            throw new Exception("Error en la preparación de la consulta: " . $conn->error);
+            throw new Exception("Error en la preparación de la consulta: " . $modelo->getConn()->error);
         }
         
         $stmt->bind_param($types, ...$params);
@@ -234,13 +257,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
         
         // Verificar si se actualizó correctamente
         if ($stmt->affected_rows > 0 || $stmt->errno === 0) {
-            $conn->commit();
+            $modelo->getConn()->commit();
             echo json_encode(['success' => true, 'message' => 'Usuario actualizado correctamente']);
         } else {
             throw new Exception("No se pudo actualizar el usuario");
         }
     } catch (Exception $e) {
-        $conn->rollback();
+        $modelo->getConn()->rollback();
         echo json_encode(['success' => false, 'message' => 'Error al actualizar: ' . $e->getMessage()]);
     }
     
@@ -253,7 +276,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     
     // Verificar si la tabla tiene la estructura esperada
     $checkTableQuery = "SHOW COLUMNS FROM usuarios";
-    $tableResult = $conn->query($checkTableQuery);
+    $tableResult = $modelo->getConn()->query($checkTableQuery);
     $columns = [];
     
     if ($tableResult) {
@@ -279,12 +302,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     }
     
     // Preparar y ejecutar la consulta con manejo de errores
-    $stmt = $conn->prepare($query);
+    $stmt = $modelo->getConn()->prepare($query);
     
     if ($stmt === false) {
         echo json_encode([
             'success' => false, 
-            'message' => 'Error en la preparación de la consulta: ' . $conn->error,
+            'message' => 'Error en la preparación de la consulta: ' . $modelo->getConn()->error,
             'query' => $query
         ]);
         exit();
@@ -346,7 +369,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['id'])) {
     // Verificar si la tabla tiene la estructura esperada
     $checkTableQuery = "SHOW COLUMNS FROM usuarios";
-    $tableResult = $conn->query($checkTableQuery);
+    $tableResult = $modelo->getConn()->query($checkTableQuery);
     $columns = [];
     
     if ($tableResult) {
@@ -397,12 +420,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['id'])) {
     }
     
     // Ejecutar la consulta con manejo de errores
-    $result = $conn->query($query);
+    $result = $modelo->getConn()->query($query);
     
     if ($result === false) {
         echo json_encode([
             'success' => false, 
-            'message' => 'Error al ejecutar la consulta: ' . $conn->error,
+            'message' => 'Error al ejecutar la consulta: ' . $modelo->getConn()->error,
             'query' => $query
         ]);
         exit();
@@ -428,5 +451,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['id'])) {
     exit();
 }
 
-$conn->close();
+$modelo->getConn()->close();
 ?>

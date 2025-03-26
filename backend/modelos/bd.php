@@ -13,16 +13,43 @@
         }
         
         // Comprobamos si las credenciales son correctas
-        public function compCredenciales(String $email, String $psw){
-            $sentencia = "SELECT NIF, nombre, apellidos, email, pswd, dpto, centro, tipo_Usu, avatar FROM usuarios WHERE email = ? AND pswd = ?"; 
-            $consulta = $this->conn->prepare($sentencia);
-            $consulta->bind_param("ss", $email, $psw);
-            $consulta->bind_result($NIF, $nombre, $apellidos, $email, $pswd, $dpto, $centro, $tipo_Usu, $avatar);
-            $consulta->execute();
-            $consulta->fetch();
-            $comprobar = array("NIF" => $NIF, "nombre" => $nombre, "apellidos" => $apellidos, "email" => $email, "pswd" => $pswd, "dpto" => $dpto, "centro" => $centro, "tipo_Usu" => $tipo_Usu, "avatar" => $avatar);
-            $consulta->close();
-            return $comprobar;
+        public function compCredenciales(String $email, String $password){
+            try {
+                // Consulta para obtener los datos del usuario
+                $sentencia = "SELECT NIF, nombre, apellidos, email, pswd, dpto, centro, tipo_Usu, avatar FROM usuarios WHERE email = ?"; 
+                $consulta = $this->conn->prepare($sentencia);
+                $consulta->bind_param("s", $email);
+                $consulta->execute();
+                $resultado = $consulta->get_result();
+                
+                if ($resultado->num_rows === 1) {
+                    $usuario = $resultado->fetch_assoc();
+                    
+                    // Verificar la contraseña usando password_verify
+                    if (password_verify($password, $usuario['pswd'])) {
+                        // Crear un array con los datos necesarios
+                        $datosUsuario = array(
+                            'NIF' => $usuario['NIF'],
+                            'nombre' => $usuario['nombre'],
+                            'apellidos' => $usuario['apellidos'],
+                            'email' => $usuario['email'],
+                            'dpto' => $usuario['dpto'],
+                            'centro' => $usuario['centro'],
+                            'tipo_Usu' => $usuario['tipo_Usu'],
+                            'avatar' => $usuario['avatar']
+                        );
+                        
+                        return $datosUsuario;
+                    }
+                }
+                
+                // Si no se encuentra el usuario o la contraseña no coincide
+                return array('NIF' => null);
+                
+            } catch (Exception $e) {
+                error_log("Error en compCredenciales: " . $e->getMessage());
+                return array('NIF' => null);
+            }
         }
     }
 ?>
