@@ -8,9 +8,18 @@ const Header = ({ className }) => {
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/login');
+  const handleLogout = async () => {
+    try {
+      await logout();
+      // Esperar un momento para asegurar que la sesión se ha cerrado completamente
+      setTimeout(() => {
+        navigate('/login');
+      }, 500);
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+      // Intentar navegar de todos modos
+      navigate('/login');
+    }
   };
 
   const toggleMenu = () => {

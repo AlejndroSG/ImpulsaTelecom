@@ -4,10 +4,18 @@
     
     // Configuración de cabeceras para CORS y JSON
     $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
-    $allowed_origins = ['http://localhost:3000', 'http://localhost:5173'];
+    $allowed_origins = [
+        'http://localhost:5173',
+        'http://127.0.0.1:5173',
+        'http://127.0.0.1:63975',  // Origen del proxy de Cascade
+        'http://localhost:63975'
+    ];
     
     if (in_array($origin, $allowed_origins)) {
         header("Access-Control-Allow-Origin: $origin");
+    } else {
+        // Si no se reconoce el origen, permitir localhost por defecto
+        header('Access-Control-Allow-Origin: http://localhost:5173');
     }
     
     header("Access-Control-Allow-Credentials: true");
@@ -171,6 +179,63 @@
                 echo json_encode([
                     'success' => false,
                     'error' => 'Faltan datos para registrar la salida'
+                ]);
+            }
+            break;
+            
+        case 'pausa':
+            // Verificar que el usuario esté autenticado o que se proporcionó un ID
+            $id_usuario = isset($requestData['id_usuario']) ? $requestData['id_usuario'] : (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
+            $id_fichaje = isset($requestData['id_fichaje']) ? $requestData['id_fichaje'] : null;
+            
+            if ($id_usuario && $id_fichaje) {
+                // Obtener hora actual
+                $hora = date('H:i:s');
+                
+                $result = $fichaje->registrarPausa($id_usuario, $id_fichaje, $hora);
+                echo json_encode($result);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Faltan datos para registrar la pausa'
+                ]);
+            }
+            break;
+            
+        case 'reanudar':
+            // Verificar que el usuario esté autenticado o que se proporcionó un ID
+            $id_usuario = isset($requestData['id_usuario']) ? $requestData['id_usuario'] : (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
+            $id_fichaje = isset($requestData['id_fichaje']) ? $requestData['id_fichaje'] : null;
+            
+            if ($id_usuario && $id_fichaje) {
+                // Obtener hora actual
+                $hora = date('H:i:s');
+                
+                $result = $fichaje->reanudarTrabajo($id_usuario, $id_fichaje, $hora);
+                echo json_encode($result);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Faltan datos para reanudar el trabajo'
+                ]);
+            }
+            break;
+            
+        case 'nuevo':
+            // Verificar que el usuario esté autenticado o que se proporcionó un ID
+            $id_usuario = isset($requestData['id_usuario']) ? $requestData['id_usuario'] : (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
+            
+            if ($id_usuario) {
+                // Obtener fecha y hora actuales
+                $fecha = date('Y-m-d');
+                $hora = date('H:i:s');
+                
+                $result = $fichaje->registrarEntrada($id_usuario, $fecha, $hora);
+                echo json_encode($result);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Usuario no autenticado'
                 ]);
             }
             break;

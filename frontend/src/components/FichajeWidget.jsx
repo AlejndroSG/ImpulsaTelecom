@@ -4,7 +4,11 @@ import { useAuth } from '../context/AuthContext';
 import { FaRegClock, FaPlay, FaStop } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
+// Usar la misma URL base que en otros componentes
 const API_URL = 'http://localhost/ImpulsaTelecom/backend/controlador.php';
+
+// Asegurar que axios use credenciales
+axios.defaults.withCredentials = true;
 
 const FichajeWidget = () => {
   const { user } = useAuth();
@@ -105,7 +109,10 @@ const FichajeWidget = () => {
         // Establecer el estado a finalizado y mantener el fichaje actual
         // para poder mostrar el botón de nuevo fichaje
         setEstado('finalizado');
-        // No llamamos a cargarFichajeActual() para evitar que se sobrescriba el estado
+        // Esperar un momento antes de recargar para asegurar que el backend haya procesado el cambio
+        setTimeout(() => {
+          cargarFichajeActual(); // Recargar para obtener los datos actualizados
+        }, 500);
       } else {
         setError(response.data.error || 'Error al registrar salida');
       }
@@ -155,43 +162,62 @@ const FichajeWidget = () => {
 
   return (
     <motion.div 
-      className="bg-white rounded-lg shadow-md p-4"
+      className="bg-white rounded-xl shadow-md p-5 border-l-4 border-[#91e302] h-full"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-lg font-semibold text-gray-800 flex items-center">
-          <FaRegClock className="mr-2 text-blue-500" />
+      <div className="flex items-center justify-between mb-5">
+        <h3 className="text-xl font-semibold text-gray-800 flex items-center">
+          <FaRegClock className="mr-2 text-[#91e302]" />
           Control de Fichaje
         </h3>
       </div>
 
       {error && (
-        <div className="mb-4 p-2 bg-red-100 text-red-700 text-sm rounded">
+        <div className="mb-4 p-3 bg-red-50 text-[#c3515f] text-sm rounded-lg border border-[#c3515f]/20">
           {error}
         </div>
       )}
 
-      <div className="flex items-center justify-between mb-3">
-        <span className="text-sm text-gray-600">Estado:</span>
-        <span className={`text-sm font-medium px-2 py-1 rounded-full ${estado === 'trabajando' ? 'bg-green-100 text-green-800' : estado === 'finalizado' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}>
-          {estado === 'trabajando' ? 'Trabajando' : 
-           estado === 'finalizado' ? 'Finalizado' : 'Pendiente'}
-        </span>
+      <div className="bg-gray-50 p-4 rounded-lg mb-4 shadow-inner">
+        <div className="flex flex-col items-center justify-center mb-3">
+          <span className="text-sm text-gray-600 mb-2">Estado Actual</span>
+          <div className={`flex items-center px-4 py-2 rounded-full ${estado === 'trabajando' ? 'bg-[#91e302]/20 text-[#5a8a01]' : 
+                                                  estado === 'finalizado' ? 'bg-[#cccccc]/30 text-gray-700' : 
+                                                  'bg-gray-100 text-gray-700'}`}>
+            <span className={`w-3 h-3 rounded-full mr-2 ${estado === 'trabajando' ? 'bg-[#91e302]' : 
+                                                  estado === 'finalizado' ? 'bg-[#cccccc]' : 
+                                                  'bg-gray-400'}`}></span>
+            <span className="font-semibold">
+              {estado === 'trabajando' ? 'Trabajando' : 
+              estado === 'finalizado' ? 'Finalizado' : 'Pendiente'}
+            </span>
+          </div>
+        </div>
+
+        {estado === 'trabajando' && (
+          <div className="text-center mt-3">
+            <div className="text-sm text-gray-600 mb-1">Tiempo de trabajo</div>
+            <div className="text-2xl font-bold text-[#5a8a01] flex items-center justify-center">
+              <FaRegClock className="mr-2 text-[#91e302]" />
+              <span>En curso</span>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="flex justify-center space-x-2 mt-4">
+      <div className="flex justify-center mt-6">
         {estado === 'pendiente' && (
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-green-500 hover:bg-green-600 text-white text-sm py-2 px-4 rounded flex items-center justify-center"
+            className="bg-gradient-to-r from-[#91e302] to-[#5a8a01] text-white font-medium py-3 px-6 rounded-lg shadow-md flex items-center justify-center w-full transition-all duration-300 hover:shadow-lg"
             onClick={handleEntrada}
             disabled={loading}
           >
-            <FaPlay className="mr-1" />
-            {loading ? 'Procesando...' : 'Iniciar'}
+            <FaPlay className="mr-2" />
+            {loading ? 'Procesando...' : 'Iniciar Jornada'}
           </motion.button>
         )}
 
@@ -199,12 +225,12 @@ const FichajeWidget = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-red-500 hover:bg-red-600 text-white text-sm py-2 px-4 rounded flex items-center justify-center"
+            className="bg-gradient-to-r from-[#c3515f] to-[#a73848] text-white font-medium py-3 px-6 rounded-lg shadow-md flex items-center justify-center w-full transition-all duration-300 hover:shadow-lg"
             onClick={handleSalida}
             disabled={loading}
           >
-            <FaStop className="mr-1" />
-            {loading ? 'Procesando...' : 'Finalizar'}
+            <FaStop className="mr-2" />
+            {loading ? 'Procesando...' : 'Finalizar Jornada'}
           </motion.button>
         )}
 
@@ -212,14 +238,23 @@ const FichajeWidget = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="bg-green-500 hover:bg-green-600 text-white text-sm py-2 px-4 rounded flex items-center justify-center"
+            className="bg-gradient-to-r from-[#91e302] to-[#5a8a01] text-white font-medium py-3 px-6 rounded-lg shadow-md flex items-center justify-center w-full transition-all duration-300 hover:shadow-lg"
             onClick={handleNuevoFichaje}
             disabled={loading}
           >
-            <FaPlay className="mr-1" />
+            <FaPlay className="mr-2" />
             {loading ? 'Procesando...' : 'Nuevo Fichaje'}
           </motion.button>
         )}
+      </div>
+
+      <div className="mt-4 text-center">
+        <a href="/fichaje" className="text-sm text-[#5a8a01] hover:text-[#91e302] transition-colors duration-200 inline-flex items-center">
+          Ver detalles completos
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
+            <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+          </svg>
+        </a>
       </div>
     </motion.div>
   );
