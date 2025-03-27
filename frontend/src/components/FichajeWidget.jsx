@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { FaRegClock, FaPlay, FaStop } from 'react-icons/fa';
+import { FaRegClock, FaPlay, FaStop, FaPauseCircle, FaExclamationCircle } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
 // Usar la misma URL base que en otros componentes
@@ -16,6 +16,24 @@ const FichajeWidget = () => {
   const [estado, setEstado] = useState('pendiente');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [mostrarModalIncidencia, setMostrarModalIncidencia] = useState(false);
+  const [incidenciaTexto, setIncidenciaTexto] = useState('');
+
+  // Actualizar el reloj en tiempo real
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, []);
+
+  // Formatear tiempo
+  const formatTime = (date) => {
+    if (!date) return '--:--';
+    return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  };
 
   // Cargar fichaje actual
   const cargarFichajeActual = async () => {
@@ -56,31 +74,110 @@ const FichajeWidget = () => {
   // Registrar entrada
   const handleEntrada = async () => {
     if (!user || !user.id) return;
-    
+    setLoading(true);
+    setError(null);
+
     try {
-      setLoading(true);
-      setError(null);
-      const response = await axios.post(
-        `${API_URL}?action=entrada`,
-        { id_usuario: user.id },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }
-      );
-      
-      if (response.data.success) {
-        setEstado('trabajando');
-        setFichajeActual({ idRegistro: response.data.id_fichaje });
-        setError(null);
+      // Obtener la ubicación actual
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+            console.log('Coordenadas obtenidas:', latitude, longitude); // Debug
+            
+            // Obtener fecha y hora actual
+            const now = new Date();
+            const fecha = now.toISOString().split('T')[0];
+            const hora = now.toTimeString().split(' ')[0];
+            
+            // Convertir coordenadas a números para asegurar que no se envíen como strings
+            const latitudNum = parseFloat(latitude);
+            const longitudNum = parseFloat(longitude);
+            
+            // Verificar que las coordenadas sean números válidos
+            if (isNaN(latitudNum) || isNaN(longitudNum)) {
+              console.error('Coordenadas inválidas:', latitude, longitude);
+              setError('No se pudieron obtener coordenadas válidas');
+              setLoading(false);
+              return;
+            }
+            
+            // Datos para enviar al servidor
+            const datos = { 
+              id_usuario: user.id,
+              fecha: fecha,
+              hora: hora,
+              latitud: latitudNum,
+              longitud: longitudNum
+            };
+            
+            console.log('Datos a enviar:', datos); // Debug
+            
+            // Registrar entrada con geolocalización
+            const response = await axios.post(
+              `${API_URL}?action=entrada`,
+              datos,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              }
+            );
+            
+            console.log('Respuesta del servidor:', response.data); // Debug
+            
+            if (response.data.success) {
+              setEstado('trabajando');
+              setFichajeActual({ idRegistro: response.data.id_fichaje });
+              setError(null);
+              // Actualizar la lista de fichajes
+              if (typeof onFichajeChange === 'function') {
+                onFichajeChange();
+              }
+            } else {
+              setError(response.data.error || 'Error al registrar entrada');
+            }
+            setLoading(false);
+          },
+          (error) => {
+            console.error('Error al obtener ubicación:', error);
+            setError('No se pudo obtener tu ubicación. Por favor, permite el acceso a la ubicación en tu navegador.');
+            setLoading(false);
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 } // Mejores opciones para geolocalización
+        );
       } else {
-        setError(response.data.error || 'Error al registrar entrada');
+        // Si no hay geolocalización, hacer la solicitud sin ubicación
+        const now = new Date();
+        const fecha = now.toISOString().split('T')[0];
+        const hora = now.toTimeString().split(' ')[0];
+        
+        const response = await axios.post(
+          `${API_URL}?action=entrada`,
+          { 
+            id_usuario: user.id,
+            fecha: fecha,
+            hora: hora 
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+        );
+        
+        if (response.data.success) {
+          setEstado('trabajando');
+          setFichajeActual({ idRegistro: response.data.id_fichaje });
+          setError(null);
+        } else {
+          setError(response.data.error || 'Error al registrar entrada');
+        }
+        setLoading(false);
       }
     } catch (err) {
       console.error('Error al registrar entrada:', err);
       setError('Error al registrar entrada');
-    } finally {
       setLoading(false);
     }
   };
@@ -126,35 +223,137 @@ const FichajeWidget = () => {
 
   // Iniciar nuevo fichaje después de haber finalizado uno
   const handleNuevoFichaje = async () => {
+    if (!user || !user.id) return;
+    setLoading(true);
+    setError(null);
+    
+    // Primero establecemos el estado a pendiente
+    setEstado('pendiente');
+    setFichajeActual(null);
+
     try {
-      setLoading(true);
-      setError(null);
-      
-      // Primero establecemos el estado a pendiente
-      setEstado('pendiente');
-      setFichajeActual(null);
-      
-      // Luego registramos una nueva entrada
-      const response = await axios.post(
-        `${API_URL}?action=entrada`,
-        { id_usuario: user.id },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          }
-        }
-      );
-      
-      if (response.data.success) {
-        setEstado('trabajando');
-        setFichajeActual({ idRegistro: response.data.id_fichaje });
-        setError(null);
+      // Obtener la ubicación actual
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          async (position) => {
+            const { latitude, longitude } = position.coords;
+            console.log('Coordenadas obtenidas para nuevo fichaje:', latitude, longitude); // Debug
+            
+            // Obtener fecha y hora actual
+            const now = new Date();
+            const fecha = now.toISOString().split('T')[0];
+            const hora = now.toTimeString().split(' ')[0];
+            
+            // Convertir coordenadas a números para asegurar que no se envíen como strings
+            const latitudNum = parseFloat(latitude);
+            const longitudNum = parseFloat(longitude);
+            
+            // Verificar que las coordenadas sean números válidos
+            if (isNaN(latitudNum) || isNaN(longitudNum)) {
+              console.error('Coordenadas inválidas:', latitude, longitude);
+              setError('No se pudieron obtener coordenadas válidas');
+              setLoading(false);
+              return;
+            }
+            
+            // Datos para enviar al servidor
+            const datos = { 
+              id_usuario: user.id,
+              fecha: fecha,
+              hora: hora,
+              latitud: latitudNum,
+              longitud: longitudNum
+            };
+            
+            console.log('Datos a enviar:', datos); // Debug
+            
+            // Registrar entrada con geolocalización
+            const response = await axios.post(
+              `${API_URL}?action=entrada`,
+              datos,
+              {
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              }
+            );
+            
+            console.log('Respuesta del servidor para nuevo fichaje:', response.data); // Debug
+            
+            if (response.data.success) {
+              setEstado('trabajando');
+              setFichajeActual({ idRegistro: response.data.id_fichaje });
+              setError(null);
+              // Actualizar la lista de fichajes
+              if (typeof onFichajeChange === 'function') {
+                onFichajeChange();
+              }
+            } else {
+              setError(response.data.error || 'Error al registrar nueva entrada');
+            }
+            setLoading(false);
+          },
+          (error) => {
+            console.error('Error al obtener ubicación para nuevo fichaje:', error);
+            setError('No se pudo obtener tu ubicación. Por favor, permite el acceso a la ubicación en tu navegador.');
+            setLoading(false);
+          },
+          { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 } // Mejores opciones para geolocalización
+        );
       } else {
-        setError(response.data.error || 'Error al registrar nueva entrada');
+        // Si no hay geolocalización, hacer la solicitud sin ubicación
+        const now = new Date();
+        const fecha = now.toISOString().split('T')[0];
+        const hora = now.toTimeString().split(' ')[0];
+        
+        const response = await axios.post(
+          `${API_URL}?action=entrada`,
+          { 
+            id_usuario: user.id,
+            fecha: fecha,
+            hora: hora 
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+        );
+        
+        if (response.data.success) {
+          setEstado('trabajando');
+          setFichajeActual({ idRegistro: response.data.id_fichaje });
+          setError(null);
+        } else {
+          setError(response.data.error || 'Error al registrar nueva entrada');
+        }
+        setLoading(false);
       }
     } catch (err) {
       console.error('Error al iniciar nuevo fichaje:', err);
       setError('Error al iniciar nuevo fichaje');
+      setLoading(false);
+    }
+  };
+
+  // Manejar registro de incidencia
+  const handleIncidencia = async () => {
+    if (!user || !user.id || !fichajeActual || !incidenciaTexto.trim()) return;
+    
+    try {
+      setLoading(true);
+      setError(null);
+      // Aquí iría la llamada al backend para registrar la incidencia
+      // Por ahora simulamos una respuesta exitosa
+      setTimeout(() => {
+        setMostrarModalIncidencia(false);
+        setIncidenciaTexto('');
+        // Mostrar mensaje de éxito
+        alert('Incidencia registrada correctamente');
+      }, 1000);
+    } catch (err) {
+      console.error('Error al registrar incidencia:', err);
+      setError('Error al registrar incidencia');
     } finally {
       setLoading(false);
     }
@@ -172,6 +371,7 @@ const FichajeWidget = () => {
           <FaRegClock className="mr-2 text-[#91e302]" />
           Control de Fichaje
         </h3>
+        <div className="text-lg font-bold text-[#5a8a01]">{formatTime(currentTime)}</div>
       </div>
 
       {error && (
@@ -209,42 +409,81 @@ const FichajeWidget = () => {
 
       <div className="flex justify-center mt-6">
         {estado === 'pendiente' && (
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-[#91e302] to-[#5a8a01] text-white font-medium py-3 px-6 rounded-lg shadow-md flex items-center justify-center w-full transition-all duration-300 hover:shadow-lg"
-            onClick={handleEntrada}
-            disabled={loading}
-          >
-            <FaPlay className="mr-2" />
-            {loading ? 'Procesando...' : 'Iniciar Jornada'}
-          </motion.button>
+          <div className="flex flex-col space-y-3 w-full">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-[#91e302] to-[#5a8a01] text-white font-medium py-3 px-6 rounded-lg shadow-md flex items-center justify-center w-full transition-all duration-300 hover:shadow-lg"
+              onClick={handleEntrada}
+              disabled={loading}
+            >
+              <FaPlay className="mr-2" />
+              {loading ? 'Procesando...' : 'Iniciar Jornada'}
+            </motion.button>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-[#f0ad4e] to-[#ec971f] text-white font-medium py-2 px-4 rounded-lg shadow-md flex items-center justify-center w-full transition-all duration-300 hover:shadow-lg"
+              onClick={() => setMostrarModalIncidencia(true)}
+              disabled={loading}
+            >
+              <FaExclamationCircle className="mr-2" />
+              Registrar Incidencia
+            </motion.button>
+          </div>
         )}
 
         {estado === 'trabajando' && (
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-[#c3515f] to-[#a73848] text-white font-medium py-3 px-6 rounded-lg shadow-md flex items-center justify-center w-full transition-all duration-300 hover:shadow-lg"
-            onClick={handleSalida}
-            disabled={loading}
-          >
-            <FaStop className="mr-2" />
-            {loading ? 'Procesando...' : 'Finalizar Jornada'}
-          </motion.button>
+          <div className="flex flex-col space-y-3 w-full">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-[#c3515f] to-[#a73848] text-white font-medium py-3 px-6 rounded-lg shadow-md flex items-center justify-center w-full transition-all duration-300 hover:shadow-lg"
+              onClick={handleSalida}
+              disabled={loading}
+            >
+              <FaStop className="mr-2" />
+              {loading ? 'Procesando...' : 'Finalizar Jornada'}
+            </motion.button>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-[#f0ad4e] to-[#ec971f] text-white font-medium py-2 px-4 rounded-lg shadow-md flex items-center justify-center w-full transition-all duration-300 hover:shadow-lg"
+              onClick={() => setMostrarModalIncidencia(true)}
+              disabled={loading}
+            >
+              <FaExclamationCircle className="mr-2" />
+              Registrar Incidencia
+            </motion.button>
+          </div>
         )}
 
         {estado === 'finalizado' && (
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gradient-to-r from-[#91e302] to-[#5a8a01] text-white font-medium py-3 px-6 rounded-lg shadow-md flex items-center justify-center w-full transition-all duration-300 hover:shadow-lg"
-            onClick={handleNuevoFichaje}
-            disabled={loading}
-          >
-            <FaPlay className="mr-2" />
-            {loading ? 'Procesando...' : 'Nuevo Fichaje'}
-          </motion.button>
+          <div className="flex flex-col space-y-3 w-full">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-[#91e302] to-[#5a8a01] text-white font-medium py-3 px-6 rounded-lg shadow-md flex items-center justify-center w-full transition-all duration-300 hover:shadow-lg"
+              onClick={handleNuevoFichaje}
+              disabled={loading}
+            >
+              <FaPlay className="mr-2" />
+              {loading ? 'Procesando...' : 'Nuevo Fichaje'}
+            </motion.button>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-[#f0ad4e] to-[#ec971f] text-white font-medium py-2 px-4 rounded-lg shadow-md flex items-center justify-center w-full transition-all duration-300 hover:shadow-lg"
+              onClick={() => setMostrarModalIncidencia(true)}
+              disabled={loading}
+            >
+              <FaExclamationCircle className="mr-2" />
+              Registrar Incidencia
+            </motion.button>
+          </div>
         )}
       </div>
 
@@ -256,6 +495,36 @@ const FichajeWidget = () => {
           </svg>
         </a>
       </div>
+      
+      {/* Modal para registrar incidencia */}
+      {mostrarModalIncidencia && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-2xl p-6 w-full max-w-md">
+            <h3 className="text-xl font-bold text-gray-800 mb-4">Registrar Incidencia</h3>
+            <textarea 
+              className="w-full border border-gray-300 rounded-lg p-3 h-32 focus:outline-none focus:ring-2 focus:ring-[#91e302] focus:border-transparent"
+              placeholder="Describe la incidencia..."
+              value={incidenciaTexto}
+              onChange={(e) => setIncidenciaTexto(e.target.value)}
+            ></textarea>
+            <div className="flex justify-end space-x-3 mt-4">
+              <button 
+                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                onClick={() => setMostrarModalIncidencia(false)}
+              >
+                Cancelar
+              </button>
+              <button 
+                className="px-4 py-2 bg-[#91e302] text-white rounded-lg hover:bg-[#5a8a01] transition-colors"
+                onClick={handleIncidencia}
+                disabled={loading || !incidenciaTexto.trim()}
+              >
+                {loading ? 'Guardando...' : 'Guardar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </motion.div>
   );
 };

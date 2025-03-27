@@ -37,6 +37,7 @@ const Fichaje = () => {
   const [loadingHistorial, setLoadingHistorial] = useState(false);
   const [tiempoPausa, setTiempoPausa] = useState(0); // Tiempo acumulado en pausa
   const [horaPausa, setHoraPausa] = useState(null); // Hora de inicio de la pausa actual
+  const [tiempoPausaActual, setTiempoPausaActual] = useState(0); // Tiempo de la pausa actual en tiempo real
 
   // Cargar fichaje actual
   const cargarFichajeActual = async () => {
@@ -198,9 +199,15 @@ const Fichaje = () => {
         if (estado === 'pausado' && horaPausa) {
           // Si está en pausa, calcular tiempo hasta el inicio de la pausa
           tiempoTrabajadoMs = horaPausa - entrada - (tiempoPausa * 1000);
+          
+          // Calcular tiempo de pausa actual en tiempo real
+          const tiempoPausaActualMs = new Date() - horaPausa;
+          setTiempoPausaActual(Math.floor(tiempoPausaActualMs / 1000));
         } else {
           // Si está trabajando, calcular tiempo hasta ahora menos las pausas acumuladas
           tiempoTrabajadoMs = new Date() - entrada - (tiempoPausa * 1000);
+          // Resetear el tiempo de pausa actual si no está en pausa
+          setTiempoPausaActual(0);
         }
         
         // Convertir a horas
@@ -487,17 +494,27 @@ const Fichaje = () => {
                     <div className="flex items-center">
                       <FaRegClock className="text-[#91e302] mr-2 text-xl" />
                       <p className="text-3xl font-bold text-[#5a8a01]">
-                        {Math.floor(horasTrabajadas)}h {Math.floor((horasTrabajadas % 1) * 60)}m
+                        {Math.floor(horasTrabajadas)}h {Math.floor((horasTrabajadas % 1) * 60)}m {Math.floor(((horasTrabajadas % 1) * 60 % 1) * 60)}s
                       </p>
                     </div>
                   </div>
-                  {tiempoPausa > 0 && (
+                  {(tiempoPausa > 0 || (estado === 'pausado' && tiempoPausaActual > 0)) && (
                     <div className="text-center md:text-right">
                       <h3 className="text-lg font-medium text-gray-700 mb-2">Tiempo en pausa</h3>
                       <div className="flex items-center justify-center md:justify-end">
                         <FaPauseCircle className="text-[#cccccc] mr-2 text-xl" />
                         <p className="text-3xl font-bold text-gray-700">
-                          {Math.floor(tiempoPausa / 3600)}h {Math.floor((tiempoPausa % 3600) / 60)}m
+                          {estado === 'pausado' ? (
+                            // Mostrar tiempo de pausa acumulado + tiempo de pausa actual
+                            <>
+                              {Math.floor((tiempoPausa + tiempoPausaActual) / 3600)}h {Math.floor(((tiempoPausa + tiempoPausaActual) % 3600) / 60)}m {Math.floor((tiempoPausa + tiempoPausaActual) % 60)}s
+                            </>
+                          ) : (
+                            // Mostrar solo tiempo de pausa acumulado
+                            <>
+                              {Math.floor(tiempoPausa / 3600)}h {Math.floor((tiempoPausa % 3600) / 60)}m {Math.floor(tiempoPausa % 60)}s
+                            </>
+                          )}
                         </p>
                       </div>
                     </div>
@@ -623,10 +640,11 @@ const Fichaje = () => {
                         const tiempoPausaSegundos = parseInt(registro.tiempoPausa || 0);
                         const tiempoEfectivo = diff - tiempoPausaSegundos; // Restar tiempo de pausa
                         
-                        // Convertir a formato horas y minutos
+                        // Convertir a formato horas, minutos y segundos
                         const horas = Math.floor(tiempoEfectivo / 3600);
                         const minutos = Math.floor((tiempoEfectivo % 3600) / 60);
-                        tiempoTotal = `${horas}h ${minutos}m`;
+                        const segundos = Math.floor(tiempoEfectivo % 60);
+                        tiempoTotal = `${horas}h ${minutos}m ${segundos}s`;
                       }
                       
                       // Formatear tiempo de pausa
@@ -635,7 +653,8 @@ const Fichaje = () => {
                         const pausaSegundos = parseInt(registro.tiempoPausa);
                         const horas = Math.floor(pausaSegundos / 3600);
                         const minutos = Math.floor((pausaSegundos % 3600) / 60);
-                        tiempoPausaFormateado = `${horas}h ${minutos}m`;
+                        const segundos = Math.floor(pausaSegundos % 60);
+                        tiempoPausaFormateado = `${horas}h ${minutos}m ${segundos}s`;
                       }
                       
                       return (

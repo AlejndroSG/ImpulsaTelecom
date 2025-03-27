@@ -11,8 +11,9 @@ class Fichaje {
         $this->database = new db();
         $this->conn = $this->database->getConn();
         
-        // Asegurarse de que la tabla tiene las columnas necesarias para las pausas
+        // Asegurarse de que la tabla tenga las columnas necesarias para las pausas
         $this->verificarColumnasPausa();
+        $this->verificarColumnasLocalizacion();
     }
     
     // Verificar y crear columnas para pausas si no existen
@@ -28,6 +29,32 @@ class Fichaje {
                            ADD COLUMN horaReanudacion TIME NULL, 
                            ADD COLUMN tiempoPausa INT DEFAULT 0";
             $this->conn->query($alterQuery);
+        }
+    }
+    
+    // Verificar y crear columnas para localización si no existen
+    private function verificarColumnasLocalizacion() {
+        // Verificar si la columna latitud existe
+        $query = "SHOW COLUMNS FROM {$this->table_name} LIKE 'latitud'";
+        $result = $this->conn->query($query);
+        
+        if ($result->num_rows == 0) {
+            // Agregar columnas para localización
+            $alterQuery = "ALTER TABLE {$this->table_name} 
+                           ADD COLUMN latitud DECIMAL(10, 8) NULL, 
+                           ADD COLUMN longitud DECIMAL(11, 8) NULL,
+                           ADD COLUMN localizacion VARCHAR(255) NULL";
+            $this->conn->query($alterQuery);
+        } else {
+            // Verificar si la columna localizacion existe
+            $query = "SHOW COLUMNS FROM {$this->table_name} LIKE 'localizacion'";
+            $result = $this->conn->query($query);
+            
+            if ($result->num_rows == 0) {
+                // Agregar solo la columna de localizacion
+                $alterQuery = "ALTER TABLE {$this->table_name} ADD COLUMN localizacion VARCHAR(255) NULL";
+                $this->conn->query($alterQuery);
+            }
         }
     }
     
@@ -115,9 +142,16 @@ class Fichaje {
         return 'pendiente';
     }
     
-    // Registrar entrada
-    public function registrarEntrada($id_usuario, $fecha, $hora) {
-        // Verificar si ya existe un fichaje activo
+    // Registrar entrada con geolocalización
+    public function registrarEntrada($id_usuario, $fecha, $hora, $latitud = null, $longitud = null) {
+        // Verificar si existen las columnas necesarias
+        $this->verificarColumnasLocalizacion();
+        
+        // Registrar en el log para depuración
+        error_log("Fichaje.php - Registrando entrada para usuario: $id_usuario, fecha: $fecha, hora: $hora");
+        error_log("Fichaje.php - Coordenadas recibidas: latitud=$latitud, longitud=$longitud");
+        
+        // Verificar si ya hay un fichaje activo para el usuario
         $fichaje_actual = $this->getFichajeActual($id_usuario);
         
         if ($fichaje_actual['success'] && $fichaje_actual['estado'] === 'trabajando') {
@@ -127,38 +161,67 @@ class Fichaje {
             ];
         }
         
-        // Insertar nuevo fichaje
-        $query = "INSERT INTO registros 
-                  (NIF, fecha, horaInicio) 
-                  VALUES (?, ?, ?)";
-        
-        $stmt = $this->conn->prepare($query);
-        
-        if ($stmt === false) {
-            error_log("Error en la preparación de la consulta de inserción: " . $this->conn->error);
-            return [
-                'success' => false,
-                'error' => 'Error en la consulta de inserción: ' . $this->conn->error
-            ];
+        // Crear la cadena de localización si se proporcionaron coordenadas
+        $localizacion = null;
+        if ($latitud !== null && $longitud !== null) {
+            $localizacion = "$latitud, $longitud";
+            error_log("Fichaje.php - Cadena de localización creada: $localizacion");
         }
         
-        $stmt->bind_param("sss", $id_usuario, $fecha, $hora);
+        // Insertar nuevo fichaje
+        if ($latitud !== null && $longitud !== null) {
+            $query = "INSERT INTO registros 
+                      (NIF, fecha, horaInicio, latitud, longitud, localizacion, estado) 
+                      VALUES (?, ?, ?, ?, ?, ?, 'entrada')";
+            
+            $stmt = $this->conn->prepare($query);
+            
+            if ($stmt === false) {
+                error_log("Error en la preparación de la consulta de inserción: " . $this->conn->error);
+                return [
+                    'success' => false,
+                    'error' => 'Error en la consulta de inserción: ' . $this->conn->error
+                ];
+            }
+            
+            error_log("Fichaje.php - Ejecutando consulta con geolocalización");
+            $stmt->bind_param("sssdds", $id_usuario, $fecha, $hora, $latitud, $longitud, $localizacion);
+        } else {
+            // Sin geolocalización
+            $query = "INSERT INTO registros 
+                      (NIF, fecha, horaInicio, estado) 
+                      VALUES (?, ?, ?, 'entrada')";
+            
+            $stmt = $this->conn->prepare($query);
+            
+            if ($stmt === false) {
+                error_log("Error en la preparación de la consulta de inserción: " . $this->conn->error);
+                return [
+                    'success' => false,
+                    'error' => 'Error en la consulta de inserción: ' . $this->conn->error
+                ];
+            }
+            
+            error_log("Fichaje.php - Ejecutando consulta sin geolocalización");
+            $stmt->bind_param("sss", $id_usuario, $fecha, $hora);
+        }
         
         if ($stmt->execute()) {
             $id_fichaje = $this->conn->insert_id;
+            error_log("Fichaje.php - Entrada registrada correctamente con ID: $id_fichaje");
             
             return [
                 'success' => true,
-                'message' => 'Entrada registrada correctamente',
                 'id_fichaje' => $id_fichaje,
-                'estado' => 'trabajando'
+                'message' => 'Entrada registrada correctamente'
+            ];
+        } else {
+            error_log("Error al registrar entrada: " . $stmt->error);
+            return [
+                'success' => false,
+                'error' => 'Error al registrar entrada: ' . $stmt->error
             ];
         }
-        
-        return [
-            'success' => false,
-            'error' => 'Error al registrar la entrada'
-        ];
     }
     
     // Registrar pausa
@@ -406,6 +469,11 @@ class Fichaje {
             'success' => true,
             'registros' => $registros
         ];
+    }
+    
+    // Getter para la conexión a la base de datos
+    public function getConn() {
+        return $this->conn;
     }
 }
 ?>

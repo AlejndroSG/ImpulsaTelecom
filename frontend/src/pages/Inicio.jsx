@@ -6,6 +6,7 @@ import DashboardWidget from '../components/DashboardWidget'
 import CalendarioWidget from '../components/CalendarioWidget'
 import PerfilWidget from '../components/PerfilWidget'
 import FichajeWidget from '../components/FichajeWidget'
+import MapaWidget from '../components/MapaWidget'
 import { useAuth } from '../context/AuthContext'
 import { motion } from 'framer-motion'
 import InitialsAvatar from '../components/InitialsAvatar'
@@ -32,6 +33,7 @@ const Inicio = () => {
       { i: 'notificaciones', x: 6, y: 4, w: 6, h: 4 },
       { i: 'calendario', x: 0, y: 6, w: 6, h: 4 },
       { i: 'perfil', x: 6, y: 8, w: 6, h: 4 },
+      { i: 'mapa', x: 0, y: 10, w: 12, h: 12 },
     ]);
   
     const onLayoutChange = (newLayout) => {
@@ -274,6 +276,12 @@ const Inicio = () => {
                                             Editar perfil
                                         </Link>
                                     </div>
+                                </DashboardWidget>
+                            </div>
+
+                            <div key="mapa" className="widget-container">
+                                <DashboardWidget title="Mapa" icon="map">
+                                    <MapaWidget />
                                 </DashboardWidget>
                             </div>
                         </ReactGridLayout>
