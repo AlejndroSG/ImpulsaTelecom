@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from '../context/ThemeContext';
 
 /**
  * Componente que muestra un avatar con las iniciales del usuario
@@ -9,6 +10,8 @@ import React from 'react';
  * @param {string} size - Tamaño del avatar ('sm', 'md', 'lg')
  */
 const InitialsAvatar = ({ nombre, className = '', bgColor, textColor, size = 'md' }) => {
+  const { isDarkMode } = useTheme();
+  
   // Función para obtener las iniciales del nombre completo
   const getInitials = (name) => {
     if (!name) return '?';
@@ -52,7 +55,26 @@ const InitialsAvatar = ({ nombre, className = '', bgColor, textColor, size = 'md
     return color;
   };
   
-  const defaultBgColor = bgColor || getConsistentColor(nombre);
+  // Ajustar el brillo del color en modo oscuro para que sea más vibrante
+  const adjustColorForDarkMode = (color) => {
+    if (!isDarkMode) return color;
+    
+    // Convertir el color hexadecimal a RGB
+    const r = parseInt(color.substr(1, 2), 16);
+    const g = parseInt(color.substr(3, 2), 16);
+    const b = parseInt(color.substr(5, 2), 16);
+    
+    // Aumentar el brillo y la saturación para modo oscuro
+    const brightenFactor = 1.2;
+    const newR = Math.min(255, Math.floor(r * brightenFactor));
+    const newG = Math.min(255, Math.floor(g * brightenFactor));
+    const newB = Math.min(255, Math.floor(b * brightenFactor));
+    
+    // Convertir de nuevo a hexadecimal
+    return `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+  };
+  
+  const defaultBgColor = isDarkMode ? adjustColorForDarkMode(bgColor || getConsistentColor(nombre)) : (bgColor || getConsistentColor(nombre));
   const defaultTextColor = textColor || '#FFFFFF';
   
   // Asegurarse de que el componente se renderice incluso si nombre es undefined
@@ -60,8 +82,12 @@ const InitialsAvatar = ({ nombre, className = '', bgColor, textColor, size = 'md
   
   return (
     <div 
-      className={`rounded-full flex items-center justify-center font-semibold ${sizeClasses[size]} ${className}`}
-      style={{ backgroundColor: defaultBgColor, color: defaultTextColor }}
+      className={`rounded-full flex items-center justify-center font-semibold ${sizeClasses[size]} ${className} ${isDarkMode ? 'dark-glow' : ''}`}
+      style={{ 
+        backgroundColor: defaultBgColor, 
+        color: defaultTextColor,
+        transition: 'all 0.3s ease'
+      }}
     >
       {initials}
     </div>

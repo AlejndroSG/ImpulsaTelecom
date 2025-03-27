@@ -1,1 +1,116 @@
 @import "tailwindcss";
+
+/* Estilos base para modo claro y oscuro */
+:root {
+  --primary-color: #91e302;
+  --primary-hover: #7bc700;
+  --text-color: #333333;
+  --bg-color: #f5f7fa;
+  --card-bg: #ffffff;
+  --border-color: #e2e8f0;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --accent-color: #3b82f6;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --danger-color: #ef4444;
+  --muted-color: #6b7280;
+  --transition-speed: 0.3s;
+}
+
+/* Estilos para modo oscuro */
+.dark {
+  --primary-color: #a5ff0d;
+  --primary-hover: #b9ff4d;
+  --text-color: #e2e8f0;
+  --bg-color: #111827;
+  --card-bg: #1f2937;
+  --border-color: #374151;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+  --accent-color: #60a5fa;
+  --success-color: #34d399;
+  --warning-color: #fbbf24;
+  --danger-color: #f87171;
+  --muted-color: #9ca3af;
+}
+
+/* Estilos para el modo oscuro del header */
+.dark-header {
+  --header-bg-start: #111827;
+  --header-bg-mid: #4c1d95;
+  --header-bg-end: #111827;
+  --header-text: #f3f4f6;
+  --header-accent: #a5b4fc;
+  --header-button-bg: #4c1d95;
+  --header-button-hover: #6d28d9;
+  --header-shadow: rgba(76, 29, 149, 0.4);
+  --header-menu-bg: linear-gradient(to bottom, #1f2937, #111827);
+  --header-menu-border: #6d28d9;
+  --header-menu-hover: #4c1d95;
+}
+
+/* Estilos globales */
+body.dark {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+/* Transiciones suaves para todos los elementos */
+* {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-duration: var(--transition-speed);
+}
+
+/* Animaciones para el modo oscuro */
+@keyframes glow {
+  0% {
+    box-shadow: 0 0 5px 0 rgba(167, 139, 250, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px 5px rgba(167, 139, 250, 0.5);
+  }
+  100% {
+    box-shadow: 0 0 5px 0 rgba(167, 139, 250, 0.3);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Clase para añadir efecto de brillo a elementos en modo oscuro */
+.dark-glow {
+  animation: glow 3s infinite;
+}
+
+/* Clase para añadir efecto de pulso a elementos en modo oscuro */
+.dark-pulse {
+  animation: pulse 2s infinite;
+}
+
+/* Estilos para scrollbar en modo oscuro */
+body.dark ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body.dark ::-webkit-scrollbar-track {
+  background: #374151;
+}
+
+body.dark ::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
+}
+
+body.dark ::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
+}

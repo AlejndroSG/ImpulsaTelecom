@@ -3,10 +3,12 @@ import { Calendar } from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import './CalendarioWidget.css'; // Importamos los estilos personalizados
 import { motion } from 'framer-motion';
+import { useTheme } from '../context/ThemeContext';
 
 const CalendarioWidget = () => {
   const [date, setDate] = useState(new Date());
   const [viewMode, setViewMode] = useState('month');
+  const { isDarkMode } = useTheme();
   
   // Función para formatear la fecha seleccionada
   const formatDate = (date) => {
@@ -44,9 +46,9 @@ const CalendarioWidget = () => {
       const events = getEvents(date);
       if (events.length > 0) {
         const eventType = events[0].type;
-        if (eventType === 'work') return 'event-work';
-        if (eventType === 'deadline') return 'event-deadline';
-        if (eventType === 'training') return 'event-training';
+        if (eventType === 'work') return isDarkMode ? 'event-work dark-mode' : 'event-work';
+        if (eventType === 'deadline') return isDarkMode ? 'event-deadline dark-mode' : 'event-deadline';
+        if (eventType === 'training') return isDarkMode ? 'event-training dark-mode' : 'event-training';
       }
     }
     return null;
@@ -54,20 +56,21 @@ const CalendarioWidget = () => {
   
   return (
     <motion.div 
-      className="h-full w-full flex flex-col min-h-full"
+      className={`h-full w-full flex flex-col min-h-full ${isDarkMode ? 'dark-calendar-container' : ''}`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
+      style={{ minHeight: '400px' }}
     >
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-bold text-gray-800">Calendario</h3>
+        <h3 className={`text-xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>Calendario</h3>
         <div className="flex space-x-2">
           <button 
             onClick={() => setViewMode('month')} 
             className={`px-3 py-1 rounded-md text-sm font-medium ${
               viewMode === 'month' 
-                ? 'bg-[#91e302] text-white' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? isDarkMode ? 'bg-[#a5ff0d] text-gray-900' : 'bg-[#91e302] text-white'
+                : isDarkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
             Mes
@@ -76,8 +79,8 @@ const CalendarioWidget = () => {
             onClick={() => setViewMode('year')} 
             className={`px-3 py-1 rounded-md text-sm font-medium ${
               viewMode === 'year' 
-                ? 'bg-[#91e302] text-white' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? isDarkMode ? 'bg-[#a5ff0d] text-gray-900' : 'bg-[#91e302] text-white'
+                : isDarkMode ? 'bg-gray-700 text-gray-300 hover:bg-gray-600' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
           >
             Año
@@ -85,14 +88,14 @@ const CalendarioWidget = () => {
         </div>
       </div>
       
-      <div className="calendar-container flex-grow">
+      <div className={`calendar-container flex-grow ${isDarkMode ? 'dark-mode' : ''}`}>
         <Calendar 
           onChange={setDate} 
           value={date}
           view={viewMode}
           onViewChange={({ view }) => setViewMode(view)}
           tileClassName={tileClassName}
-          className="custom-calendar"
+          className={`custom-calendar ${isDarkMode ? 'dark-calendar' : ''}`}
           nextLabel={
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
@@ -107,8 +110,8 @@ const CalendarioWidget = () => {
       </div>
       
       <div className="mt-6">
-        <div className="p-4 bg-gray-50 rounded-lg">
-          <h4 className="font-semibold text-gray-800 mb-2">
+        <div className={`p-4 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} rounded-lg`}>
+          <h4 className={`font-semibold ${isDarkMode ? 'text-gray-100' : 'text-gray-800'} mb-2`}>
             {formatDate(date)}
           </h4>
           
@@ -119,18 +122,18 @@ const CalendarioWidget = () => {
                   key={index} 
                   className={`p-3 rounded-lg flex items-center ${
                     event.type === 'work' 
-                      ? 'bg-[#f0f9e0] border-l-4 border-[#91e302]' 
+                      ? isDarkMode ? 'bg-[#2a3b14] border-l-4 border-[#a5ff0d]' : 'bg-[#f0f9e0] border-l-4 border-[#91e302]'
                       : event.type === 'deadline' 
-                        ? 'bg-[#f9e0e3] border-l-4 border-[#c3515f]' 
-                        : 'bg-[#f0f0f0] border-l-4 border-[#cccccc]'
+                        ? isDarkMode ? 'bg-[#3b1414] border-l-4 border-[#ff5252]' : 'bg-[#f9e0e3] border-l-4 border-[#c3515f]'
+                        : isDarkMode ? 'bg-[#2a2a2a] border-l-4 border-[#666666]' : 'bg-[#f0f0f0] border-l-4 border-[#cccccc]'
                   }`}
                 >
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center mr-3 ${
                     event.type === 'work' 
-                      ? 'bg-[#91e302] text-white' 
+                      ? isDarkMode ? 'bg-[#a5ff0d] text-gray-900' : 'bg-[#91e302] text-white'
                       : event.type === 'deadline' 
-                        ? 'bg-[#c3515f] text-white' 
-                        : 'bg-[#cccccc] text-white'
+                        ? isDarkMode ? 'bg-[#ff5252] text-white' : 'bg-[#c3515f] text-white'
+                        : isDarkMode ? 'bg-[#666666] text-white' : 'bg-[#cccccc] text-white'
                   }`}>
                     {event.type === 'work' && (
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
@@ -149,17 +152,17 @@ const CalendarioWidget = () => {
                       </svg>
                     )}
                   </div>
-                  <span className="font-medium">{event.title}</span>
+                  <span className={`font-medium ${isDarkMode ? 'text-gray-200' : ''}`}>{event.title}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-gray-500 text-sm">No hay eventos programados para este día.</p>
+            <p className={isDarkMode ? 'text-gray-400 text-sm' : 'text-gray-500 text-sm'}>No hay eventos programados para este día.</p>
           )}
         </div>
       </div>
       
-      <div className="mt-4 border-t pt-4 flex items-center justify-between text-xs text-gray-500">
+      <div className={`mt-4 border-t ${isDarkMode ? 'border-gray-700 pt-4' : 'pt-4'} flex items-center justify-between text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
         <div className="flex items-center">
           <span className="inline-block w-3 h-3 bg-[#91e302] rounded-full mr-1"></span>
           <span>Reuniones</span>

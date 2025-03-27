@@ -8,14 +8,29 @@ import PerfilWidget from '../components/PerfilWidget'
 import FichajeWidget from '../components/FichajeWidget'
 import MapaWidget from '../components/MapaWidget'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../context/ThemeContext'
 import { motion } from 'framer-motion'
 import InitialsAvatar from '../components/InitialsAvatar'
 import { Link } from 'react-router-dom'
 
 const ReactGridLayout = WidthProvider(RGL);
 
+// Estilos para los widgets
+const widgetContainerStyle = {
+    height: 'auto',
+    width: '100%'
+};
+
+// Estilos específicos para widgets que necesitan más espacio
+const mapCalendarWidgetStyle = {
+    height: 'auto',
+    width: '100%',
+    minHeight: '300px'
+};
+
 const Inicio = () => {
     const { user } = useAuth();
+    const { isDarkMode } = useTheme();
     const [isLoading, setIsLoading] = useState(true);
     const isEmpleado = user?.tipo_usuario === 'empleado';
     
@@ -31,9 +46,9 @@ const Inicio = () => {
       { i: 'fichaje', x: 0, y: 0, w: 6, h: 6 },
       { i: 'tareas', x: 6, y: 0, w: 6, h: 4 },
       { i: 'notificaciones', x: 6, y: 4, w: 6, h: 4 },
-      { i: 'calendario', x: 0, y: 6, w: 6, h: 4 },
+      { i: 'calendario', x: 0, y: 6, w: 6, h: 9.5 },
       { i: 'perfil', x: 6, y: 8, w: 6, h: 4 },
-      { i: 'mapa', x: 0, y: 10, w: 12, h: 12 },
+      { i: 'mapa', x: 0, y: 10, w: 12, h: 10 },
     ]);
   
     const onLayoutChange = (newLayout) => {
@@ -71,19 +86,19 @@ const Inicio = () => {
     
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-[#f8f8f8] to-[#e6e6e6] flex items-center justify-center">
+            <div className={`min-h-screen ${isDarkMode ? 'bg-gradient-to-br from-gray-900 to-gray-800' : 'bg-gradient-to-br from-[#f8f8f8] to-[#e6e6e6]'} flex items-center justify-center transition-colors duration-300`}>
                 <div className="text-center">
                     <div className="flex justify-center mb-4">
-                        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-[#91e302]"></div>
+                        <div className={`animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 ${isDarkMode ? 'border-[#a5ff0d]' : 'border-[#91e302]'}`}></div>
                     </div>
-                    <h2 className="text-xl text-gray-700 font-medium">Cargando su espacio de trabajo...</h2>
+                    <h2 className={`text-xl ${isDarkMode ? 'text-gray-200' : 'text-gray-700'} font-medium`}>Cargando su espacio de trabajo...</h2>
                 </div>
             </div>
         );
     }
     
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#f8f8f8] to-[#e6e6e6] pt-6 pb-12">
+        <div className={`min-h-screen ${isDarkMode ? 'bg-gradient-to-br from-gray-900 to-gray-800' : 'bg-gradient-to-br from-[#f8f8f8] to-[#e6e6e6]'} px-4 pt-6 pb-12 transition-colors duration-300`}>
             <motion.div 
                 className="container mx-auto px-4"
                 initial="hidden"
@@ -91,20 +106,20 @@ const Inicio = () => {
                 variants={containerVariants}
             >
                 <motion.div 
-                    className="mb-8 bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#91e302]"
+                    className={`mb-8 ${isDarkMode ? 'bg-gray-800 border-[#a5ff0d] text-gray-100' : 'bg-white border-[#91e302] text-gray-800'} rounded-xl shadow-lg p-6 border-l-4 transition-colors duration-300`}
                     variants={itemVariants}
                 >
                     <div className="flex items-center justify-between">
                         <div>
-                            <h1 className="text-3xl font-bold text-gray-800">
-                                {getGreeting()}, <span className="text-[#91e302]">{user?.nombre || 'Usuario'}</span>
+                            <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-gray-100' : 'text-gray-800'}`}>
+                                {getGreeting()}, <span className={isDarkMode ? 'text-[#a5ff0d]' : 'text-[#91e302]'}>{user?.nombre || 'Usuario'}</span>
                             </h1>
-                            <p className="text-gray-600 mt-1">
+                            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mt-1`}>
                                 {new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
                             </p>
                         </div>
                         <div className="hidden md:block">
-                            <div className="bg-[#f0f9e0] text-[#5a8a01] px-4 py-2 rounded-lg font-medium border border-[#d1e9b0]">
+                            <div className={`${isDarkMode ? 'bg-gray-700 text-[#a5ff0d] border-gray-600' : 'bg-[#f0f9e0] text-[#5a8a01] border-[#d1e9b0]'} px-4 py-2 rounded-lg font-medium border transition-colors duration-300`}>
                                 {isEmpleado ? 'Panel de Empleado' : 'Panel de Administración'}
                             </div>
                         </div>
@@ -118,18 +133,22 @@ const Inicio = () => {
                             layout={layout}
                             onLayoutChange={onLayoutChange}
                             cols={12}
-                            rowHeight={100}
+                            rowHeight={60}
+                            autoSize={true}
                             isDraggable={true}
                             isResizable={true}
                             compactType="vertical"
                             draggableHandle=".drag-handle"
                             margin={[16, 16]}
+                            containerPadding={[0, 0]}
+                            useCSSTransforms={true}
+                            verticalCompact={true}
                         >
-                            <div key="fichaje" className="widget-container">
+                            <div key="fichaje" className="widget-container" style={widgetContainerStyle}>
                                 <FichajeWidget />
                             </div>
                             
-                            <div key="tareas" className="widget-container">
+                            <div key="tareas" className="widget-container" style={widgetContainerStyle}>
                                 <DashboardWidget title="Tareas Pendientes" icon="task">
                                     <ul className="space-y-3">
                                         <li className="flex items-center p-2 hover:bg-[#f0f9e0] rounded-lg transition-colors duration-200">
@@ -178,7 +197,7 @@ const Inicio = () => {
                                 </DashboardWidget>
                             </div>
 
-                            <div key="notificaciones" className="widget-container">
+                            <div key="notificaciones" className="widget-container" style={widgetContainerStyle}>
                                 <DashboardWidget title="Notificaciones" icon="notification">
                                     <div className="space-y-3">
                                         <div className="p-3 bg-[#f0f9e0] rounded-lg border-l-4 border-[#91e302] hover:shadow-md transition-shadow duration-200">
@@ -217,13 +236,13 @@ const Inicio = () => {
                                 </DashboardWidget>
                             </div>
 
-                            <div key="calendario" className="widget-container">
+                            <div key="calendario" className="widget-container" style={mapCalendarWidgetStyle}>
                                 <DashboardWidget title="Calendario" icon="calendar">
                                     <CalendarioWidget />
                                 </DashboardWidget>
                             </div>
 
-                            <div key="perfil" className="widget-container">
+                            <div key="perfil" className="widget-container" style={widgetContainerStyle}>
                                 <DashboardWidget title="Mi Perfil" icon="user">
                                     <div className="flex items-center space-x-4 mb-4">
                                         {user.avatar ? (
@@ -279,7 +298,7 @@ const Inicio = () => {
                                 </DashboardWidget>
                             </div>
 
-                            <div key="mapa" className="widget-container">
+                            <div key="mapa" className="widget-container" style={mapCalendarWidgetStyle}>
                                 <DashboardWidget title="Mapa" icon="map">
                                     <MapaWidget />
                                 </DashboardWidget>
@@ -328,7 +347,7 @@ const Inicio = () => {
                                     <h3 className="text-xl font-semibold">Configuración</h3>
                                     <div className="p-2 bg-white bg-opacity-20 rounded-lg">
                                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c.94-1.543-.826-3.31-2.37-2.37-.996-.608-2.296-.07-2.572 1.065z" />
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                         </svg>
                                     </div>
@@ -367,16 +386,6 @@ const Inicio = () => {
                         </div>
                     </motion.div>
                 )}
-            </motion.div>
-            
-            {/* Footer con información adicional */}
-            <motion.div 
-                className="container mx-auto px-4 mt-8 text-center text-gray-500 text-sm"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 1.2 }}
-            >
-                <p> 2025 ImpulsaTelecom - Todos los derechos reservados</p>
             </motion.div>
         </div>
     )

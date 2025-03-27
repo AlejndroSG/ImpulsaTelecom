@@ -2,19 +2,21 @@ import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import InitialsAvatar from './InitialsAvatar'
+import { useTheme } from '../context/ThemeContext'
 
 const Sidebar = ({ expanded }) => {
   const { user } = useAuth();
+  const { isDarkMode } = useTheme();
   
   return (
-    <aside className="bg-gray-100 h-full w-full">
+    <aside className={`${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'} h-full w-full transition-colors duration-300`}>
       {/* Perfil del usuario en el sidebar */}
       {expanded && (
-        <div className="p-4 mb-4 border-b pt-10 border-gray-200">
+        <div className={`p-4 mb-4 pt-10 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} border-b`}>
           <div className="flex items-center">
             <div 
               className="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center mr-3"
-              style={{ backgroundColor: user?.avatar?.color_fondo || '#f3f4f6' }}
+              style={{ backgroundColor: user?.avatar?.color_fondo || (isDarkMode ? '#374151' : '#f3f4f6') }}
             >
               {user?.avatar ? (
                 <img 
@@ -33,8 +35,8 @@ const Sidebar = ({ expanded }) => {
               )}
             </div>
             <div className="overflow-hidden">
-              <p className="font-medium text-gray-800 truncate">{user?.nombre || 'Usuario'}</p>
-              <p className="text-xs text-gray-500 truncate">{user?.correo || ''}</p>
+              <p className={`font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-800'} truncate`}>{user?.nombre || 'Usuario'}</p>
+              <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'} truncate`}>{user?.correo || ''}</p>
             </div>
           </div>
         </div>
@@ -44,10 +46,11 @@ const Sidebar = ({ expanded }) => {
         <NavLink 
           to="/inicio" 
           className={({isActive}) => 
-            `flex items-center p-3 rounded-lg transition-colors duration-200 ${
-              isActive 
+            `flex items-center p-3 rounded-lg transition-colors duration-200 ${isActive 
                 ? 'bg-[#78bd00] text-white' 
-                : 'hover:bg-gray-200 text-gray-700'
+                : isDarkMode 
+                  ? 'hover:bg-gray-800 text-gray-300' 
+                  : 'hover:bg-gray-200 text-gray-700'
             } ${expanded ? 'mx-2' : 'justify-center'}`
           }
         >
@@ -60,10 +63,11 @@ const Sidebar = ({ expanded }) => {
         <NavLink 
           to="/fichaje" 
           className={({isActive}) => 
-            `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${
-              isActive 
+            `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
                 ? 'bg-[#78bd00] text-white' 
-                : 'hover:bg-gray-200 text-gray-700'
+                : isDarkMode 
+                  ? 'hover:bg-gray-800 text-gray-300' 
+                  : 'hover:bg-gray-200 text-gray-700'
             } ${expanded ? 'mx-2' : 'justify-center'}`
           }
         >
@@ -76,10 +80,11 @@ const Sidebar = ({ expanded }) => {
         <NavLink 
           to="/calendario" 
           className={({isActive}) => 
-            `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${
-              isActive 
+            `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
                 ? 'bg-[#78bd00] text-white' 
-                : 'hover:bg-gray-200 text-gray-700'
+                : isDarkMode 
+                  ? 'hover:bg-gray-800 text-gray-300' 
+                  : 'hover:bg-gray-200 text-gray-700'
             } ${expanded ? 'mx-2' : 'justify-center'}`
           }
         >
@@ -92,10 +97,11 @@ const Sidebar = ({ expanded }) => {
         <NavLink 
           to="/tareas" 
           className={({isActive}) => 
-            `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${
-              isActive 
+            `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
                 ? 'bg-[#78bd00] text-white' 
-                : 'hover:bg-gray-200 text-gray-700'
+                : isDarkMode 
+                  ? 'hover:bg-gray-800 text-gray-300' 
+                  : 'hover:bg-gray-200 text-gray-700'
             } ${expanded ? 'mx-2' : 'justify-center'}`
           }
         >
@@ -108,10 +114,11 @@ const Sidebar = ({ expanded }) => {
         <NavLink 
           to="/perfil" 
           className={({isActive}) => 
-            `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${
-              isActive 
+            `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
                 ? 'bg-[#78bd00] text-white' 
-                : 'hover:bg-gray-200 text-gray-700'
+                : isDarkMode 
+                  ? 'hover:bg-gray-800 text-gray-300' 
+                  : 'hover:bg-gray-200 text-gray-700'
             } ${expanded ? 'mx-2' : 'justify-center'}`
           }
         >
