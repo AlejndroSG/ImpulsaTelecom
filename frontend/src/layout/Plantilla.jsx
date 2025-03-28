@@ -10,7 +10,8 @@ const Plantilla = () => {
   const { isDarkMode } = useTheme();
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [sidebarPinned, setSidebarPinned] = useState(false);
-  
+  const [currentTime, setCurrentTime] = useState(new Date());
+
   const handleMouseEnter = () => {
     if (!sidebarPinned) {
       setSidebarExpanded(true);
@@ -43,6 +44,15 @@ const Plantilla = () => {
     localStorage.setItem('sidebarPinned', JSON.stringify(sidebarPinned));
   }, [sidebarPinned]);
 
+  // Actualizar el reloj cada segundo
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <div className={`flex flex-col min-h-screen w-full ${isDarkMode ? 'bg-gray-800' : 'bg-gray-50'} transition-colors duration-300 overflow-x-hidden`}>
         <motion.div 
@@ -51,12 +61,46 @@ const Plantilla = () => {
           animate={{ width: '100%' }}
         >
             <motion.div 
-              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
+              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} relative overflow-hidden`}
               initial={{ width: sidebarPinned ? '240px' : '60px' }}
               animate={{ width: sidebarExpanded ? '240px' : '60px' }}
               transition={{ duration: 0.3, ease: 'easeInOut' }}
             >
-                {/* Espacio reservado para mantener el layout */}
+                {/* Logo minimalista de ImpulsaTelecom */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className={`relative transition-all duration-300 ${!sidebarExpanded ? 'scale-75' : 'scale-100'}`}>
+                    {/* Fondo con efecto de brillo */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-transparent overflow-hidden rounded-md">
+                      <div 
+                        className="absolute -inset-[100%] animate-[spin_8s_linear_infinite] opacity-30"
+                        style={{
+                          background: `conic-gradient(from 0deg at 50% 50%, transparent 0deg, ${isDarkMode ? '#91e302' : '#91e302'} 60deg, transparent 120deg)`
+                        }}
+                      ></div>
+                    </div>
+                    
+                    {/* Logo */}
+                    <div className={`relative flex items-center justify-center p-2 ${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-md z-10`}>
+                      {sidebarExpanded ? (
+                        // Logo expandido
+                        <div className="flex items-center">
+                          <div className="w-7 h-7 rounded-md bg-[#91e302] flex items-center justify-center shadow-md">
+                            <span className="text-white font-bold text-xs">IT</span>
+                          </div>
+                          <div className="ml-2">
+                            <div className={`text-xs font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Impulsa</div>
+                            <div className="text-xs font-semibold text-[#91e302]">Telecom</div>
+                          </div>
+                        </div>
+                      ) : (
+                        // Logo compacto
+                        <div className="w-7 h-7 rounded-md bg-[#91e302] flex items-center justify-center shadow-md">
+                          <span className="text-white font-bold text-xs">IT</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
             </motion.div>
             <motion.div 
               className={``}

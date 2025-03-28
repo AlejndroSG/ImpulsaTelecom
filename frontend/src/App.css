@@ -18,3 +18,22 @@ body{
   background: linear-gradient(135deg, var(--color-secondary) 0%, #ffffff 100%);
   font-family: 'Open Sans', sans-serif;
 }
+
+/* Animaciones personalizadas */
+@keyframes ping-slow {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+.animate-ping-slow {
+  animation: ping-slow 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+}

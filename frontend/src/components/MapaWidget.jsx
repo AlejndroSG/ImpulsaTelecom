@@ -129,7 +129,7 @@ const MapaWidget = () => {
 
   if (loading) {
     return (
-      <div className={`${isDarkMode ? 'bg-gray-800 border-[#a5ff0d]' : 'bg-white border-[#91e302]'} rounded-xl shadow-md p-5 border-l-4 h-full flex items-center justify-center transition-colors duration-300`}>
+      <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl shadow-md p-5 h-full flex items-center justify-center transition-colors duration-300`}>
         <div className={`animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 ${isDarkMode ? 'border-[#a5ff0d]' : 'border-[#91e302]'}`}></div>
       </div>
     );
@@ -137,7 +137,7 @@ const MapaWidget = () => {
 
   if (error) {
     return (
-      <div className={`${isDarkMode ? 'bg-gray-800 border-[#a5ff0d]' : 'bg-white border-[#91e302]'} rounded-xl shadow-md p-5 border-l-4 h-full transition-colors duration-300`}>
+      <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl shadow-md p-5 h-full transition-colors duration-300`}>
         <div className="text-center">
           <div className="text-red-500 mb-2">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -153,7 +153,7 @@ const MapaWidget = () => {
 
   return (
     <motion.div 
-      className={`${isDarkMode ? 'bg-gray-800 border-[#a5ff0d]' : 'bg-white border-[#91e302]'} rounded-xl shadow-md p-5 border-l-4 h-full flex flex-col transition-colors duration-300`}
+      className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-xl shadow-md p-5 h-full flex flex-col transition-colors duration-300`}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
@@ -186,11 +186,11 @@ const MapaWidget = () => {
               center={position} 
               zoom={15} 
               style={{ height: '100%', width: '100%', borderRadius: '0.5rem', minHeight: '450px' }}
-              className={`shadow-inner ${isDarkMode ? 'dark-map' : ''}`}
+              className="shadow-inner"
             >
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                url={isDarkMode ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png' : 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
+                url={'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'}
               />
               <LocationMarker position={position} setPosition={setPosition} />
               
