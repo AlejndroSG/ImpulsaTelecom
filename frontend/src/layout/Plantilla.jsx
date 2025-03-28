@@ -44,16 +44,30 @@ const Plantilla = () => {
   }, [sidebarPinned]);
 
   return (
-    <div className={`flex flex-col min-h-screen w-full ${isDarkMode ? 'bg-gray-800' : 'bg-gray-50'} transition-colors duration-300`}>
-        <div className={`flex fixed top-0 left-0 right-0 z-50 ${isDarkMode ? 'dark-header' : ''}`}>
-            <div className={`transition-all duration-300 ease-in-out ${sidebarExpanded ? 'w-[240px]' : 'w-[60px]'} ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+    <div className={`flex flex-col min-h-screen w-full ${isDarkMode ? 'bg-gray-800' : 'bg-gray-50'} transition-colors duration-300 overflow-x-hidden`}>
+        <motion.div 
+          className={`flex fixed top-0 left-0 right-0 z-50 ${isDarkMode ? 'dark-header' : ''}`}
+          initial={{ width: '100%' }}
+          animate={{ width: '100%' }}
+        >
+            <motion.div 
+              className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}
+              initial={{ width: sidebarPinned ? '240px' : '60px' }}
+              animate={{ width: sidebarExpanded ? '240px' : '60px' }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
                 {/* Espacio reservado para mantener el layout */}
-            </div>
-            <div className={`transition-all duration-300 ease-in-out ${sidebarExpanded ? 'w-[calc(100%-240px)]' : 'w-[calc(100%-60px)]'}`}>
+            </motion.div>
+            <motion.div 
+              className={``}
+              initial={{ width: `calc(100% - ${sidebarPinned ? '240px' : '60px'})` }}
+              animate={{ width: `calc(100% - ${sidebarExpanded ? '240px' : '60px'})` }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
                 <Header/>
-            </div>
-        </div>
-        <div className="flex flex-1 pt-16">
+            </motion.div>
+        </motion.div>
+        <div className="flex flex-1 pt-16 overflow-x-hidden">
             <motion.div 
               className={`fixed top-16 bottom-0 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'} z-40 overflow-hidden shadow-lg`}
               initial={{ width: sidebarPinned ? '240px' : '60px' }}
@@ -91,7 +105,7 @@ const Plantilla = () => {
                 </div>
             </motion.div>
             <motion.main 
-                className={`flex-1 ${isDarkMode ? 'bg-gray-800 text-gray-100' : 'bg-gray-50'} py-5 overflow-x-hidden`}
+                className={`flex-1 ${isDarkMode ? 'bg-gray-800 text-gray-100' : 'bg-gray-50'} pt-5 overflow-x-hidden`}
                 initial={{ marginLeft: sidebarPinned ? '240px' : '60px' }}
                 animate={{ marginLeft: sidebarExpanded ? '240px' : '60px' }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
@@ -103,9 +117,9 @@ const Plantilla = () => {
             initial={{ marginLeft: sidebarPinned ? '240px' : '60px' }}
             animate={{ marginLeft: sidebarExpanded ? '240px' : '60px' }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
-            className="w-[calc(100%-240px)]"  
+            className="w-full overflow-x-hidden"  
         >
-            <Footer className={`mt-auto ${isDarkMode ? 'bg-gray-900 text-gray-200' : ''}`}/>
+            <Footer className={`${isDarkMode ? 'bg-gray-900 text-gray-200' : ''}`}/>
         </motion.div>
     </div>
   )

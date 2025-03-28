@@ -14,6 +14,7 @@ const Perfil = () => {
     telefono: user?.telefono || '',
     password: '',
     confirmarPassword: '',
+    permitir_pausas: user?.permitir_pausas !== undefined ? user.permitir_pausas : true,
   });
   
   const [selectedAvatar, setSelectedAvatar] = useState(user?.id_avatar || null);
@@ -31,6 +32,7 @@ const Perfil = () => {
         telefono: user.telefono || '',
         password: '',
         confirmarPassword: '',
+        permitir_pausas: user.permitir_pausas !== undefined ? user.permitir_pausas : true,
       });
       setSelectedAvatar(user.id_avatar || null);
     }
@@ -54,6 +56,7 @@ const Perfil = () => {
         telefono: user?.telefono || '',
         password: '',
         confirmarPassword: '',
+        permitir_pausas: user?.permitir_pausas !== undefined ? user.permitir_pausas : true,
       });
       setSelectedAvatar(user?.id_avatar || null);
     }
@@ -77,7 +80,8 @@ const Perfil = () => {
         nombre: formData.nombre,
         correo: formData.correo,
         telefono: formData.telefono,
-        id_avatar: selectedAvatar
+        id_avatar: selectedAvatar,
+        permitir_pausas: formData.permitir_pausas
       };
       console.log(datosActualizados)
       // Solo incluir contraseña si se ha ingresado una nueva
@@ -284,10 +288,8 @@ const Perfil = () => {
                         name="nombre"
                         value={formData.nombre}
                         onChange={handleChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         disabled={!modoEdicion}
-                        className={`w-full px-4 py-2 rounded-lg border ${
-                          modoEdicion ? 'border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500' : 'border-gray-200 bg-gray-50'
-                        }`}
                       />
                     </div>
                     <div>
@@ -297,10 +299,8 @@ const Perfil = () => {
                         name="correo"
                         value={formData.correo}
                         onChange={handleChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         disabled={!modoEdicion}
-                        className={`w-full px-4 py-2 rounded-lg border ${
-                          modoEdicion ? 'border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500' : 'border-gray-200 bg-gray-50'
-                        }`}
                       />
                     </div>
                     <div>
@@ -310,11 +310,34 @@ const Perfil = () => {
                         name="telefono"
                         value={formData.telefono}
                         onChange={handleChange}
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         disabled={!modoEdicion}
-                        className={`w-full px-4 py-2 rounded-lg border ${
-                          modoEdicion ? 'border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500' : 'border-gray-200 bg-gray-50'
-                        }`}
                       />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Permitir Pausas</label>
+                      <div className="mt-2">
+                        <label className="inline-flex items-center cursor-pointer">
+                          <input
+                            type="checkbox"
+                            name="permitir_pausas"
+                            checked={formData.permitir_pausas}
+                            onChange={(e) => {
+                              setFormData(prev => ({
+                                ...prev,
+                                permitir_pausas: e.target.checked
+                              }));
+                            }}
+                            className="sr-only peer"
+                            disabled={!modoEdicion}
+                          />
+                          <div className={`relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer ${formData.permitir_pausas ? 'peer-checked:after:translate-x-full peer-checked:after:border-white peer-checked:bg-blue-600' : ''} after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${!modoEdicion ? 'opacity-70' : ''}`}></div>
+                          <span className="ml-3 text-sm font-medium text-gray-700">
+                            {formData.permitir_pausas ? 'Habilitadas' : 'Deshabilitadas'}
+                          </span>
+                        </label>
+                        <p className="mt-1 text-xs text-gray-500">Permite a los empleados pausar su fichaje durante la jornada laboral.</p>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -342,7 +365,7 @@ const Perfil = () => {
                         name="password"
                         value={formData.password}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Dejar en blanco para mantener la actual"
                       />
                     </div>
@@ -353,7 +376,7 @@ const Perfil = () => {
                         name="confirmarPassword"
                         value={formData.confirmarPassword}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Confirmar nueva contraseña"
                       />
                     </div>

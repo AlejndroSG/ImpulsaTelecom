@@ -541,16 +541,18 @@ const Fichaje = () => {
               
               {estado === 'trabajando' && (
                 <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full justify-center">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-gradient-to-r from-[#cccccc] to-[#a0a0a0] text-white font-bold py-4 px-8 rounded-xl shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-300"
-                    onClick={handlePausa}
-                    disabled={loading}
-                  >
-                    <FaPauseCircle className="w-6 h-6 mr-2" />
-                    Iniciar Pausa
-                  </motion.button>
+                  {user && user.permitir_pausas !== false && (
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="bg-gradient-to-r from-[#cccccc] to-[#a0a0a0] text-white font-bold py-4 px-8 rounded-xl shadow-lg flex items-center justify-center hover:shadow-xl transition-all duration-300"
+                      onClick={handlePausa}
+                      disabled={loading}
+                    >
+                      <FaPauseCircle className="w-6 h-6 mr-2" />
+                      Iniciar Pausa
+                    </motion.button>
+                  )}
                   
                   <motion.button
                     whileHover={{ scale: 1.05 }}

@@ -201,62 +201,58 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
     }
     
     // Determinar los nombres de columna correctos
-    $idField = in_array('NIF', $columns) ? 'NIF' : 'id';
     $emailField = in_array('email', $columns) ? 'email' : 'correo';
     $passwordField = in_array('pswd', $columns) ? 'pswd' : 'password';
+    $idField = in_array('NIF', $columns) ? 'NIF' : 'id';
     $avatarField = 'id_avatar'; // Usar siempre id_avatar como nombre de columna
+    
+    // Verificar si existe la columna permitir_pausas
+    $permitirPausasField = in_array('permitir_pausas', $columns) ? 'permitir_pausas' : null;
+    
+    // Verificar si existe la columna telefono
+    $telefonoField = in_array('telefono', $columns) ? 'telefono' : null;
+    
+    // Construir la consulta SQL base
+    $updateFields = [
+        "nombre = ?"
+    ];
+    
+    $params = [
+        $data['nombre']
+    ];
+    
+    $types = "s"; // string
+    
+    // Añadir campo email/correo
+    $updateFields[] = "$emailField = ?";
+    $params[] = $data['correo'];
+    $types .= "s"; // string
+    
+    // Añadir campo telefono si existe
+    if ($telefonoField && isset($data['telefono'])) {
+        $updateFields[] = "$telefonoField = ?";
+        $params[] = $data['telefono'] ?? null;
+        $types .= "s"; // string
+    }
+    
+    // Añadir campo avatar
+    $updateFields[] = "$avatarField = ?";
+    $params[] = $data['id_avatar'] !== '' ? $data['id_avatar'] : null;
+    $types .= "i"; // integer
+    
+    // Añadir campo permitir_pausas si existe
+    if ($permitirPausasField && isset($data['permitir_pausas'])) {
+        $updateFields[] = "$permitirPausasField = ?";
+        $params[] = $data['permitir_pausas'] ? 1 : 0;
+        $types .= "i"; // integer
+    }
     
     // Iniciar transacción
     $modelo->getConn()->begin_transaction();
     
     try {
         // Preparar la consulta base según la estructura real de la base de datos
-        $query = "UPDATE usuarios SET nombre = ?";
-        $params = [$data['nombre']];
-        $types = "s";
-        
-        // Añadir campos opcionales si están presentes y existen en la tabla
-        if (isset($data['apellidos']) && in_array('apellidos', $columns)) {
-            $query .= ", apellidos = ?";
-            $params[] = $data['apellidos'];
-            $types .= "s";
-        }
-        
-        if (isset($data['email']) && in_array($emailField, $columns)) {
-            $query .= ", $emailField = ?";
-            $params[] = $data['email'];
-            $types .= "s";
-        }
-        
-        if (isset($data['dpto']) && in_array('dpto', $columns)) {
-            $query .= ", dpto = ?";
-            $params[] = $data['dpto'];
-            $types .= "s";
-        }
-        
-        if (isset($data['centro']) && in_array('centro', $columns)) {
-            $query .= ", centro = ?";
-            $params[] = $data['centro'];
-            $types .= "s";
-        }
-        
-        // Si se proporciona un avatar, actualizarlo
-        if (isset($data['id_avatar']) && in_array($avatarField, $columns)) {
-            $query .= ", $avatarField = ?";
-            $params[] = $data['id_avatar'];
-            $types .= "i";
-        }
-        
-        // Si se proporciona una contraseña, actualizarla
-        if (isset($data['password']) && !empty($data['password']) && in_array($passwordField, $columns)) {
-            $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
-            $query .= ", $passwordField = ?";
-            $params[] = $hashedPassword;
-            $types .= "s";
-        }
-        
-        // Completar la consulta con la condición WHERE
-        $query .= " WHERE $idField = ?";
+        $query = "UPDATE usuarios SET " . implode(", ", $updateFields) . " WHERE $idField = ?";
         $params[] = $userId;
         $types .= "s";
         
@@ -357,6 +353,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
             'centro' => $usuario['centro'] ?? '',
             'id_avatar' => $usuario[$avatarField] ?? null
         ];
+        
+        // Añadir permitir_pausas si existe
+        if (in_array('permitir_pausas', $columns) && isset($usuario['permitir_pausas'])) {
+            $usuarioResponse['permitir_pausas'] = (bool)$usuario['permitir_pausas'];
+        }
         
         // Si tiene avatar, incluir la información
         if ($usuario[$avatarField]) {
