@@ -279,85 +279,9 @@
             $longitud = isset($requestData['longitud']) ? $requestData['longitud'] : null;
             
             if ($id_usuario && $latitud !== null && $longitud !== null) {
-                // Verificar si existe la tabla de ubicaciones
-                $query = "SHOW TABLES LIKE 'ubicaciones_usuarios'";
-                $result = $fichaje->getConn()->query($query);
-                
-                if ($result->num_rows == 0) {
-                    // Crear la tabla de ubicaciones
-                    $createTable = "CREATE TABLE ubicaciones_usuarios (
-                        id INT AUTO_INCREMENT PRIMARY KEY,
-                        id_usuario VARCHAR(20) NOT NULL,
-                        nombre VARCHAR(100),
-                        latitud DECIMAL(10, 8) NOT NULL,
-                        longitud DECIMAL(11, 8) NOT NULL,
-                        fecha_actualizacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                        INDEX (id_usuario)
-                    )";
-                    $fichaje->getConn()->query($createTable);
-                }
-                
-                // Obtener el nombre del usuario
-                $nombre = "Usuario";
-                if (isset($requestData['nombre'])) {
-                    $nombre = $requestData['nombre'];
-                } else {
-                    // Intentar obtener el nombre de la base de datos
-                    $queryNombre = "SELECT nombre FROM usuarios WHERE NIF = ?";
-                    $stmtNombre = $fichaje->getConn()->prepare($queryNombre);
-                    if ($stmtNombre) {
-                        $stmtNombre->bind_param("s", $id_usuario);
-                        $stmtNombre->execute();
-                        $resultNombre = $stmtNombre->get_result();
-                        if ($resultNombre->num_rows > 0) {
-                            $rowNombre = $resultNombre->fetch_assoc();
-                            $nombre = $rowNombre['nombre'];
-                        }
-                    }
-                }
-                
-                // Verificar si ya existe un registro para este usuario
-                $queryCheck = "SELECT id FROM ubicaciones_usuarios WHERE id_usuario = ?";
-                $stmtCheck = $fichaje->getConn()->prepare($queryCheck);
-                $stmtCheck->bind_param("s", $id_usuario);
-                $stmtCheck->execute();
-                $resultCheck = $stmtCheck->get_result();
-                
-                if ($resultCheck->num_rows > 0) {
-                    // Actualizar ubicación existente
-                    $queryUpdate = "UPDATE ubicaciones_usuarios SET latitud = ?, longitud = ?, nombre = ? WHERE id_usuario = ?";
-                    $stmtUpdate = $fichaje->getConn()->prepare($queryUpdate);
-                    $stmtUpdate->bind_param("ddss", $latitud, $longitud, $nombre, $id_usuario);
-                    
-                    if ($stmtUpdate->execute()) {
-                        echo json_encode([
-                            'success' => true,
-                            'message' => 'Ubicación actualizada correctamente'
-                        ]);
-                    } else {
-                        echo json_encode([
-                            'success' => false,
-                            'error' => 'Error al actualizar la ubicación'
-                        ]);
-                    }
-                } else {
-                    // Insertar nueva ubicación
-                    $queryInsert = "INSERT INTO ubicaciones_usuarios (id_usuario, nombre, latitud, longitud) VALUES (?, ?, ?, ?)";
-                    $stmtInsert = $fichaje->getConn()->prepare($queryInsert);
-                    $stmtInsert->bind_param("ssdd", $id_usuario, $nombre, $latitud, $longitud);
-                    
-                    if ($stmtInsert->execute()) {
-                        echo json_encode([
-                            'success' => true,
-                            'message' => 'Ubicación guardada correctamente'
-                        ]);
-                    } else {
-                        echo json_encode([
-                            'success' => false,
-                            'error' => 'Error al guardar la ubicación'
-                        ]);
-                    }
-                }
+                // Guardar la ubicación del usuario
+                $result = $fichaje->guardarUbicacion($id_usuario, $latitud, $longitud);
+                echo json_encode($result);
             } else {
                 echo json_encode([
                     'success' => false,
@@ -371,36 +295,30 @@
             $id_usuario = isset($requestData['id_usuario']) ? $requestData['id_usuario'] : (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
             
             if ($id_usuario) {
-                // Verificar si existe la tabla de ubicaciones
-                $query = "SHOW TABLES LIKE 'ubicaciones_usuarios'";
-                $result = $fichaje->getConn()->query($query);
-                
-                if ($result->num_rows == 0) {
-                    echo json_encode([
-                        'success' => true,
-                        'usuarios' => []
-                    ]);
-                    break;
-                }
-                
-                // Obtener todas las ubicaciones excepto la del usuario actual
-                $query = "SELECT id_usuario, nombre, latitud, longitud, fecha_actualizacion 
-                          FROM ubicaciones_usuarios 
-                          WHERE id_usuario != ? 
-                          ORDER BY fecha_actualizacion DESC";
-                $stmt = $fichaje->getConn()->prepare($query);
-                $stmt->bind_param("s", $id_usuario);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                
-                $usuarios = [];
-                while ($row = $result->fetch_assoc()) {
-                    $usuarios[] = $row;
-                }
+                // Obtener las ubicaciones del usuario
+                $result = $fichaje->getUbicacionesByUsuario($id_usuario);
+                echo json_encode($result);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Usuario no autenticado'
+                ]);
+            }
+            break;
+
+        case 'estadisticas':
+            // Verificar que el usuario esté autenticado o que se proporcionó un ID
+            $id_usuario = isset($requestData['id_usuario']) ? $requestData['id_usuario'] : (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
+            $periodo = isset($requestData['periodo']) ? $requestData['periodo'] : 'semana';
+            
+            if ($id_usuario) {
+                // Obtener estadísticas del usuario
+                $fichaje = new Fichaje();
+                $estadisticas = $fichaje->getEstadisticas($id_usuario, $periodo);
                 
                 echo json_encode([
                     'success' => true,
-                    'usuarios' => $usuarios
+                    'estadisticas' => $estadisticas
                 ]);
             } else {
                 echo json_encode([
@@ -408,6 +326,164 @@
                     'error' => 'Usuario no autenticado'
                 ]);
             }
+            break;
+            
+        case 'exportar_informe':
+            // Verificar que el usuario esté autenticado o que se proporcionó un ID
+            $id_usuario = isset($requestData['id_usuario']) ? $requestData['id_usuario'] : (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
+            $fecha_inicio = isset($requestData['fecha_inicio']) ? $requestData['fecha_inicio'] : date('Y-m-d', strtotime('-7 days'));
+            $fecha_fin = isset($requestData['fecha_fin']) ? $requestData['fecha_fin'] : date('Y-m-d');
+            $formato = isset($requestData['formato']) ? $requestData['formato'] : 'pdf';
+            
+            if ($id_usuario) {
+                // Exportar informe
+                $fichaje = new Fichaje();
+                $resultado = $fichaje->exportarInforme($id_usuario, $fecha_inicio, $fecha_fin, $formato);
+                
+                if ($resultado['success']) {
+                    echo json_encode([
+                        'success' => true,
+                        'contenido' => base64_encode($resultado['contenido']),
+                        'formato' => $formato
+                    ]);
+                } else {
+                    echo json_encode([
+                        'success' => false,
+                        'error' => $resultado['error']
+                    ]);
+                }
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Usuario no autenticado'
+                ]);
+            }
+            break;
+            
+        case 'get_user_data':
+            // Verificar que el usuario esté autenticado o que se proporcionó un ID
+            $id_usuario = isset($requestData['id_usuario']) ? $requestData['id_usuario'] : (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
+            
+            if ($id_usuario) {
+                // Obtener datos del usuario
+                $query = "SELECT nombre, apellidos, email, telefono, permitir_pausas FROM usuarios WHERE NIF = ? LIMIT 1";
+                $stmt = $fichaje->getConn()->prepare($query);
+                $stmt->bind_param("s", $id_usuario);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                
+                if ($result->num_rows > 0) {
+                    $usuario = $result->fetch_assoc();
+                    echo json_encode([
+                        'success' => true,
+                        'usuario' => $usuario
+                    ]);
+                } else {
+                    echo json_encode([
+                        'success' => false,
+                        'error' => 'Usuario no encontrado'
+                    ]);
+                }
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Usuario no autenticado'
+                ]);
+            }
+            break;
+            
+        case 'update_user_data':
+            // Verificar que el usuario esté autenticado o que se proporcionó un ID
+            $id_usuario = isset($requestData['id_usuario']) ? $requestData['id_usuario'] : (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
+            
+            if ($id_usuario) {
+                // Preparar datos para actualizar
+                $nombre = isset($requestData['nombre']) ? $requestData['nombre'] : null;
+                $apellidos = isset($requestData['apellidos']) ? $requestData['apellidos'] : null;
+                $email = isset($requestData['email']) ? $requestData['email'] : null;
+                $telefono = isset($requestData['telefono']) ? $requestData['telefono'] : null;
+                $permitir_pausas = isset($requestData['permitir_pausas']) ? $requestData['permitir_pausas'] : 0;
+                
+                // Verificar si se está cambiando la contraseña
+                $cambiarPassword = false;
+                if (isset($requestData['currentPassword']) && isset($requestData['newPassword']) && !empty($requestData['currentPassword']) && !empty($requestData['newPassword'])) {
+                    $currentPassword = $requestData['currentPassword'];
+                    $newPassword = $requestData['newPassword'];
+                    $cambiarPassword = true;
+                    
+                    // Verificar contraseña actual
+                    $queryPassword = "SELECT password FROM usuarios WHERE NIF = ? LIMIT 1";
+                    $stmtPassword = $fichaje->getConn()->prepare($queryPassword);
+                    $stmtPassword->bind_param("s", $id_usuario);
+                    $stmtPassword->execute();
+                    $resultPassword = $stmtPassword->get_result();
+                    
+                    if ($resultPassword->num_rows > 0) {
+                        $userData = $resultPassword->fetch_assoc();
+                        if (!password_verify($currentPassword, $userData['password'])) {
+                            echo json_encode([
+                                'success' => false,
+                                'error' => 'La contraseña actual es incorrecta'
+                            ]);
+                            exit;
+                        }
+                    }
+                }
+                
+                // Actualizar datos del usuario
+                $query = "UPDATE usuarios SET nombre = ?, apellidos = ?, email = ?, telefono = ?, permitir_pausas = ?";
+                $params = [$nombre, $apellidos, $email, $telefono, $permitir_pausas];
+                $types = "ssssi";
+                
+                // Añadir cambio de contraseña si es necesario
+                if ($cambiarPassword) {
+                    $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+                    $query .= ", password = ?";
+                    $params[] = $hashedPassword;
+                    $types .= "s";
+                }
+                
+                $query .= " WHERE NIF = ?";
+                $params[] = $id_usuario;
+                $types .= "s";
+                
+                $stmt = $fichaje->getConn()->prepare($query);
+                $stmt->bind_param($types, ...$params);
+                
+                if ($stmt->execute()) {
+                    echo json_encode([
+                        'success' => true,
+                        'message' => 'Datos actualizados correctamente'
+                    ]);
+                } else {
+                    echo json_encode([
+                        'success' => false,
+                        'error' => 'Error al actualizar los datos: ' . $stmt->error
+                    ]);
+                }
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Usuario no autenticado'
+                ]);
+            }
+            break;
+            
+        case 'registrar_entrada':
+            // Verificar datos requeridos
+            if (!isset($requestData['id_usuario']) || !isset($requestData['fecha']) || !isset($requestData['hora'])) {
+                echo json_encode(['success' => false, 'message' => 'Faltan datos requeridos']);
+                exit;
+            }
+            
+            // Obtener datos de geolocalización si están disponibles
+            $latitud = isset($requestData['latitud']) ? $requestData['latitud'] : null;
+            $longitud = isset($requestData['longitud']) ? $requestData['longitud'] : null;
+            
+            // Registrar entrada con geolocalización
+            $resultado = $fichaje->registrarEntrada($requestData['id_usuario'], $requestData['fecha'], $requestData['hora'], $latitud, $longitud);
+            
+            echo json_encode($resultado);
             break;
             
         case 'actualizar_ubicacion_fichaje':
@@ -440,23 +516,6 @@
                     'error' => 'Faltan datos para actualizar la ubicación del fichaje'
                 ]);
             }
-            break;
-            
-        case 'registrar_entrada':
-            // Verificar datos requeridos
-            if (!isset($requestData['id_usuario']) || !isset($requestData['fecha']) || !isset($requestData['hora'])) {
-                echo json_encode(['success' => false, 'message' => 'Faltan datos requeridos']);
-                exit;
-            }
-            
-            // Obtener datos de geolocalización si están disponibles
-            $latitud = isset($requestData['latitud']) ? $requestData['latitud'] : null;
-            $longitud = isset($requestData['longitud']) ? $requestData['longitud'] : null;
-            
-            // Registrar entrada con geolocalización
-            $resultado = $fichaje->registrarEntrada($requestData['id_usuario'], $requestData['fecha'], $requestData['hora'], $latitud, $longitud);
-            
-            echo json_encode($resultado);
             break;
             
         default:

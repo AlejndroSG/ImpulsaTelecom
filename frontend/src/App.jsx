@@ -6,6 +6,7 @@ import Inicio from './pages/Inicio'
 import Plantilla from './layout/Plantilla'
 import Perfil from './pages/Perfil'
 import Fichaje from './pages/Fichaje'
+import Usuario from './pages/Usuario'
 import { AuthProvider, ProtectedRoute, PublicRoute } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 
@@ -37,6 +38,7 @@ function App() {
               <Route path="/inicio" element={<Inicio />} />
               <Route path="/perfil" element={<Perfil />} />
               <Route path="/fichaje" element={<Fichaje />} />
+              <Route path="/usuario" element={<Usuario />} />
             </Route>
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>

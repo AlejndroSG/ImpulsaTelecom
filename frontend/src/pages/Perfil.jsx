@@ -201,45 +201,26 @@ const Perfil = () => {
               {/* Columna de Información Personal */}
               <div className="md:col-span-2 space-y-6">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-800 mb-4">Información Personal</h3>
-                  <div className="bg-gray-50 rounded-lg p-4 space-y-4">
-                    <div className="flex items-center space-x-3">
-                      <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">Nombre</p>
-                        <p className="font-medium text-gray-800">{formData.nombre}</p>
-                      </div>
+                  <h3 className="text-sm font-medium text-gray-500">Información Personal</h3>
+                  <div className="mt-2 grid grid-cols-1 gap-4">
+                    <div>
+                      <span className="block text-sm font-medium text-gray-700">Nombre completo</span>
+                      <span className="block mt-1 text-gray-900">{formData.nombre}</span>
                     </div>
-
-                    <div className="flex items-center space-x-3">
-                      <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-sm text-gray-500">Correo Electrónico</p>
-                        <p className="font-medium text-gray-800">{formData.correo}</p>
-                      </div>
+                    <div>
+                      <span className="block text-sm font-medium text-gray-700">Correo electrónico</span>
+                      <span className="block mt-1 text-gray-900">{formData.correo}</span>
                     </div>
-
-                    {formData.telefono && (
-                      <div className="flex items-center space-x-3">
-                        <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                          </svg>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-500">Teléfono</p>
-                          <p className="font-medium text-gray-800">{formData.telefono}</p>
-                        </div>
-                      </div>
-                    )}
+                    <div>
+                      <span className="block text-sm font-medium text-gray-700">Teléfono</span>
+                      <span className="block mt-1 text-gray-900">{formData.telefono || 'No especificado'}</span>
+                    </div>
+                    <div>
+                      <span className="block text-sm font-medium text-gray-700">Pausas en fichajes</span>
+                      <span className="block mt-1 text-gray-900">
+                        {formData.permitir_pausas ? 'Habilitadas' : 'Deshabilitadas'}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -303,41 +284,44 @@ const Perfil = () => {
                         disabled={!modoEdicion}
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Teléfono</label>
+                    <div className="mb-4">
+                      <label htmlFor="telefono" className="block text-sm font-medium text-gray-700 mb-1">
+                        Teléfono
+                      </label>
                       <input
                         type="tel"
+                        id="telefono"
                         name="telefono"
                         value={formData.telefono}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                        disabled={!modoEdicion}
+                        className="w-full p-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Tu número de teléfono"
                       />
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Permitir Pausas</label>
-                      <div className="mt-2">
-                        <label className="inline-flex items-center cursor-pointer">
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between">
+                        <span className="block text-sm font-medium text-gray-700">
+                          Permitir pausas en fichajes
+                        </span>
+                        <div 
+                          className="relative inline-block w-12 mr-2 align-middle select-none cursor-pointer"
+                          onClick={() => setFormData(prev => ({ ...prev, permitir_pausas: !prev.permitir_pausas }))}
+                        >
                           <input
                             type="checkbox"
+                            id="permitir_pausas"
                             name="permitir_pausas"
                             checked={formData.permitir_pausas}
-                            onChange={(e) => {
-                              setFormData(prev => ({
-                                ...prev,
-                                permitir_pausas: e.target.checked
-                              }));
-                            }}
-                            className="sr-only peer"
-                            disabled={!modoEdicion}
+                            onChange={(e) => setFormData(prev => ({ ...prev, permitir_pausas: e.target.checked }))}
+                            className="sr-only"
                           />
-                          <div className={`relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer ${formData.permitir_pausas ? 'peer-checked:after:translate-x-full peer-checked:after:border-white peer-checked:bg-blue-600' : ''} after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all ${!modoEdicion ? 'opacity-70' : ''}`}></div>
-                          <span className="ml-3 text-sm font-medium text-gray-700">
-                            {formData.permitir_pausas ? 'Habilitadas' : 'Deshabilitadas'}
-                          </span>
-                        </label>
-                        <p className="mt-1 text-xs text-gray-500">Permite a los empleados pausar su fichaje durante la jornada laboral.</p>
+                          <div className={`block w-12 h-6 rounded-full transition-colors duration-300 ${formData.permitir_pausas ? 'bg-green-400' : 'bg-gray-300'}`}></div>
+                          <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 transform ${formData.permitir_pausas ? 'translate-x-6' : ''}`}></div>
+                        </div>
                       </div>
+                      <p className="mt-1 text-sm text-gray-500">
+                        {formData.permitir_pausas ? 'Las pausas están habilitadas en tus fichajes' : 'Las pausas están deshabilitadas en tus fichajes'}
+                      </p>
                     </div>
                   </div>
                 </div>
