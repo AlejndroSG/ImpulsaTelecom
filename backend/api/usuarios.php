@@ -247,6 +247,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
         $types .= "i"; // integer
     }
     
+    // Añadir campo password si se proporciona una nueva contraseña
+    if (isset($data['password']) && !empty($data['password'])) {
+        $updateFields[] = "$passwordField = ?";
+        // Hashear la contraseña para almacenarla de forma segura
+        $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+        $params[] = $hashedPassword;
+        $types .= "s"; // string
+    }
+    
     // Iniciar transacción
     $modelo->getConn()->begin_transaction();
     

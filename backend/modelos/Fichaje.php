@@ -320,10 +320,36 @@ class Fichaje {
         
         $row = $result->fetch_assoc();
         
+        // Registrar información para depuración
+        error_log("Fichaje.php - Reanudando trabajo para fichaje ID: $id_fichaje");
+        error_log("Fichaje.php - Hora de pausa registrada: " . $row['horaPausa']);
+        error_log("Fichaje.php - Hora de reanudación actual: $hora");
+        
         // Calcular el tiempo de pausa en segundos
         $horaPausa = strtotime($row['horaPausa']);
         $horaReanudacion = strtotime($hora);
         $tiempoPausaActual = $horaReanudacion - $horaPausa;
+        
+        error_log("Fichaje.php - Tiempo de pausa calculado en segundos: $tiempoPausaActual");
+        
+        // Verificar que la hora de reanudación sea posterior a la hora de pausa
+        if ($tiempoPausaActual <= 0) {
+            error_log("Fichaje.php - ERROR: La hora de reanudación es anterior o igual a la hora de pausa");
+            
+            // Usar la hora actual del servidor para garantizar que sea posterior
+            $hora = date('H:i:s');
+            $horaReanudacion = strtotime($hora);
+            $tiempoPausaActual = $horaReanudacion - $horaPausa;
+            
+            error_log("Fichaje.php - Corrigiendo con hora del servidor: $hora");
+            error_log("Fichaje.php - Nuevo tiempo de pausa calculado: $tiempoPausaActual");
+            
+            // Si aún así es negativo, establecer un valor mínimo de 1 segundo
+            if ($tiempoPausaActual <= 0) {
+                $tiempoPausaActual = 1;
+                error_log("Fichaje.php - Estableciendo tiempo mínimo de pausa: 1 segundo");
+            }
+        }
         
         // Sumar al tiempo de pausa acumulado
         $tiempoPausaTotal = $row['tiempoPausa'] + $tiempoPausaActual;
@@ -361,7 +387,7 @@ class Fichaje {
     }
     
     // Registrar salida
-    public function registrarSalida($id_usuario, $id_fichaje, $hora) {
+    public function registrarSalida($id_usuario, $id_fichaje, $hora, $latitud = null, $longitud = null) {
         // Verificar que el fichaje pertenece al usuario
         $query = "SELECT * FROM registros 
                   WHERE idRegistro = ? AND NIF = ?";
@@ -408,22 +434,53 @@ class Fichaje {
             $tiempoPausaTotal += $tiempoPausaActual;
         }
         
-        // Actualizar la hora de salida y el tiempo de pausa total
-        $query = "UPDATE registros 
-                  SET horaFin = ?, tiempoPausa = ? 
-                  WHERE idRegistro = ?";
+        // Registrar en el log para depuración de coordenadas
+        error_log("Fichaje.php - Registrando salida para usuario: $id_usuario, fichaje: $id_fichaje");
+        error_log("Fichaje.php - Coordenadas recibidas para salida: latitud=$latitud, longitud=$longitud");
         
-        $stmt = $this->conn->prepare($query);
-        
-        if ($stmt === false) {
-            error_log("Error en la preparación de la consulta de actualización: " . $this->conn->error);
-            return [
-                'success' => false,
-                'error' => 'Error en la consulta de actualización: ' . $this->conn->error
-            ];
+        // Crear la cadena de localización si se proporcionaron coordenadas
+        $localizacion = null;
+        if ($latitud !== null && $longitud !== null) {
+            $localizacion = "$latitud, $longitud";
+            error_log("Fichaje.php - Cadena de localización creada para salida: $localizacion");
         }
         
-        $stmt->bind_param("sii", $hora, $tiempoPausaTotal, $id_fichaje);
+        // Construir la consulta SQL basada en si hay coordenadas o no
+        if ($latitud !== null && $longitud !== null) {
+            // Actualizar con coordenadas
+            $query = "UPDATE registros 
+                      SET horaFin = ?, tiempoPausa = ?, latitud = ?, longitud = ?, localizacion = ? 
+                      WHERE idRegistro = ?";
+            
+            $stmt = $this->conn->prepare($query);
+            
+            if ($stmt === false) {
+                error_log("Error en la preparación de la consulta de actualización: " . $this->conn->error);
+                return [
+                    'success' => false,
+                    'error' => 'Error en la consulta de actualización: ' . $this->conn->error
+                ];
+            }
+            
+            $stmt->bind_param("siddsi", $hora, $tiempoPausaTotal, $latitud, $longitud, $localizacion, $id_fichaje);
+        } else {
+            // Actualizar sin coordenadas
+            $query = "UPDATE registros 
+                      SET horaFin = ?, tiempoPausa = ? 
+                      WHERE idRegistro = ?";
+            
+            $stmt = $this->conn->prepare($query);
+            
+            if ($stmt === false) {
+                error_log("Error en la preparación de la consulta de actualización: " . $this->conn->error);
+                return [
+                    'success' => false,
+                    'error' => 'Error en la consulta de actualización: ' . $this->conn->error
+                ];
+            }
+            
+            $stmt->bind_param("sii", $hora, $tiempoPausaTotal, $id_fichaje);
+        }
         
         if ($stmt->execute()) {
             return [

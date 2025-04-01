@@ -102,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
     if ($stmt->execute()) {
         echo json_encode(['success' => true, 'message' => 'Avatar actualizado correctamente']);
     } else {
-        echo json_encode(['success' => false, 'message' => 'Error al actualizar avatar: ' . $conn->error]);
+        echo json_encode(['success' => false, 'message' => 'Error al actualizar el avatar: ' . $stmt->error]);
     }
 }
 

@@ -4,8 +4,21 @@
     class db{
         private $conn;
         public function __construct(){
-            $this->conn = new mysqli("localhost", "root", "", "impulsatelecom");
-            $this->conn->set_charset("utf8");
+            try {
+                // Usar exclusivamente el método de conexión que suele funcionar mejor con XAMPP
+                $this->conn = new mysqli("localhost", "root", "", "impulsatelecom", 3306);
+                
+                // Verificar si hay error de conexión
+                if ($this->conn->connect_error) {
+                    throw new Exception("Error de conexión: " . $this->conn->connect_error);
+                }
+                
+                $this->conn->set_charset("utf8");
+            } catch (Exception $e) {
+                // Registrar el error para diagnóstico
+                error_log("Error de conexión a la base de datos: " . $e->getMessage());
+                throw $e;  // Re-lanzar la excepción para que sea manejada por el código que llama
+            }
         }
 
         public function getConn() {

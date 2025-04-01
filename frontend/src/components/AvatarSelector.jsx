@@ -21,16 +21,8 @@ const AvatarSelector = ({ selectedAvatar, onSelectAvatar }) => {
         const response = await axios.get(apiUrl);
         
         if (response.data && Array.isArray(response.data)) {
-          // Procesar las rutas de los avatares para asegurarnos de que sean absolutas
-          const avatarsWithFullPaths = response.data.map(avatar => {
-            let ruta = avatar.ruta;
-            if (!ruta.startsWith('http')) {
-              ruta = 'http://localhost/ImpulsaTelecom/frontend' + ruta;
-            }
-            return { ...avatar, ruta };
-          });
-          
-          setAvatares(avatarsWithFullPaths);
+          // Ya no modificamos las rutas, las usamos tal como vienen del backend
+          setAvatares(response.data);
           
           // Extraer categorías únicas
           const uniqueCategorias = ['todos', ...new Set(response.data.map(avatar => avatar.categoria))];

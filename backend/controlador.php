@@ -205,7 +205,26 @@
                 // Obtener hora actual
                 $hora = date('H:i:s');
                 
-                $result = $fichaje->registrarSalida($id_usuario, $id_fichaje, $hora);
+                // Obtener latitud y longitud si están disponibles
+                $latitud = isset($requestData['latitud']) ? floatval($requestData['latitud']) : null;
+                $longitud = isset($requestData['longitud']) ? floatval($requestData['longitud']) : null;
+                
+                // Registrar en el log para depuración
+                error_log("controlador.php - Datos recibidos para salida: " . json_encode($requestData));
+                error_log("controlador.php - Registrando salida con coordenadas: latitud=$latitud, longitud=$longitud");
+                
+                // Verificar que las coordenadas sean válidas
+                if ($latitud === 0 || $longitud === 0) {
+                    error_log("controlador.php - Coordenadas con valor cero, posible error");
+                }
+                
+                if ($latitud === null || $longitud === null) {
+                    error_log("controlador.php - Coordenadas nulas, verificando datos originales");
+                    error_log("controlador.php - latitud original: " . (isset($requestData['latitud']) ? $requestData['latitud'] : 'no definida'));
+                    error_log("controlador.php - longitud original: " . (isset($requestData['longitud']) ? $requestData['longitud'] : 'no definida'));
+                }
+                
+                $result = $fichaje->registrarSalida($id_usuario, $id_fichaje, $hora, $latitud, $longitud);
                 echo json_encode($result);
             } else {
                 echo json_encode([
