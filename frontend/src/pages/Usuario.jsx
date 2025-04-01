@@ -98,7 +98,7 @@ const Usuario = () => {
             </div>
             
             {/* Estilos CSS inline para la demostración */}
-            <style jsx>{`
+            <style>{`
                 .usuario-container {
                     padding: 20px;
                     max-width: 1200px;

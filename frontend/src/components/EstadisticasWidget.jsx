@@ -31,7 +31,7 @@ ChartJS.register(
 
 const API_URL = 'http://localhost/ImpulsaTelecom/backend/controlador.php';
 
-const EstadisticasWidget = () => {
+const EstadisticasWidget = ({ userId }) => {
   const { user } = useAuth();
   const { isDarkMode } = useTheme();
   const [periodo, setPeriodo] = useState('semana');
@@ -42,7 +42,7 @@ const EstadisticasWidget = () => {
 
   useEffect(() => {
     cargarEstadisticas();
-  }, [periodo]);
+  }, [periodo, userId]);
 
   const cargarEstadisticas = async () => {
     try {
@@ -51,7 +51,7 @@ const EstadisticasWidget = () => {
 
       const response = await axios.post(
         `${API_URL}?action=estadisticas`,
-        { id_usuario: user?.NIF, periodo },
+        { id_usuario: userId, periodo },
         { withCredentials: true }
       );
 
@@ -174,7 +174,7 @@ const EstadisticasWidget = () => {
   };
 
   const renderEstadisticasDetalladas = () => {
-    if (!estadisticas || !estadisticas.datos) return null;
+    if (!estadisticas) return null;
     
     return (
       <div className="mt-6">
@@ -185,19 +185,19 @@ const EstadisticasWidget = () => {
           <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
             <div className="text-sm text-gray-500">Tiempo total trabajado</div>
             <div className="text-2xl font-bold mt-1">
-              {estadisticas.datos.horas_totales.toFixed(2)} h
+              {estadisticas.totalHoras} h
             </div>
           </div>
           <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
-            <div className="text-sm text-gray-500">Tiempo en pausas</div>
+            <div className="text-sm text-gray-500">Promedio diario</div>
             <div className="text-2xl font-bold mt-1">
-              {estadisticas.datos.tiempo_pausas ? (estadisticas.datos.tiempo_pausas / 60).toFixed(2) : '0.00'} h
+              {estadisticas.promedioHorasDiarias} h
             </div>
           </div>
           <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
             <div className="text-sm text-gray-500">Días trabajados</div>
             <div className="text-2xl font-bold mt-1">
-              {estadisticas.datos.dias_trabajados}
+              {estadisticas.totalDias}
             </div>
           </div>
         </div>
@@ -256,7 +256,7 @@ const EstadisticasWidget = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
               <p className="text-sm opacity-70">Horas totales</p>
-              <p className="text-2xl font-bold">{estadisticas.horasTotales} h</p>
+              <p className="text-2xl font-bold">{estadisticas.totalHoras} h</p>
             </div>
             <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
               <p className="text-sm opacity-70">Promedio diario</p>
@@ -264,7 +264,7 @@ const EstadisticasWidget = () => {
             </div>
             <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
               <p className="text-sm opacity-70">Días trabajados</p>
-              <p className="text-2xl font-bold">{estadisticas.diasTrabajados}</p>
+              <p className="text-2xl font-bold">{estadisticas.totalDias}</p>
             </div>
           </div>
           

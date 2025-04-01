@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-04-2025 a las 12:09:03
+-- Tiempo de generación: 01-04-2025 a las 17:13:30
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -130,7 +130,10 @@ INSERT INTO `registros` (`idRegistro`, `NIF`, `fecha`, `horaInicio`, `horaFin`, 
 (10, '98765432B', '2025-04-01', '12:03:39', '12:03:52', '12:03:43', '12:03:47', 4, NULL, NULL, NULL, 'entrada'),
 (11, '98765432B', '2025-04-01', '12:04:32', '12:04:34', '12:04:33', NULL, 1, NULL, NULL, NULL, 'entrada'),
 (12, '98765432B', '2025-04-01', '12:04:45', '12:04:46', NULL, NULL, 0, NULL, NULL, NULL, 'entrada'),
-(13, '98765432B', '2025-04-01', '12:04:49', '12:04:50', NULL, NULL, 0, NULL, NULL, NULL, 'entrada');
+(13, '98765432B', '2025-04-01', '12:04:49', '12:04:50', NULL, NULL, 0, NULL, NULL, NULL, 'entrada'),
+(14, '98765432B', '2025-04-01', '12:26:35', '12:26:49', '12:26:39', '12:26:44', 5, NULL, NULL, NULL, 'entrada'),
+(15, '98765432B', '2025-04-01', '12:46:40', '12:46:43', NULL, NULL, 0, 37.15356010, -3.59967030, '37.1535601, -3.5996703', 'entrada'),
+(16, '98765432B', '2024-04-08', '17:11:57', '22:10:57', NULL, NULL, 0, NULL, NULL, NULL, 'entrada');
 
 -- --------------------------------------------------------
 
@@ -160,7 +163,7 @@ INSERT INTO `usuarios` (`NIF`, `nombre`, `apellidos`, `email`, `pswd`, `dpto`, `
 ('12345678A', 'Admin', 'Sistema', 'admin@impulsatelecom.com', '$2y$10$XFvlfrAGkm8H8Y5.hvKAXO4x0ICsQPEAB9NMR/LVUVnvIpj5h0nPe', 'IT', 'Sede Central', 'admin', 1, 1, 1),
 ('34567890D', 'Carlos', 'Rodríguez Sánchez', 'carlos.rodriguez@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Soporte', 'Valencia', 'supervisor', 4, 1, 1),
 ('56789012C', 'María', 'García Martínez', 'maria.garcia@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Marketing', 'Barcelona', 'empleado', 3, 0, 1),
-('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 192, 0, 1);
+('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 221, 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -202,7 +205,7 @@ ALTER TABLE `avatares`
 -- AUTO_INCREMENT de la tabla `registros`
 --
 ALTER TABLE `registros`
-  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- Restricciones para tablas volcadas

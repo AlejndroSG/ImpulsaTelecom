@@ -497,6 +497,134 @@ class Fichaje {
         ];
     }
     
+    // Obtener estadísticas de fichajes de un usuario
+    public function getEstadisticas($id_usuario, $periodo = 'semana') {
+        // Crear un archivo de log específico para estadísticas
+        $logFile = __DIR__ . '/../../logs/estadisticas.log';
+        $logDir = dirname($logFile);
+        
+        // Crear directorio de logs si no existe
+        if (!file_exists($logDir)) {
+            mkdir($logDir, 0777, true);
+        }
+        
+        // Escribir en el archivo de log
+        $logMessage = date('Y-m-d H:i:s') . " - Obteniendo estadísticas para usuario: $id_usuario, período: $periodo\n";
+        file_put_contents($logFile, $logMessage, FILE_APPEND);
+        
+        // Determinar el rango de fechas según el período
+        $fechaFin = date('Y-m-d');
+        $fechaInicio = '';
+        
+        switch ($periodo) {
+            case 'semana':
+                $fechaInicio = date('Y-m-d', strtotime('-7 days'));
+                break;
+            case 'mes':
+                $fechaInicio = date('Y-m-d', strtotime('-30 days'));
+                break;
+            case 'trimestre':
+                $fechaInicio = date('Y-m-d', strtotime('-90 days'));
+                break;
+            case 'año':
+                $fechaInicio = date('Y-m-d', strtotime('-365 days'));
+                break;
+            default:
+                $fechaInicio = date('Y-m-d', strtotime('-7 days'));
+        }
+        
+        $logMessage = date('Y-m-d H:i:s') . " - Rango de fechas: $fechaInicio a $fechaFin\n";
+        file_put_contents($logFile, $logMessage, FILE_APPEND);
+        
+        // Consulta para obtener los registros en el período especificado
+        $query = "SELECT fecha, horaInicio, horaFin, tiempoPausa FROM {$this->table_name} 
+                  WHERE NIF = ? AND fecha BETWEEN ? AND ? 
+                  ORDER BY fecha ASC, horaInicio ASC";
+        
+        $stmt = $this->conn->prepare($query);
+        
+        if ($stmt === false) {
+            $errorMsg = date('Y-m-d H:i:s') . " - Error en la preparación de la consulta: " . $this->conn->error . "\n";
+            file_put_contents($logFile, $errorMsg, FILE_APPEND);
+            return null;
+        }
+        
+        $stmt->bind_param("sss", $id_usuario, $fechaInicio, $fechaFin);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        // Registrar número de registros encontrados
+        $numRegistros = $result->num_rows;
+        $logMessage = date('Y-m-d H:i:s') . " - Número de registros encontrados: $numRegistros\n";
+        file_put_contents($logFile, $logMessage, FILE_APPEND);
+        
+        // Inicializar variables para estadísticas
+        $totalDias = 0;
+        $totalHoras = 0;
+        $datosPorDia = [];
+        $diasTrabajados = [];
+        
+        // Procesar resultados
+        while ($row = $result->fetch_assoc()) {
+            $fecha = $row['fecha'];
+            $logMessage = date('Y-m-d H:i:s') . " - Procesando registro: fecha=$fecha, inicio={$row['horaInicio']}, fin={$row['horaFin']}\n";
+            file_put_contents($logFile, $logMessage, FILE_APPEND);
+            
+            // Si es un nuevo día de trabajo
+            if (!isset($diasTrabajados[$fecha])) {
+                $diasTrabajados[$fecha] = [
+                    'horasTrabajadas' => 0,
+                    'registros' => 0
+                ];
+                $totalDias++;
+            }
+            
+            // Calcular horas trabajadas en este registro
+            $horasTrabajadas = 0;
+            
+            if (!empty($row['horaInicio']) && !empty($row['horaFin'])) {
+                $inicio = strtotime($row['horaInicio']);
+                $fin = strtotime($row['horaFin']);
+                $tiempoPausa = intval($row['tiempoPausa']);
+                
+                // Tiempo total menos tiempo de pausa (en segundos)
+                $tiempoTrabajado = ($fin - $inicio) - $tiempoPausa;
+                $horasTrabajadas = $tiempoTrabajado / 3600; // Convertir a horas
+                $logMessage = date('Y-m-d H:i:s') . " - Horas trabajadas en este registro: $horasTrabajadas\n";
+                file_put_contents($logFile, $logMessage, FILE_APPEND);
+            }
+            
+            // Acumular horas trabajadas
+            $diasTrabajados[$fecha]['horasTrabajadas'] += $horasTrabajadas;
+            $diasTrabajados[$fecha]['registros']++;
+            $totalHoras += $horasTrabajadas;
+        }
+        
+        // Preparar datos para gráficas
+        foreach ($diasTrabajados as $fecha => $datos) {
+            $datosPorDia[] = [
+                'fecha' => $fecha,
+                'horasTrabajadas' => round($datos['horasTrabajadas'], 2),
+                'registros' => $datos['registros']
+            ];
+        }
+        
+        // Calcular promedios
+        $promedioHorasDiarias = $totalDias > 0 ? round($totalHoras / $totalDias, 2) : 0;
+        
+        // Registrar resumen de estadísticas
+        $logMessage = date('Y-m-d H:i:s') . " - Resumen de estadísticas: totalHoras=$totalHoras, totalDias=$totalDias\n";
+        file_put_contents($logFile, $logMessage, FILE_APPEND);
+        
+        // Devolver estadísticas
+        return [
+            'totalHoras' => round($totalHoras, 2),
+            'totalDias' => $totalDias,
+            'promedioHorasDiarias' => $promedioHorasDiarias,
+            'datosPorDia' => $datosPorDia
+        ];
+    }
+    
     // Obtener historial de fichajes de un usuario
     public function getHistorialByUsuario($id_usuario) {
         $query = "SELECT * FROM registros 
@@ -531,6 +659,11 @@ class Fichaje {
     // Getter para la conexión a la base de datos
     public function getConn() {
         return $this->conn;
+    }
+    
+    // Getter para el nombre de la tabla
+    public function getTableName() {
+        return $this->table_name;
     }
 }
 ?>
