@@ -21,6 +21,8 @@ const FichajeWidget = ({ onFichajeChange }) => {
   const [hora, setHora] = useState('');
   const [mostrarModalIncidencia, setMostrarModalIncidencia] = useState(false);
   const [incidenciaTexto, setIncidenciaTexto] = useState('');
+  const [geoLoading, setGeoLoading] = useState(false);
+  const [geoError, setGeoError] = useState(null);
   
   // Actualizar el reloj en tiempo real
   useEffect(() => {
@@ -68,6 +70,56 @@ const FichajeWidget = ({ onFichajeChange }) => {
     return () => clearInterval(interval);
   }, [user]);
 
+  // Obtener coordenadas de geolocalizaciu00f3n
+  const obtenerCoordenadas = () => {
+    return new Promise((resolve, reject) => {
+      setGeoLoading(true);
+      setGeoError(null);
+      
+      if (!navigator.geolocation) {
+        setGeoError('La geolocalizaciu00f3n no estu00e1 soportada por este navegador.');
+        setGeoLoading(false);
+        reject(new Error('Geolocalizaciu00f3n no soportada'));
+        return;
+      }
+      
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setGeoLoading(false);
+          resolve({
+            latitud: position.coords.latitude,
+            longitud: position.coords.longitude
+          });
+        },
+        (error) => {
+          setGeoLoading(false);
+          let errorMsg = 'Error desconocido al obtener la ubicaciu00f3n.';
+          
+          switch(error.code) {
+            case error.PERMISSION_DENIED:
+              errorMsg = 'Usuario denegu00f3 la solicitud de geolocalizaciu00f3n.';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMsg = 'La informaciu00f3n de ubicaciu00f3n no estu00e1 disponible.';
+              break;
+            case error.TIMEOUT:
+              errorMsg = 'La solicitud de ubicaciu00f3n expiru00f3.';
+              break;
+          }
+          
+          setGeoError(errorMsg);
+          console.error('Error de geolocalizaciu00f3n:', errorMsg);
+          reject(new Error(errorMsg));
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      );
+    });
+  };
+
   // Registrar entrada
   const handleEntrada = async () => {
     if (!user || !user.id) return;
@@ -75,9 +127,24 @@ const FichajeWidget = ({ onFichajeChange }) => {
     try {
       setLoading(true);
       setError(null);
+      
+      // Obtener coordenadas de geolocalizaciu00f3n
+      let coordenadas = {};
+      try {
+        coordenadas = await obtenerCoordenadas();
+        console.log('Coordenadas obtenidas para entrada:', coordenadas);
+      } catch (geoErr) {
+        console.warn('No se pudieron obtener las coordenadas:', geoErr.message);
+        // Continuamos sin coordenadas
+      }
+      
       const response = await axios.post(
         `${API_URL}?action=entrada`,
-        { id_usuario: user.id },
+        { 
+          id_usuario: user.id,
+          latitud: coordenadas.latitud,
+          longitud: coordenadas.longitud
+        },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -109,11 +176,24 @@ const FichajeWidget = ({ onFichajeChange }) => {
     try {
       setLoading(true);
       setError(null);
+      
+      // Obtener coordenadas de geolocalizaciu00f3n
+      let coordenadas = {};
+      try {
+        coordenadas = await obtenerCoordenadas();
+        console.log('Coordenadas obtenidas para salida:', coordenadas);
+      } catch (geoErr) {
+        console.warn('No se pudieron obtener las coordenadas:', geoErr.message);
+        // Continuamos sin coordenadas
+      }
+      
       const response = await axios.post(
         `${API_URL}?action=salida`,
         { 
           id_usuario: user.id,
-          id_fichaje: fichajeActual.idRegistro 
+          id_fichaje: fichajeActual.idRegistro,
+          latitud: coordenadas.latitud,
+          longitud: coordenadas.longitud
         },
         {
           headers: {
