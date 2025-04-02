@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-04-2025 a las 17:13:30
+-- Tiempo de generación: 02-04-2025 a las 15:14:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -133,7 +133,41 @@ INSERT INTO `registros` (`idRegistro`, `NIF`, `fecha`, `horaInicio`, `horaFin`, 
 (13, '98765432B', '2025-04-01', '12:04:49', '12:04:50', NULL, NULL, 0, NULL, NULL, NULL, 'entrada'),
 (14, '98765432B', '2025-04-01', '12:26:35', '12:26:49', '12:26:39', '12:26:44', 5, NULL, NULL, NULL, 'entrada'),
 (15, '98765432B', '2025-04-01', '12:46:40', '12:46:43', NULL, NULL, 0, 37.15356010, -3.59967030, '37.1535601, -3.5996703', 'entrada'),
-(16, '98765432B', '2024-04-08', '17:11:57', '22:10:57', NULL, NULL, 0, NULL, NULL, NULL, 'entrada');
+(16, '98765432B', '2025-01-01', '17:11:57', '22:10:57', NULL, NULL, 0, NULL, NULL, NULL, 'entrada'),
+(17, '98765432B', '2025-02-04', '09:19:24', '09:19:32', '09:19:26', '09:19:28', 2, 37.15356190, -3.59965680, '37.1535619, -3.5996568', 'entrada'),
+(18, '98765432B', '2025-04-02', '10:33:57', '10:34:02', NULL, NULL, 0, 37.15355690, -3.59966710, '37.1535569, -3.5996671', 'entrada'),
+(19, '98765432B', '2025-04-02', '10:36:43', '10:36:46', NULL, NULL, 0, NULL, NULL, NULL, 'entrada'),
+(20, '98765432B', '2025-04-02', '10:36:53', '10:37:10', '10:36:54', '10:37:08', 14, NULL, NULL, NULL, 'entrada'),
+(21, '98765432B', '2025-04-02', '10:40:26', '10:40:26', NULL, NULL, 0, 37.15355690, -3.59966710, '37.1535569, -3.5996671', 'entrada'),
+(22, '98765432B', '2025-04-02', '10:40:27', '10:40:27', NULL, NULL, 0, 37.15355690, -3.59966710, '37.1535569, -3.5996671', 'entrada');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tareas`
+--
+
+CREATE TABLE `tareas` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(255) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `estado` enum('pendiente','en_progreso','completada','cancelada') DEFAULT 'pendiente',
+  `prioridad` enum('baja','media','alta') DEFAULT 'media',
+  `fecha_creacion` datetime DEFAULT current_timestamp(),
+  `fecha_vencimiento` date DEFAULT NULL,
+  `fecha_completada` datetime DEFAULT NULL,
+  `NIF_creador` varchar(15) NOT NULL,
+  `NIF_asignado` varchar(15) NOT NULL,
+  `departamento` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tareas`
+--
+
+INSERT INTO `tareas` (`id`, `titulo`, `descripcion`, `estado`, `prioridad`, `fecha_creacion`, `fecha_vencimiento`, `fecha_completada`, `NIF_creador`, `NIF_asignado`, `departamento`) VALUES
+(1, 'Revisar equipos de red', 'Realizar revisi¾n de todos los equipos de red en la oficina central y actualizar firmware si es necesario', 'en_progreso', 'alta', '2025-04-02 13:57:44', '2025-04-15', NULL, '12345678A', '98765432B', 'Ventas'),
+(2, 'Preparar informe mensual', 'Elaborar el informe de ventas del mes de marzo con comparativa del trimestre anterior', 'en_progreso', 'media', '2025-04-02 13:57:52', '2025-04-10', NULL, '12345678A', '98765432B', 'Ventas');
 
 -- --------------------------------------------------------
 
@@ -163,7 +197,7 @@ INSERT INTO `usuarios` (`NIF`, `nombre`, `apellidos`, `email`, `pswd`, `dpto`, `
 ('12345678A', 'Admin', 'Sistema', 'admin@impulsatelecom.com', '$2y$10$XFvlfrAGkm8H8Y5.hvKAXO4x0ICsQPEAB9NMR/LVUVnvIpj5h0nPe', 'IT', 'Sede Central', 'admin', 1, 1, 1),
 ('34567890D', 'Carlos', 'Rodríguez Sánchez', 'carlos.rodriguez@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Soporte', 'Valencia', 'supervisor', 4, 1, 1),
 ('56789012C', 'María', 'García Martínez', 'maria.garcia@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Marketing', 'Barcelona', 'empleado', 3, 0, 1),
-('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 221, 1, 1);
+('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -182,6 +216,17 @@ ALTER TABLE `registros`
   ADD PRIMARY KEY (`idRegistro`),
   ADD KEY `idx_registros_nif` (`NIF`),
   ADD KEY `idx_registros_fecha` (`fecha`);
+
+--
+-- Indices de la tabla `tareas`
+--
+ALTER TABLE `tareas`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `NIF_creador` (`NIF_creador`),
+  ADD KEY `idx_nif_asignado` (`NIF_asignado`),
+  ADD KEY `idx_departamento` (`departamento`),
+  ADD KEY `idx_estado` (`estado`),
+  ADD KEY `idx_fecha_vencimiento` (`fecha_vencimiento`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -205,7 +250,13 @@ ALTER TABLE `avatares`
 -- AUTO_INCREMENT de la tabla `registros`
 --
 ALTER TABLE `registros`
-  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+
+--
+-- AUTO_INCREMENT de la tabla `tareas`
+--
+ALTER TABLE `tareas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Restricciones para tablas volcadas
@@ -216,6 +267,13 @@ ALTER TABLE `registros`
 --
 ALTER TABLE `registros`
   ADD CONSTRAINT `registros_ibfk_1` FOREIGN KEY (`NIF`) REFERENCES `usuarios` (`NIF`);
+
+--
+-- Filtros para la tabla `tareas`
+--
+ALTER TABLE `tareas`
+  ADD CONSTRAINT `tareas_ibfk_1` FOREIGN KEY (`NIF_creador`) REFERENCES `usuarios` (`NIF`),
+  ADD CONSTRAINT `tareas_ibfk_2` FOREIGN KEY (`NIF_asignado`) REFERENCES `usuarios` (`NIF`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

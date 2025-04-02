@@ -2858,3 +2858,15 @@
 2025-04-02 11:22:34 - Procesando registro: fecha=2025-03-30, inicio=08:30:00, fin=17:30:00
 2025-04-02 11:22:34 - Horas trabajadas en este registro: 8
 2025-04-02 11:22:34 - Resumen de estadísticas: totalHoras=8, totalDias=1
+2025-04-02 15:13:33 - Obteniendo estadísticas para usuario: 56789012C, período: semana
+2025-04-02 15:13:33 - Rango de fechas: 2025-03-24 a 2025-03-30
+2025-04-02 15:13:33 - Número de registros encontrados: 1
+2025-04-02 15:13:33 - Procesando registro: fecha=2025-03-30, inicio=09:00:00, fin=18:30:00
+2025-04-02 15:13:33 - Horas trabajadas en este registro: 8.5
+2025-04-02 15:13:33 - Resumen de estadísticas: totalHoras=8.5, totalDias=1
+2025-04-02 15:13:33 - Obteniendo estadísticas para usuario: 56789012C, período: semana
+2025-04-02 15:13:33 - Rango de fechas: 2025-03-24 a 2025-03-30
+2025-04-02 15:13:33 - Número de registros encontrados: 1
+2025-04-02 15:13:33 - Procesando registro: fecha=2025-03-30, inicio=09:00:00, fin=18:30:00
+2025-04-02 15:13:33 - Horas trabajadas en este registro: 8.5
+2025-04-02 15:13:33 - Resumen de estadísticas: totalHoras=8.5, totalDias=1
