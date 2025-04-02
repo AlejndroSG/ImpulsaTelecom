@@ -513,24 +513,96 @@ class Fichaje {
         file_put_contents($logFile, $logMessage, FILE_APPEND);
         
         // Determinar el rango de fechas según el período
-        $fechaFin = date('Y-m-d');
+        $fechaFin = date('Y-m-d'); // Hoy
         $fechaInicio = '';
+        
+        // Obtener año y mes actuales
+        $anioActual = date('Y');
+        $mesActual = (int)date('m');
         
         switch ($periodo) {
             case 'semana':
-                $fechaInicio = date('Y-m-d', strtotime('-7 days'));
+                // Semana anterior completa (lunes a domingo)
+                $diaSemanaActual = date('N'); // 1 (lunes) a 7 (domingo)
+                
+                // Obtener el último domingo (fin de la semana anterior)
+                if ($diaSemanaActual == 7) {
+                    // Si hoy es domingo, el fin de la semana anterior es el domingo anterior
+                    $ultimoDomingoSemanaAnterior = date('Y-m-d', strtotime('-7 days'));
+                } else {
+                    // Si no es domingo, retroceder hasta el último domingo
+                    $diasHastaUltimoDomingo = $diaSemanaActual;
+                    $ultimoDomingoSemanaAnterior = date('Y-m-d', strtotime("-$diasHastaUltimoDomingo days"));
+                }
+                
+                // El inicio de la semana anterior es 6 días antes del fin (lunes)
+                $fechaInicio = date('Y-m-d', strtotime("$ultimoDomingoSemanaAnterior -6 days"));
+                $fechaFin = $ultimoDomingoSemanaAnterior;
                 break;
+                
             case 'mes':
-                $fechaInicio = date('Y-m-d', strtotime('-30 days'));
+                // Mes anterior completo
+                $mesAnterior = $mesActual - 1;
+                $anioMesAnterior = $anioActual;
+                
+                // Si estamos en enero (mes 1), el mes anterior es diciembre (mes 12) del año anterior
+                if ($mesAnterior < 1) {
+                    $mesAnterior = 12;
+                    $anioMesAnterior = $anioActual - 1;
+                }
+                
+                // Formatear el mes con ceros a la izquierda si es necesario
+                $mesAnteriorFormateado = str_pad($mesAnterior, 2, '0', STR_PAD_LEFT);
+                
+                // Primer día del mes anterior
+                $fechaInicio = "$anioMesAnterior-$mesAnteriorFormateado-01";
+                
+                // Último día del mes anterior
+                $ultimoDiaMesAnterior = date('Y-m-t', strtotime($fechaInicio));
+                $fechaFin = $ultimoDiaMesAnterior;
                 break;
+                
             case 'trimestre':
-                $fechaInicio = date('Y-m-d', strtotime('-90 days'));
+                // Determinar el trimestre actual (1, 2, 3 o 4)
+                $trimestreActual = ceil($mesActual / 3);
+                
+                // Obtener el trimestre anterior
+                $trimestreAnterior = $trimestreActual - 1;
+                $anioTrimestreAnterior = $anioActual;
+                
+                // Si estamos en el primer trimestre, el trimestre anterior es el cuarto del año anterior
+                if ($trimestreAnterior < 1) {
+                    $trimestreAnterior = 4;
+                    $anioTrimestreAnterior = $anioActual - 1;
+                }
+                
+                // Calcular el primer mes del trimestre anterior
+                $primerMesTrimestreAnterior = (($trimestreAnterior - 1) * 3) + 1;
+                $primerMesFormateado = str_pad($primerMesTrimestreAnterior, 2, '0', STR_PAD_LEFT);
+                
+                // Calcular el último mes del trimestre anterior
+                $ultimoMesTrimestreAnterior = $primerMesTrimestreAnterior + 2;
+                $ultimoMesFormateado = str_pad($ultimoMesTrimestreAnterior, 2, '0', STR_PAD_LEFT);
+                
+                // Establecer fechas de inicio y fin
+                $fechaInicio = "$anioTrimestreAnterior-$primerMesFormateado-01";
+                $fechaFin = date('Y-m-t', strtotime("$anioTrimestreAnterior-$ultimoMesFormateado-01"));
                 break;
+                
             case 'año':
-                $fechaInicio = date('Y-m-d', strtotime('-365 days'));
+            case 'anio':
+                // Año actual (desde el 1 de enero hasta hoy)
+                $fechaInicio = "$anioActual-01-01";
+                $fechaFin = date('Y-m-d'); // Hoy
                 break;
+                
             default:
-                $fechaInicio = date('Y-m-d', strtotime('-7 days'));
+                // Por defecto, última semana natural
+                $diaSemanaActual = date('N');
+                $diasHastaUltimoDomingo = $diaSemanaActual;
+                $ultimoDomingoSemanaAnterior = date('Y-m-d', strtotime("-$diasHastaUltimoDomingo days"));
+                $fechaInicio = date('Y-m-d', strtotime("$ultimoDomingoSemanaAnterior -6 days"));
+                $fechaFin = $ultimoDomingoSemanaAnterior;
         }
         
         $logMessage = date('Y-m-d H:i:s') . " - Rango de fechas: $fechaInicio a $fechaFin\n";

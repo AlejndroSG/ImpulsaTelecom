@@ -7,6 +7,7 @@ import Plantilla from './layout/Plantilla'
 import Perfil from './pages/Perfil'
 import Fichaje from './pages/Fichaje'
 import Usuario from './pages/Usuario'
+import Tareas from './pages/Tareas'
 import { AuthProvider, ProtectedRoute, PublicRoute } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 
@@ -39,6 +40,7 @@ function App() {
               <Route path="/perfil" element={<Perfil />} />
               <Route path="/fichaje" element={<Fichaje />} />
               <Route path="/usuario" element={<Usuario />} />
+              <Route path="/tareas" element={<Tareas />} />
             </Route>
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
