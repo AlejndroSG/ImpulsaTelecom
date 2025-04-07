@@ -1,20 +1,32 @@
 <?php
-// Configuraciu00f3n de la sesiu00f3n y cabeceras
+// Configuración de la sesión y cabeceras
 ini_set('session.cookie_lifetime', '86400');    // 24 horas
 ini_set('session.gc_maxlifetime', '86400');     // 24 horas
 ini_set('session.use_strict_mode', '1');        // Modo estricto para seguridad
 
-// Iniciar sesiu00f3n si no estu00e1 iniciada
+// Configuración de errores - Registrar pero no mostrar
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+ini_set('log_errors', 1);
+ini_set('error_log', __DIR__ . '/../logs/calendario_error.log');
+
+// Iniciar sesión si no está iniciada
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Configuraciu00f3n de cabeceras para CORS y JSON
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Credentials: true");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE");
-header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-header("Content-Type: application/json; charset=UTF-8");
+// Configuración de cabeceras para CORS y JSON
+$allowedOrigins = ['http://localhost:5173', 'http://localhost:3000'];
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+
+if (in_array($origin, $allowedOrigins)) {
+    header("Access-Control-Allow-Origin: $origin");
+    header("Access-Control-Allow-Credentials: true");
+    header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+    header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, cache-control");
+    header("Content-Type: application/json; charset=UTF-8");
+}
 
 // Manejar pre-flight requests
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -23,25 +35,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Incluir modelo de evento
-require_once __DIR__ . '/../modelos/Evento.php';
-require_once __DIR__ . '/../modelos/Tarea.php';
-require_once __DIR__ . '/../modelos/Fichaje.php';
+try {
+    require_once __DIR__ . '/../modelos/Evento.php';
+    require_once __DIR__ . '/../modelos/Tarea.php';
+    require_once __DIR__ . '/../modelos/Fichaje.php';
+} catch (Exception $e) {
+    error_log("Error al incluir modelos: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Error interno del servidor al cargar modelos']);
+    exit();
+}
 
-// Funciu00f3n para manejar errores
+// Función para manejar errores
 function handleError($message, $code = 500) {
+    error_log("API calendario error: " . $message);
     http_response_code($code);
     echo json_encode(['success' => false, 'message' => $message]);
     exit();
 }
 
-// Verificar si el usuario estu00e1 autenticado
+// Verificar si el usuario está autenticado
 function verificarAutenticacion() {
-    // Iniciar la sesiu00f3n si no estu00e1 iniciada
+    // Iniciar la sesión si no está iniciada
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
     
     if (!isset($_SESSION['NIF']) || empty($_SESSION['NIF'])) {
+        error_log("Usuario no autenticado en API calendario");
         http_response_code(401);
         echo json_encode(['success' => false, 'message' => 'Usuario no autenticado']);
         exit();
@@ -116,38 +137,45 @@ try {
     
     // Obtener eventos por usuario y rango de fechas
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['mis_eventos'])) {
-        $NIF = verificarAutenticacion();
-        
-        // Fechas para filtrar (opcional)
-        $fecha_inicio = isset($_GET['inicio']) ? $_GET['inicio'] : null;
-        $fecha_fin = isset($_GET['fin']) ? $_GET['fin'] : null;
-        
-        // Obtener los eventos del usuario
-        $eventos = $modeloEvento->obtenerEventosPorUsuario($NIF, $fecha_inicio, $fecha_fin);
-        
-        // Si se solicita incluir tareas y fichajes
-        $incluirTodo = isset($_GET['incluir_todo']) && $_GET['incluir_todo'] === 'true';
-        
-        if ($incluirTodo) {
-            // Obtener tareas como eventos
-            $tareas = $modeloEvento->obtenerTareasComoEventos($NIF, $fecha_inicio, $fecha_fin);
+        try {
+            $NIF = verificarAutenticacion();
             
-            // Obtener fichajes como eventos
-            $fichajes = $modeloEvento->obtenerFichajesComoEventos($NIF, $fecha_inicio, $fecha_fin);
+            // Fechas para filtrar (opcional)
+            $fecha_inicio = isset($_GET['inicio']) ? $_GET['inicio'] : null;
+            $fecha_fin = isset($_GET['fin']) ? $_GET['fin'] : null;
             
-            // Combinar todo en un solo array
-            $resultado = [
-                'success' => true,
-                'eventos' => $eventos['success'] ? $eventos['eventos'] : [],
-                'tareas' => $tareas['success'] ? $tareas['tareas'] : [],
-                'fichajes' => $fichajes['success'] ? $fichajes['fichajes'] : []
-            ];
-        } else {
-            $resultado = $eventos;
+            // Obtener los eventos del usuario
+            $eventos = $modeloEvento->obtenerEventosPorUsuario($NIF, $fecha_inicio, $fecha_fin);
+            
+            // Si se solicita incluir tareas y fichajes
+            $incluirTodo = isset($_GET['incluir_todo']) && $_GET['incluir_todo'] === 'true';
+            
+            if ($incluirTodo) {
+                // Obtener tareas como eventos
+                $tareas = $modeloEvento->obtenerTareasComoEventos($NIF, $fecha_inicio, $fecha_fin);
+                
+                // Obtener fichajes como eventos
+                $fichajes = $modeloEvento->obtenerFichajesComoEventos($NIF, $fecha_inicio, $fecha_fin);
+                
+                // Combinar todo en un solo array
+                $resultado = [
+                    'success' => true,
+                    'eventos' => $eventos['success'] ? $eventos['eventos'] : [],
+                    'tareas' => $tareas['success'] ? $tareas['tareas'] : [],
+                    'fichajes' => $fichajes['success'] ? $fichajes['fichajes'] : []
+                ];
+            } else {
+                $resultado = $eventos;
+            }
+            
+            echo json_encode($resultado);
+            exit();
+        } catch (Exception $e) {
+            error_log("Error al obtener eventos del usuario: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Error al obtener eventos: ' . $e->getMessage()]);
+            exit();
         }
-        
-        echo json_encode($resultado);
-        exit();
     }
     
     // Obtener eventos por departamento y rango de fechas
@@ -171,12 +199,12 @@ try {
         exit();
     }
     
-    // Si llegamos aquu00ed, la ruta no existe
+    // Si llegamos aquí, la ruta no existe
     http_response_code(404);
     echo json_encode(['success' => false, 'message' => 'Endpoint no encontrado']);
     
 } catch (Exception $e) {
     error_log("Error en API calendario: " . $e->getMessage());
-    handleError("Error interno del servidor: " . $e->getMessage());
+    handleError("Error interno del servidor");
 }
 ?>

@@ -67,21 +67,41 @@ const Calendario = () => {
         url = `${import.meta.env.VITE_API_URL}/calendario.php?mis_eventos=true&inicio=${inicio}&fin=${fin}&incluir_todo=true`
       }
       
-      const response = await fetch(url, {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-          'Accept': 'application/json',
-          'Cache-Control': 'no-cache, no-store'
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json',
+            'Cache-Control': 'no-cache, no-store'
+          }
+        })
+
+        if (!response.ok) {
+          console.error(`Error en la respuesta del servidor: ${response.status}`);
+          setError(`Error al cargar eventos (${response.status}). Por favor, inténtelo de nuevo más tarde.`);
+          setIsLoading(false);
+          return;
         }
-      })
 
-      if (!response.ok) {
-        throw new Error(`Error al cargar eventos: ${response.status}`)
-      }
+        // Intentar parsear la respuesta como JSON
+        let data;
+        try {
+          data = await response.json();
+        } catch (jsonError) {
+          console.error('Error al parsear JSON:', jsonError);
+          setError('Error en el formato de la respuesta del servidor. Por favor, contacte al administrador.');
+          setIsLoading(false);
+          return;
+        }
 
-      const data = await response.json()
-      if (data.success) {
+        if (!data.success && data.message) {
+          console.error('Error reportado por la API:', data.message);
+          setError(`Error: ${data.message}`);
+          setIsLoading(false);
+          return;
+        }
+
         const eventosFormateados = []
         
         // Agregar eventos normales si el filtro está activado
@@ -155,8 +175,11 @@ const Calendario = () => {
         }
         
         setEventos(eventosFormateados)
-      } else {
-        throw new Error(data.message || 'Error al cargar eventos')
+      } catch (error) {
+        console.error('Error:', error)
+        setError(error.message)
+      } finally {
+        setIsLoading(false)
       }
     } catch (error) {
       console.error('Error:', error)

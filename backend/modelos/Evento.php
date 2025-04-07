@@ -271,99 +271,275 @@ class Evento {
     }
     
     /**
-     * Obtener tareas con vencimiento como eventos de calendario
+     * Obtiene las tareas del usuario como eventos para el calendario
+     * @param string $NIF El NIF del usuario
+     * @param string|null $fecha_inicio Fecha de inicio para filtrar
+     * @param string|null $fecha_fin Fecha de fin para filtrar
+     * @return array Array con las tareas como eventos
      */
-    public function obtenerTareasComoEventos($NIF_usuario, $fecha_inicio = null, $fecha_fin = null) {
+    public function obtenerTareasComoEventos($NIF, $fecha_inicio = null, $fecha_fin = null) {
         try {
-            $query = "SELECT t.id, t.titulo, t.descripcion, t.fecha_vencimiento as fecha_inicio, 
-                            t.fecha_vencimiento as fecha_fin, 'tarea' as tipo, 
-                            CASE 
-                                WHEN t.prioridad = 'alta' THEN '#ef4444' 
-                                WHEN t.prioridad = 'media' THEN '#3b82f6' 
-                                ELSE '#94a3b8' 
-                            END as color, 
-                            t.NIF_asignado as NIF_usuario, t.id_departamento, 0 as recurrente, 0 as dia_completo,
-                            t.estado 
-                      FROM tareas t 
-                      WHERE t.NIF_asignado = :NIF_usuario 
-                      AND t.fecha_vencimiento IS NOT NULL ";
+            // Verificar si la tabla 'tareas' existe
+            $tableCheckQuery = "SHOW TABLES LIKE 'tareas'";
+            $tableResult = $this->conn->query($tableCheckQuery);
             
-            $params = [':NIF_usuario' => $NIF_usuario];
+            if ($tableResult === false) {
+                error_log("Error al verificar la tabla 'tareas': " . $this->conn->errorInfo()[2]);
+                return ['success' => false, 'message' => 'Error al verificar la tabla de tareas', 'tareas' => []];
+            }
             
-            // Filtrar por rango de fechas si se proporcionan
+            if ($tableResult->rowCount() === 0) {
+                error_log("La tabla 'tareas' no existe en la base de datos");
+                return ['success' => true, 'tareas' => []];
+            }
+            
+            // Construir la consulta base
+            $query = "SELECT id, titulo, descripcion, fecha_creacion, fecha_vencimiento, estado, prioridad, NIF_usuario 
+                     FROM tareas 
+                     WHERE NIF_usuario = :NIF";
+            
+            // Añadir filtro de fechas si se proporcionan
+            $params = [':NIF' => $NIF];
+            
             if ($fecha_inicio && $fecha_fin) {
-                $query .= "AND t.fecha_vencimiento BETWEEN :fecha_inicio AND :fecha_fin ";
+                $query .= " AND (fecha_vencimiento BETWEEN :fecha_inicio AND :fecha_fin 
+                           OR fecha_creacion BETWEEN :fecha_inicio AND :fecha_fin)";
                 $params[':fecha_inicio'] = $fecha_inicio;
                 $params[':fecha_fin'] = $fecha_fin;
             }
             
-            $query .= "ORDER BY t.fecha_vencimiento ASC";
-            
+            // Preparar y ejecutar la consulta
             $stmt = $this->conn->prepare($query);
             
-            // Bind de todos los paru00e1metros
+            if ($stmt === false) {
+                error_log("Error en la preparación de la consulta de tareas: " . $this->conn->errorInfo()[2]);
+                return ['success' => false, 'message' => 'Error al preparar la consulta de tareas', 'tareas' => []];
+            }
+            
             foreach ($params as $param => $value) {
                 $stmt->bindValue($param, $value);
             }
             
-            $stmt->execute();
-            $tareas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            if (!$stmt->execute()) {
+                error_log("Error al ejecutar la consulta de tareas: " . $stmt->errorInfo()[2]);
+                return ['success' => false, 'message' => 'Error al obtener tareas', 'tareas' => []];
+            }
             
-            return ['success' => true, 'tareas' => $tareas];
+            $tareas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $tareasComoEventos = [];
+            
+            // Convertir las tareas a formato de evento para el calendario
+            foreach ($tareas as $tarea) {
+                $color = '';
+                
+                // Asignar color según prioridad
+                switch ($tarea['prioridad']) {
+                    case 'alta':
+                        $color = '#ff4d4d'; // Rojo
+                        break;
+                    case 'media':
+                        $color = '#ffa64d'; // Naranja
+                        break;
+                    case 'baja':
+                        $color = '#4da6ff'; // Azul
+                        break;
+                    default:
+                        $color = '#808080'; // Gris por defecto
+                }
+                
+                // Crear el evento a partir de la tarea
+                $evento = [
+                    'id' => 'tarea_' . $tarea['id'],
+                    'title' => '[Tarea] ' . $tarea['titulo'],
+                    'start' => $tarea['fecha_vencimiento'] ?: $tarea['fecha_creacion'],
+                    'end' => $tarea['fecha_vencimiento'] ?: $tarea['fecha_creacion'],
+                    'allDay' => true,
+                    'backgroundColor' => $color,
+                    'borderColor' => $color,
+                    'description' => $tarea['descripcion'],
+                    'estado' => $tarea['estado'],
+                    'tipo' => 'tarea'
+                ];
+                
+                $tareasComoEventos[] = $evento;
+            }
+            
+            return ['success' => true, 'tareas' => $tareasComoEventos];
             
         } catch (PDOException $e) {
-            error_log("Error en obtenerTareasComoEventos: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error al obtener tareas: ' . $e->getMessage()];
+            error_log("Error PDO al obtener tareas como eventos: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error de base de datos al obtener tareas', 'tareas' => []];
+        } catch (Exception $e) {
+            error_log("Error general al obtener tareas como eventos: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error al obtener tareas', 'tareas' => []];
         }
     }
     
     /**
-     * Obtener fichajes como eventos de calendario
+     * Obtiene los fichajes del usuario como eventos para el calendario
+     * @param string $NIF El NIF del usuario
+     * @param string|null $fecha_inicio Fecha de inicio para filtrar
+     * @param string|null $fecha_fin Fecha de fin para filtrar
+     * @return array Array con los fichajes como eventos
      */
-    public function obtenerFichajesComoEventos($NIF_usuario, $fecha_inicio = null, $fecha_fin = null) {
+    public function obtenerFichajesComoEventos($NIF, $fecha_inicio = null, $fecha_fin = null) {
         try {
-            $query = "SELECT f.id, 
-                            CONCAT('Fichaje: ', DATE_FORMAT(f.hora_entrada, '%H:%i'), ' - ', 
-                                  CASE WHEN f.hora_salida IS NULL THEN 'En curso' 
-                                  ELSE DATE_FORMAT(f.hora_salida, '%H:%i') END) as titulo, 
-                            '' as descripcion, 
-                            f.hora_entrada as fecha_inicio, 
-                            COALESCE(f.hora_salida, CURRENT_TIMESTAMP) as fecha_fin, 
-                            'fichaje' as tipo, 
-                            '#10b981' as color, 
-                            f.NIF as NIF_usuario, 
-                            null as id_departamento, 
-                            0 as recurrente, 
-                            0 as dia_completo 
-                      FROM fichajes f 
-                      WHERE f.NIF = :NIF_usuario ";
+            // Verificar si existe la tabla 'fichajes' o 'registros'
+            $tableFichajes = false;
+            $tablaRegistros = false;
             
-            $params = [':NIF_usuario' => $NIF_usuario];
-            
-            // Filtrar por rango de fechas si se proporcionan
-            if ($fecha_inicio && $fecha_fin) {
-                $query .= "AND (DATE(f.hora_entrada) BETWEEN DATE(:fecha_inicio) AND DATE(:fecha_fin)) ";
-                $params[':fecha_inicio'] = $fecha_inicio;
-                $params[':fecha_fin'] = $fecha_fin;
+            // Comprobar tabla fichajes
+            $checkFichajes = "SHOW TABLES LIKE 'fichajes'";
+            $resultFichajes = $this->conn->query($checkFichajes);
+            if ($resultFichajes && $resultFichajes->rowCount() > 0) {
+                $tableFichajes = true;
             }
             
-            $query .= "ORDER BY f.hora_entrada ASC";
-            
-            $stmt = $this->conn->prepare($query);
-            
-            // Bind de todos los paru00e1metros
-            foreach ($params as $param => $value) {
-                $stmt->bindValue($param, $value);
+            // Comprobar tabla registros
+            $checkRegistros = "SHOW TABLES LIKE 'registros'";
+            $resultRegistros = $this->conn->query($checkRegistros);
+            if ($resultRegistros && $resultRegistros->rowCount() > 0) {
+                $tablaRegistros = true;
             }
             
-            $stmt->execute();
-            $fichajes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            // Si no existe ninguna de las tablas, devolver array vacío
+            if (!$tableFichajes && !$tablaRegistros) {
+                error_log("No existen las tablas 'fichajes' ni 'registros' en la base de datos");
+                return ['success' => true, 'fichajes' => []];
+            }
             
-            return ['success' => true, 'fichajes' => $fichajes];
+            $fichajes = [];
+            
+            // Consulta para tabla fichajes
+            if ($tableFichajes) {
+                $queryFichajes = "SELECT id, fecha_entrada, fecha_salida, NIF_usuario, latitud_entrada, longitud_entrada, 
+                               latitud_salida, longitud_salida 
+                               FROM fichajes 
+                               WHERE NIF_usuario = :NIF";
+                
+                if ($fecha_inicio && $fecha_fin) {
+                    $queryFichajes .= " AND (fecha_entrada BETWEEN :fecha_inicio AND :fecha_fin 
+                                   OR fecha_salida BETWEEN :fecha_inicio AND :fecha_fin)";
+                }
+                
+                $stmtFichajes = $this->conn->prepare($queryFichajes);
+                
+                if ($stmtFichajes) {
+                    $stmtFichajes->bindValue(':NIF', $NIF);
+                    
+                    if ($fecha_inicio && $fecha_fin) {
+                        $stmtFichajes->bindValue(':fecha_inicio', $fecha_inicio);
+                        $stmtFichajes->bindValue(':fecha_fin', $fecha_fin);
+                    }
+                    
+                    if ($stmtFichajes->execute()) {
+                        $fichajes = array_merge($fichajes, $stmtFichajes->fetchAll(PDO::FETCH_ASSOC));
+                    } else {
+                        error_log("Error al ejecutar consulta de fichajes: " . implode(", ", $stmtFichajes->errorInfo()));
+                    }
+                } else {
+                    error_log("Error al preparar consulta de fichajes: " . implode(", ", $this->conn->errorInfo()));
+                }
+            }
+            
+            // Consulta para tabla registros
+            if ($tablaRegistros) {
+                $queryRegistros = "SELECT id, fecha_entrada, fecha_salida, NIF_usuario, latitud_entrada, longitud_entrada, 
+                                latitud_salida, longitud_salida 
+                                FROM registros 
+                                WHERE NIF_usuario = :NIF";
+                
+                if ($fecha_inicio && $fecha_fin) {
+                    $queryRegistros .= " AND (fecha_entrada BETWEEN :fecha_inicio AND :fecha_fin 
+                                    OR fecha_salida BETWEEN :fecha_inicio AND :fecha_fin)";
+                }
+                
+                $stmtRegistros = $this->conn->prepare($queryRegistros);
+                
+                if ($stmtRegistros) {
+                    $stmtRegistros->bindValue(':NIF', $NIF);
+                    
+                    if ($fecha_inicio && $fecha_fin) {
+                        $stmtRegistros->bindValue(':fecha_inicio', $fecha_inicio);
+                        $stmtRegistros->bindValue(':fecha_fin', $fecha_fin);
+                    }
+                    
+                    if ($stmtRegistros->execute()) {
+                        $fichajes = array_merge($fichajes, $stmtRegistros->fetchAll(PDO::FETCH_ASSOC));
+                    } else {
+                        error_log("Error al ejecutar consulta de registros: " . implode(", ", $stmtRegistros->errorInfo()));
+                    }
+                } else {
+                    error_log("Error al preparar consulta de registros: " . implode(", ", $this->conn->errorInfo()));
+                }
+            }
+            
+            // Si no hay fichajes, devolver array vacío
+            if (empty($fichajes)) {
+                return ['success' => true, 'fichajes' => []];
+            }
+            
+            $fichajesComoEventos = [];
+            
+            // Convertir los fichajes a formato de evento para el calendario
+            foreach ($fichajes as $fichaje) {
+                // Color para entrada
+                $colorEntrada = '#4CAF50'; // Verde
+                
+                // Evento de entrada
+                if (!empty($fichaje['fecha_entrada'])) {
+                    $eventoEntrada = [
+                        'id' => 'fichaje_entrada_' . $fichaje['id'],
+                        'title' => 'Entrada',
+                        'start' => $fichaje['fecha_entrada'],
+                        'end' => $fichaje['fecha_entrada'],
+                        'backgroundColor' => $colorEntrada,
+                        'borderColor' => $colorEntrada,
+                        'tipo' => 'fichaje_entrada'
+                    ];
+                    
+                    // Añadir coordenadas si existen
+                    if (!empty($fichaje['latitud_entrada']) && !empty($fichaje['longitud_entrada'])) {
+                        $eventoEntrada['latitud'] = $fichaje['latitud_entrada'];
+                        $eventoEntrada['longitud'] = $fichaje['longitud_entrada'];
+                    }
+                    
+                    $fichajesComoEventos[] = $eventoEntrada;
+                }
+                
+                // Color para salida
+                $colorSalida = '#F44336'; // Rojo
+                
+                // Evento de salida
+                if (!empty($fichaje['fecha_salida'])) {
+                    $eventoSalida = [
+                        'id' => 'fichaje_salida_' . $fichaje['id'],
+                        'title' => 'Salida',
+                        'start' => $fichaje['fecha_salida'],
+                        'end' => $fichaje['fecha_salida'],
+                        'backgroundColor' => $colorSalida,
+                        'borderColor' => $colorSalida,
+                        'tipo' => 'fichaje_salida'
+                    ];
+                    
+                    // Añadir coordenadas si existen
+                    if (!empty($fichaje['latitud_salida']) && !empty($fichaje['longitud_salida'])) {
+                        $eventoSalida['latitud'] = $fichaje['latitud_salida'];
+                        $eventoSalida['longitud'] = $fichaje['longitud_salida'];
+                    }
+                    
+                    $fichajesComoEventos[] = $eventoSalida;
+                }
+            }
+            
+            return ['success' => true, 'fichajes' => $fichajesComoEventos];
             
         } catch (PDOException $e) {
-            error_log("Error en obtenerFichajesComoEventos: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error al obtener fichajes: ' . $e->getMessage()];
+            error_log("Error PDO al obtener fichajes como eventos: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error de base de datos al obtener fichajes', 'fichajes' => []];
+        } catch (Exception $e) {
+            error_log("Error general al obtener fichajes como eventos: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error al obtener fichajes', 'fichajes' => []];
         }
     }
 }
