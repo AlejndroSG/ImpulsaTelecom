@@ -98,10 +98,9 @@ try {
     
     // Verificar si el usuario está autenticado
     function verificarAutenticacion() {
-        // Modo de desarrollo: permitir acceso sin autenticación
-        if (isset($_GET['estadisticas']) || isset($_GET['mis_tareas']) || isset($_GET['departamento'])) {
-            // Para propósitos de prueba, devolver un NIF de usuario existente
-            return '98765432B'; // NIF de Juan Pérez López
+        // Iniciar la sesión si no está iniciada
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
         }
         
         if (!isset($_SESSION['NIF']) || empty($_SESSION['NIF'])) {
@@ -337,7 +336,9 @@ try {
             $filtros['fecha_hasta'] = $_GET['fecha_hasta'];
         }
         
-        if (isset($_GET['NIF_asignado'])) {
+        // Ya no filtramos por el usuario actual para mostrar todas las tareas del departamento
+        // Si se proporciona un NIF específico, filtrar por ese usuario
+        if (isset($_GET['NIF_asignado']) && !empty($_GET['NIF_asignado'])) {
             $filtros['NIF_asignado'] = $_GET['NIF_asignado'];
         }
         

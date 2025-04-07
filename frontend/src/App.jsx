@@ -8,6 +8,7 @@ import Perfil from './pages/Perfil'
 import Fichaje from './pages/Fichaje'
 import Usuario from './pages/Usuario'
 import Tareas from './pages/Tareas'
+import Calendario from './pages/Calendario'
 import { AuthProvider, ProtectedRoute, PublicRoute } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 
@@ -41,6 +42,7 @@ function App() {
               <Route path="/fichaje" element={<Fichaje />} />
               <Route path="/usuario" element={<Usuario />} />
               <Route path="/tareas" element={<Tareas />} />
+              <Route path="/calendario" element={<Calendario />} />
             </Route>
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>

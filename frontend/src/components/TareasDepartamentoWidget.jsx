@@ -8,13 +8,11 @@ const TareasDepartamentoWidget = () => {
   const [tareas, setTareas] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
-  const [compañeros, setCompañeros] = useState([])
   const [filtros, setFiltros] = useState({
     estado: '',
     prioridad: '',
     fecha_desde: '',
-    fecha_hasta: '',
-    NIF_asignado: ''
+    fecha_hasta: ''
   })
 
   // Cargar tareas del departamento
@@ -29,7 +27,6 @@ const TareasDepartamentoWidget = () => {
       if (filtros.prioridad) url += `&prioridad=${filtros.prioridad}`
       if (filtros.fecha_desde) url += `&fecha_desde=${filtros.fecha_desde}`
       if (filtros.fecha_hasta) url += `&fecha_hasta=${filtros.fecha_hasta}`
-      if (filtros.NIF_asignado) url += `&NIF_asignado=${filtros.NIF_asignado}`
       
       const response = await fetch(url, {
         method: 'GET',
@@ -43,19 +40,6 @@ const TareasDepartamentoWidget = () => {
       const data = await response.json()
       if (data.success) {
         setTareas(data.tareas)
-        
-        // Extraer compañeros únicos del departamento
-        const compañerosUnicos = [...new Set(data.tareas.map(tarea => tarea.NIF_asignado))]
-          .filter(nif => nif !== user.id) // Filtrar el usuario actual
-          .map(nif => {
-            const tarea = data.tareas.find(t => t.NIF_asignado === nif)
-            return {
-              NIF: nif,
-              nombre: `${tarea.nombre_asignado || ''} ${tarea.apellidos_asignado || ''}`.trim() || 'Usuario'
-            }
-          })
-        
-        setCompañeros(compañerosUnicos)
       } else {
         throw new Error(data.message || 'Error al cargar tareas del departamento')
       }
@@ -87,8 +71,7 @@ const TareasDepartamentoWidget = () => {
       estado: '',
       prioridad: '',
       fecha_desde: '',
-      fecha_hasta: '',
-      NIF_asignado: ''
+      fecha_hasta: ''
     })
   }
 
@@ -146,21 +129,6 @@ const TareasDepartamentoWidget = () => {
       <div className={`mb-6 p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
         <div className="flex flex-wrap gap-4">
           <div className="flex-1 min-w-[200px]">
-            <label className={`block mb-2 text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Compañero</label>
-            <select
-              name="NIF_asignado"
-              value={filtros.NIF_asignado}
-              onChange={handleFiltroChange}
-              className={`w-full p-2 rounded border ${isDarkMode ? 'bg-gray-600 border-gray-500 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
-            >
-              <option value="">Todos</option>
-              {compañeros.map(comp => (
-                <option key={comp.NIF} value={comp.NIF}>{comp.nombre}</option>
-              ))}
-            </select>
-          </div>
-          
-          <div className="flex-1 min-w-[200px]">
             <label className={`block mb-2 text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>Estado</label>
             <select
               name="estado"
@@ -214,61 +182,66 @@ const TareasDepartamentoWidget = () => {
           </div>
         </div>
         
-        <div className="mt-4 flex justify-end">
-          <button
-            onClick={resetFiltros}
-            className={`px-4 py-2 rounded ${isDarkMode ? 'bg-gray-600 hover:bg-gray-500 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-800'}`}
-          >
-            Limpiar Filtros
-          </button>
-        </div>
+        <button
+          onClick={resetFiltros}
+          className={`mt-3 px-4 py-2 text-sm font-medium rounded-md ${isDarkMode ? 'bg-gray-600 hover:bg-gray-500 text-white' : 'bg-gray-200 hover:bg-gray-300 text-gray-700'}`}
+        >
+          Limpiar filtros
+        </button>
       </div>
 
       {/* Lista de tareas */}
       {isLoading ? (
-        <div className="flex justify-center items-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-500"></div>
+        <div className="flex justify-center items-center py-10">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-gray-500"></div>
         </div>
       ) : error ? (
-        <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-red-900 text-red-200' : 'bg-red-100 text-red-800'}`}>
+        <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-red-800 text-red-200' : 'bg-red-100 text-red-800'}`}>
           {error}
+          <button 
+            onClick={cargarTareas} 
+            className={`ml-4 px-3 py-1 rounded-md ${isDarkMode ? 'bg-red-700 hover:bg-red-600' : 'bg-red-200 hover:bg-red-300'}`}
+          >
+            Reintentar
+          </button>
         </div>
       ) : tareas.length === 0 ? (
-        <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
+        <div className={`p-6 text-center rounded-lg ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
           No hay tareas en el departamento que coincidan con los filtros seleccionados.
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className={`min-w-full ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
-            <thead>
-              <tr className={`${isDarkMode ? 'border-gray-700' : 'border-gray-200'} border-b`}>
-                <th className="py-3 px-4 text-left">Tu00edtulo</th>
-                <th className="py-3 px-4 text-left">Asignado a</th>
-                <th className="py-3 px-4 text-left">Estado</th>
-                <th className="py-3 px-4 text-left">Prioridad</th>
-                <th className="py-3 px-4 text-left">Vencimiento</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tareas.map(tarea => (
-                <tr 
-                  key={tarea.id} 
-                  className={`${isDarkMode ? 'border-gray-700 hover:bg-gray-700' : 'border-gray-200 hover:bg-gray-50'} border-b transition-colors`}
-                >
-                  <td className="py-3 px-4">
-                    <div className="font-medium">{tarea.titulo}</div>
-                    <div className="text-sm truncate max-w-xs">{tarea.descripcion}</div>
-                  </td>
-                  <td className="py-3 px-4">
-                    {`${tarea.nombre_asignado || ''} ${tarea.apellidos_asignado || ''}`.trim() || 'Usuario'}
-                  </td>
-                  <td className="py-3 px-4">{renderEstado(tarea.estado)}</td>
-                  <td className="py-3 px-4">{renderPrioridad(tarea.prioridad)}</td>
-                  <td className="py-3 px-4">{tarea.fecha_vencimiento || 'Sin fecha'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="grid gap-4">
+          {tareas.map((tarea) => (
+            <div key={tarea.id} className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} border ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
+              <div className="flex justify-between items-start">
+                <div>
+                  <h3 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{tarea.titulo}</h3>
+                  <p className={`mt-1 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>{tarea.descripcion}</p>
+                </div>
+                
+                <div className="flex items-center gap-2">
+                  {renderEstado(tarea.estado)}
+                  {renderPrioridad(tarea.prioridad)}
+                </div>
+              </div>
+              
+              <div className="mt-3 flex flex-wrap gap-2 text-xs">
+                <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+                  <span className="font-medium">Creada por:</span> {tarea.nombre_creador} {tarea.apellidos_creador}
+                </span>
+                
+                <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+                  <span className="font-medium">Asignada a:</span> {tarea.nombre_asignado} {tarea.apellidos_asignado}
+                </span>
+                
+                {tarea.fecha_vencimiento && (
+                  <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+                    <span className="font-medium">Vence:</span> {new Date(tarea.fecha_vencimiento).toLocaleDateString()}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
