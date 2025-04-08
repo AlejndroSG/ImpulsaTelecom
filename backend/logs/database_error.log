@@ -111,3 +111,195 @@ Stack trace:
 [07-Apr-2025 16:26:10 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
 [07-Apr-2025 16:26:10 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
 [07-Apr-2025 16:26:10 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:28:24 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:28:24 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:28:24 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:28:24 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:28:24 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:28:24 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:34:32 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:34:32 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:34:32 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:34:32 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:34:32 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:34:32 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:35:31 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:35:31 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:35:31 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:35:32 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:35:32 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:35:32 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:35:34 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:35:34 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:35:34 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:35:34 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:35:34 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:35:34 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:35:38 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:35:38 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:35:38 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:35:38 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:35:38 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:35:38 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:35:39 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:35:39 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:35:39 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:35:39 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:79
+Stack trace:
+#0 C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php(186): obtenerDepartamentoUsuario('98765432B')
+#1 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 79
+[08-Apr-2025 12:35:40 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:79
+Stack trace:
+#0 C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php(186): obtenerDepartamentoUsuario('98765432B')
+#1 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 79
+[08-Apr-2025 12:35:41 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:79
+Stack trace:
+#0 C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php(186): obtenerDepartamentoUsuario('98765432B')
+#1 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 79
+[08-Apr-2025 12:35:41 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:79
+Stack trace:
+#0 C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php(186): obtenerDepartamentoUsuario('98765432B')
+#1 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 79
+[08-Apr-2025 12:35:42 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:35:42 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:35:42 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:35:43 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:79
+Stack trace:
+#0 C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php(186): obtenerDepartamentoUsuario('98765432B')
+#1 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 79
+[08-Apr-2025 12:37:41 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:79
+Stack trace:
+#0 C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php(186): obtenerDepartamentoUsuario('98765432B')
+#1 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 79
+[08-Apr-2025 12:43:00 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:79
+Stack trace:
+#0 C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php(186): obtenerDepartamentoUsuario('98765432B')
+#1 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 79
+[08-Apr-2025 12:43:00 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:79
+Stack trace:
+#0 C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php(186): obtenerDepartamentoUsuario('98765432B')
+#1 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 79
+[08-Apr-2025 12:43:01 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:43:01 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:43:01 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:43:01 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:79
+Stack trace:
+#0 C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php(186): obtenerDepartamentoUsuario('98765432B')
+#1 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 79
+[08-Apr-2025 12:43:01 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:79
+Stack trace:
+#0 C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php(186): obtenerDepartamentoUsuario('98765432B')
+#1 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 79
+[08-Apr-2025 12:43:02 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to a member function prepare() on null in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:79
+Stack trace:
+#0 C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php(186): obtenerDepartamentoUsuario('98765432B')
+#1 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 79
+[08-Apr-2025 12:43:05 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:43:05 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:43:05 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:43:05 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:43:05 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:43:05 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:45:51 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:45:51 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:45:51 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:45:51 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:45:51 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:45:51 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:52:42 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:52:42 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:52:42 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:52:42 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:52:42 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:52:42 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:53:33 Europe/Berlin] Error en crear evento: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:53:50 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:53:50 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:53:50 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:53:50 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 12:53:50 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 12:53:50 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 12:53:56 Europe/Berlin] Error en crear evento: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.eventos' doesn't exist
+[08-Apr-2025 13:01:36 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:01:36 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:01:40 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:01:40 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:01:55 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:01:55 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:02:02 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:02:02 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:03:41 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.departamentos' doesn't exist
+[08-Apr-2025 13:03:41 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:03:41 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:04:10 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.departamentos' doesn't exist
+[08-Apr-2025 13:04:10 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:04:10 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:04:26 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.departamentos' doesn't exist
+[08-Apr-2025 13:04:26 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:04:26 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:05:46 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.departamentos' doesn't exist
+[08-Apr-2025 13:05:46 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:05:46 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:05:46 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.departamentos' doesn't exist
+[08-Apr-2025 13:05:46 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:05:46 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:06:00 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.departamentos' doesn't exist
+[08-Apr-2025 13:06:00 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:06:00 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:08:55 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.departamentos' doesn't exist
+[08-Apr-2025 13:08:55 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:08:55 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:09:43 Europe/Berlin] Error en obtenerEventosPorUsuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.departamentos' doesn't exist
+[08-Apr-2025 13:09:43 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:09:43 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:20:48 Europe/Berlin] Error al obtener eventos por usuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.departamentos' doesn't exist
+[08-Apr-2025 13:20:48 Europe/Berlin] Error al obtener eventos por usuario: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.departamentos' doesn't exist
+[08-Apr-2025 13:23:23 Europe/Berlin] Error al obtener eventos por usuario: SQLSTATE[HY000]: General error: 1267 Illegal mix of collations (utf8mb4_unicode_ci,IMPLICIT) and (utf8mb4_general_ci,IMPLICIT) for operation '='
+[08-Apr-2025 13:23:23 Europe/Berlin] Error al obtener eventos por usuario: SQLSTATE[HY000]: General error: 1267 Illegal mix of collations (utf8mb4_unicode_ci,IMPLICIT) and (utf8mb4_general_ci,IMPLICIT) for operation '='
+[08-Apr-2025 13:24:01 Europe/Berlin] Error al obtener eventos por usuario: SQLSTATE[HY000]: General error: 1267 Illegal mix of collations (utf8mb4_unicode_ci,IMPLICIT) and (utf8mb4_general_ci,IMPLICIT) for operation '='
+[08-Apr-2025 13:24:01 Europe/Berlin] Error al obtener eventos por usuario: SQLSTATE[HY000]: General error: 1267 Illegal mix of collations (utf8mb4_unicode_ci,IMPLICIT) and (utf8mb4_general_ci,IMPLICIT) for operation '='
+[08-Apr-2025 13:26:44 Europe/Berlin] Error al obtener eventos por usuario: SQLSTATE[HY000]: General error: 1267 Illegal mix of collations (utf8mb4_unicode_ci,IMPLICIT) and (utf8mb4_general_ci,IMPLICIT) for operation '='
+[08-Apr-2025 13:26:44 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:26:44 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:26:44 Europe/Berlin] Error al obtener eventos por usuario: SQLSTATE[HY000]: General error: 1267 Illegal mix of collations (utf8mb4_unicode_ci,IMPLICIT) and (utf8mb4_general_ci,IMPLICIT) for operation '='
+[08-Apr-2025 13:26:44 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:26:44 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:26:53 Europe/Berlin] Error al obtener eventos por usuario: SQLSTATE[HY000]: General error: 1267 Illegal mix of collations (utf8mb4_unicode_ci,IMPLICIT) and (utf8mb4_general_ci,IMPLICIT) for operation '='
+[08-Apr-2025 13:26:53 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:26:53 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:28:58 Europe/Berlin] Error al obtener eventos por usuario: SQLSTATE[HY000]: General error: 1267 Illegal mix of collations (utf8mb4_unicode_ci,IMPLICIT) and (utf8mb4_general_ci,IMPLICIT) for operation '='
+[08-Apr-2025 13:29:08 Europe/Berlin] Error al obtener eventos por usuario: SQLSTATE[HY000]: General error: 1267 Illegal mix of collations (utf8mb4_unicode_ci,IMPLICIT) and (utf8mb4_general_ci,IMPLICIT) for operation '='
+[08-Apr-2025 13:30:10 Europe/Berlin] Error al obtener eventos por usuario: SQLSTATE[42000]: Syntax error or access violation: 1253 COLLATION 'utf8mb4_unicode_ci' is not valid for CHARACTER SET 'binary'
+[08-Apr-2025 13:39:32 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:39:32 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:39:32 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:39:32 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:39:37 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:39:37 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:39:54 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:39:54 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:39:55 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:39:55 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:39:56 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:39:56 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:39:57 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:39:57 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:39:58 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:39:58 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:39:58 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:39:59 Europe/Berlin] Usuario no autenticado en API calendario
+[08-Apr-2025 13:40:01 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:40:01 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'
+[08-Apr-2025 13:40:01 Europe/Berlin] Error PDO al obtener tareas como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'NIF_usuario' in 'field list'
+[08-Apr-2025 13:40:01 Europe/Berlin] Error PDO al obtener fichajes como eventos: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'id' in 'field list'

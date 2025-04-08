@@ -14,127 +14,125 @@ class Evento {
      * Crear un nuevo evento en el calendario
      */
     public function crear($datos) {
+        // Validar datos requeridos
+        if (!isset($datos['titulo']) || !isset($datos['fecha_inicio']) || !isset($datos['NIF_usuario'])) {
+            return ['success' => false, 'message' => 'Faltan datos requeridos'];
+        }
+        
         try {
-            // Validar datos mu00ednimos requeridos
-            if (!isset($datos['titulo']) || !isset($datos['fecha_inicio']) || !isset($datos['NIF_usuario'])) {
-                return ['success' => false, 'message' => 'Faltan datos requeridos'];
+            // Validar y formatear las fechas
+            $fecha_inicio = $this->validarFormatoFecha($datos['fecha_inicio']);
+            $fecha_fin = isset($datos['fecha_fin']) ? $this->validarFormatoFecha($datos['fecha_fin']) : null;
+            
+            if ($fecha_inicio === false) {
+                return ['success' => false, 'message' => 'Formato de fecha de inicio inválido'];
             }
             
-            // Preparar la consulta
-            $query = "INSERT INTO eventos (titulo, descripcion, fecha_inicio, fecha_fin, tipo, color, NIF_usuario, id_departamento, recurrente, dia_completo) "
-                   . "VALUES (:titulo, :descripcion, :fecha_inicio, :fecha_fin, :tipo, :color, :NIF_usuario, :id_departamento, :recurrente, :dia_completo)";
+            if (isset($datos['fecha_fin']) && $fecha_fin === false) {
+                return ['success' => false, 'message' => 'Formato de fecha de fin inválido'];
+            }
+            
+            // Preparar la consulta SQL
+            $query = "INSERT INTO eventos (titulo, descripcion, fecha_inicio, fecha_fin, NIF_usuario, id_departamento, tipo, color, dia_completo) "
+                   . "VALUES (:titulo, :descripcion, :fecha_inicio, :fecha_fin, :NIF_usuario, :id_departamento, :tipo, :color, :dia_completo)";
             
             $stmt = $this->conn->prepare($query);
             
-            // Limpiar y asignar valores
-            $titulo = htmlspecialchars(strip_tags($datos['titulo']));
-            $descripcion = isset($datos['descripcion']) ? htmlspecialchars(strip_tags($datos['descripcion'])) : null;
-            $fecha_inicio = $datos['fecha_inicio'];
-            $fecha_fin = isset($datos['fecha_fin']) ? $datos['fecha_fin'] : null;
-            $tipo = isset($datos['tipo']) ? htmlspecialchars(strip_tags($datos['tipo'])) : 'evento';
-            $color = isset($datos['color']) ? htmlspecialchars(strip_tags($datos['color'])) : '#3788d8';
-            $NIF_usuario = htmlspecialchars(strip_tags($datos['NIF_usuario']));
-            $id_departamento = isset($datos['id_departamento']) ? htmlspecialchars(strip_tags($datos['id_departamento'])) : null;
-            $recurrente = isset($datos['recurrente']) ? (int)$datos['recurrente'] : 0;
-            $dia_completo = isset($datos['dia_completo']) ? (int)$datos['dia_completo'] : 0;
-            
-            // Bind de paru00e1metros
-            $stmt->bindParam(':titulo', $titulo);
-            $stmt->bindParam(':descripcion', $descripcion);
+            // Vincular parámetros
+            $stmt->bindParam(':titulo', $datos['titulo']);
+            $stmt->bindParam(':descripcion', $datos['descripcion']);
             $stmt->bindParam(':fecha_inicio', $fecha_inicio);
             $stmt->bindParam(':fecha_fin', $fecha_fin);
+            $stmt->bindParam(':NIF_usuario', $datos['NIF_usuario']);
+            
+            // Parámetros opcionales
+            $id_departamento = isset($datos['id_departamento']) ? $datos['id_departamento'] : null;
+            $tipo = isset($datos['tipo']) ? $datos['tipo'] : 'evento';
+            $color = isset($datos['color']) ? $datos['color'] : '#3788d8';
+            $dia_completo = isset($datos['dia_completo']) ? $datos['dia_completo'] : '0';
+            
+            $stmt->bindParam(':id_departamento', $id_departamento);
             $stmt->bindParam(':tipo', $tipo);
             $stmt->bindParam(':color', $color);
-            $stmt->bindParam(':NIF_usuario', $NIF_usuario);
-            $stmt->bindParam(':id_departamento', $id_departamento);
-            $stmt->bindParam(':recurrente', $recurrente);
             $stmt->bindParam(':dia_completo', $dia_completo);
             
             // Ejecutar la consulta
-            if ($stmt->execute()) {
-                return [
-                    'success' => true, 
-                    'id' => $this->conn->lastInsertId(),
-                    'message' => 'Evento creado con u00e9xito'
-                ];
-            }
+            $stmt->execute();
             
-            return ['success' => false, 'message' => 'Error al crear el evento'];
+            // Obtener el ID del evento creado
+            $id = $this->conn->lastInsertId();
+            
+            return [
+                'success' => true, 
+                'message' => 'Evento creado correctamente',
+                'id' => $id
+            ];
             
         } catch (PDOException $e) {
-            error_log("Error en crear evento: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error en la base de datos: ' . $e->getMessage()];
+            error_log("Error al crear evento: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error al crear evento: ' . $e->getMessage()];
         }
     }
     
     /**
      * Actualizar un evento existente
      */
-    public function actualizar($id, $datos, $NIF_usuario) {
+    public function actualizar($id, $datos) {
         try {
-            // Verificar que el evento existe y pertenece al usuario
-            $evento = $this->obtenerPorId($id);
-            if (!$evento) {
+            // Verificar que el evento existe
+            $checkQuery = "SELECT id FROM eventos WHERE id = :id";
+            $checkStmt = $this->conn->prepare($checkQuery);
+            $checkStmt->bindParam(':id', $id);
+            $checkStmt->execute();
+            
+            if ($checkStmt->rowCount() == 0) {
                 return ['success' => false, 'message' => 'Evento no encontrado'];
             }
             
-            if ($evento['NIF_usuario'] !== $NIF_usuario) {
-                return ['success' => false, 'message' => 'No tienes permiso para editar este evento'];
-            }
-            
-            // Construir la consulta dinu00e1micamente segu00fan los campos proporcionados
+            // Construir la consulta de actualización dinámicamente
             $query = "UPDATE eventos SET ";
             $params = [];
             
-            // Campos actualizables
-            $campos = [
-                'titulo', 'descripcion', 'fecha_inicio', 'fecha_fin', 
-                'tipo', 'color', 'id_departamento', 'recurrente', 'dia_completo'
-            ];
+            // Campos permitidos para actualizar
+            $camposPermitidos = ['titulo', 'descripcion', 'fecha_inicio', 'fecha_fin', 'id_departamento'];
             
-            foreach ($campos as $campo) {
+            foreach ($camposPermitidos as $campo) {
                 if (isset($datos[$campo])) {
-                    $params[] = "$campo = :$campo";
+                    // Para las fechas, asegurarse de que estén en formato correcto
+                    if ($campo === 'fecha_inicio' || $campo === 'fecha_fin') {
+                        $datos[$campo] = $this->validarFormatoFecha($datos[$campo]);
+                    }
+                    $query .= "$campo = :$campo, ";
+                    $params[$campo] = $datos[$campo];
                 }
             }
             
-            // Si no hay campos para actualizar, retornar u00e9xito
-            if (empty($params)) {
-                return ['success' => true, 'message' => 'No hay cambios para aplicar'];
-            }
+            // Eliminar la última coma y espacio
+            $query = rtrim($query, ', ');
             
-            $query .= implode(', ', $params);
+            // Añadir la condición WHERE
             $query .= " WHERE id = :id";
+            $params['id'] = $id;
             
+            // Preparar y ejecutar la consulta
             $stmt = $this->conn->prepare($query);
             
-            // Bind de id
-            $stmt->bindParam(':id', $id);
-            
-            // Bind de cada paru00e1metro presente
-            foreach ($campos as $campo) {
-                if (isset($datos[$campo])) {
-                    // Sanitizar valor segu00fan el tipo
-                    $valor = $datos[$campo];
-                    if (in_array($campo, ['titulo', 'descripcion', 'tipo', 'color'])) {
-                        $valor = htmlspecialchars(strip_tags($valor));
-                    } elseif (in_array($campo, ['recurrente', 'dia_completo'])) {
-                        $valor = (int)$valor;
-                    }
-                    $stmt->bindValue(":$campo", $valor);
-                }
+            // Bind de parámetros
+            foreach ($params as $param => $value) {
+                $stmt->bindValue(":$param", $value);
             }
             
             // Ejecutar la consulta
-            if ($stmt->execute()) {
-                return ['success' => true, 'message' => 'Evento actualizado con u00e9xito'];
+            if (!$stmt->execute()) {
+                error_log("Error al actualizar evento: " . implode(", ", $stmt->errorInfo()));
+                return ['success' => false, 'message' => 'Error al actualizar el evento: ' . $stmt->errorInfo()[2]];
             }
             
-            return ['success' => false, 'message' => 'Error al actualizar el evento'];
+            return ['success' => true, 'message' => 'Evento actualizado con éxito'];
             
-        } catch (PDOException $e) {
-            error_log("Error en actualizar evento: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error en la base de datos: ' . $e->getMessage()];
+        } catch (Exception $e) {
+            error_log("Error al actualizar evento: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error al actualizar evento: ' . $e->getMessage()];
         }
     }
     
@@ -158,7 +156,7 @@ class Evento {
             $stmt->bindParam(':id', $id);
             
             if ($stmt->execute()) {
-                return ['success' => true, 'message' => 'Evento eliminado con u00e9xito'];
+                return ['success' => true, 'message' => 'Evento eliminado con éxito'];
             }
             
             return ['success' => false, 'message' => 'Error al eliminar el evento'];
@@ -188,42 +186,77 @@ class Evento {
     }
     
     /**
-     * Obtener eventos por usuario y rango de fechas
+     * Obtener eventos por usuario
      */
     public function obtenerEventosPorUsuario($NIF_usuario, $fecha_inicio = null, $fecha_fin = null) {
         try {
-            $query = "SELECT e.*, d.nombre as nombre_departamento "
-                   . "FROM eventos e "
-                   . "LEFT JOIN departamentos d ON e.id_departamento = d.id "
-                   . "WHERE e.NIF_usuario = :NIF_usuario ";
-            
-            $params = [':NIF_usuario' => $NIF_usuario];
-            
-            // Filtrar por rango de fechas si se proporcionan
-            if ($fecha_inicio && $fecha_fin) {
-                $query .= "AND ((e.fecha_inicio BETWEEN :fecha_inicio AND :fecha_fin) "
-                       . "OR (e.fecha_fin BETWEEN :fecha_inicio AND :fecha_fin) "
-                       . "OR (e.fecha_inicio <= :fecha_inicio AND e.fecha_fin >= :fecha_fin))";
-                $params[':fecha_inicio'] = $fecha_inicio;
-                $params[':fecha_fin'] = $fecha_fin;
+            // Verificar si existen las tablas necesarias
+            $tablas = ['eventos', 'usuarios'];
+            foreach ($tablas as $tabla) {
+                $checkQuery = "SHOW TABLES LIKE '$tabla'";
+                $result = $this->conn->query($checkQuery);
+                if ($result->rowCount() === 0) {
+                    return ['success' => false, 'message' => "La tabla '$tabla' no existe"];
+                }
             }
             
-            $query .= " ORDER BY e.fecha_inicio ASC";
+            // Preparar la consulta base
+            $query = "SELECT e.*, u.nombre as nombre_usuario, u.apellidos as apellidos_usuario "
+                   . "FROM eventos e "
+                   . "LEFT JOIN usuarios u ON e.NIF_usuario = u.NIF "
+                   . "WHERE e.NIF_usuario = :NIF_usuario ";
+            
+            // Añadir filtros de fecha si se proporcionan
+            if ($fecha_inicio) {
+                $fecha_inicio = $this->validarFormatoFecha($fecha_inicio);
+                if ($fecha_inicio) {
+                    $query .= "AND e.fecha_inicio >= :fecha_inicio ";
+                }
+            }
+            
+            if ($fecha_fin) {
+                $fecha_fin = $this->validarFormatoFecha($fecha_fin);
+                if ($fecha_fin) {
+                    $query .= "AND e.fecha_fin <= :fecha_fin ";
+                }
+            }
+            
+            $query .= "ORDER BY e.fecha_inicio ASC";
             
             $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':NIF_usuario', $NIF_usuario);
             
-            // Bind de todos los paru00e1metros
-            foreach ($params as $param => $value) {
-                $stmt->bindValue($param, $value);
+            if ($fecha_inicio) {
+                $stmt->bindParam(':fecha_inicio', $fecha_inicio);
+            }
+            
+            if ($fecha_fin) {
+                $stmt->bindParam(':fecha_fin', $fecha_fin);
             }
             
             $stmt->execute();
             $eventos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            return ['success' => true, 'eventos' => $eventos];
+            // Formatear las fechas para el frontend (ISO8601 con T)
+            foreach ($eventos as &$evento) {
+                if (isset($evento['fecha_inicio'])) {
+                    $evento['fecha_inicio'] = date('Y-m-d\TH:i:s', strtotime($evento['fecha_inicio']));
+                }
+                if (isset($evento['fecha_fin'])) {
+                    $evento['fecha_fin'] = date('Y-m-d\TH:i:s', strtotime($evento['fecha_fin']));
+                }
+            }
+            
+            return [
+                'success' => true, 
+                'eventos' => $eventos,
+                'debug' => [
+                    'count' => count($eventos)
+                ]
+            ];
             
         } catch (PDOException $e) {
-            error_log("Error en obtenerEventosPorUsuario: " . $e->getMessage());
+            error_log("Error al obtener eventos: " . $e->getMessage());
             return ['success' => false, 'message' => 'Error al obtener eventos: ' . $e->getMessage()];
         }
     }
@@ -254,7 +287,7 @@ class Evento {
             
             $stmt = $this->conn->prepare($query);
             
-            // Bind de todos los paru00e1metros
+            // Bind de todos los parámetros
             foreach ($params as $param => $value) {
                 $stmt->bindValue($param, $value);
             }
@@ -541,6 +574,56 @@ class Evento {
             error_log("Error general al obtener fichajes como eventos: " . $e->getMessage());
             return ['success' => false, 'message' => 'Error al obtener fichajes', 'fichajes' => []];
         }
+    }
+    
+    /**
+     * Valida y formatea una fecha para asegurar que esté en el formato correcto para MySQL
+     * @param string $fecha Fecha a validar y formatear
+     * @return string|false Fecha formateada o false si es inválida
+     */
+    private function validarFormatoFecha($fecha) {
+        if (empty($fecha)) {
+            return false;
+        }
+        
+        // Si la fecha ya está en formato ISO (YYYY-MM-DD HH:MM:SS)
+        if (preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/', $fecha)) {
+            return $fecha;
+        }
+        
+        // Si la fecha está en formato ISO con T (YYYY-MM-DDTHH:MM:SS)
+        if (preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/', $fecha)) {
+            return str_replace('T', ' ', substr($fecha, 0, 19));
+        }
+        
+        // Si la fecha está en formato español (DD/MM/YYYY HH:MM)
+        if (preg_match('/^\d{2}\/\d{2}\/\d{4} \d{2}:\d{2}$/', $fecha)) {
+            $partes = explode(' ', $fecha);
+            $fechaParte = explode('/', $partes[0]);
+            return $fechaParte[2] . '-' . $fechaParte[1] . '-' . $fechaParte[0] . ' ' . $partes[1] . ':00';
+        }
+        
+        // Si la fecha está en formato español (DD/MM/YYYY)
+        if (preg_match('/^\d{2}\/\d{2}\/\d{4}$/', $fecha)) {
+            $fechaParte = explode('/', $fecha);
+            return $fechaParte[2] . '-' . $fechaParte[1] . '-' . $fechaParte[0] . ' 00:00:00';
+        }
+        
+        // Intentar convertir cualquier otro formato usando strtotime
+        $timestamp = strtotime($fecha);
+        if ($timestamp === false) {
+            return false;
+        }
+        
+        return date('Y-m-d H:i:s', $timestamp);
+    }
+    
+    /**
+     * Obtener la conexión a la base de datos
+     * @return PDO Conexión a la base de datos
+     */
+    public function getConnection() {
+        return $this->conn;
     }
 }
 ?>

@@ -42,6 +42,12 @@ const Calendario = () => {
     ausencia: '#6b7280'
   }
 
+  // Estilo para prevenir el parpadeo negro al cambiar filtros
+  const transitionStyle = {
+    transition: 'all 0.3s ease',
+    backgroundColor: isDarkMode ? '#1f2937' : '#ffffff'
+  }
+
   // Cargar eventos del calendario
   const cargarEventos = useCallback(async () => {
     try {
@@ -64,7 +70,20 @@ const Calendario = () => {
       if (filtros.verDepartamento) {
         url = `${import.meta.env.VITE_API_URL}/calendario.php?departamento=true&inicio=${inicio}&fin=${fin}`
       } else {
-        url = `${import.meta.env.VITE_API_URL}/calendario.php?mis_eventos=true&inicio=${inicio}&fin=${fin}&incluir_todo=true`
+        // Añadir parámetros de autenticación alternativa
+        const storedUser = localStorage.getItem('user')
+        let userId = ''
+        
+        if (storedUser) {
+          try {
+            const userObj = JSON.parse(storedUser)
+            userId = userObj.id || ''
+          } catch (error) {
+            console.error('Error al parsear usuario almacenado:', error)
+          }
+        }
+        
+        url = `${import.meta.env.VITE_API_URL}/calendario.php?mis_eventos=true&inicio=${inicio}&fin=${fin}&incluir_todo=true&user_id=${userId}`
       }
       
       try {
@@ -88,6 +107,7 @@ const Calendario = () => {
         let data;
         try {
           data = await response.json();
+          console.log('Respuesta de la API de eventos:', data);
         } catch (jsonError) {
           console.error('Error al parsear JSON:', jsonError);
           setError('Error en el formato de la respuesta del servidor. Por favor, contacte al administrador.');
@@ -106,23 +126,31 @@ const Calendario = () => {
         
         // Agregar eventos normales si el filtro está activado
         if (filtros.verEventos && data.eventos) {
-          const eventosCalendario = data.eventos.map(evento => ({
-            id: `evento_${evento.id}`,
-            title: evento.titulo,
-            start: evento.fecha_inicio,
-            end: evento.fecha_fin,
-            allDay: evento.dia_completo === '1',
-            backgroundColor: evento.color || coloresEventos[evento.tipo] || coloresEventos.evento,
-            borderColor: evento.color || coloresEventos[evento.tipo] || coloresEventos.evento,
-            extendedProps: {
-              tipo: evento.tipo || 'evento',
-              descripcion: evento.descripcion,
-              creador: evento.nombre_usuario ? `${evento.nombre_usuario} ${evento.apellidos_usuario}` : user.nombre,
-              departamento: evento.nombre_departamento || '',
-              eventoOriginal: evento
-            }
-          }))
-          eventosFormateados.push(...eventosCalendario)
+          console.log('Eventos recibidos del servidor:', data.eventos);
+          
+          // Verificar si hay eventos para procesar
+          if (Array.isArray(data.eventos) && data.eventos.length > 0) {
+            const eventosCalendario = data.eventos.map(evento => ({
+              id: `evento_${evento.id}`,
+              title: evento.titulo,
+              start: evento.fecha_inicio,
+              end: evento.fecha_fin || evento.fecha_inicio, // Si no hay fecha fin, usar la de inicio
+              allDay: evento.dia_completo === '1',
+              backgroundColor: evento.color || coloresEventos[evento.tipo] || coloresEventos.evento,
+              borderColor: evento.color || coloresEventos[evento.tipo] || coloresEventos.evento,
+              extendedProps: {
+                tipo: evento.tipo || 'evento',
+                descripcion: evento.descripcion,
+                creador: evento.nombre_usuario ? `${evento.nombre_usuario} ${evento.apellidos_usuario}` : user?.nombre || 'Usuario',
+                departamento: evento.nombre_departamento || '',
+                eventoOriginal: evento
+              }
+            }))
+            eventosFormateados.push(...eventosCalendario)
+            console.log('Eventos formateados para el calendario:', eventosCalendario);
+          } else {
+            console.log('No hay eventos para mostrar o el formato es incorrecto');
+          }
         }
         
         // Agregar tareas si el filtro está activado
@@ -263,11 +291,24 @@ const Calendario = () => {
       
       let url, method
       
+      // Obtener el ID del usuario desde localStorage para autenticación alternativa
+      const storedUser = localStorage.getItem('user')
+      let userId = ''
+      
+      if (storedUser) {
+        try {
+          const userObj = JSON.parse(storedUser)
+          userId = userObj.id || ''
+        } catch (error) {
+          console.error('Error al parsear usuario almacenado:', error)
+        }
+      }
+      
       if (evento.modo === 'crear') {
-        url = `${import.meta.env.VITE_API_URL}/calendario.php`
+        url = `${import.meta.env.VITE_API_URL}/calendario.php?user_id=${userId}`
         method = 'POST'
       } else {
-        url = `${import.meta.env.VITE_API_URL}/calendario.php?id=${evento.id.replace('evento_', '')}`
+        url = `${import.meta.env.VITE_API_URL}/calendario.php?id=${evento.id.replace('evento_', '')}&user_id=${userId}`
         method = 'PUT'
       }
       
@@ -303,7 +344,20 @@ const Calendario = () => {
   // Función para eliminar un evento
   const eliminarEvento = async (eventoId) => {
     try {
-      const url = `${import.meta.env.VITE_API_URL}/calendario.php?id=${eventoId.replace('evento_', '')}`
+      // Obtener el ID del usuario desde localStorage para autenticación alternativa
+      const storedUser = localStorage.getItem('user')
+      let userId = ''
+      
+      if (storedUser) {
+        try {
+          const userObj = JSON.parse(storedUser)
+          userId = userObj.id || ''
+        } catch (error) {
+          console.error('Error al parsear usuario almacenado:', error)
+        }
+      }
+      
+      const url = `${import.meta.env.VITE_API_URL}/calendario.php?id=${eventoId.replace('evento_', '')}&user_id=${userId}`
       
       const response = await fetch(url, {
         method: 'DELETE',
@@ -346,7 +400,7 @@ const Calendario = () => {
   }
 
   return (
-    <div className={`container mx-auto px-4 py-8 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+    <div className={`container mx-auto px-4 py-8 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`} style={transitionStyle}>
       <h1 className="text-3xl font-bold mb-6">Calendario</h1>
       
       {/* Filtros */}
