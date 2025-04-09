@@ -29,6 +29,7 @@ const Calendario = () => {
     verTareas: true,
     verFichajes: true,
     verDepartamento: false,
+    verPersonales: true,
   })
   
   // Colores para los diferentes tipos de eventos
@@ -39,7 +40,9 @@ const Calendario = () => {
     fichaje: '#10b981',
     formacion: '#f97316',
     proyecto: '#ec4899',
-    ausencia: '#6b7280'
+    ausencia: '#6b7280',
+    personal: '#3788d8',     // Azul para eventos personales
+    departamental: '#8b5cf6'  // Morado para eventos departamentales
   }
 
   // Estilo para prevenir el parpadeo negro al cambiar filtros
@@ -62,29 +65,50 @@ const Calendario = () => {
       const fechaFin = new Date(fechaActual.getFullYear(), fechaActual.getMonth() + 6, 0)
       
       // Formatear fechas para la API
-      const inicio = fechaInicio.toISOString().split('T')[0]
-      const fin = fechaFin.toISOString().split('T')[0]
+      const inicio = formatearFechaParaAPI(fechaInicio)
+      const fin = formatearFechaParaAPI(fechaFin)
+      
+      // Añadir parámetros de autenticación alternativa
+      const storedUser = localStorage.getItem('user')
+      let userId = ''
+      
+      if (storedUser) {
+        try {
+          const userObj = JSON.parse(storedUser)
+          userId = userObj.id || ''
+        } catch (error) {
+          console.error('Error al parsear usuario almacenado:', error)
+        }
+      }
       
       // Determinar qué endpoint usar según filtros
       let url
-      if (filtros.verDepartamento) {
-        url = `${import.meta.env.VITE_API_URL}/calendario.php?departamento=true&inicio=${inicio}&fin=${fin}`
-      } else {
-        // Añadir parámetros de autenticación alternativa
-        const storedUser = localStorage.getItem('user')
-        let userId = ''
+      
+      // Nuevo sistema híbrido
+      if (filtros.verPersonales || filtros.verDepartamento) {
+        // Base URL para el endpoint híbrido
+        url = `${import.meta.env.VITE_API_URL}/calendario.php?hibrido=true&inicio=${inicio}&fin=${fin}&user_id=${userId}`
         
-        if (storedUser) {
-          try {
-            const userObj = JSON.parse(storedUser)
-            userId = userObj.id || ''
-          } catch (error) {
-            console.error('Error al parsear usuario almacenado:', error)
-          }
+        // Añadir parámetro de incluir departamento si está activado
+        if (filtros.verDepartamento) {
+          url += '&incluir_departamento=true'
         }
         
+        // Filtrar por tipo si solo uno está activado
+        if (filtros.verPersonales && !filtros.verDepartamento) {
+          url += '&tipo=personal'
+        } else if (!filtros.verPersonales && filtros.verDepartamento) {
+          url += '&tipo=departamental'
+        }
+        
+        // Añadir parámetros para incluir tareas y fichajes según filtros
+        url += `&incluir_tareas=${filtros.verTareas}&incluir_fichajes=${filtros.verFichajes}`
+      } else {
+        // Ninguno seleccionado, usar endpoint original para otros tipos de eventos
         url = `${import.meta.env.VITE_API_URL}/calendario.php?mis_eventos=true&inicio=${inicio}&fin=${fin}&incluir_todo=true&user_id=${userId}`
       }
+      
+      console.log('URL de la API:', url)
       
       try {
         const response = await fetch(url, {
@@ -130,22 +154,45 @@ const Calendario = () => {
           
           // Verificar si hay eventos para procesar
           if (Array.isArray(data.eventos) && data.eventos.length > 0) {
-            const eventosCalendario = data.eventos.map(evento => ({
-              id: `evento_${evento.id}`,
-              title: evento.titulo,
-              start: evento.fecha_inicio,
-              end: evento.fecha_fin || evento.fecha_inicio, // Si no hay fecha fin, usar la de inicio
-              allDay: evento.dia_completo === '1',
-              backgroundColor: evento.color || coloresEventos[evento.tipo] || coloresEventos.evento,
-              borderColor: evento.color || coloresEventos[evento.tipo] || coloresEventos.evento,
-              extendedProps: {
-                tipo: evento.tipo || 'evento',
-                descripcion: evento.descripcion,
-                creador: evento.nombre_usuario ? `${evento.nombre_usuario} ${evento.apellidos_usuario}` : user?.nombre || 'Usuario',
-                departamento: evento.nombre_departamento || '',
-                eventoOriginal: evento
-              }
-            }))
+            const eventosCalendario = data.eventos
+              .filter(evento => {
+                // Filtrar por tipo de evento (personal o departamental)
+                if (!filtros.verPersonales && evento.tipo_evento === 'personal') {
+                  return false; // No mostrar personales si el filtro está desactivado
+                }
+                if (!filtros.verDepartamento && evento.tipo_evento === 'departamental') {
+                  return false; // No mostrar departamentales si el filtro está desactivado
+                }
+                return true; // Mostrar el evento si pasa los filtros
+              })
+              .map(evento => {
+                // Determinar color según tipo de evento (personal o departamental)
+                let color;
+                
+                if (evento.tipo_evento === 'departamental') {
+                  color = coloresEventos.departamental;
+                } else {
+                  color = evento.color || coloresEventos[evento.tipo] || coloresEventos.personal;
+                }
+                
+                return {
+                  id: `evento_${evento.id}`,
+                  title: evento.titulo,
+                  start: evento.fecha_inicio,
+                  end: evento.fecha_fin || evento.fecha_inicio, // Si no hay fecha fin, usar la de inicio
+                  allDay: evento.dia_completo === '1',
+                  backgroundColor: color,
+                  borderColor: color,
+                  extendedProps: {
+                    tipo: evento.tipo || 'evento',
+                    tipo_evento: evento.tipo_evento, // Nuevo campo para distinguir personales/departamentales
+                    descripcion: evento.descripcion,
+                    creador: evento.nombre_usuario ? `${evento.nombre_usuario} ${evento.apellidos_usuario}` : user?.nombre || 'Usuario',
+                    departamento: evento.nombre_departamento || '',
+                    eventoOriginal: evento
+                  }
+                }
+              });
             eventosFormateados.push(...eventosCalendario)
             console.log('Eventos formateados para el calendario:', eventosCalendario);
           } else {
@@ -282,9 +329,10 @@ const Calendario = () => {
       const datosEvento = {
         titulo: evento.titulo,
         descripcion: evento.descripcion,
-        fecha_inicio: evento.inicio.toISOString().slice(0, 19).replace('T', ' '),
-        fecha_fin: evento.fin ? evento.fin.toISOString().slice(0, 19).replace('T', ' ') : null,
+        fecha_inicio: formatearFechaParaAPI(evento.inicio),
+        fecha_fin: evento.fin ? formatearFechaParaAPI(evento.fin) : null,
         tipo: evento.tipo,
+        tipo_evento: evento.tipo_evento || 'personal', // Agregar tipo de evento (personal o departamental)
         color: evento.color,
         dia_completo: evento.diaCompleto ? 1 : 0
       }
@@ -399,6 +447,20 @@ const Calendario = () => {
     }))
   }
 
+  // Función para formatear fechas antes de enviarlas al backend
+  const formatearFechaParaAPI = (fecha) => {
+    // Obtener los componentes de la fecha en la zona horaria local
+    const año = fecha.getFullYear();
+    const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+    const dia = String(fecha.getDate()).padStart(2, '0');
+    const horas = String(fecha.getHours()).padStart(2, '0');
+    const minutos = String(fecha.getMinutes()).padStart(2, '0');
+    const segundos = String(fecha.getSeconds()).padStart(2, '0');
+    
+    // Devolver formato MySQL: YYYY-MM-DD HH:MM:SS
+    return `${año}-${mes}-${dia} ${horas}:${minutos}:${segundos}`;
+  }
+
   return (
     <div className={`container mx-auto px-4 py-8 ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`} style={transitionStyle}>
       <h1 className="text-3xl font-bold mb-6">Calendario</h1>
@@ -446,6 +508,16 @@ const Calendario = () => {
           >
             <span className="mr-1.5">👥</span>
             Eventos del departamento
+          </button>
+          
+          <button
+            onClick={() => toggleFiltro('verPersonales')}
+            className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${filtros.verPersonales
+              ? isDarkMode ? 'bg-blue-700 text-white' : 'bg-blue-100 text-blue-800'
+              : isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-600'}`}
+          >
+            <span className="mr-1.5">👤</span>
+            Eventos personales
           </button>
         </div>
       </div>

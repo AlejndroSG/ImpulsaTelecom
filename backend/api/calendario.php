@@ -34,15 +34,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-// Incluir modelo de evento
+// Incluir modelo de evento y base de datos
 try {
+    require_once __DIR__ . '/../config/database.php';
     require_once __DIR__ . '/../modelos/Evento.php';
     require_once __DIR__ . '/../modelos/Tarea.php';
     require_once __DIR__ . '/../modelos/Fichaje.php';
+    
+    // Obtener la conexión a la base de datos
+    $database = new Database();
+    $conn = $database->getConnection();
+    
+    if (!$conn) {
+        throw new Exception("No se pudo establecer la conexión a la base de datos");
+    }
 } catch (Exception $e) {
-    error_log("Error al incluir modelos: " . $e->getMessage());
+    error_log("Error al incluir modelos o conectar a la base de datos: " . $e->getMessage());
     http_response_code(500);
-    echo json_encode(['success' => false, 'message' => 'Error interno del servidor al cargar modelos']);
+    echo json_encode(['success' => false, 'message' => 'Error interno del servidor al cargar modelos o conectar a la base de datos']);
     exit();
 }
 
@@ -92,67 +101,174 @@ function obtenerDepartamentoUsuario($NIF) {
     global $conn;
     
     try {
-        $query = "SELECT id_departamento FROM usuarios WHERE NIF = :NIF";
+        // Verificar que tenemos una conexión a la base de datos
+        if (!$conn) {
+            error_log("Error: No hay conexión a la base de datos en obtenerDepartamentoUsuario");
+            return null;
+        }
+        
+        // Consulta corregida para usar la columna 'dpto' en lugar de 'id_departamento'
+        $query = "SELECT dpto FROM usuarios WHERE NIF = :NIF";
         $stmt = $conn->prepare($query);
+        
+        if (!$stmt) {
+            error_log("Error al preparar consulta: " . implode(", ", $conn->errorInfo()));
+            return null;
+        }
+        
         $stmt->bindParam(':NIF', $NIF);
-        $stmt->execute();
         
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$stmt->execute()) {
+            error_log("Error al ejecutar consulta: " . implode(", ", $stmt->errorInfo()));
+            return null;
+        }
         
-        if ($resultado && isset($resultado['id_departamento'])) {
-            return $resultado['id_departamento'];
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($result && isset($result['dpto'])) {
+            return $result['dpto'];
         }
         
         return null;
-    } catch (PDOException $e) {
-        error_log("Error al obtener departamento: " . $e->getMessage());
+    } catch (Exception $e) {
+        error_log("Error en obtenerDepartamentoUsuario: " . $e->getMessage());
         return null;
     }
 }
 
 try {
-    // Instanciar los modelos
+    // Inicializar modelos
     $modeloEvento = new Evento();
     $modeloTarea = new Tarea();
     $modeloFichaje = new Fichaje();
     
-    // Crear un nuevo evento
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_GET['id'])) {
-        $NIF = verificarAutenticacion();
-        $data = json_decode(file_get_contents('php://input'), true);
-        
-        // Asignar el NIF del usuario actual
-        $data['NIF_usuario'] = $NIF;
-        
-        $resultado = $modeloEvento->crear($data);
-        echo json_encode($resultado);
-        exit();
+    // MANEJAR SOLICITUDES POST PARA GUARDAR EVENTOS
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        try {
+            // Verificar autenticación
+            $NIF = verificarAutenticacion();
+            
+            // Registrar información de depuración
+            error_log("Procesando solicitud POST para guardar evento. NIF: $NIF");
+            
+            // Obtener los datos del evento desde el cuerpo de la solicitud
+            $datosJson = file_get_contents('php://input');
+            error_log("Datos JSON recibidos: $datosJson");
+            
+            $datos = json_decode($datosJson, true);
+            
+            if (!$datos) {
+                $jsonError = json_last_error_msg();
+                error_log("Error al decodificar JSON: $jsonError");
+                handleError("Datos de evento inválidos o vacíos: $jsonError", 400);
+            }
+            
+            // Validar datos básicos del evento
+            if (!isset($datos['titulo']) || (!isset($datos['inicio']) && !isset($datos['fecha_inicio']))) {
+                error_log("Faltan datos obligatorios. Datos recibidos: " . print_r($datos, true));
+                handleError('Faltan datos obligatorios del evento (título o fecha de inicio)', 400);
+            }
+            
+            // Asignar el creador del evento (usuario autenticado)
+            $datos['NIF'] = $NIF;
+            $datos['NIF_usuario'] = $NIF; // Agregar también como NIF_usuario para compatibilidad con la función crear
+            error_log("Datos preparados para guardar: " . print_r($datos, true));
+            
+            // Guardar el evento
+            $resultado = $modeloEvento->guardarEvento($datos);
+            
+            if ($resultado['success']) {
+                echo json_encode($resultado);
+            } else {
+                error_log("Error al guardar evento: " . ($resultado['message'] ?? 'Error desconocido'));
+                handleError($resultado['message'] ?? 'Error al guardar el evento', 500);
+            }
+            exit();
+        } catch (Exception $e) {
+            error_log("Excepción al procesar solicitud POST: " . $e->getMessage());
+            handleError('Error al procesar la solicitud: ' . $e->getMessage(), 500);
+        }
     }
     
-    // Actualizar un evento existente
-    if (($_SERVER['REQUEST_METHOD'] === 'PUT' || $_SERVER['REQUEST_METHOD'] === 'POST') && isset($_GET['id'])) {
-        $NIF = verificarAutenticacion();
-        $id = $_GET['id'];
-        
-        // Obtener datos del body
-        $data = json_decode(file_get_contents('php://input'), true);
-        
-        $resultado = $modeloEvento->actualizar($id, $data, $NIF);
-        echo json_encode($resultado);
-        exit();
+    // MANEJAR SOLICITUDES PUT PARA ACTUALIZAR EVENTOS
+    if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
+        try {
+            // Verificar autenticación
+            $NIF = verificarAutenticacion();
+            
+            // Verificar que se proporciona un ID de evento
+            if (!isset($_GET['id']) || empty($_GET['id'])) {
+                handleError('No se proporcionó un ID de evento para actualizar', 400);
+            }
+            
+            $eventoId = $_GET['id'];
+            
+            // Obtener los datos del evento desde el cuerpo de la solicitud
+            $datosJson = file_get_contents('php://input');
+            $datos = json_decode($datosJson, true);
+            
+            if (!$datos) {
+                handleError('Datos de evento inválidos o vacíos', 400);
+            }
+            
+            // Verificar que el usuario es el propietario del evento
+            $esPropio = $modeloEvento->verificarPropietarioEvento($eventoId, $NIF);
+            if (!$esPropio) {
+                handleError('No tienes permiso para editar este evento', 403);
+            }
+            
+            // Asignar ID y NIF a los datos
+            $datos['id'] = $eventoId;
+            $datos['NIF'] = $NIF;
+            
+            // Actualizar el evento
+            $resultado = $modeloEvento->actualizarEvento($datos);
+            
+            if ($resultado['success']) {
+                echo json_encode($resultado);
+            } else {
+                handleError($resultado['message'] ?? 'Error al actualizar el evento', 500);
+            }
+            exit();
+        } catch (Exception $e) {
+            handleError('Error al procesar la solicitud: ' . $e->getMessage(), 500);
+        }
     }
     
-    // Eliminar un evento
-    if ($_SERVER['REQUEST_METHOD'] === 'DELETE' && isset($_GET['id'])) {
-        $NIF = verificarAutenticacion();
-        $id = $_GET['id'];
-        
-        $resultado = $modeloEvento->eliminar($id, $NIF);
-        echo json_encode($resultado);
-        exit();
+    // MANEJAR SOLICITUDES DELETE PARA ELIMINAR EVENTOS
+    if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+        try {
+            // Verificar autenticación
+            $NIF = verificarAutenticacion();
+            
+            // Verificar que se proporciona un ID de evento
+            if (!isset($_GET['id']) || empty($_GET['id'])) {
+                handleError('No se proporcionó un ID de evento para eliminar', 400);
+            }
+            
+            $eventoId = $_GET['id'];
+            
+            // Verificar que el usuario es el propietario del evento
+            $esPropio = $modeloEvento->verificarPropietarioEvento($eventoId, $NIF);
+            if (!$esPropio) {
+                handleError('No tienes permiso para eliminar este evento', 403);
+            }
+            
+            // Eliminar el evento
+            $resultado = $modeloEvento->eliminarEvento($eventoId);
+            
+            if ($resultado['success']) {
+                echo json_encode($resultado);
+            } else {
+                handleError($resultado['message'] ?? 'Error al eliminar el evento', 500);
+            }
+            exit();
+        } catch (Exception $e) {
+            handleError('Error al procesar la solicitud: ' . $e->getMessage(), 500);
+        }
     }
     
-    // Obtener eventos por usuario y rango de fechas
+    // Obtener eventos del usuario
     if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['mis_eventos'])) {
         try {
             $NIF = verificarAutenticacion();
@@ -161,70 +277,209 @@ try {
             $fecha_inicio = isset($_GET['inicio']) ? $_GET['inicio'] : null;
             $fecha_fin = isset($_GET['fin']) ? $_GET['fin'] : null;
             
-            // Obtener los eventos del usuario
-            $eventos = $modeloEvento->obtenerEventosPorUsuario($NIF, $fecha_inicio, $fecha_fin);
+            // Incluir todos los tipos de eventos (tareas, fichajes, etc.)
+            $incluir_todo = isset($_GET['incluir_todo']) ? $_GET['incluir_todo'] === 'true' : true;
             
-            // Si se solicita incluir tareas y fichajes
-            $incluirTodo = isset($_GET['incluir_todo']) && $_GET['incluir_todo'] === 'true';
+            // Obtener eventos personales
+            $resultado = $modeloEvento->obtenerEventosPorUsuario($NIF, $fecha_inicio, $fecha_fin);
             
-            if ($incluirTodo) {
+            // Si se solicitan todos los tipos, incluir tareas y fichajes
+            if ($incluir_todo) {
                 // Obtener tareas como eventos
-                $tareas = $modeloEvento->obtenerTareasComoEventos($NIF, $fecha_inicio, $fecha_fin);
+                $resultadoTareas = $modeloEvento->obtenerTareasComoEventos($NIF, $fecha_inicio, $fecha_fin);
+                if ($resultadoTareas['success'] && !empty($resultadoTareas['tareas'])) {
+                    $resultado['tareas'] = $resultadoTareas['tareas'];
+                } else {
+                    $resultado['tareas'] = [];
+                }
                 
                 // Obtener fichajes como eventos
-                $fichajes = $modeloEvento->obtenerFichajesComoEventos($NIF, $fecha_inicio, $fecha_fin);
-                
-                // Combinar todo en un solo array
-                $resultado = [
-                    'success' => true,
-                    'eventos' => $eventos['success'] ? $eventos['eventos'] : [],
-                    'tareas' => $tareas['success'] ? $tareas['tareas'] : [],
-                    'fichajes' => $fichajes['success'] ? $fichajes['fichajes'] : []
-                ];
-            } else {
-                $resultado = $eventos;
+                $resultadoFichajes = $modeloEvento->obtenerFichajesComoEventos($NIF, $fecha_inicio, $fecha_fin);
+                if ($resultadoFichajes['success'] && !empty($resultadoFichajes['fichajes'])) {
+                    $resultado['fichajes'] = $resultadoFichajes['fichajes'];
+                } else {
+                    $resultado['fichajes'] = [];
+                }
             }
             
             // Agregar información de depuración
-            $resultado['debug'] = [
-                'NIF' => $NIF,
-                'fecha_inicio' => $fecha_inicio,
-                'fecha_fin' => $fecha_fin,
-                'incluirTodo' => $incluirTodo,
-                'session_active' => isset($_SESSION['NIF']),
-                'session_id' => session_id(),
-                'user_id' => isset($_GET['user_id']) ? $_GET['user_id'] : null
-            ];
+            $resultado['debug']['NIF'] = $NIF;
+            $resultado['debug']['session_id'] = session_id();
+            $resultado['debug']['session_active'] = isset($_SESSION['NIF']);
             
             echo json_encode($resultado);
             exit();
         } catch (Exception $e) {
-            error_log("Error al obtener eventos del usuario: " . $e->getMessage());
+            error_log("Error al obtener eventos: " . $e->getMessage());
             http_response_code(500);
             echo json_encode(['success' => false, 'message' => 'Error al obtener eventos: ' . $e->getMessage()]);
             exit();
         }
     }
     
-    // Obtener eventos por departamento y rango de fechas
-    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['departamento'])) {
-        $NIF = verificarAutenticacion();
-        
-        // Obtener el departamento del usuario
-        $id_departamento = obtenerDepartamentoUsuario($NIF);
-        
-        if (!$id_departamento) {
-            echo json_encode(['success' => false, 'message' => 'No se pudo determinar el departamento del usuario']);
+    // Obtener eventos del departamento
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['eventos_departamento'])) {
+        try {
+            $NIF = verificarAutenticacion();
+            
+            // Obtener el departamento del usuario
+            $dpto = obtenerDepartamentoUsuario($NIF);
+            
+            if (!$dpto) {
+                // Si no se puede obtener el departamento, intentar usar un valor por defecto
+                try {
+                    if (isset($_GET['departamento_fallback']) && !empty($_GET['departamento_fallback'])) {
+                        $dpto = $_GET['departamento_fallback'];
+                    } else {
+                        echo json_encode(['success' => false, 'message' => 'No se pudo determinar el departamento del usuario']);
+                        exit();
+                    }
+                } catch (Exception $e) {
+                    error_log("Error al buscar departamento fallback: " . $e->getMessage());
+                    echo json_encode(['success' => false, 'message' => 'No se pudo determinar el departamento del usuario y falló el fallback']);
+                    exit();
+                }
+            }
+            
+            // Fechas para filtrar (opcional)
+            $fecha_inicio = isset($_GET['inicio']) ? $_GET['inicio'] : null;
+            $fecha_fin = isset($_GET['fin']) ? $_GET['fin'] : null;
+            
+            $resultado = $modeloEvento->obtenerEventosPorDepartamento($dpto, $fecha_inicio, $fecha_fin);
+            
+            // Agregar información de depuración
+            $resultado['debug']['NIF'] = $NIF;
+            $resultado['debug']['dpto'] = $dpto;
+            $resultado['debug']['session_id'] = session_id();
+            $resultado['debug']['session_active'] = isset($_SESSION['NIF']);
+            
+            echo json_encode($resultado);
+            exit();
+        } catch (Exception $e) {
+            error_log("Error al obtener eventos de departamento: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Error al obtener eventos de departamento: ' . $e->getMessage()]);
             exit();
         }
-        
-        // Fechas para filtrar (opcional)
-        $fecha_inicio = isset($_GET['inicio']) ? $_GET['inicio'] : null;
-        $fecha_fin = isset($_GET['fin']) ? $_GET['fin'] : null;
-        
-        $resultado = $modeloEvento->obtenerEventosPorDepartamento($id_departamento, $fecha_inicio, $fecha_fin);
-        echo json_encode($resultado);
-        exit();
+    }
+    
+    // Obtener eventos híbridos (personales + departamentales)
+    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['hibrido'])) {
+        try {
+            // Configurar respuesta de depuración
+            $debug = [];
+            $debug['request'] = $_GET;
+            
+            $NIF = verificarAutenticacion();
+            $debug['NIF'] = $NIF;
+            
+            // Obtener el departamento del usuario (opcional)
+            $dpto = null;
+            if (isset($_GET['incluir_departamento']) && $_GET['incluir_departamento'] === 'true') {
+                try {
+                    $dpto = obtenerDepartamentoUsuario($NIF);
+                    $debug['dpto_obtenido'] = $dpto;
+                    
+                    // Verificar si se pudo obtener el departamento
+                    if (!$dpto) {
+                        error_log("No se pudo obtener el departamento para el usuario $NIF");
+                    }
+                } catch (Exception $deptoError) {
+                    $debug['error_dpto'] = $deptoError->getMessage();
+                }
+            }
+            
+            // Fechas para filtrar (opcional)
+            $fecha_inicio = isset($_GET['inicio']) ? $_GET['inicio'] : null;
+            $fecha_fin = isset($_GET['fin']) ? $_GET['fin'] : null;
+            $debug['fecha_inicio'] = $fecha_inicio;
+            $debug['fecha_fin'] = $fecha_fin;
+            
+            // Tipo de filtro (opcional: 'todos', 'personal', 'departamental')
+            $tipo_filtro = isset($_GET['tipo']) ? $_GET['tipo'] : 'todos';
+            $debug['tipo_filtro'] = $tipo_filtro;
+            
+            try {
+                // Obtener eventos híbridos
+                $resultado = $modeloEvento->obtenerEventosHibridos($NIF, $dpto, $fecha_inicio, $fecha_fin);
+                
+                // Si hay un error en la consulta, devolver el error
+                if (!$resultado['success']) {
+                    // Añadir información de depuración
+                    $resultado['debug'] = array_merge($debug, isset($resultado['debug']) ? $resultado['debug'] : []);
+                    echo json_encode($resultado);
+                    exit();
+                }
+                
+                // Filtrar por tipo si se especifica
+                if ($resultado['success'] && $tipo_filtro !== 'todos' && isset($resultado['eventos'])) {
+                    $eventos_filtrados = [];
+                    foreach ($resultado['eventos'] as $evento) {
+                        if (isset($evento['tipo_evento']) && $evento['tipo_evento'] === $tipo_filtro) {
+                            $eventos_filtrados[] = $evento;
+                        }
+                    }
+                    $resultado['eventos'] = $eventos_filtrados;
+                    $resultado['debug']['count_filtrado'] = count($eventos_filtrados);
+                    $resultado['debug']['tipo_filtro'] = $tipo_filtro;
+                }
+                
+                // Incluir tareas y fichajes si están activados en los filtros
+                $incluir_tareas = isset($_GET['incluir_tareas']) ? $_GET['incluir_tareas'] === 'true' : false;
+                $incluir_fichajes = isset($_GET['incluir_fichajes']) ? $_GET['incluir_fichajes'] === 'true' : false;
+                $debug['incluir_tareas'] = $incluir_tareas;
+                $debug['incluir_fichajes'] = $incluir_fichajes;
+                
+                // Obtener tareas como eventos si se solicitan
+                $resultado['tareas'] = [];
+                if ($incluir_tareas) {
+                    try {
+                        $resultadoTareas = $modeloEvento->obtenerTareasComoEventos($NIF, $fecha_inicio, $fecha_fin);
+                        if ($resultadoTareas['success'] && !empty($resultadoTareas['tareas'])) {
+                            $resultado['tareas'] = $resultadoTareas['tareas'];
+                        }
+                    } catch (Exception $tareasError) {
+                        $debug['error_tareas'] = $tareasError->getMessage();
+                    }
+                }
+                
+                // Obtener fichajes como eventos si se solicitan
+                $resultado['fichajes'] = [];
+                if ($incluir_fichajes) {
+                    try {
+                        $resultadoFichajes = $modeloEvento->obtenerFichajesComoEventos($NIF, $fecha_inicio, $fecha_fin);
+                        if ($resultadoFichajes['success'] && !empty($resultadoFichajes['fichajes'])) {
+                            $resultado['fichajes'] = $resultadoFichajes['fichajes'];
+                        }
+                    } catch (Exception $fichajesError) {
+                        $debug['error_fichajes'] = $fichajesError->getMessage();
+                    }
+                }
+                
+                // Agregar información de depuración
+                $resultado['debug'] = array_merge($debug, isset($resultado['debug']) ? $resultado['debug'] : []);
+                $resultado['debug']['NIF'] = $NIF;
+                $resultado['debug']['dpto'] = $dpto;
+                $resultado['debug']['session_id'] = session_id();
+                $resultado['debug']['session_active'] = isset($_SESSION['NIF']);
+                
+                echo json_encode($resultado);
+                exit();
+                
+            } catch (Exception $eventosError) {
+                $debug['error_eventos'] = $eventosError->getMessage();
+                $debug['error_trace'] = $eventosError->getTraceAsString();
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'Error al obtener eventos híbridos: ' . $eventosError->getMessage(), 'debug' => $debug]);
+                exit();
+            }
+            
+        } catch (Exception $e) {
+            error_log("Error general al obtener eventos híbridos: " . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'Error al obtener eventos híbridos: ' . $e->getMessage(), 'debug' => isset($debug) ? $debug : []]);
+            exit();
+        }
     }
     
     // Si llegamos aquí, la ruta no existe

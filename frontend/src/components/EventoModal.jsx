@@ -7,10 +7,24 @@ const EventoModal = ({ evento, onClose, onSave, onDelete, tiposEventos, isDarkMo
   const inicioFecha = evento.inicio ? new Date(evento.inicio) : new Date()
   const finFecha = evento.fin ? new Date(evento.fin) : new Date(new Date().setHours(inicioFecha.getHours() + 1))
   
+  // Colores para los diferentes tipos de eventos (mismo objeto que en Calendario.jsx)
+  const coloresEventos = {
+    evento: '#3788d8',
+    tarea: '#f59e0b',
+    reunion: '#4f46e5',
+    fichaje: '#10b981',
+    formacion: '#f97316',
+    proyecto: '#ec4899',
+    ausencia: '#6b7280',
+    personal: '#3788d8',     // Azul para eventos personales
+    departamental: '#8b5cf6'  // Morado para eventos departamentales
+  }
+  
   const [eventoEditado, setEventoEditado] = useState({
     ...evento,
     inicio: inicioFecha,
-    fin: finFecha
+    fin: finFecha,
+    color: evento.color || coloresEventos[evento.tipo || 'evento'] // Inicializar con el color según el tipo
   })
   
   // Estados para manejar los valores de texto de las fechas
@@ -33,7 +47,8 @@ const EventoModal = ({ evento, onClose, onSave, onDelete, tiposEventos, isDarkMo
       setEventoEditado({
         ...evento,
         inicio: nuevoInicio,
-        fin: nuevoFin
+        fin: nuevoFin,
+        color: evento.color || coloresEventos[evento.tipo || 'evento'] // Inicializar con el color según el tipo
       })
     }
   }, [evento.id, evento.modo])
@@ -231,6 +246,41 @@ const EventoModal = ({ evento, onClose, onSave, onDelete, tiposEventos, isDarkMo
       } catch (error) {
         console.error('Error al procesar la fecha:', error)
       }
+    } else if (name === 'tipo') {
+      // Cuando cambia el tipo de evento, asignar automáticamente el color según la leyenda
+      let colorAsignado;
+      
+      // Priorizar el tipo_evento (personal o departamental) para la asignación de color
+      if (eventoEditado.tipo_evento === 'departamental') {
+        colorAsignado = coloresEventos.departamental;
+      } else {
+        colorAsignado = coloresEventos[value] || coloresEventos.evento;
+      }
+      
+      setEventoEditado({ 
+        ...eventoEditado, 
+        [name]: value,
+        color: colorAsignado  // Asignar automáticamente el color
+      })
+      console.log(`Asignando color ${colorAsignado} para el tipo de evento ${value}, categoría: ${eventoEditado.tipo_evento}`)
+    } else if (name === 'tipo_evento') {
+      // Cuando cambia el tipo de evento (personal/departamental), asignar automáticamente el color
+      let colorAsignado;
+      
+      if (value === 'departamental') {
+        colorAsignado = coloresEventos.departamental;
+      } else {
+        // Para eventos personales, usar el color del tipo de evento o el predeterminado
+        colorAsignado = coloresEventos[eventoEditado.tipo] || coloresEventos.personal;
+      }
+      
+      setEventoEditado({
+        ...eventoEditado,
+        [name]: value,
+        color: colorAsignado
+      })
+      
+      console.log(`Cambiando a categoría ${value}, asignando color ${colorAsignado}`)
     } else {
       setEventoEditado({ ...eventoEditado, [name]: value })
     }
@@ -383,6 +433,24 @@ const EventoModal = ({ evento, onClose, onSave, onDelete, tiposEventos, isDarkMo
                   <span className="font-medium mr-1">Departamento:</span>
                   {eventoEditado.departamento}
                 </span>
+              </div>
+            )}
+            
+            {/* Mostrar tipo de evento (personal/departamental) si existe */}
+            {eventoEditado.tipo_evento && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-1">
+                  Tipo de evento:
+                </label>
+                <div className="flex items-center">
+                  <div 
+                    className="w-4 h-4 rounded-full mr-2" 
+                    style={{ backgroundColor: eventoEditado.tipo_evento === 'departamental' ? '#8b5cf6' : '#3788d8' }}
+                  ></div>
+                  <span>
+                    {eventoEditado.tipo_evento === 'personal' ? 'Personal' : 'Departamental'}
+                  </span>
+                </div>
               </div>
             )}
             
@@ -551,43 +619,45 @@ const EventoModal = ({ evento, onClose, onSave, onDelete, tiposEventos, isDarkMo
                 >
                   Tipo de evento
                 </label>
-                <select
-                  id="tipo"
-                  name="tipo"
-                  value={eventoEditado.tipo}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 rounded-md ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-900 border-gray-300'} border`}
-                >
-                  {tiposEventos.map(tipo => (
-                    <option key={tipo.value} value={tipo.value}>{tipo.label}</option>
-                  ))}
-                </select>
+                <div className="flex items-center space-x-2">
+                  <select
+                    id="tipo"
+                    name="tipo"
+                    value={eventoEditado.tipo}
+                    onChange={handleChange}
+                    className={`w-full px-3 py-2 rounded-md ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-900 border-gray-300'} border`}
+                  >
+                    {tiposEventos.map(tipo => (
+                      <option key={tipo.value} value={tipo.value}>{tipo.label}</option>
+                    ))}
+                  </select>
+                  <div
+                    className="w-6 h-6 rounded-full flex-shrink-0"
+                    style={{ backgroundColor: eventoEditado.color }}
+                    title={`Color asignado para ${eventoEditado.tipo || 'evento'}`}
+                  ></div>
+                </div>
+                <p className="text-xs text-gray-500 mt-1">El color se asigna automáticamente según el tipo de evento</p>
               </div>
               
               <div>
                 <label
-                  htmlFor="color"
+                  htmlFor="tipo_evento"
                   className={`block font-medium ${isDarkMode ? 'text-gray-200' : 'text-gray-700'} mb-1`}
                 >
-                  Color
+                  Categoría
                 </label>
-                <div className="flex items-center">
-                  <input
-                    type="color"
-                    id="color"
-                    name="color"
-                    value={eventoEditado.color}
-                    onChange={handleChange}
-                    className="w-10 h-10 p-1 rounded mr-2 cursor-pointer border-none"
-                  />
-                  <input
-                    type="text"
-                    value={eventoEditado.color}
-                    onChange={handleChange}
-                    name="color"
-                    className={`flex-1 px-3 py-2 rounded-md ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-900 border-gray-300'} border`}
-                  />
-                </div>
+                <select
+                  id="tipo_evento"
+                  name="tipo_evento"
+                  value={eventoEditado.tipo_evento || 'personal'}
+                  onChange={handleChange}
+                  className={`w-full px-3 py-2 rounded-md ${isDarkMode ? 'bg-gray-700 text-white border-gray-600' : 'bg-white text-gray-900 border-gray-300'} border`}
+                >
+                  <option value="personal">Personal</option>
+                  <option value="departamental">Departamental</option>
+                </select>
+                <p className="text-xs text-gray-500 mt-1">Selecciona si el evento es personal o departamental</p>
               </div>
             </div>
             

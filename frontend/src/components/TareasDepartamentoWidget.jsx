@@ -14,11 +14,13 @@ const TareasDepartamentoWidget = () => {
     fecha_desde: '',
     fecha_hasta: ''
   })
+  const [retryCount, setRetryCount] = useState(0)
 
   // Cargar tareas del departamento
   const cargarTareas = async () => {
     try {
       setIsLoading(true)
+      setError(null)
       
       // Construir URL con filtros
       let url = `${import.meta.env.VITE_API_URL}/tareas.php?departamento=true`
@@ -31,15 +33,28 @@ const TareasDepartamentoWidget = () => {
       const response = await fetch(url, {
         method: 'GET',
         credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Cache-Control': 'no-cache, no-store'
+        }
       })
 
+      // Check if response is JSON
+      const contentType = response.headers.get('content-type')
+      if (!contentType || !contentType.includes('application/json')) {
+        // Handle non-JSON response
+        const text = await response.text()
+        console.error('Received non-JSON response:', text)
+        throw new Error('El servidor no devolvió una respuesta JSON válida')
+      }
+
       if (!response.ok) {
-        throw new Error('Error al cargar tareas del departamento')
+        throw new Error(`Error al cargar tareas del departamento: ${response.status}`)
       }
 
       const data = await response.json()
       if (data.success) {
-        setTareas(data.tareas)
+        setTareas(data.tareas || [])
       } else {
         throw new Error(data.message || 'Error al cargar tareas del departamento')
       }
@@ -51,10 +66,10 @@ const TareasDepartamentoWidget = () => {
     }
   }
 
-  // Cargar tareas al iniciar y cuando cambien los filtros
+  // Cargar tareas al iniciar y cuando cambien los filtros o se solicite un reintento
   useEffect(() => {
     cargarTareas()
-  }, [filtros])
+  }, [filtros, retryCount])
 
   // Manejar cambios en los filtros
   const handleFiltroChange = (e) => {
@@ -73,6 +88,11 @@ const TareasDepartamentoWidget = () => {
       fecha_desde: '',
       fecha_hasta: ''
     })
+  }
+
+  // Función para reintentar manualmente
+  const handleRetry = () => {
+    setRetryCount(prev => prev + 1)
   }
 
   // Renderizar el estado con color
@@ -118,6 +138,11 @@ const TareasDepartamentoWidget = () => {
       </span>
     )
   }
+
+  // Mensaje de error personalizado
+  const mensajeError = error ? (
+    error.includes('JSON') ? 'Error de comunicación con el servidor. Por favor, inténtelo de nuevo más tarde.' : error
+  ) : 'No hay tareas disponibles.';
 
   return (
     <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow p-6`}>
@@ -197,51 +222,45 @@ const TareasDepartamentoWidget = () => {
         </div>
       ) : error ? (
         <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-red-800 text-red-200' : 'bg-red-100 text-red-800'}`}>
-          {error}
+          {mensajeError}
           <button 
-            onClick={cargarTareas} 
-            className={`ml-4 px-3 py-1 rounded-md ${isDarkMode ? 'bg-red-700 hover:bg-red-600' : 'bg-red-200 hover:bg-red-300'}`}
+            onClick={handleRetry} 
+            className={`mt-2 px-4 py-2 rounded ${isDarkMode ? 'bg-red-700 hover:bg-red-600' : 'bg-red-200 hover:bg-red-300'} text-sm`}
           >
             Reintentar
           </button>
         </div>
       ) : tareas.length === 0 ? (
-        <div className={`p-6 text-center rounded-lg ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
-          No hay tareas en el departamento que coincidan con los filtros seleccionados.
+        <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
+          No hay tareas que coincidan con los filtros seleccionados.
         </div>
       ) : (
-        <div className="grid gap-4">
-          {tareas.map((tarea) => (
-            <div key={tarea.id} className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'} border ${isDarkMode ? 'border-gray-600' : 'border-gray-200'}`}>
-              <div className="flex justify-between items-start">
-                <div>
-                  <h3 className={`font-semibold ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>{tarea.titulo}</h3>
-                  <p className={`mt-1 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>{tarea.descripcion}</p>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                  {renderEstado(tarea.estado)}
-                  {renderPrioridad(tarea.prioridad)}
-                </div>
-              </div>
-              
-              <div className="mt-3 flex flex-wrap gap-2 text-xs">
-                <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
-                  <span className="font-medium">Creada por:</span> {tarea.nombre_creador} {tarea.apellidos_creador}
-                </span>
-                
-                <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
-                  <span className="font-medium">Asignada a:</span> {tarea.nombre_asignado} {tarea.apellidos_asignado}
-                </span>
-                
-                {tarea.fecha_vencimiento && (
-                  <span className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
-                    <span className="font-medium">Vence:</span> {new Date(tarea.fecha_vencimiento).toLocaleDateString()}
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
+        <div className="overflow-x-auto">
+          <table className={`min-w-full ${isDarkMode ? 'text-gray-200' : 'text-gray-800'}`}>
+            <thead>
+              <tr className={`${isDarkMode ? 'border-gray-700' : 'border-gray-200'} border-b`}>
+                <th className="py-3 px-4 text-left">Título</th>
+                <th className="py-3 px-4 text-left">Asignado a</th>
+                <th className="py-3 px-4 text-left">Estado</th>
+                <th className="py-3 px-4 text-left">Prioridad</th>
+                <th className="py-3 px-4 text-left">Fecha Límite</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tareas.map((tarea, index) => (
+                <tr 
+                  key={index} 
+                  className={`${isDarkMode ? 'border-gray-700 hover:bg-gray-700' : 'border-gray-200 hover:bg-gray-50'} border-b`}
+                >
+                  <td className="py-3 px-4">{tarea.titulo}</td>
+                  <td className="py-3 px-4">{tarea.nombre_asignado} {tarea.apellidos_asignado}</td>
+                  <td className="py-3 px-4">{renderEstado(tarea.estado)}</td>
+                  <td className="py-3 px-4">{renderPrioridad(tarea.prioridad)}</td>
+                  <td className="py-3 px-4">{new Date(tarea.fecha_limite).toLocaleDateString()}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

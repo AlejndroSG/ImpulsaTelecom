@@ -264,26 +264,61 @@ class Evento {
     /**
      * Obtener eventos por departamento y rango de fechas
      */
-    public function obtenerEventosPorDepartamento($id_departamento, $fecha_inicio = null, $fecha_fin = null) {
+    public function obtenerEventosPorDepartamento($dpto, $fecha_inicio = null, $fecha_fin = null) {
         try {
-            $query = "SELECT e.*, u.nombre as nombre_usuario, u.apellidos as apellidos_usuario, d.nombre as nombre_departamento "
+            // Validar y formatear las fechas si se proporcionan
+            if ($fecha_inicio) {
+                $fecha_inicio = $this->validarFormatoFecha($fecha_inicio);
+                if (!$fecha_inicio) {
+                    return ['success' => false, 'message' => 'Formato de fecha de inicio inválido'];
+                }
+            }
+            
+            if ($fecha_fin) {
+                $fecha_fin = $this->validarFormatoFecha($fecha_fin);
+                if (!$fecha_fin) {
+                    return ['success' => false, 'message' => 'Formato de fecha de fin inválido'];
+                }
+            }
+
+            // Consulta base
+            $query = "SELECT e.*, u.nombre as nombre_usuario, u.apellidos as apellidos_usuario "
                    . "FROM eventos e "
                    . "JOIN usuarios u ON e.NIF_usuario = u.NIF "
-                   . "LEFT JOIN departamentos d ON e.id_departamento = d.id "
-                   . "WHERE e.id_departamento = :id_departamento ";
+                   . "WHERE 1=1 ";
             
-            $params = [':id_departamento' => $id_departamento];
+            $params = [];
             
-            // Filtrar por rango de fechas si se proporcionan
+            // Filtrar por departamento si se proporciona
+            if ($dpto) {
+                $query .= "AND u.dpto = :dpto ";
+                $params[':dpto'] = $dpto;
+            }
+            
+            // Filtrar por rango de fechas si se proporcionan ambas fechas
             if ($fecha_inicio && $fecha_fin) {
                 $query .= "AND ((e.fecha_inicio BETWEEN :fecha_inicio AND :fecha_fin) "
                        . "OR (e.fecha_fin BETWEEN :fecha_inicio AND :fecha_fin) "
-                       . "OR (e.fecha_inicio <= :fecha_inicio AND e.fecha_fin >= :fecha_fin))";
+                       . "OR (e.fecha_inicio <= :fecha_inicio AND (e.fecha_fin >= :fecha_fin OR e.fecha_fin IS NULL)))";
                 $params[':fecha_inicio'] = $fecha_inicio;
+                $params[':fecha_fin'] = $fecha_fin;
+            }
+            // Si solo se proporciona fecha de inicio
+            else if ($fecha_inicio) {
+                $query .= "AND (e.fecha_inicio >= :fecha_inicio OR e.fecha_fin >= :fecha_inicio)";
+                $params[':fecha_inicio'] = $fecha_inicio;
+            }
+            // Si solo se proporciona fecha de fin
+            else if ($fecha_fin) {
+                $query .= "AND (e.fecha_inicio <= :fecha_fin)";
                 $params[':fecha_fin'] = $fecha_fin;
             }
             
             $query .= " ORDER BY e.fecha_inicio ASC";
+            
+            // Registrar la consulta para depuración
+            error_log("Consulta SQL: " . $query);
+            error_log("Parámetros: " . json_encode($params));
             
             $stmt = $this->conn->prepare($query);
             
@@ -295,7 +330,28 @@ class Evento {
             $stmt->execute();
             $eventos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             
-            return ['success' => true, 'eventos' => $eventos];
+            // Formatear las fechas para el frontend (ISO8601 con T)
+            foreach ($eventos as &$evento) {
+                if (isset($evento['fecha_inicio'])) {
+                    $evento['fecha_inicio'] = date('Y-m-d\TH:i:s', strtotime($evento['fecha_inicio']));
+                }
+                if (isset($evento['fecha_fin']) && $evento['fecha_fin']) {
+                    $evento['fecha_fin'] = date('Y-m-d\TH:i:s', strtotime($evento['fecha_fin']));
+                }
+            }
+            
+            return [
+                'success' => true, 
+                'eventos' => $eventos,
+                'debug' => [
+                    'count' => count($eventos),
+                    'dpto' => $dpto,
+                    'fecha_inicio' => $fecha_inicio,
+                    'fecha_fin' => $fecha_fin,
+                    'query' => $query,
+                    'params' => $params
+                ]
+            ];
             
         } catch (PDOException $e) {
             error_log("Error en obtenerEventosPorDepartamento: " . $e->getMessage());
@@ -304,275 +360,530 @@ class Evento {
     }
     
     /**
-     * Obtiene las tareas del usuario como eventos para el calendario
+     * Obtener eventos híbridos (personales + departamentales) para un usuario
+     */
+    public function obtenerEventosHibridos($NIF, $dpto = null, $fecha_inicio = null, $fecha_fin = null) {
+        $debug = [];
+        $debug['NIF'] = $NIF;
+        $debug['dpto'] = $dpto;
+        $debug['fecha_inicio'] = $fecha_inicio;
+        $debug['fecha_fin'] = $fecha_fin;
+        
+        // Validar y formatear las fechas si se proporcionan
+        if ($fecha_inicio) {
+            $fecha_inicio = $this->validarFormatoFecha($fecha_inicio);
+            if (!$fecha_inicio) {
+                return ['success' => false, 'message' => 'Formato de fecha de inicio inválido', 'debug' => $debug];
+            }
+        }
+        
+        if ($fecha_fin) {
+            $fecha_fin = $this->validarFormatoFecha($fecha_fin);
+            if (!$fecha_fin) {
+                return ['success' => false, 'message' => 'Formato de fecha de fin inválido', 'debug' => $debug];
+            }
+        }
+        
+        // Obtener eventos personales del usuario
+        $resultadoPersonales = $this->obtenerEventosPersonales($NIF, $fecha_inicio, $fecha_fin);
+        $debug['resultado_personales'] = $resultadoPersonales['debug'];
+        
+        // Verificar si se obtuvieron con éxito
+        if (!$resultadoPersonales['success']) {
+            return ['success' => false, 'message' => 'Error al obtener eventos personales', 'debug' => $debug];
+        }
+        
+        $eventosPersonales = $resultadoPersonales['eventos'];
+        $debug['num_eventos_personales'] = count($eventosPersonales);
+        
+        // Inicializar array de eventos híbridos con los eventos personales
+        $eventosHibridos = $eventosPersonales;
+        
+        // Si se proporciona un departamento, obtener también los eventos departamentales
+        if ($dpto) {
+            $resultadoDepartamentales = $this->obtenerEventosDepartamentales($NIF, $dpto, $fecha_inicio, $fecha_fin);
+            $debug['resultado_departamentales'] = $resultadoDepartamentales['debug'];
+            
+            // Verificar si se obtuvieron con éxito
+            if (!$resultadoDepartamentales['success']) {
+                return ['success' => false, 'message' => 'Error al obtener eventos departamentales', 'debug' => $debug];
+            }
+            
+            $eventosDepartamentales = $resultadoDepartamentales['eventos'];
+            $debug['num_eventos_departamentales'] = count($eventosDepartamentales);
+            
+            // Combinar eventos personales y departamentales
+            $eventosHibridos = array_merge($eventosHibridos, $eventosDepartamentales);
+        }
+        
+        // Incluir tareas como eventos si es necesario
+        $incluirTareas = true; // Este valor podría ser un parámetro de entrada
+        if ($incluirTareas) {
+            $resultadoTareas = $this->obtenerTareasComoEventos($NIF, $fecha_inicio, $fecha_fin);
+            $debug['resultado_tareas'] = $resultadoTareas['debug'];
+            
+            if ($resultadoTareas['success'] && !empty($resultadoTareas['tareas'])) {
+                $eventosHibridos = array_merge($eventosHibridos, $resultadoTareas['tareas']);
+                $debug['num_tareas'] = count($resultadoTareas['tareas']);
+            } else {
+                $debug['tareas_error'] = $resultadoTareas['message'] ?? 'No se encontraron tareas';
+            }
+        }
+        
+        // Incluir fichajes como eventos si es necesario
+        $incluirFichajes = true; // Este valor podría ser un parámetro de entrada
+        if ($incluirFichajes) {
+            $resultadoFichajes = $this->obtenerFichajesComoEventos($NIF, $fecha_inicio, $fecha_fin);
+            $debug['resultado_fichajes'] = $resultadoFichajes['debug'];
+            
+            if ($resultadoFichajes['success'] && !empty($resultadoFichajes['fichajes'])) {
+                $eventosHibridos = array_merge($eventosHibridos, $resultadoFichajes['fichajes']);
+                $debug['num_fichajes'] = count($resultadoFichajes['fichajes']);
+            } else {
+                $debug['fichajes_error'] = $resultadoFichajes['message'] ?? 'No se encontraron fichajes';
+            }
+        }
+        
+        // Asegurarnos de que todos los eventos tengan todas las propiedades necesarias
+        foreach ($eventosHibridos as &$evento) {
+            // Verificar y establecer propiedades obligatorias si no existen
+            if (!isset($evento['id'])) {
+                $evento['id'] = 'evento_' . uniqid();
+            }
+            if (!isset($evento['title']) && isset($evento['titulo'])) {
+                $evento['title'] = $evento['titulo'];
+            }
+            if (!isset($evento['start']) && isset($evento['fecha_inicio'])) {
+                $evento['start'] = $evento['fecha_inicio'];
+            }
+            if (!isset($evento['end']) && isset($evento['fecha_fin'])) {
+                $evento['end'] = $evento['fecha_fin'] ?: $evento['start'];
+            }
+            if (!isset($evento['color'])) {
+                $evento['color'] = '#6c757d'; // Color gris por defecto
+            }
+            if (!isset($evento['editable'])) {
+                $evento['editable'] = false; // Por defecto, no editable
+            }
+            if (!isset($evento['eventType']) && isset($evento['tipo_evento'])) {
+                $evento['eventType'] = $evento['tipo_evento'];
+            }
+        }
+        
+        $debug['num_eventos_hibridos'] = count($eventosHibridos);
+        
+        return [
+            'success' => true,
+            'eventos' => $eventosHibridos,
+            'debug' => $debug
+        ];
+    }
+    
+    /**
+     * Método auxiliar para obtener solo los eventos personales
+     */
+    private function obtenerEventosPersonales($NIF, $fecha_inicio = null, $fecha_fin = null) {
+        $debug = [];
+        try {
+            $query = "SELECT e.*, u.nombre as nombre_usuario, u.apellidos as apellidos_usuario, 
+                    'personal' as tipo_evento 
+                    FROM eventos e 
+                    JOIN usuarios u ON e.NIF_usuario = u.NIF 
+                    WHERE e.NIF_usuario = ?";
+            
+            $params = [$NIF];
+            
+            // Construir cláusula WHERE para filtrar por fechas
+            if ($fecha_inicio && $fecha_fin) {
+                $query .= " AND ((e.fecha_inicio BETWEEN ? AND ?) 
+                        OR (e.fecha_fin BETWEEN ? AND ?) 
+                        OR (e.fecha_inicio <= ? AND (e.fecha_fin >= ? OR e.fecha_fin IS NULL)))";
+                $params[] = $fecha_inicio;
+                $params[] = $fecha_fin;
+                $params[] = $fecha_inicio;
+                $params[] = $fecha_fin;
+                $params[] = $fecha_inicio;
+                $params[] = $fecha_fin;
+            } else if ($fecha_inicio) {
+                $query .= " AND (e.fecha_inicio >= ? OR e.fecha_fin >= ?)";
+                $params[] = $fecha_inicio;
+                $params[] = $fecha_inicio;
+            } else if ($fecha_fin) {
+                $query .= " AND (e.fecha_inicio <= ?)";
+                $params[] = $fecha_fin;
+            }
+            
+            $debug['query'] = $query;
+            $debug['params'] = $params;
+            
+            $stmt = $this->conn->prepare($query);
+            
+            if ($stmt === false) {
+                $error = $this->conn->errorInfo();
+                error_log("Error al preparar consulta de eventos personales: " . implode(", ", $error));
+                return ['success' => false, 'message' => 'Error al preparar consulta de eventos personales', 'debug' => $debug];
+            }
+            
+            if (!$stmt->execute($params)) {
+                $error = $stmt->errorInfo();
+                error_log("Error al ejecutar consulta de eventos personales: " . implode(", ", $error));
+                return ['success' => false, 'message' => 'Error al consultar eventos personales', 'debug' => $debug];
+            }
+            
+            $eventos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Formatear las fechas para el frontend (ISO8601 con T)
+            // y agregar propiedades necesarias para la interactividad del calendario
+            foreach ($eventos as &$evento) {
+                // Formatear fechas
+                if (isset($evento['fecha_inicio'])) {
+                    $evento['fecha_inicio'] = date('Y-m-d\TH:i:s', strtotime($evento['fecha_inicio']));
+                }
+                if (isset($evento['fecha_fin']) && $evento['fecha_fin']) {
+                    $evento['fecha_fin'] = date('Y-m-d\TH:i:s', strtotime($evento['fecha_fin']));
+                }
+                
+                // Agregar propiedades para la interactividad del calendario
+                // El tipo de evento determina el color y comportamiento en el frontend
+                $evento['id'] = 'evento_' . $evento['id'];
+                $evento['title'] = $evento['titulo'];
+                $evento['start'] = $evento['fecha_inicio'];
+                $evento['end'] = $evento['fecha_fin'] ?? $evento['fecha_inicio']; // Si no hay fecha_fin, usar fecha_inicio
+                $evento['color'] = '#3788d8'; // Color por defecto para eventos personales
+                $evento['editable'] = true; // Los eventos personales son editables
+                $evento['eventType'] = 'personal'; // Tipo de evento para la lógica del frontend
+            }
+            
+            return ['success' => true, 'eventos' => $eventos, 'debug' => $debug];
+            
+        } catch (Exception $e) {
+            error_log("Error al obtener eventos personales: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error: ' . $e->getMessage(), 'debug' => $debug];
+        }
+    }
+    
+    /**
+     * Método auxiliar para obtener solo los eventos departamentales
+     */
+    private function obtenerEventosDepartamentales($NIF, $dpto, $fecha_inicio = null, $fecha_fin = null) {
+        $debug = [];
+        try {
+            $query = "SELECT e.*, u.nombre as nombre_usuario, u.apellidos as apellidos_usuario, 
+                    'departamental' as tipo_evento 
+                    FROM eventos e 
+                    JOIN usuarios u ON e.NIF_usuario = u.NIF 
+                    WHERE u.dpto = ? AND e.NIF_usuario != ?";
+            
+            $params = [$dpto, $NIF];
+            
+            // Construir cláusula WHERE para filtrar por fechas
+            if ($fecha_inicio && $fecha_fin) {
+                $query .= " AND ((e.fecha_inicio BETWEEN ? AND ?) 
+                        OR (e.fecha_fin BETWEEN ? AND ?) 
+                        OR (e.fecha_inicio <= ? AND (e.fecha_fin >= ? OR e.fecha_fin IS NULL)))";
+                $params[] = $fecha_inicio;
+                $params[] = $fecha_fin;
+                $params[] = $fecha_inicio;
+                $params[] = $fecha_fin;
+                $params[] = $fecha_inicio;
+                $params[] = $fecha_fin;
+            } else if ($fecha_inicio) {
+                $query .= " AND (e.fecha_inicio >= ? OR e.fecha_fin >= ?)";
+                $params[] = $fecha_inicio;
+                $params[] = $fecha_inicio;
+            } else if ($fecha_fin) {
+                $query .= " AND (e.fecha_inicio <= ?)";
+                $params[] = $fecha_fin;
+            }
+            
+            $debug['query'] = $query;
+            $debug['params'] = $params;
+            
+            $stmt = $this->conn->prepare($query);
+            
+            if ($stmt === false) {
+                $error = $this->conn->errorInfo();
+                error_log("Error al preparar consulta de eventos departamentales: " . implode(", ", $error));
+                return ['success' => false, 'message' => 'Error al preparar consulta de eventos departamentales', 'debug' => $debug];
+            }
+            
+            if (!$stmt->execute($params)) {
+                $error = $stmt->errorInfo();
+                error_log("Error al ejecutar consulta de eventos departamentales: " . implode(", ", $error));
+                return ['success' => false, 'message' => 'Error al consultar eventos departamentales', 'debug' => $debug];
+            }
+            
+            $eventos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            // Formatear las fechas para el frontend (ISO8601 con T)
+            // y agregar propiedades necesarias para la interactividad del calendario
+            foreach ($eventos as &$evento) {
+                // Formatear fechas
+                if (isset($evento['fecha_inicio'])) {
+                    $evento['fecha_inicio'] = date('Y-m-d\TH:i:s', strtotime($evento['fecha_inicio']));
+                }
+                if (isset($evento['fecha_fin']) && $evento['fecha_fin']) {
+                    $evento['fecha_fin'] = date('Y-m-d\TH:i:s', strtotime($evento['fecha_fin']));
+                }
+                
+                // Agregar propiedades para la interactividad del calendario
+                // El tipo de evento determina el color y comportamiento en el frontend
+                $evento['id'] = 'evento_dpto_' . $evento['id'];
+                $evento['title'] = $evento['titulo'];
+                $evento['start'] = $evento['fecha_inicio'];
+                $evento['end'] = $evento['fecha_fin'] ?? $evento['fecha_inicio']; // Si no hay fecha_fin, usar fecha_inicio
+                $evento['color'] = '#28a745'; // Color verde para eventos departamentales
+                $evento['editable'] = false; // Los eventos departamentales no son editables para el usuario actual
+                $evento['eventType'] = 'departamental'; // Tipo de evento para la lógica del frontend
+            }
+            
+            return ['success' => true, 'eventos' => $eventos, 'debug' => $debug];
+            
+        } catch (Exception $e) {
+            error_log("Error al obtener eventos departamentales: " . $e->getMessage());
+            return ['success' => false, 'message' => 'Error: ' . $e->getMessage(), 'debug' => $debug];
+        }
+    }
+    
+    /**
+     * Obtener las tareas del usuario como eventos para el calendario
      * @param string $NIF El NIF del usuario
      * @param string|null $fecha_inicio Fecha de inicio para filtrar
      * @param string|null $fecha_fin Fecha de fin para filtrar
      * @return array Array con las tareas como eventos
      */
     public function obtenerTareasComoEventos($NIF, $fecha_inicio = null, $fecha_fin = null) {
+        $debug = [];
+        $tareas = [];
+        
         try {
-            // Verificar si la tabla 'tareas' existe
-            $tableCheckQuery = "SHOW TABLES LIKE 'tareas'";
-            $tableResult = $this->conn->query($tableCheckQuery);
-            
-            if ($tableResult === false) {
-                error_log("Error al verificar la tabla 'tareas': " . $this->conn->errorInfo()[2]);
-                return ['success' => false, 'message' => 'Error al verificar la tabla de tareas', 'tareas' => []];
+            // Verificar si el modelo de Tarea está disponible
+            if (!class_exists('Tarea')) {
+                require_once __DIR__ . '/Tarea.php';
             }
             
-            if ($tableResult->rowCount() === 0) {
-                error_log("La tabla 'tareas' no existe en la base de datos");
-                return ['success' => true, 'tareas' => []];
+            $modeloTarea = new Tarea();
+            
+            // Preparar los parámetros de filtrado para las tareas
+            $filtros = [];
+            if ($fecha_inicio) {
+                $filtros['fecha_inicio'] = $fecha_inicio;
+                $debug['fecha_inicio'] = $fecha_inicio;
+            }
+            if ($fecha_fin) {
+                $filtros['fecha_fin'] = $fecha_fin;
+                $debug['fecha_fin'] = $fecha_fin;
             }
             
-            // Construir la consulta base
-            $query = "SELECT id, titulo, descripcion, fecha_creacion, fecha_vencimiento, estado, prioridad, NIF_usuario 
-                     FROM tareas 
-                     WHERE NIF_usuario = :NIF";
+            // Obtener las tareas del usuario
+            $resultadoTareas = $modeloTarea->obtenerTareasPorUsuario($NIF, $filtros);
+            $debug['resultado_raw'] = $resultadoTareas;
             
-            // Añadir filtro de fechas si se proporcionan
-            $params = [':NIF' => $NIF];
-            
-            if ($fecha_inicio && $fecha_fin) {
-                $query .= " AND (fecha_vencimiento BETWEEN :fecha_inicio AND :fecha_fin 
-                           OR fecha_creacion BETWEEN :fecha_inicio AND :fecha_fin)";
-                $params[':fecha_inicio'] = $fecha_inicio;
-                $params[':fecha_fin'] = $fecha_fin;
-            }
-            
-            // Preparar y ejecutar la consulta
-            $stmt = $this->conn->prepare($query);
-            
-            if ($stmt === false) {
-                error_log("Error en la preparación de la consulta de tareas: " . $this->conn->errorInfo()[2]);
-                return ['success' => false, 'message' => 'Error al preparar la consulta de tareas', 'tareas' => []];
-            }
-            
-            foreach ($params as $param => $value) {
-                $stmt->bindValue($param, $value);
-            }
-            
-            if (!$stmt->execute()) {
-                error_log("Error al ejecutar la consulta de tareas: " . $stmt->errorInfo()[2]);
-                return ['success' => false, 'message' => 'Error al obtener tareas', 'tareas' => []];
-            }
-            
-            $tareas = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            $tareasComoEventos = [];
-            
-            // Convertir las tareas a formato de evento para el calendario
-            foreach ($tareas as $tarea) {
-                $color = '';
-                
-                // Asignar color según prioridad
-                switch ($tarea['prioridad']) {
-                    case 'alta':
-                        $color = '#ff4d4d'; // Rojo
-                        break;
-                    case 'media':
-                        $color = '#ffa64d'; // Naranja
-                        break;
-                    case 'baja':
-                        $color = '#4da6ff'; // Azul
-                        break;
-                    default:
-                        $color = '#808080'; // Gris por defecto
+            if ($resultadoTareas['success'] && !empty($resultadoTareas['tareas'])) {
+                // Convertir cada tarea a formato de evento para el calendario
+                foreach ($resultadoTareas['tareas'] as $tarea) {
+                    $evento = [
+                        'id' => 'tarea_' . $tarea['id'],
+                        'title' => $tarea['titulo'],
+                        'description' => $tarea['descripcion'] ?? '',
+                        'start' => date('Y-m-d\TH:i:s', strtotime($tarea['fecha_inicio'])),
+                        'estado' => $tarea['estado'],
+                        'prioridad' => $tarea['prioridad'],
+                        'eventType' => 'tarea',
+                        'editable' => true,
+                        // Color según la prioridad de la tarea
+                        'color' => $this->obtenerColorPorPrioridad($tarea['prioridad'])
+                    ];
+                    
+                    // Si hay fecha de fin, agregarla
+                    if (isset($tarea['fecha_fin']) && !empty($tarea['fecha_fin'])) {
+                        $evento['end'] = date('Y-m-d\TH:i:s', strtotime($tarea['fecha_fin']));
+                    } else {
+                        // Si no hay fecha fin, usar la misma fecha de inicio
+                        $evento['end'] = $evento['start'];
+                    }
+                    
+                    $tareas[] = $evento;
                 }
                 
-                // Crear el evento a partir de la tarea
-                $evento = [
-                    'id' => 'tarea_' . $tarea['id'],
-                    'title' => '[Tarea] ' . $tarea['titulo'],
-                    'start' => $tarea['fecha_vencimiento'] ?: $tarea['fecha_creacion'],
-                    'end' => $tarea['fecha_vencimiento'] ?: $tarea['fecha_creacion'],
-                    'allDay' => true,
-                    'backgroundColor' => $color,
-                    'borderColor' => $color,
-                    'description' => $tarea['descripcion'],
-                    'estado' => $tarea['estado'],
-                    'tipo' => 'tarea'
-                ];
+                $debug['tareas_convertidas'] = count($tareas);
                 
-                $tareasComoEventos[] = $evento;
+                return [
+                    'success' => true,
+                    'tareas' => $tareas,
+                    'debug' => $debug
+                ];
+            } else {
+                $debug['error_api'] = $resultadoTareas['message'] ?? 'No se encontraron tareas';
+                
+                return [
+                    'success' => true,
+                    'tareas' => [],
+                    'debug' => $debug
+                ];
             }
             
-            return ['success' => true, 'tareas' => $tareasComoEventos];
-            
-        } catch (PDOException $e) {
-            error_log("Error PDO al obtener tareas como eventos: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error de base de datos al obtener tareas', 'tareas' => []];
         } catch (Exception $e) {
-            error_log("Error general al obtener tareas como eventos: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error al obtener tareas', 'tareas' => []];
+            $error = 'Error al obtener tareas como eventos: ' . $e->getMessage();
+            error_log($error);
+            $debug['error_exception'] = $error;
+            
+            return [
+                'success' => false,
+                'message' => $error,
+                'tareas' => [],
+                'debug' => $debug
+            ];
         }
     }
     
     /**
-     * Obtiene los fichajes del usuario como eventos para el calendario
-     * @param string $NIF El NIF del usuario
-     * @param string|null $fecha_inicio Fecha de inicio para filtrar
-     * @param string|null $fecha_fin Fecha de fin para filtrar
-     * @return array Array con los fichajes como eventos
+     * Obtener color para una tarea según su prioridad
+     */
+    private function obtenerColorPorPrioridad($prioridad) {
+        switch (strtolower($prioridad)) {
+            case 'alta':
+                return '#dc3545'; // Rojo
+            case 'media':
+                return '#ffc107'; // Amarillo
+            case 'baja':
+                return '#17a2b8'; // Azul claro
+            default:
+                return '#6c757d'; // Gris
+        }
+    }
+
+    /**
+     * Obtener fichajes del usuario convertidos a formato de eventos para el calendario
      */
     public function obtenerFichajesComoEventos($NIF, $fecha_inicio = null, $fecha_fin = null) {
+        $debug = [];
+        $fichajes = [];
+        
         try {
-            // Verificar si existe la tabla 'fichajes' o 'registros'
-            $tableFichajes = false;
-            $tablaRegistros = false;
-            
-            // Comprobar tabla fichajes
-            $checkFichajes = "SHOW TABLES LIKE 'fichajes'";
-            $resultFichajes = $this->conn->query($checkFichajes);
-            if ($resultFichajes && $resultFichajes->rowCount() > 0) {
-                $tableFichajes = true;
+            // Verificar si el modelo de Fichaje está disponible
+            if (!class_exists('Fichaje')) {
+                require_once __DIR__ . '/Fichaje.php';
             }
             
-            // Comprobar tabla registros
-            $checkRegistros = "SHOW TABLES LIKE 'registros'";
-            $resultRegistros = $this->conn->query($checkRegistros);
-            if ($resultRegistros && $resultRegistros->rowCount() > 0) {
-                $tablaRegistros = true;
-            }
+            $modeloFichaje = new Fichaje();
             
-            // Si no existe ninguna de las tablas, devolver array vacío
-            if (!$tableFichajes && !$tablaRegistros) {
-                error_log("No existen las tablas 'fichajes' ni 'registros' en la base de datos");
-                return ['success' => true, 'fichajes' => []];
-            }
+            // Preparar los parámetros para la consulta de fichajes
+            $params = [];
             
-            $fichajes = [];
-            
-            // Consulta para tabla fichajes
-            if ($tableFichajes) {
-                $queryFichajes = "SELECT id, fecha_entrada, fecha_salida, NIF_usuario, latitud_entrada, longitud_entrada, 
-                               latitud_salida, longitud_salida 
-                               FROM fichajes 
-                               WHERE NIF_usuario = :NIF";
-                
-                if ($fecha_inicio && $fecha_fin) {
-                    $queryFichajes .= " AND (fecha_entrada BETWEEN :fecha_inicio AND :fecha_fin 
-                                   OR fecha_salida BETWEEN :fecha_inicio AND :fecha_fin)";
+            if ($fecha_inicio) {
+                $fecha_inicio = $this->validarFormatoFecha($fecha_inicio);
+                if (!$fecha_inicio) {
+                    return ['success' => false, 'message' => 'Formato de fecha de inicio inválido para fichajes', 'fichajes' => [], 'debug' => $debug];
                 }
+                $params['fecha_inicio'] = $fecha_inicio;
+                $debug['fecha_inicio'] = $fecha_inicio;
+            }
+            
+            if ($fecha_fin) {
+                $fecha_fin = $this->validarFormatoFecha($fecha_fin);
+                if (!$fecha_fin) {
+                    return ['success' => false, 'message' => 'Formato de fecha de fin inválido para fichajes', 'fichajes' => [], 'debug' => $debug];
+                }
+                $params['fecha_fin'] = $fecha_fin;
+                $debug['fecha_fin'] = $fecha_fin;
+            }
+            
+            // Obtener los fichajes del usuario usando el modelo de Fichaje
+            $debug['params_consulta'] = ['NIF' => $NIF, 'params' => $params];
+            
+            try {
+                // Consulta de fichajes (entradas y salidas) del usuario
+                $queryFichajes = "SELECT f.id, f.NIF_usuario, f.tipo, f.fecha_hora, f.comentario, 
+                         u.nombre, u.apellidos
+                         FROM fichajes f 
+                         JOIN usuarios u ON f.NIF_usuario = u.NIF 
+                         WHERE f.NIF_usuario = ? ";
+                
+                $paramsFichajes = [$NIF];
+                
+                // Filtrar por rango de fechas
+                if ($fecha_inicio) {
+                    $queryFichajes .= " AND f.fecha_hora >= ? ";
+                    $paramsFichajes[] = $fecha_inicio;
+                }
+                
+                if ($fecha_fin) {
+                    $queryFichajes .= " AND f.fecha_hora <= ? ";
+                    $paramsFichajes[] = $fecha_fin;
+                }
+                
+                $queryFichajes .= " ORDER BY f.fecha_hora DESC";
+                
+                $debug['query_fichajes'] = $queryFichajes;
+                $debug['params_fichajes'] = $paramsFichajes;
                 
                 $stmtFichajes = $this->conn->prepare($queryFichajes);
                 
-                if ($stmtFichajes) {
-                    $stmtFichajes->bindValue(':NIF', $NIF);
-                    
-                    if ($fecha_inicio && $fecha_fin) {
-                        $stmtFichajes->bindValue(':fecha_inicio', $fecha_inicio);
-                        $stmtFichajes->bindValue(':fecha_fin', $fecha_fin);
-                    }
-                    
-                    if ($stmtFichajes->execute()) {
-                        $fichajes = array_merge($fichajes, $stmtFichajes->fetchAll(PDO::FETCH_ASSOC));
-                    } else {
-                        error_log("Error al ejecutar consulta de fichajes: " . implode(", ", $stmtFichajes->errorInfo()));
-                    }
-                } else {
-                    error_log("Error al preparar consulta de fichajes: " . implode(", ", $this->conn->errorInfo()));
-                }
-            }
-            
-            // Consulta para tabla registros
-            if ($tablaRegistros) {
-                $queryRegistros = "SELECT id, fecha_entrada, fecha_salida, NIF_usuario, latitud_entrada, longitud_entrada, 
-                                latitud_salida, longitud_salida 
-                                FROM registros 
-                                WHERE NIF_usuario = :NIF";
-                
-                if ($fecha_inicio && $fecha_fin) {
-                    $queryRegistros .= " AND (fecha_entrada BETWEEN :fecha_inicio AND :fecha_fin 
-                                    OR fecha_salida BETWEEN :fecha_inicio AND :fecha_fin)";
+                if ($stmtFichajes === false) {
+                    $debug['error_prepare_fichajes'] = $this->conn->errorInfo()[2];
+                    error_log("Error al preparar consulta de fichajes: " . $this->conn->errorInfo()[2]);
+                    return ['success' => false, 'message' => 'Error al preparar consulta de fichajes', 'fichajes' => [], 'debug' => $debug];
                 }
                 
-                $stmtRegistros = $this->conn->prepare($queryRegistros);
-                
-                if ($stmtRegistros) {
-                    $stmtRegistros->bindValue(':NIF', $NIF);
-                    
-                    if ($fecha_inicio && $fecha_fin) {
-                        $stmtRegistros->bindValue(':fecha_inicio', $fecha_inicio);
-                        $stmtRegistros->bindValue(':fecha_fin', $fecha_fin);
-                    }
-                    
-                    if ($stmtRegistros->execute()) {
-                        $fichajes = array_merge($fichajes, $stmtRegistros->fetchAll(PDO::FETCH_ASSOC));
-                    } else {
-                        error_log("Error al ejecutar consulta de registros: " . implode(", ", $stmtRegistros->errorInfo()));
-                    }
-                } else {
-                    error_log("Error al preparar consulta de registros: " . implode(", ", $this->conn->errorInfo()));
+                foreach ($paramsFichajes as $key => $value) {
+                    $stmtFichajes->bindValue($key+1, $value);
                 }
-            }
-            
-            // Si no hay fichajes, devolver array vacío
-            if (empty($fichajes)) {
-                return ['success' => true, 'fichajes' => []];
-            }
-            
-            $fichajesComoEventos = [];
-            
-            // Convertir los fichajes a formato de evento para el calendario
-            foreach ($fichajes as $fichaje) {
-                // Color para entrada
-                $colorEntrada = '#4CAF50'; // Verde
                 
-                // Evento de entrada
-                if (!empty($fichaje['fecha_entrada'])) {
-                    $eventoEntrada = [
-                        'id' => 'fichaje_entrada_' . $fichaje['id'],
-                        'title' => 'Entrada',
-                        'start' => $fichaje['fecha_entrada'],
-                        'end' => $fichaje['fecha_entrada'],
-                        'backgroundColor' => $colorEntrada,
-                        'borderColor' => $colorEntrada,
-                        'tipo' => 'fichaje_entrada'
+                if (!$stmtFichajes->execute()) {
+                    $debug['error_execute_fichajes'] = $stmtFichajes->errorInfo()[2];
+                    error_log("Error al ejecutar consulta de fichajes: " . $stmtFichajes->errorInfo()[2]);
+                    return ['success' => false, 'message' => 'Error al obtener fichajes', 'fichajes' => [], 'debug' => $debug];
+                }
+                
+                $resultadoFichajes = $stmtFichajes->fetchAll(PDO::FETCH_ASSOC);
+                $fichajes = [];
+                $debug['fichajes_count'] = count($resultadoFichajes);
+                
+                // Convertir cada fichaje a formato de evento para el calendario
+                foreach ($resultadoFichajes as $fichaje) {
+                    $color = $fichaje['tipo'] === 'entrada' ? '#28a745' : '#dc3545'; // Verde para entradas, rojo para salidas
+                    $titulo = $fichaje['tipo'] === 'entrada' ? 'Entrada' : 'Salida';
+                    
+                    $eventoFichaje = [
+                        'id' => 'fichaje_' . $fichaje['id'],
+                        'title' => $titulo,
+                        'start' => date('Y-m-d\TH:i:s', strtotime($fichaje['fecha_hora'])),
+                        'end' => date('Y-m-d\TH:i:s', strtotime($fichaje['fecha_hora'])),
+                        'color' => $color,
+                        'comentario' => $fichaje['comentario'] ?? '',
+                        'tipo' => $fichaje['tipo'],
+                        'eventType' => 'fichaje',
+                        'editable' => false, // Los fichajes no se pueden editar directamente
+                        'allDay' => false
                     ];
                     
-                    // Añadir coordenadas si existen
-                    if (!empty($fichaje['latitud_entrada']) && !empty($fichaje['longitud_entrada'])) {
-                        $eventoEntrada['latitud'] = $fichaje['latitud_entrada'];
-                        $eventoEntrada['longitud'] = $fichaje['longitud_entrada'];
-                    }
-                    
-                    $fichajesComoEventos[] = $eventoEntrada;
+                    $fichajes[] = $eventoFichaje;
                 }
-                
-                // Color para salida
-                $colorSalida = '#F44336'; // Rojo
-                
-                // Evento de salida
-                if (!empty($fichaje['fecha_salida'])) {
-                    $eventoSalida = [
-                        'id' => 'fichaje_salida_' . $fichaje['id'],
-                        'title' => 'Salida',
-                        'start' => $fichaje['fecha_salida'],
-                        'end' => $fichaje['fecha_salida'],
-                        'backgroundColor' => $colorSalida,
-                        'borderColor' => $colorSalida,
-                        'tipo' => 'fichaje_salida'
-                    ];
-                    
-                    // Añadir coordenadas si existen
-                    if (!empty($fichaje['latitud_salida']) && !empty($fichaje['longitud_salida'])) {
-                        $eventoSalida['latitud'] = $fichaje['latitud_salida'];
-                        $eventoSalida['longitud'] = $fichaje['longitud_salida'];
-                    }
-                    
-                    $fichajesComoEventos[] = $eventoSalida;
-                }
+            } catch (Exception $e) {
+                $debug['error_fichajes_excepcion'] = $e->getMessage();
+                error_log("Excepción al procesar fichajes: " . $e->getMessage());
             }
             
-            return ['success' => true, 'fichajes' => $fichajesComoEventos];
+            // También podríamos obtener registros de horas como eventos adicionales
+            // Esto depende de la estructura de tu base de datos
             
-        } catch (PDOException $e) {
-            error_log("Error PDO al obtener fichajes como eventos: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error de base de datos al obtener fichajes', 'fichajes' => []];
+            return [
+                'success' => true,
+                'fichajes' => $fichajes,
+                'debug' => $debug
+            ];
+            
         } catch (Exception $e) {
-            error_log("Error general al obtener fichajes como eventos: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error al obtener fichajes', 'fichajes' => []];
+            $error = 'Error al obtener fichajes como eventos: ' . $e->getMessage();
+            error_log($error);
+            
+            return [
+                'success' => false,
+                'message' => $error,
+                'fichajes' => [],
+                'debug' => isset($debug) ? $debug : []
+            ];
         }
     }
     
@@ -624,6 +935,206 @@ class Evento {
      */
     public function getConnection() {
         return $this->conn;
+    }
+    
+    /**
+     * Guardar un evento (crear o actualizar)
+     */
+    public function guardarEvento($datos) {
+        try {
+            // Formatear datos para el modelo
+            $eventoData = [
+                'titulo' => $datos['titulo'],
+                'descripcion' => $datos['descripcion'] ?? '',
+                'fecha_inicio' => $datos['fecha_inicio'] ?? $datos['inicio'] ?? null, // Aceptar ambos formatos
+                'fecha_fin' => $datos['fecha_fin'] ?? $datos['fin'] ?? null, // Aceptar ambos formatos
+                'NIF_usuario' => $datos['NIF'], // Importante: El modelo espera 'NIF_usuario', no 'NIF'
+                'id_departamento' => ($datos['tipo_evento'] === 'departamental') ? ($datos['departamento'] ?? null) : null,
+                'tipo' => $datos['tipo'] ?? 'evento',
+                'tipo_evento' => $datos['tipo_evento'] ?? 'personal', // Guardar si es personal o departamental
+                'color' => $datos['color'] ?? '#3788d8',
+                'dia_completo' => $datos['dia_completo'] ?? $datos['diaCompleto'] ?? false // Aceptar ambos formatos
+            ];
+            
+            // Crear el evento en la base de datos
+            $resultado = $this->crear($eventoData);
+            
+            if ($resultado['success']) {
+                return [
+                    'success' => true,
+                    'message' => 'Evento guardado correctamente',
+                    'id' => $resultado['id']
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => $resultado['message'] ?? 'Error al guardar el evento'
+                ];
+            }
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Error al guardar el evento: ' . $e->getMessage()
+            ];
+        }
+    }
+    
+    /**
+     * Actualizar un evento existente
+     */
+    public function actualizarEvento($datos) {
+        try {
+            // Eliminar id de los datos para evitar errores
+            $idEvento = $datos['id'];
+            unset($datos['id']);
+            
+            // Comprobar si tenemos el campo tipo_evento
+            if (isset($datos['tipo_evento']) && $datos['tipo_evento'] === 'departamental') {
+                // Si es un evento departamental, asegurar que tiene id_departamento
+                $datos['id_departamento'] = $datos['departamento'] ?? null;
+            } else if (isset($datos['tipo_evento']) && $datos['tipo_evento'] === 'personal') {
+                // Si es un evento personal, establecer id_departamento a NULL
+                $datos['id_departamento'] = null;
+            }
+            
+            $camposActualizados = [];
+            $parametros = [];
+            
+            // Validar y mapear los campos disponibles
+            $camposPermitidos = [
+                'titulo' => 'titulo',
+                'descripcion' => 'descripcion',
+                'fecha_inicio' => 'fecha_inicio',
+                'inicio' => 'fecha_inicio',
+                'fecha_fin' => 'fecha_fin',
+                'fin' => 'fecha_fin',
+                'tipo' => 'tipo',
+                'tipo_evento' => 'tipo_evento',
+                'id_departamento' => 'id_departamento',
+                'departamento' => 'id_departamento',
+                'color' => 'color',
+                'dia_completo' => 'dia_completo',
+                'diaCompleto' => 'dia_completo'
+            ];
+            
+            // Construir la consulta y los parámetros
+            foreach ($camposPermitidos as $campoDatos => $campoDb) {
+                
+                // Verificar si el campo existe en los datos
+                if (isset($datos[$campoDatos])) {
+                    // Para las fechas, asegurarse de que estén en formato correcto
+                    if ($campoDb === 'fecha_inicio' || $campoDb === 'fecha_fin') {
+                        $datos[$campoDatos] = $this->validarFormatoFecha($datos[$campoDatos]);
+                    }
+                    $camposActualizados[] = "$campoDb = :$campoDb";
+                    $parametros[$campoDb] = $datos[$campoDatos];
+                }
+            }
+            
+            // Si no hay campos para actualizar, devolver mensaje
+            if (empty($camposActualizados)) {
+                return ['success' => false, 'message' => 'No hay campos para actualizar'];
+            }
+            
+            // Construir la consulta SQL
+            $query = "UPDATE eventos SET ";
+            
+            // Completar la query con los campos a actualizar
+            $query .= implode(", ", $camposActualizados);
+            $query .= " WHERE id = :id";
+            $parametros['id'] = $idEvento;
+            
+            // Preparar y ejecutar la consulta
+            $stmt = $this->conn->prepare($query);
+            
+            foreach ($parametros as $campo => $valor) {
+                $stmt->bindValue(":$campo", $valor);
+            }
+            
+            // Ejecutar la consulta
+            if ($stmt->execute()) {
+                return [
+                    'success' => true,
+                    'message' => 'Evento actualizado correctamente'
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'Error al actualizar el evento: ' . implode(", ", $stmt->errorInfo())
+                ];
+            }
+            
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Error al actualizar el evento: ' . $e->getMessage()
+            ];
+        }
+    }
+    
+    /**
+     * Verificar que un evento existe en la base de datos
+     */
+    public function verificarExistenciaEvento($eventoId) {
+        try {
+            $query = "SELECT COUNT(*) as existe FROM eventos WHERE id = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':id', $eventoId);
+            $stmt->execute();
+            
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $resultado['existe'] > 0;
+        } catch (Exception $e) {
+            error_log("Error al verificar existencia de evento: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Verificar que un usuario es propietario de un evento
+     */
+    public function verificarPropietarioEvento($eventoId, $NIF) {
+        try {
+            $query = "SELECT COUNT(*) as es_propietario FROM eventos WHERE id = :id AND NIF_usuario = :NIF";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':id', $eventoId);
+            $stmt->bindParam(':NIF', $NIF);
+            $stmt->execute();
+            
+            $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $resultado['es_propietario'] > 0;
+        } catch (Exception $e) {
+            error_log("Error al verificar propietario de evento: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Eliminar un evento
+     */
+    public function eliminarEvento($eventoId) {
+        try {
+            $query = "DELETE FROM eventos WHERE id = :id";
+            $stmt = $this->conn->prepare($query);
+            $stmt->bindParam(':id', $eventoId);
+            
+            if ($stmt->execute()) {
+                return [
+                    'success' => true,
+                    'message' => 'Evento eliminado correctamente'
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'message' => 'Error al eliminar el evento: ' . implode(", ", $stmt->errorInfo())
+                ];
+            }
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'message' => 'Error al eliminar el evento: ' . $e->getMessage()
+            ];
+        }
     }
 }
 ?>

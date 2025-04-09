@@ -7,6 +7,42 @@ ini_set('session.cookie_httponly', '1');        // Prevenir acceso JS a la cooki
 ini_set('session.use_only_cookies', '1');       // Solo usar cookies para sesiones
 ini_set('session.cookie_samesite', 'Lax');      // Configuración más compatible
 
+// Iniciar la sesión antes de cualquier salida
+session_start();
+
+// Obtener el origen de la solicitud
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+
+// Lista de orígenes permitidos
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:63975',  // Origen del proxy de Cascade
+    'http://localhost:63975',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+];
+
+// Verificar si el origen está permitido
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+} else {
+    // Si no se reconoce el origen, permitir localhost por defecto
+    header('Access-Control-Allow-Origin: http://localhost:5173');
+}
+
+// Resto de cabeceras CORS
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type, Authorization, Accept, Cache-Control');
+header('Access-Control-Allow-Credentials: true');
+header('Content-Type: application/json; charset=UTF-8');
+
+// Manejar solicitud OPTIONS (pre-flight)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 // Configuración crítica para prevenir salida HTML
 ini_set('display_errors', '0');                 // No mostrar errores en el navegador
 ini_set('html_errors', '0');                    // No formatear errores como HTML
@@ -49,45 +85,10 @@ register_shutdown_function(function() {
     }
 });
 
-// Iniciar sesión
-session_start();
-
-// Obtener el origen de la solicitud
-$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
-
-// Lista de orígenes permitidos
-$allowed_origins = [
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-    'http://127.0.0.1:63975',  // Origen del proxy de Cascade
-    'http://localhost:63975',
-    'http://localhost:3000',
-    'http://127.0.0.1:3000'
-];
-
-// Verificar si el origen está permitido
-if (in_array($origin, $allowed_origins)) {
-    header("Access-Control-Allow-Origin: $origin");
-} else {
-    // Si no se reconoce el origen, permitir localhost por defecto
-    header('Access-Control-Allow-Origin: http://localhost:5173');
-}
-
-// Resto de cabeceras CORS
-header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
-header('Access-Control-Allow-Headers: Content-Type, Authorization, Accept, Cache-Control');
-header('Access-Control-Allow-Credentials: true');
-header('Content-Type: application/json; charset=UTF-8');
-
-// Manejar solicitud OPTIONS (pre-flight)
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
-}
-
-require_once "../modelos/Tarea.php";
-
 try {
+    // Incluir los modelos necesarios
+    require_once "../modelos/Tarea.php";
+    
     // Verificar conexión a la base de datos antes de continuar
     $modelo = new Tarea();
     $conn = $modelo->getConn();
@@ -98,12 +99,12 @@ try {
     
     // Verificar si el usuario está autenticado
     function verificarAutenticacion() {
-        // Iniciar la sesión si no está iniciada
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        
+        // La sesión ya se ha iniciado al principio del archivo
         if (!isset($_SESSION['NIF']) || empty($_SESSION['NIF'])) {
+            // Registrar información de depuración
+            error_log('Autenticación fallida: SESSION=' . json_encode($_SESSION));
+            error_log('Cookies: ' . json_encode($_COOKIE));
+            
             http_response_code(401);
             echo json_encode(['success' => false, 'message' => 'Usuario no autenticado']);
             exit();

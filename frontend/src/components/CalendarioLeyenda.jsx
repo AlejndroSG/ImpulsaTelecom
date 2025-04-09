@@ -3,6 +3,8 @@ import React from 'react'
 const CalendarioLeyenda = ({ coloresEventos, isDarkMode }) => {
   // Definir los diferentes tipos de eventos y su significado
   const tiposEventos = [
+    { tipo: 'personal', label: 'Evento personal', color: coloresEventos.personal },
+    { tipo: 'departamental', label: 'Evento departamental', color: coloresEventos.departamental },
     { tipo: 'evento', label: 'Evento general', color: coloresEventos.evento },
     { tipo: 'reunion', label: 'Reuniu00f3n', color: coloresEventos.reunion },
     { tipo: 'formacion', label: 'Formaciu00f3n', color: coloresEventos.formacion },
