@@ -486,7 +486,7 @@ class Evento {
         $debug = [];
         try {
             $query = "SELECT e.*, u.nombre as nombre_usuario, u.apellidos as apellidos_usuario, 
-                    'personal' as tipo_evento 
+                    'personal' as tipo_evento, 'personal' as eventType 
                     FROM eventos e 
                     JOIN usuarios u ON e.NIF_usuario = u.NIF 
                     WHERE e.NIF_usuario = ?";
@@ -549,9 +549,31 @@ class Evento {
                 $evento['title'] = $evento['titulo'];
                 $evento['start'] = $evento['fecha_inicio'];
                 $evento['end'] = $evento['fecha_fin'] ?? $evento['fecha_inicio']; // Si no hay fecha_fin, usar fecha_inicio
-                $evento['color'] = '#3788d8'; // Color por defecto para eventos personales
+                
+                // Usar el color específico del evento si existe, o asignar color según el tipo
+                if (!empty($evento['color'])) {
+                    // Mantener el color original del evento
+                } else if (!empty($evento['tipo'])) {
+                    // Asignar color según el tipo de evento (reunión, formación, etc.)
+                    $coloresEventos = [
+                        'evento' => '#3788d8',
+                        'tarea' => '#f59e0b',
+                        'reunion' => '#4f46e5',
+                        'fichaje' => '#10b981',
+                        'formacion' => '#f97316',
+                        'proyecto' => '#ec4899',
+                        'ausencia' => '#6b7280',
+                        'personal' => '#3788d8',
+                        'departamental' => '#8b5cf6'
+                    ];
+                    $evento['color'] = isset($coloresEventos[$evento['tipo']]) ? $coloresEventos[$evento['tipo']] : '#3788d8';
+                } else {
+                    $evento['color'] = '#3788d8'; // Color por defecto solo si no hay tipo ni color
+                }
+                
                 $evento['editable'] = true; // Los eventos personales son editables
                 $evento['eventType'] = 'personal'; // Tipo de evento para la lógica del frontend
+                $evento['tipo_evento'] = 'personal';
             }
             
             return ['success' => true, 'eventos' => $eventos, 'debug' => $debug];
@@ -569,7 +591,7 @@ class Evento {
         $debug = [];
         try {
             $query = "SELECT e.*, u.nombre as nombre_usuario, u.apellidos as apellidos_usuario, 
-                    'departamental' as tipo_evento 
+                    'departamental' as tipo_evento, 'departamental' as eventType 
                     FROM eventos e 
                     JOIN usuarios u ON e.NIF_usuario = u.NIF 
                     WHERE u.dpto = ? AND e.NIF_usuario != ?";
@@ -632,9 +654,31 @@ class Evento {
                 $evento['title'] = $evento['titulo'];
                 $evento['start'] = $evento['fecha_inicio'];
                 $evento['end'] = $evento['fecha_fin'] ?? $evento['fecha_inicio']; // Si no hay fecha_fin, usar fecha_inicio
-                $evento['color'] = '#28a745'; // Color verde para eventos departamentales
+                
+                // Usar el color específico del evento si existe, o asignar color según el tipo
+                if (!empty($evento['color'])) {
+                    // Mantener el color original del evento
+                } else if (!empty($evento['tipo'])) {
+                    // Asignar color según el tipo de evento (reunión, formación, etc.)
+                    $coloresEventos = [
+                        'evento' => '#3788d8',
+                        'tarea' => '#f59e0b',
+                        'reunion' => '#4f46e5',
+                        'fichaje' => '#10b981',
+                        'formacion' => '#f97316',
+                        'proyecto' => '#ec4899',
+                        'ausencia' => '#6b7280',
+                        'personal' => '#3788d8',
+                        'departamental' => '#8b5cf6'
+                    ];
+                    $evento['color'] = isset($coloresEventos[$evento['tipo']]) ? $coloresEventos[$evento['tipo']] : '#3788d8';
+                } else {
+                    $evento['color'] = '#3788d8'; // Color por defecto solo si no hay tipo ni color
+                }
+                
                 $evento['editable'] = false; // Los eventos departamentales no son editables para el usuario actual
                 $evento['eventType'] = 'departamental'; // Tipo de evento para la lógica del frontend
+                $evento['tipo_evento'] = 'departamental';
             }
             
             return ['success' => true, 'eventos' => $eventos, 'debug' => $debug];

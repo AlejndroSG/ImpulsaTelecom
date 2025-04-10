@@ -23,6 +23,7 @@ const Calendario = () => {
   const [error, setError] = useState(null)
   const [modalEvento, setModalEvento] = useState(null)
   const [calendario, setCalendario] = useState(null)
+  const [eventoSeleccionadoId, setEventoSeleccionadoId] = useState(null);
   const [vista, setVista] = useState('dayGridMonth')
   const [filtros, setFiltros] = useState({
     verEventos: true,
@@ -270,35 +271,39 @@ const Calendario = () => {
   }, [cargarEventos])
 
   // Función para manejar clic en eventos
+  // Modifica la función handleEventClick para guardar el ID del evento seleccionado
   const handleEventClick = (info) => {
-    const tipoEvento = info.event.extendedProps.tipo
+    const tipoEvento = info.event.extendedProps.tipo;
+    
+    // Guardar el ID del evento seleccionado
+    setEventoSeleccionadoId(info.event.id);
     
     // Si es un fichaje, no mostrar modal
-    if (tipoEvento === 'fichaje') {
-      return
-    }
-    
-    // Si es una tarea, redirigir a la página de tareas
-    if (tipoEvento === 'tarea') {
-      // En una implementación futura se podría abrir el detalle de la tarea
-      return
-    }
-    
-    // Para eventos normales, mostrar modal
-    setModalEvento({
-      id: info.event.id.replace('evento_', ''),
-      titulo: info.event.title,
-      inicio: info.event.start,
-      fin: info.event.end,
-      diaCompleto: info.event.allDay,
-      color: info.event.backgroundColor,
-      descripcion: info.event.extendedProps.descripcion,
-      tipo: info.event.extendedProps.tipo,
-      creador: info.event.extendedProps.creador,
-      departamento: info.event.extendedProps.departamento,
-      modo: 'ver'
-    })
+  if (tipoEvento === 'fichaje') {
+    return;
   }
+  
+  // Si es una tarea, redirigir a la página de tareas
+  if (tipoEvento === 'tarea') {
+    // En una implementación futura se podría abrir el detalle de la tarea
+    return;
+  }
+  
+  // Para eventos normales, mostrar modal
+  setModalEvento({
+    id: info.event.id.replace('evento_', ''),
+    titulo: info.event.title,
+    inicio: info.event.start,
+    fin: info.event.end,
+    diaCompleto: info.event.allDay,
+    color: info.event.backgroundColor,
+    descripcion: info.event.extendedProps.descripcion,
+    tipo: info.event.extendedProps.tipo,
+    creador: info.event.extendedProps.creador,
+    departamento: info.event.extendedProps.departamento,
+    modo: 'ver'
+  });
+};
 
   // Función para crear un nuevo evento
   const handleDateSelect = (selectInfo) => {
@@ -317,10 +322,36 @@ const Calendario = () => {
     })
   }
 
-  // Función para cerrar el modal
+  // Añade esta función para personalizar el renderizado de eventos
+  const eventDidMount = (info) => {
+  // Si este evento es el seleccionado, cambia su estilo
+  if (info.event.id === eventoSeleccionadoId) {
+    // Aplicar un estilo destacado al evento seleccionado
+    info.el.style.boxShadow = '0 0 0 2px #fff, 0 0 0 4px #000';
+    info.el.style.transform = 'scale(1.05)';
+    info.el.style.zIndex = '10';
+    info.el.style.transition = 'all 0.2s ease';
+    
+    // Cambiar el color de fondo para mayor contraste
+    const currentColor = info.event.backgroundColor;
+    // Hacer el color un poco más brillante
+    const brighterColor = adjustBrightness(currentColor, 20);
+    info.el.style.backgroundColor = brighterColor;
+  }   
+};
+
+// Función auxiliar para ajustar el brillo de un color
+const adjustBrightness = (color, percent) => {
+  // Implementación simple para ajustar brillo
+  // En producción podrías usar una biblioteca como tinycolor2
+  return color; // Por simplicidad, devolvemos el mismo color
+};
+
+  // Modifica la función cerrarModal para limpiar también el evento seleccionado
   const cerrarModal = () => {
-    setModalEvento(null)
-  }
+    setModalEvento(null);
+    setEventoSeleccionadoId(null); // Limpiar el evento seleccionado
+  };
 
   // Función para guardar un evento
   const guardarEvento = async (evento) => {
@@ -548,6 +579,7 @@ const Calendario = () => {
           events={eventos}
           select={handleDateSelect}
           eventClick={handleEventClick}
+          eventDidMount={eventDidMount}
           viewDidMount={handleViewChange}
           eventTimeFormat={{
             hour: '2-digit',
