@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 07-04-2025 a las 13:16:42
+-- Tiempo de generación: 11-04-2025 a las 17:22:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -95,6 +95,69 @@ INSERT INTO `avatares` (`id`, `ruta`, `categoria`, `color_fondo`, `nombre`, `act
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `eventos`
+--
+
+CREATE TABLE `eventos` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(255) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `fecha_inicio` datetime NOT NULL,
+  `fecha_fin` datetime DEFAULT NULL,
+  `NIF_usuario` varchar(20) NOT NULL,
+  `id_departamento` int(11) DEFAULT NULL,
+  `tipo` varchar(50) DEFAULT 'evento',
+  `color` varchar(20) DEFAULT '#3788d8',
+  `dia_completo` char(1) DEFAULT '0',
+  `tipo_evento` enum('personal','departamental') NOT NULL DEFAULT 'personal'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `eventos`
+--
+
+INSERT INTO `eventos` (`id`, `titulo`, `descripcion`, `fecha_inicio`, `fecha_fin`, `NIF_usuario`, `id_departamento`, `tipo`, `color`, `dia_completo`, `tipo_evento`) VALUES
+(1, 'Evento de prueba', 'Este es un evento de prueba para verificar el formato de fechas', '2025-04-08 13:31:56', '2025-04-08 14:31:56', 'TEST123', NULL, 'evento', '#3788d8', '0', 'personal'),
+(3, 'werr', '', '2025-04-07 22:00:00', '2025-04-09 21:59:59', '98765432B', NULL, 'fichaje', '#173654', '1', 'personal'),
+(4, 'Evento de prueba', 'Descripción de prueba', '2025-04-09 13:24:41', '2025-04-09 14:24:41', '98765432B', NULL, 'evento', '#3788d8', '0', 'personal'),
+(5, 'Evento de prueba', 'Descripción de prueba', '2025-04-09 13:24:43', '2025-04-09 14:24:43', '98765432B', NULL, 'evento', '#3788d8', '0', 'personal'),
+(6, 'Evento de prueba', 'Descripción de prueba', '2025-04-09 13:24:43', '2025-04-09 14:24:43', '98765432B', NULL, 'evento', '#3788d8', '0', 'personal'),
+(7, 'Evento de prueba', 'Descripción de prueba', '2025-04-09 13:24:44', '2025-04-09 14:24:44', '98765432B', NULL, 'evento', '#3788d8', '0', 'personal'),
+(9, 'CyberSegurida', '', '2025-04-09 22:00:00', '2025-04-10 21:59:59', '98765432B', NULL, 'fichaje', '#10b981', '1', 'personal'),
+(10, 'CyberSegurida', '', '2025-04-09 22:00:00', '2025-04-13 21:59:59', '98765432B', NULL, 'tarea', '#f59e0b', '1', 'personal'),
+(14, 'Evento de prueba', '', '2025-04-15 00:00:00', '2025-04-16 00:00:00', '98765432B', NULL, 'departamental', '#8b5cf6', '0', 'personal'),
+(15, 'werr', '', '2025-04-15 00:00:00', '2025-04-16 23:59:59', '98765432B', NULL, 'tarea', '#8b5cf6', '1', 'personal'),
+(16, 'Esto es de María', '', '2025-04-16 00:00:00', '2025-04-17 23:59:59', '56789012C', NULL, 'tarea', '#f59e0b', '1', 'personal'),
+(17, 'PERSONAL DE JUAN', '', '2025-04-17 00:00:00', '2025-04-18 23:59:59', '98765432B', NULL, 'fichaje', '#10b981', '1', 'personal');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `notificaciones`
+--
+
+CREATE TABLE `notificaciones` (
+  `idNotificacion` int(11) NOT NULL,
+  `NIF` varchar(15) NOT NULL,
+  `tipo` varchar(50) NOT NULL,
+  `mensaje` text NOT NULL,
+  `leida` tinyint(1) DEFAULT 0,
+  `fecha` timestamp NOT NULL DEFAULT current_timestamp(),
+  `id_referencia` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `notificaciones`
+--
+
+INSERT INTO `notificaciones` (`idNotificacion`, `NIF`, `tipo`, `mensaje`, `leida`, `fecha`, `id_referencia`) VALUES
+(3, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido aprobada', 0, '2025-04-10 10:46:06', 2),
+(4, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido rechazada', 0, '2025-04-10 10:46:10', 1),
+(6, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido aprobada. Comentario: ertertertert', 0, '2025-04-10 11:37:36', 3);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `registros`
 --
 
@@ -139,7 +202,45 @@ INSERT INTO `registros` (`idRegistro`, `NIF`, `fecha`, `horaInicio`, `horaFin`, 
 (19, '98765432B', '2025-04-02', '10:36:43', '10:36:46', NULL, NULL, 0, NULL, NULL, NULL, 'entrada'),
 (20, '98765432B', '2025-04-02', '10:36:53', '10:37:10', '10:36:54', '10:37:08', 14, NULL, NULL, NULL, 'entrada'),
 (21, '98765432B', '2025-04-02', '10:40:26', '10:40:26', NULL, NULL, 0, 37.15355690, -3.59966710, '37.1535569, -3.5996671', 'entrada'),
-(22, '98765432B', '2025-04-02', '10:40:27', '10:40:27', NULL, NULL, 0, 37.15355690, -3.59966710, '37.1535569, -3.5996671', 'entrada');
+(22, '98765432B', '2025-04-02', '10:40:27', '10:40:27', NULL, NULL, 0, 37.15355690, -3.59966710, '37.1535569, -3.5996671', 'entrada'),
+(23, '98765432B', '2025-04-07', '16:02:09', '16:02:10', NULL, NULL, 0, 37.15355630, -3.59966070, '37.1535563, -3.5996607', 'entrada'),
+(24, '98765432B', '2025-04-07', '16:02:10', '16:02:12', '16:02:10', '16:02:11', 1, 37.15355630, -3.59966070, '37.1535563, -3.5996607', 'entrada'),
+(25, '98765432B', '2025-04-07', '16:02:20', '16:02:21', NULL, NULL, 0, 37.15355630, -3.59966070, '37.1535563, -3.5996607', 'entrada'),
+(26, '98765432B', '2025-04-07', '16:02:26', '16:02:28', NULL, NULL, 0, NULL, NULL, NULL, 'entrada'),
+(27, '98765432B', '2025-04-07', '16:02:37', '16:02:40', '16:02:38', '16:02:38', 1, NULL, NULL, NULL, 'entrada'),
+(28, '98765432B', '2025-04-08', '12:34:20', '12:34:24', '12:34:21', '12:34:22', 1, 37.15355710, -3.59965880, '37.1535571, -3.5996588', 'entrada'),
+(29, '98765432B', '2025-04-09', '12:28:33', '12:28:36', NULL, NULL, 0, 37.15356730, -3.59965430, '37.1535673, -3.5996543', 'entrada'),
+(30, '98765432B', '2025-04-10', '13:50:26', '13:50:43', '13:50:28', '13:50:39', 11, NULL, NULL, NULL, 'entrada');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `solicitudes`
+--
+
+CREATE TABLE `solicitudes` (
+  `idSolicitud` int(11) NOT NULL,
+  `NIF` varchar(15) NOT NULL,
+  `tipo` enum('horaria','diaria') NOT NULL,
+  `fecha_inicio` date NOT NULL,
+  `fecha_fin` date DEFAULT NULL,
+  `hora_inicio` time DEFAULT NULL,
+  `hora_fin` time DEFAULT NULL,
+  `motivo` text DEFAULT NULL,
+  `estado` enum('pendiente','aprobada','rechazada') DEFAULT 'pendiente',
+  `fecha_solicitud` timestamp NOT NULL DEFAULT current_timestamp(),
+  `fecha_respuesta` timestamp NULL DEFAULT NULL,
+  `comentario_respuesta` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `solicitudes`
+--
+
+INSERT INTO `solicitudes` (`idSolicitud`, `NIF`, `tipo`, `fecha_inicio`, `fecha_fin`, `hora_inicio`, `hora_fin`, `motivo`, `estado`, `fecha_solicitud`, `fecha_respuesta`, `comentario_respuesta`) VALUES
+(1, '98765432B', 'horaria', '2025-04-10', NULL, '09:00:00', '14:00:00', 'Tengo Médico', 'rechazada', '2025-04-10 10:28:15', '2025-04-10 10:46:10', ''),
+(2, '98765432B', 'horaria', '2025-04-12', NULL, '09:00:00', '14:00:00', 'Me gusta Juande', 'aprobada', '2025-04-10 10:45:46', '2025-04-10 10:46:06', ''),
+(3, '98765432B', 'horaria', '2025-04-10', NULL, '09:00:00', '14:00:00', 'Hola buenas', 'aprobada', '2025-04-10 11:36:56', '2025-04-10 11:37:36', 'ertertertert');
 
 -- --------------------------------------------------------
 
@@ -197,7 +298,8 @@ INSERT INTO `usuarios` (`NIF`, `nombre`, `apellidos`, `email`, `pswd`, `dpto`, `
 ('12345678A', 'Admin', 'Sistema', 'admin@impulsatelecom.com', '$2y$10$XFvlfrAGkm8H8Y5.hvKAXO4x0ICsQPEAB9NMR/LVUVnvIpj5h0nPe', 'IT', 'Sede Central', 'admin', 1, 1, 1),
 ('34567890D', 'Carlos', 'Rodríguez Sánchez', 'carlos.rodriguez@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Soporte', 'Valencia', 'supervisor', 4, 1, 1),
 ('56789012C', 'María', 'García Martínez', 'maria.garcia@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Ventas', 'Barcelona', 'empleado', 215, 1, 1),
-('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 1, 1);
+('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 1, 1),
+('TEST123', 'Usuario', 'Prueba', 'test@example.com', '', NULL, NULL, 'empleado', NULL, 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -210,12 +312,32 @@ ALTER TABLE `avatares`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indices de la tabla `eventos`
+--
+ALTER TABLE `eventos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `notificaciones`
+--
+ALTER TABLE `notificaciones`
+  ADD PRIMARY KEY (`idNotificacion`),
+  ADD KEY `NIF` (`NIF`);
+
+--
 -- Indices de la tabla `registros`
 --
 ALTER TABLE `registros`
   ADD PRIMARY KEY (`idRegistro`),
   ADD KEY `idx_registros_nif` (`NIF`),
   ADD KEY `idx_registros_fecha` (`fecha`);
+
+--
+-- Indices de la tabla `solicitudes`
+--
+ALTER TABLE `solicitudes`
+  ADD PRIMARY KEY (`idSolicitud`),
+  ADD KEY `NIF` (`NIF`);
 
 --
 -- Indices de la tabla `tareas`
@@ -247,10 +369,28 @@ ALTER TABLE `avatares`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=262;
 
 --
+-- AUTO_INCREMENT de la tabla `eventos`
+--
+ALTER TABLE `eventos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+
+--
+-- AUTO_INCREMENT de la tabla `notificaciones`
+--
+ALTER TABLE `notificaciones`
+  MODIFY `idNotificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT de la tabla `registros`
 --
 ALTER TABLE `registros`
-  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+
+--
+-- AUTO_INCREMENT de la tabla `solicitudes`
+--
+ALTER TABLE `solicitudes`
+  MODIFY `idSolicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `tareas`
@@ -263,10 +403,22 @@ ALTER TABLE `tareas`
 --
 
 --
+-- Filtros para la tabla `notificaciones`
+--
+ALTER TABLE `notificaciones`
+  ADD CONSTRAINT `notificaciones_ibfk_1` FOREIGN KEY (`NIF`) REFERENCES `usuarios` (`NIF`) ON DELETE CASCADE;
+
+--
 -- Filtros para la tabla `registros`
 --
 ALTER TABLE `registros`
   ADD CONSTRAINT `registros_ibfk_1` FOREIGN KEY (`NIF`) REFERENCES `usuarios` (`NIF`);
+
+--
+-- Filtros para la tabla `solicitudes`
+--
+ALTER TABLE `solicitudes`
+  ADD CONSTRAINT `solicitudes_ibfk_1` FOREIGN KEY (`NIF`) REFERENCES `usuarios` (`NIF`) ON DELETE CASCADE;
 
 --
 -- Filtros para la tabla `tareas`
