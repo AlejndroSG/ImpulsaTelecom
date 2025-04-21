@@ -322,9 +322,9 @@ const Inicio = () => {
                                     </div>
                                 </div>
                                 <p className="text-white text-opacity-80 mb-4">Administra los usuarios del sistema, sus permisos y roles.</p>
-                                <button className="mt-2 px-4 py-2 bg-white text-[#5a8a01] rounded-lg font-medium hover:bg-opacity-90 transition-colors">
+                                <Link to="/admin/usuarios" className="mt-2 px-4 py-2 bg-white text-[#5a8a01] rounded-lg font-medium hover:bg-opacity-90 transition-colors inline-block">
                                     Gestionar
-                                </button>
+                                </Link>
                             </div>
                             
                             <div className="bg-gradient-to-br from-[#c3515f] to-[#8c3a44] rounded-xl shadow-lg p-6 text-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105">

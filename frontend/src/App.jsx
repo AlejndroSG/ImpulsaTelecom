@@ -10,6 +10,7 @@ import Usuario from './pages/Usuario'
 import Tareas from './pages/Tareas'
 import Calendario from './pages/Calendario'
 import Solicitudes from './pages/Solicitudes'
+import AdminUsuarios from './pages/AdminUsuarios'
 import { AuthProvider, ProtectedRoute, PublicRoute } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 
@@ -45,6 +46,7 @@ function App() {
               <Route path="/tareas" element={<Tareas />} />
               <Route path="/calendario" element={<Calendario />} />
               <Route path="/solicitudes" element={<Solicitudes />} />
+              <Route path="/admin/usuarios" element={<AdminUsuarios />} />
             </Route>
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 11-04-2025 a las 17:22:56
+-- Tiempo de generación: 21-04-2025 a las 13:15:27
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -133,6 +133,42 @@ INSERT INTO `eventos` (`id`, `titulo`, `descripcion`, `fecha_inicio`, `fecha_fin
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `horarios`
+--
+
+CREATE TABLE `horarios` (
+  `id` int(11) NOT NULL,
+  `nombre` varchar(100) NOT NULL,
+  `descripcion` text DEFAULT NULL,
+  `hora_inicio` time NOT NULL,
+  `hora_fin` time NOT NULL,
+  `lunes` tinyint(1) NOT NULL DEFAULT 1,
+  `martes` tinyint(1) NOT NULL DEFAULT 1,
+  `miercoles` tinyint(1) NOT NULL DEFAULT 1,
+  `jueves` tinyint(1) NOT NULL DEFAULT 1,
+  `viernes` tinyint(1) NOT NULL DEFAULT 1,
+  `sabado` tinyint(1) NOT NULL DEFAULT 0,
+  `domingo` tinyint(1) NOT NULL DEFAULT 0,
+  `tiempo_pausa_permitido` int(11) DEFAULT 60 COMMENT 'Tiempo de pausa permitido en minutos',
+  `activo` tinyint(1) NOT NULL DEFAULT 1,
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  `fecha_modificacion` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `horarios`
+--
+
+INSERT INTO `horarios` (`id`, `nombre`, `descripcion`, `hora_inicio`, `hora_fin`, `lunes`, `martes`, `miercoles`, `jueves`, `viernes`, `sabado`, `domingo`, `tiempo_pausa_permitido`, `activo`, `fecha_creacion`, `fecha_modificacion`) VALUES
+(1, 'Jornada Completa', 'Horario estándar de oficina de lunes a viernes', '09:00:00', '18:00:00', 1, 1, 1, 1, 1, 0, 0, 60, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
+(2, 'Media Jornada Mañana', 'Horario de media jornada por la mañana', '09:00:00', '13:00:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
+(3, 'Media Jornada Tarde', 'Horario de media jornada por la tarde', '14:00:00', '18:00:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
+(4, 'Jornada Intensiva', 'Horario intensivo sin pausa para comida', '08:00:00', '15:00:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
+(5, 'Fin de Semana', 'Horario para trabajadores de fin de semana', '10:00:00', '19:00:00', 0, 0, 0, 0, 0, 1, 1, 60, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `notificaciones`
 --
 
@@ -153,7 +189,8 @@ CREATE TABLE `notificaciones` (
 INSERT INTO `notificaciones` (`idNotificacion`, `NIF`, `tipo`, `mensaje`, `leida`, `fecha`, `id_referencia`) VALUES
 (3, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido aprobada', 0, '2025-04-10 10:46:06', 2),
 (4, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido rechazada', 0, '2025-04-10 10:46:10', 1),
-(6, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido aprobada. Comentario: ertertertert', 0, '2025-04-10 11:37:36', 3);
+(6, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido aprobada. Comentario: ertertertert', 0, '2025-04-10 11:37:36', 3),
+(8, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido aprobada', 0, '2025-04-11 15:32:58', 4);
 
 -- --------------------------------------------------------
 
@@ -210,7 +247,13 @@ INSERT INTO `registros` (`idRegistro`, `NIF`, `fecha`, `horaInicio`, `horaFin`, 
 (27, '98765432B', '2025-04-07', '16:02:37', '16:02:40', '16:02:38', '16:02:38', 1, NULL, NULL, NULL, 'entrada'),
 (28, '98765432B', '2025-04-08', '12:34:20', '12:34:24', '12:34:21', '12:34:22', 1, 37.15355710, -3.59965880, '37.1535571, -3.5996588', 'entrada'),
 (29, '98765432B', '2025-04-09', '12:28:33', '12:28:36', NULL, NULL, 0, 37.15356730, -3.59965430, '37.1535673, -3.5996543', 'entrada'),
-(30, '98765432B', '2025-04-10', '13:50:26', '13:50:43', '13:50:28', '13:50:39', 11, NULL, NULL, NULL, 'entrada');
+(30, '98765432B', '2025-04-10', '13:50:26', '13:50:43', '13:50:28', '13:50:39', 11, NULL, NULL, NULL, 'entrada'),
+(31, '98765432B', '2025-04-11', '17:27:39', '17:27:43', '17:27:42', '17:27:42', 1, 37.15356370, -3.59964600, '37.1535637, -3.599646', 'entrada'),
+(32, '98765432B', '2025-04-11', '17:27:52', '17:27:56', NULL, NULL, 0, 37.15356370, -3.59964600, '37.1535637, -3.599646', 'entrada'),
+(33, '98765432B', '2025-04-11', '17:27:58', '17:28:00', NULL, NULL, 0, NULL, NULL, NULL, 'entrada'),
+(34, '98765432B', '2025-04-21', '11:50:34', '11:50:37', '11:50:35', '11:50:36', 1, 37.15356560, -3.59965470, '37.1535656, -3.5996547', 'entrada'),
+(35, '98765432B', '2025-04-21', '11:58:19', '11:58:19', NULL, NULL, 0, 37.15356560, -3.59965470, '37.1535656, -3.5996547', 'entrada'),
+(36, '98765432B', '2025-04-21', '12:50:24', '12:50:25', NULL, NULL, 0, 37.15356210, -3.59966500, '37.1535621, -3.599665', 'entrada');
 
 -- --------------------------------------------------------
 
@@ -240,7 +283,8 @@ CREATE TABLE `solicitudes` (
 INSERT INTO `solicitudes` (`idSolicitud`, `NIF`, `tipo`, `fecha_inicio`, `fecha_fin`, `hora_inicio`, `hora_fin`, `motivo`, `estado`, `fecha_solicitud`, `fecha_respuesta`, `comentario_respuesta`) VALUES
 (1, '98765432B', 'horaria', '2025-04-10', NULL, '09:00:00', '14:00:00', 'Tengo Médico', 'rechazada', '2025-04-10 10:28:15', '2025-04-10 10:46:10', ''),
 (2, '98765432B', 'horaria', '2025-04-12', NULL, '09:00:00', '14:00:00', 'Me gusta Juande', 'aprobada', '2025-04-10 10:45:46', '2025-04-10 10:46:06', ''),
-(3, '98765432B', 'horaria', '2025-04-10', NULL, '09:00:00', '14:00:00', 'Hola buenas', 'aprobada', '2025-04-10 11:36:56', '2025-04-10 11:37:36', 'ertertertert');
+(3, '98765432B', 'horaria', '2025-04-10', NULL, '09:00:00', '14:00:00', 'Hola buenas', 'aprobada', '2025-04-10 11:36:56', '2025-04-10 11:37:36', 'ertertertert'),
+(4, '98765432B', 'horaria', '2025-04-11', NULL, '09:00:00', '14:00:00', 'Follar con Alejandra', 'aprobada', '2025-04-11 15:31:51', '2025-04-11 15:32:58', '');
 
 -- --------------------------------------------------------
 
@@ -287,19 +331,20 @@ CREATE TABLE `usuarios` (
   `tipo_Usu` enum('admin','empleado','supervisor') NOT NULL DEFAULT 'empleado',
   `id_avatar` int(11) DEFAULT NULL,
   `permitir_pausas` tinyint(1) NOT NULL DEFAULT 1 COMMENT '1=permitir pausas, 0=no permitir',
-  `activo` tinyint(1) NOT NULL DEFAULT 1
+  `activo` tinyint(1) NOT NULL DEFAULT 1,
+  `id_horario` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
-INSERT INTO `usuarios` (`NIF`, `nombre`, `apellidos`, `email`, `pswd`, `dpto`, `centro`, `tipo_Usu`, `id_avatar`, `permitir_pausas`, `activo`) VALUES
-('12345678A', 'Admin', 'Sistema', 'admin@impulsatelecom.com', '$2y$10$XFvlfrAGkm8H8Y5.hvKAXO4x0ICsQPEAB9NMR/LVUVnvIpj5h0nPe', 'IT', 'Sede Central', 'admin', 1, 1, 1),
-('34567890D', 'Carlos', 'Rodríguez Sánchez', 'carlos.rodriguez@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Soporte', 'Valencia', 'supervisor', 4, 1, 1),
-('56789012C', 'María', 'García Martínez', 'maria.garcia@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Ventas', 'Barcelona', 'empleado', 215, 1, 1),
-('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 1, 1),
-('TEST123', 'Usuario', 'Prueba', 'test@example.com', '', NULL, NULL, 'empleado', NULL, 1, 1);
+INSERT INTO `usuarios` (`NIF`, `nombre`, `apellidos`, `email`, `pswd`, `dpto`, `centro`, `tipo_Usu`, `id_avatar`, `permitir_pausas`, `activo`, `id_horario`) VALUES
+('12345678A', 'Admin', 'Sistema', 'admin@impulsatelecom.com', '$2y$10$IQg48EWDa1IgU3I0tpHEQ.Wp1YVXDhOvEwZtzbC1gNrtMUMKxRhV.', 'IT', 'Sede Central', 'admin', 240, 1, 1, NULL),
+('34567890D', 'Carlos', 'Rodríguez Sánchez', 'carlos.rodriguez@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Soporte', 'Valencia', 'supervisor', 4, 1, 1, NULL),
+('56789012C', 'María', 'García Martínez', 'maria.garcia@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Ventas', 'Barcelona', 'empleado', 215, 1, 1, NULL),
+('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 0, 1, NULL),
+('TEST123', 'Usuario', 'Prueba', 'test@example.com', '', NULL, NULL, 'empleado', NULL, 1, 1, NULL);
 
 --
 -- Índices para tablas volcadas
@@ -315,6 +360,12 @@ ALTER TABLE `avatares`
 -- Indices de la tabla `eventos`
 --
 ALTER TABLE `eventos`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `horarios`
+--
+ALTER TABLE `horarios`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -356,7 +407,8 @@ ALTER TABLE `tareas`
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`NIF`),
   ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `idx_usuarios_email` (`email`);
+  ADD KEY `idx_usuarios_email` (`email`),
+  ADD KEY `fk_usuarios_horarios` (`id_horario`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -375,22 +427,28 @@ ALTER TABLE `eventos`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
+-- AUTO_INCREMENT de la tabla `horarios`
+--
+ALTER TABLE `horarios`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
 -- AUTO_INCREMENT de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
-  MODIFY `idNotificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idNotificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `registros`
 --
 ALTER TABLE `registros`
-  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitudes`
 --
 ALTER TABLE `solicitudes`
-  MODIFY `idSolicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `idSolicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `tareas`
@@ -426,6 +484,12 @@ ALTER TABLE `solicitudes`
 ALTER TABLE `tareas`
   ADD CONSTRAINT `tareas_ibfk_1` FOREIGN KEY (`NIF_creador`) REFERENCES `usuarios` (`NIF`),
   ADD CONSTRAINT `tareas_ibfk_2` FOREIGN KEY (`NIF_asignado`) REFERENCES `usuarios` (`NIF`);
+
+--
+-- Filtros para la tabla `usuarios`
+--
+ALTER TABLE `usuarios`
+  ADD CONSTRAINT `fk_usuarios_horarios` FOREIGN KEY (`id_horario`) REFERENCES `horarios` (`id`) ON DELETE SET NULL;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
