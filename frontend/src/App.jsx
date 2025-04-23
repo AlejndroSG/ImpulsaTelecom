@@ -11,6 +11,7 @@ import Tareas from './pages/Tareas'
 import Calendario from './pages/Calendario'
 import Solicitudes from './pages/Solicitudes'
 import AdminUsuarios from './pages/AdminUsuarios'
+import AdminRecordatorios from './pages/AdminRecordatorios'
 import { AuthProvider, ProtectedRoute, PublicRoute } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 
@@ -47,6 +48,7 @@ function App() {
               <Route path="/calendario" element={<Calendario />} />
               <Route path="/solicitudes" element={<Solicitudes />} />
               <Route path="/admin/usuarios" element={<AdminUsuarios />} />
+              <Route path="/admin/recordatorios" element={<AdminRecordatorios />} />
             </Route>
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
