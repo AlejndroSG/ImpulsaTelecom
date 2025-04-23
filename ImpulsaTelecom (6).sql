@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-04-2025 a las 13:15:27
+-- Tiempo de generación: 23-04-2025 a las 12:30:50
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -253,7 +253,9 @@ INSERT INTO `registros` (`idRegistro`, `NIF`, `fecha`, `horaInicio`, `horaFin`, 
 (33, '98765432B', '2025-04-11', '17:27:58', '17:28:00', NULL, NULL, 0, NULL, NULL, NULL, 'entrada'),
 (34, '98765432B', '2025-04-21', '11:50:34', '11:50:37', '11:50:35', '11:50:36', 1, 37.15356560, -3.59965470, '37.1535656, -3.5996547', 'entrada'),
 (35, '98765432B', '2025-04-21', '11:58:19', '11:58:19', NULL, NULL, 0, 37.15356560, -3.59965470, '37.1535656, -3.5996547', 'entrada'),
-(36, '98765432B', '2025-04-21', '12:50:24', '12:50:25', NULL, NULL, 0, 37.15356210, -3.59966500, '37.1535621, -3.599665', 'entrada');
+(36, '98765432B', '2025-04-21', '12:50:24', '12:50:25', NULL, NULL, 0, 37.15356210, -3.59966500, '37.1535621, -3.599665', 'entrada'),
+(37, '98765432B', '2025-04-22', '12:04:38', '12:04:39', NULL, NULL, 0, 37.15356260, -3.59965940, '37.1535626, -3.5996594', 'entrada'),
+(38, '98765432B', '2025-04-23', '11:10:15', '11:10:18', '11:10:17', '11:10:16', 1, 37.15356030, -3.59965350, '37.1535603, -3.5996535', 'entrada');
 
 -- --------------------------------------------------------
 
@@ -343,7 +345,7 @@ INSERT INTO `usuarios` (`NIF`, `nombre`, `apellidos`, `email`, `pswd`, `dpto`, `
 ('12345678A', 'Admin', 'Sistema', 'admin@impulsatelecom.com', '$2y$10$IQg48EWDa1IgU3I0tpHEQ.Wp1YVXDhOvEwZtzbC1gNrtMUMKxRhV.', 'IT', 'Sede Central', 'admin', 240, 1, 1, NULL),
 ('34567890D', 'Carlos', 'Rodríguez Sánchez', 'carlos.rodriguez@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Soporte', 'Valencia', 'supervisor', 4, 1, 1, NULL),
 ('56789012C', 'María', 'García Martínez', 'maria.garcia@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Ventas', 'Barcelona', 'empleado', 215, 1, 1, NULL),
-('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 0, 1, NULL),
+('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 0, 1, 2),
 ('TEST123', 'Usuario', 'Prueba', 'test@example.com', '', NULL, NULL, 'empleado', NULL, 1, 1, NULL);
 
 --
@@ -442,7 +444,7 @@ ALTER TABLE `notificaciones`
 -- AUTO_INCREMENT de la tabla `registros`
 --
 ALTER TABLE `registros`
-  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitudes`

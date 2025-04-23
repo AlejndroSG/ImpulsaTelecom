@@ -1,13 +1,68 @@
-import React from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import InitialsAvatar from './InitialsAvatar';
 import { motion } from 'framer-motion';
+import axios from 'axios';
 
 const PerfilWidget = () => {
   const { user } = useAuth();
   const { isDarkMode } = useTheme();
+  const [horario, setHorario] = useState(null);
+  const [loadingHorario, setLoadingHorario] = useState(false);
+  
+  // Función para obtener el horario del usuario
+  const fetchHorarioUsuario = useCallback(async () => {
+    if (!user || !user.id) return;
+    
+    try {
+      setLoadingHorario(true);
+      const response = await axios.get(
+        `http://localhost/ImpulsaTelecom/backend/api/horarios.php?usuario=${user.NIF || user.id}`,
+        { withCredentials: true }
+      );
+      
+      if (response.data.success) {
+        setHorario(response.data.horario);
+      } else {
+        setHorario(null);
+      }
+    } catch (err) {
+      console.error('Error al cargar horario del usuario:', err);
+      setHorario(null);
+    } finally {
+      setLoadingHorario(false);
+    }
+  }, [user]);
+  
+  // Función para obtener los días de la semana de un horario
+  const obtenerDiasHorario = useCallback((horario) => {
+    if (!horario) return '';
+    
+    const diasSemana = [
+      { id: 'lunes', nombre: 'Lunes' },
+      { id: 'martes', nombre: 'Martes' },
+      { id: 'miercoles', nombre: 'Miércoles' },
+      { id: 'jueves', nombre: 'Jueves' },
+      { id: 'viernes', nombre: 'Viernes' },
+      { id: 'sabado', nombre: 'Sábado' },
+      { id: 'domingo', nombre: 'Domingo' }
+    ];
+    
+    const diasActivos = diasSemana
+      .filter(dia => horario[dia.id])
+      .map(dia => dia.nombre);
+      
+    return diasActivos.join(', ');
+  }, []);
+  
+  // Cargar el horario cuando cambia el usuario
+  useEffect(() => {
+    if (user) {
+      fetchHorarioUsuario();
+    }
+  }, [user, fetchHorarioUsuario]);
 
   return (
     <motion.div 
@@ -53,6 +108,25 @@ const PerfilWidget = () => {
         <div className="mt-4 space-y-2">
           <p className={isDarkMode ? 'text-gray-300' : ''}><span className="font-semibold">Correo:</span> {user?.correo}</p>
           <p className={isDarkMode ? 'text-gray-300' : ''}><span className="font-semibold">Teléfono:</span> {user?.telefono || 'No especificado'}</p>
+          
+          {/* Información del horario */}
+          <div className="mt-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+            <p className={`font-semibold ${isDarkMode ? 'text-gray-300' : ''}`}>Horario:</p>
+            {loadingHorario ? (
+              <div className="flex items-center py-1">
+                <div className="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-blue-500 mr-2"></div>
+                <span className="text-sm text-gray-500 dark:text-gray-400">Cargando...</span>
+              </div>
+            ) : horario ? (
+              <div className={`text-sm ${isDarkMode ? 'text-gray-300' : ''}`}>
+                <p>{horario.nombre}</p>
+                <p>{horario.hora_inicio} - {horario.hora_fin}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Días: {obtenerDiasHorario(horario)}</p>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500 dark:text-gray-400">Sin horario asignado</p>
+            )}
+          </div>
         </div>
         <div className="mt-4">
           <Link 

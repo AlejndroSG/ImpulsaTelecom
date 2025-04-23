@@ -47,7 +47,7 @@ $modelo = new Horario();
 
 // Verificar si el usuario está autenticado
 function verificarAutenticacion() {
-    if (!isset($_SESSION['usuario']) || empty($_SESSION['usuario'])) {
+    if (!isset($_SESSION['NIF']) || empty($_SESSION['NIF'])) {
         echo json_encode([
             'success' => false,
             'error' => 'No autenticado',
@@ -55,7 +55,14 @@ function verificarAutenticacion() {
         ]);
         exit();
     }
-    return $_SESSION['usuario'];
+    
+    // Construir y devolver un array con la información del usuario desde las variables de sesión individuales
+    return [
+        'NIF' => $_SESSION['NIF'],
+        'tipo_Usu' => $_SESSION['tipo_usuario'] ?? 'empleado',
+        'nombre' => $_SESSION['nombre'] ?? '',
+        'apellidos' => $_SESSION['apellidos'] ?? ''
+    ];
 }
 
 // Verificar si el usuario es administrador

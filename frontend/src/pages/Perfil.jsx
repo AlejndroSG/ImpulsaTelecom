@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import AvatarSelector from '../components/AvatarSelector';
@@ -22,7 +22,33 @@ const Perfil = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [mensaje, setMensaje] = useState(null);
+  const [horario, setHorario] = useState(null);
+  const [loadingHorario, setLoadingHorario] = useState(false);
   
+  // Función para obtener el horario del usuario
+  const fetchHorarioUsuario = useCallback(async () => {
+    if (!user || !user.id) return;
+    
+    try {
+      setLoadingHorario(true);
+      const response = await axios.get(
+        `http://localhost/ImpulsaTelecom/backend/api/horarios.php?usuario=${user.NIF || user.id}`,
+        { withCredentials: true }
+      );
+      
+      if (response.data.success) {
+        setHorario(response.data.horario);
+      } else {
+        setHorario(null);
+      }
+    } catch (err) {
+      console.error('Error al cargar horario del usuario:', err);
+      setHorario(null);
+    } finally {
+      setLoadingHorario(false);
+    }
+  }, [user]);
+
   // Actualizar el formulario cuando cambia el usuario
   useEffect(() => {
     if (user) {
@@ -35,9 +61,33 @@ const Perfil = () => {
         permitir_pausas: user.permitir_pausas !== undefined ? user.permitir_pausas : true,
       });
       setSelectedAvatar(user.id_avatar || null);
+      
+      // Cargar el horario del usuario
+      fetchHorarioUsuario();
     }
-  }, [user]);
+  }, [user, fetchHorarioUsuario]);
   
+  // Función para obtener los días de la semana de un horario
+  const obtenerDiasHorario = useCallback((horario) => {
+    if (!horario) return '';
+    
+    const diasSemana = [
+      { id: 'lunes', nombre: 'Lunes' },
+      { id: 'martes', nombre: 'Martes' },
+      { id: 'miercoles', nombre: 'Miércoles' },
+      { id: 'jueves', nombre: 'Jueves' },
+      { id: 'viernes', nombre: 'Viernes' },
+      { id: 'sabado', nombre: 'Sábado' },
+      { id: 'domingo', nombre: 'Domingo' }
+    ];
+    
+    const diasActivos = diasSemana
+      .filter(dia => horario[dia.id])
+      .map(dia => dia.nombre);
+      
+    return diasActivos.join(', ');
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -221,6 +271,32 @@ const Perfil = () => {
                         {formData.permitir_pausas ? 'Habilitadas' : 'Deshabilitadas'}
                       </span>
                     </div>
+                  </div>
+                </div>
+                
+                <div className="mt-6">
+                  <h3 className="text-sm font-medium text-gray-500">Horario Asignado</h3>
+                  <div className="mt-2">
+                    {loadingHorario ? (
+                      <div className="flex items-center justify-center py-4">
+                        <div className="animate-spin rounded-full h-6 w-6 border-t-2 border-b-2 border-blue-500"></div>
+                      </div>
+                    ) : horario ? (
+                      <div className="bg-gray-50 p-3 rounded-md">
+                        <p className="font-medium">{horario.nombre}</p>
+                        <p className="text-sm text-gray-600">
+                          Horario: {horario.hora_inicio} - {horario.hora_fin}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Días: {obtenerDiasHorario(horario)}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          Tiempo de pausa: {horario.tiempo_pausa_permitido} minutos
+                        </p>
+                      </div>
+                    ) : (
+                      <p className="text-sm text-gray-500">No tienes un horario asignado</p>
+                    )}
                   </div>
                 </div>
 

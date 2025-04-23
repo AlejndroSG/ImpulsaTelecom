@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 
+// URL base para las peticiones API
+const API_URL = 'http://localhost/ImpulsaTelecom/backend/api';
+
 const AdminUsuarios = () => {
     const { user } = useAuth();
     const { isDarkMode } = useTheme();
     const navigate = useNavigate();
+    
+    // Estados para gestionar datos y UI
     const [usuarios, setUsuarios] = useState([]);
     const [horarios, setHorarios] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -17,10 +22,8 @@ const AdminUsuarios = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
-    const API_URL = 'http://localhost/ImpulsaTelecom/backend/api';
-
+    // Verificar autenticación y permisos
     useEffect(() => {
-        // Verificar si el usuario está autenticado y es administrador
         if (!user) {
             navigate('/login');
             return;
@@ -31,12 +34,13 @@ const AdminUsuarios = () => {
             return;
         }
 
-        // Cargar usuarios y horarios
+        // Cargar datos iniciales
         fetchUsuarios();
         fetchHorarios();
     }, [user, navigate]);
 
-    const fetchUsuarios = async () => {
+    // Función para cargar usuarios desde la API
+    const fetchUsuarios = useCallback(async () => {
         try {
             setLoading(true);
             const response = await axios.get(`${API_URL}/usuarios.php?action=list`, {
@@ -46,16 +50,18 @@ const AdminUsuarios = () => {
             if (response.data.success) {
                 setUsuarios(response.data.usuarios);
             } else {
-                setError('Error al cargar usuarios: ' + response.data.error);
+                setError(`Error al cargar usuarios: ${response.data.error || 'Error desconocido'}`);
             }
         } catch (err) {
-            setError('Error de conexión: ' + err.message);
+            setError(`Error de conexión: ${err.message}`);
+            console.error('Error al cargar usuarios:', err);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
-    const fetchHorarios = async () => {
+    // Función para cargar horarios desde la API
+    const fetchHorarios = useCallback(async () => {
         try {
             const response = await axios.get(`${API_URL}/horarios.php`, {
                 withCredentials: true
@@ -64,34 +70,46 @@ const AdminUsuarios = () => {
             if (response.data.success) {
                 setHorarios(response.data.horarios);
             } else {
-                setError('Error al cargar horarios: ' + response.data.error);
+                setError(`Error al cargar horarios: ${response.data.error || 'Error desconocido'}`);
             }
         } catch (err) {
-            setError('Error de conexión: ' + err.message);
+            setError(`Error de conexión: ${err.message}`);
+            console.error('Error al cargar horarios:', err);
         }
-    };
+    }, []);
 
-    const handleUserSelect = (usuario) => {
+    // Manejar selección de usuario
+    const handleUserSelect = useCallback((usuario) => {
         setSelectedUser(usuario);
         setSelectedHorario(usuario.id_horario || '');
         // Limpiar mensajes
         setSuccessMessage('');
         setErrorMessage('');
-    };
+    }, []);
 
-    const handleHorarioChange = (e) => {
+    // Manejar cambio de horario en el selector
+    const handleHorarioChange = useCallback((e) => {
         setSelectedHorario(e.target.value);
-    };
+    }, []);
 
-    const handleAsignarHorario = async () => {
+    // Función para asignar horario al usuario seleccionado
+    const handleAsignarHorario = useCallback(async () => {
         if (!selectedUser) return;
 
         try {
+            // Asegurarse de que NIF existe y es una cadena
+            const userNIF = selectedUser.NIF || selectedUser.id;
+            
+            // Convertir el ID del horario a entero o null si está vacío
+            const horarioID = selectedHorario === '' ? null : parseInt(selectedHorario, 10);
+            
+            console.log('Enviando datos:', { NIF: userNIF, id_horario: horarioID });
+            
             const response = await axios.post(
                 `${API_URL}/horarios.php?asignar`, 
                 {
-                    NIF: selectedUser.NIF,
-                    id_horario: selectedHorario === '' ? null : parseInt(selectedHorario)
+                    NIF: userNIF,
+                    id_horario: horarioID
                 },
                 { withCredentials: true }
             );
@@ -101,13 +119,64 @@ const AdminUsuarios = () => {
                 // Actualizar la lista de usuarios
                 fetchUsuarios();
             } else {
-                setErrorMessage('Error al asignar horario: ' + response.data.error);
+                setErrorMessage(`Error al asignar horario: ${response.data.error || 'Error desconocido'}`);
             }
         } catch (err) {
-            setErrorMessage('Error de conexión: ' + err.message);
+            setErrorMessage(`Error de conexión: ${err.message}`);
+            console.error('Error al asignar horario:', err);
         }
-    };
+    }, [selectedUser, selectedHorario, fetchUsuarios]);
 
+    // Función para obtener los días de la semana de un horario
+    const obtenerDiasHorario = useCallback((horario) => {
+        if (!horario) return '';
+        
+        const diasSemana = [
+            { id: 'lunes', nombre: 'Lunes' },
+            { id: 'martes', nombre: 'Martes' },
+            { id: 'miercoles', nombre: 'Miércoles' },
+            { id: 'jueves', nombre: 'Jueves' },
+            { id: 'viernes', nombre: 'Viernes' },
+            { id: 'sabado', nombre: 'Sábado' },
+            { id: 'domingo', nombre: 'Domingo' }
+        ];
+        
+        const diasActivos = diasSemana
+            .filter(dia => horario[dia.id])
+            .map(dia => dia.nombre);
+            
+        return diasActivos.join(', ');
+    }, []);
+
+    // Renderizar información del horario seleccionado
+    const renderInfoHorario = useCallback(() => {
+        if (!selectedUser || !selectedUser.id_horario) {
+            return <p className="text-sm text-gray-500 dark:text-gray-400">No hay horario asignado</p>;
+        }
+
+        const horarioSeleccionado = horarios.find(h => h.id === parseInt(selectedUser.id_horario));
+        
+        if (!horarioSeleccionado) {
+            return <p className="text-sm text-gray-500 dark:text-gray-400">Cargando información del horario...</p>;
+        }
+
+        return (
+            <div className="bg-gray-50 p-3 rounded-md dark:bg-gray-700">
+                <p className="font-medium">{horarioSeleccionado.nombre}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Horario: {horarioSeleccionado.hora_inicio} - {horarioSeleccionado.hora_fin}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Días: {obtenerDiasHorario(horarioSeleccionado)}
+                </p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                    Tiempo de pausa: {horarioSeleccionado.tiempo_pausa_permitido} minutos
+                </p>
+            </div>
+        );
+    }, [selectedUser, horarios, obtenerDiasHorario]);
+
+    // Renderizar componente de carga
     if (loading) {
         return (
             <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-800'} p-6`}>
@@ -138,8 +207,8 @@ const AdminUsuarios = () => {
                                 <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                                     {usuarios.map((usuario) => (
                                         <li 
-                                            key={usuario.NIF} 
-                                            className={`py-3 px-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded ${selectedUser && selectedUser.NIF === usuario.NIF ? 'bg-blue-50 dark:bg-blue-900' : ''}`}
+                                            key={usuario.NIF || usuario.id} 
+                                            className={`py-3 px-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded ${selectedUser && (selectedUser.NIF === usuario.NIF || selectedUser.id === usuario.id) ? 'bg-blue-50 dark:bg-blue-900' : ''}`}
                                             onClick={() => handleUserSelect(usuario)}
                                         >
                                             <div className="flex items-center">
@@ -147,7 +216,7 @@ const AdminUsuarios = () => {
                                                     {usuario.avatar ? (
                                                         <img 
                                                             src={usuario.avatar.ruta} 
-                                                            alt={usuario.nombre} 
+                                                            alt={`Avatar de ${usuario.nombre}`} 
                                                             className="h-10 w-10 rounded-full"
                                                             style={{ backgroundColor: usuario.avatar.color_fondo }}
                                                         />
@@ -183,7 +252,7 @@ const AdminUsuarios = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                     <div>
                                         <p className="text-sm text-gray-600 dark:text-gray-400">NIF</p>
-                                        <p className="font-medium">{selectedUser.NIF}</p>
+                                        <p className="font-medium">{selectedUser.NIF || selectedUser.id}</p>
                                     </div>
                                     <div>
                                         <p className="text-sm text-gray-600 dark:text-gray-400">Correo</p>
@@ -244,50 +313,7 @@ const AdminUsuarios = () => {
 
                                     <div className="mt-4">
                                         <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Información del Horario</h4>
-                                        {selectedHorario ? (
-                                            <div className="bg-gray-50 p-3 rounded-md dark:bg-gray-700">
-                                                {horarios.find(h => h.id === parseInt(selectedHorario)) ? (
-                                                    <div>
-                                                        <p className="font-medium">
-                                                            {horarios.find(h => h.id === parseInt(selectedHorario)).nombre}
-                                                        </p>
-                                                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                                                            Horario: {horarios.find(h => h.id === parseInt(selectedHorario)).hora_inicio} - 
-                                                            {horarios.find(h => h.id === parseInt(selectedHorario)).hora_fin}
-                                                        </p>
-                                                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                                                            Días: {
-                                                                // Obtener el horario seleccionado una sola vez para evitar múltiples búsquedas
-                                                                (() => {
-                                                                    const horario = horarios.find(h => h.id === parseInt(selectedHorario));
-                                                                    if (!horario) return '';
-                                                                    
-                                                                    // Crear un array de días y renderizarlo como string
-                                                                    const dias = [];
-                                                                    if (horario.lunes) dias.push('Lunes');
-                                                                    if (horario.martes) dias.push('Martes');
-                                                                    if (horario.miercoles) dias.push('Miércoles');
-                                                                    if (horario.jueves) dias.push('Jueves');
-                                                                    if (horario.viernes) dias.push('Viernes');
-                                                                    if (horario.sabado) dias.push('Sábado');
-                                                                    if (horario.domingo) dias.push('Domingo');
-                                                                    
-                                                                    // Unir los días con coma en lugar de renderizar como elementos separados
-                                                                    return dias.join(', ');
-                                                                })()
-                                                            }
-                                                        </p>
-                                                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                                                            Tiempo de pausa: {horarios.find(h => h.id === parseInt(selectedHorario)).tiempo_pausa_permitido} minutos
-                                                        </p>
-                                                    </div>
-                                                ) : (
-                                                    <p>Cargando información del horario...</p>
-                                                )}
-                                            </div>
-                                        ) : (
-                                            <p className="text-sm text-gray-500 dark:text-gray-400">No hay horario asignado</p>
-                                        )}
+                                        {renderInfoHorario()}
                                     </div>
                                 </div>
                             </div>

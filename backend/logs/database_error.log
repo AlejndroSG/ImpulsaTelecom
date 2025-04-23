@@ -2929,3 +2929,11 @@ Stack trace:
 [21-Apr-2025 12:27:17 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
 [21-Apr-2025 12:27:17 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 726
 [21-Apr-2025 12:27:17 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-Apr-2025 12:04:59 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 726
+[22-Apr-2025 12:04:59 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-Apr-2025 12:04:59 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 726
+[22-Apr-2025 12:04:59 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-Apr-2025 12:04:59 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 726
+[22-Apr-2025 12:04:59 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-Apr-2025 12:04:59 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 726
+[22-Apr-2025 12:04:59 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
