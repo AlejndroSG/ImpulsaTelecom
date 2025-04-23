@@ -193,9 +193,11 @@ try {
             id INT AUTO_INCREMENT PRIMARY KEY,
             NIF VARCHAR(20) NOT NULL,
             tipo_recordatorio ENUM('entrada', 'salida', 'inicio_pausa', 'fin_pausa') NOT NULL,
+            tipo_fichaje ENUM('entrada', 'salida') NOT NULL,
             fecha DATE NOT NULL,
             enviado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            INDEX (NIF, tipo_recordatorio, fecha)
+            INDEX (NIF, tipo_recordatorio, fecha),
+            INDEX (NIF, tipo_fichaje, fecha)
         )";
         
         if (!$conn->query($crearTabla)) {
@@ -236,12 +238,12 @@ try {
         $dt_fin_pausa = clone $dt_inicio_pausa;
         $dt_fin_pausa->modify("+$tiempo_pausa minutes");
         
-        // Restar 5 minutos para los recordatorios
+        // Sumar 5 minutos para los recordatorios (para que lleguen dentro del periodo de gracia de 10 min)
         $dt_recordatorio_entrada = clone $dt_inicio;
-        $dt_recordatorio_entrada->modify("-5 minutes");
+        $dt_recordatorio_entrada->modify("+5 minutes");
         
         $dt_recordatorio_salida = clone $dt_fin;
-        $dt_recordatorio_salida->modify("-5 minutes");
+        $dt_recordatorio_salida->modify("+5 minutes");
         
         $dt_recordatorio_inicio_pausa = clone $dt_inicio_pausa;
         $dt_recordatorio_inicio_pausa->modify("-5 minutes");
@@ -261,10 +263,10 @@ try {
         // Verificar recordatorios no enviados previamente hoy
         // Array de tipos de recordatorios para verificar
         $tipos_recordatorios = [
-            'entrada' => ['diff' => $diff_entrada, 'dt' => $dt_recordatorio_entrada, 'referencia' => $dt_inicio, 'accion' => 'entrada al trabajo'],
-            'salida' => ['diff' => $diff_salida, 'dt' => $dt_recordatorio_salida, 'referencia' => $dt_fin, 'accion' => 'salida del trabajo'],
-            'inicio_pausa' => ['diff' => $diff_inicio_pausa, 'dt' => $dt_recordatorio_inicio_pausa, 'referencia' => $dt_inicio_pausa, 'accion' => 'inicio de pausa'],
-            'fin_pausa' => ['diff' => $diff_fin_pausa, 'dt' => $dt_recordatorio_fin_pausa, 'referencia' => $dt_fin_pausa, 'accion' => 'fin de pausa']
+            'entrada' => ['diff' => $diff_entrada, 'dt' => $dt_recordatorio_entrada, 'referencia' => $dt_inicio, 'accion' => 'entrada al trabajo', 'tipo_fichaje' => 'entrada'],
+            'salida' => ['diff' => $diff_salida, 'dt' => $dt_recordatorio_salida, 'referencia' => $dt_fin, 'accion' => 'salida del trabajo', 'tipo_fichaje' => 'salida'],
+            'inicio_pausa' => ['diff' => $diff_inicio_pausa, 'dt' => $dt_recordatorio_inicio_pausa, 'referencia' => $dt_inicio_pausa, 'accion' => 'inicio de pausa', 'tipo_fichaje' => 'salida'],
+            'fin_pausa' => ['diff' => $diff_fin_pausa, 'dt' => $dt_recordatorio_fin_pausa, 'referencia' => $dt_fin_pausa, 'accion' => 'fin de pausa', 'tipo_fichaje' => 'entrada']
         ];
         
         foreach ($tipos_recordatorios as $tipo => $datos) {
@@ -298,31 +300,71 @@ try {
                                        AND fecha = '$fechaActual'";
                 $resultado_verificacion = $conn->query($verificar_enviado);
                 
-                if ($resultado_verificacion->num_rows == 0) {
+                // Verificar si el usuario ya ha fichado
+                $tipo_fichaje = $datos['tipo_fichaje']; // 'entrada' o 'salida'
+                $verificar_fichaje = "SELECT idRegistro FROM registros 
+                                      WHERE NIF = '$nif' 
+                                      AND fecha = '$fechaActual'";
+                
+                // Si es recordatorio de entrada, verificar si ya registró entrada
+                if ($tipo_fichaje == 'entrada') {
+                    $verificar_fichaje .= " AND horaInicio IS NOT NULL";
+                }
+                // Si es recordatorio de salida, verificar si ya registró salida
+                else if ($tipo_fichaje == 'salida') {
+                    $verificar_fichaje .= " AND horaFin IS NOT NULL";
+                }
+                
+                $resultado_fichaje = $conn->query($verificar_fichaje);
+                $ya_ficho = ($resultado_fichaje && $resultado_fichaje->num_rows > 0);
+                
+                // Solo enviar recordatorio si no se ha enviado antes Y no ha fichado aún
+                if ($resultado_verificacion->num_rows == 0 && !$ya_ficho) {
                     // No se ha enviado todavía - Preparar mensaje
                     $hora_accion = $datos['referencia']->format('H:i');
                     $asunto = "Recordatorio: {$datos['accion']} a las $hora_accion";
                     
                     $mensaje = "<h3>Hola $nombre,</h3>";
-                    $mensaje .= "<p>Te recordamos que {$datos['accion']} está programada para las <strong>$hora_accion</strong> (en aproximadamente 5 minutos).</p>";
+                    $mensaje .= "<p>Te recordamos que {$datos['accion']} estaba programada para las <strong>$hora_accion</strong> (hace 5 minutos).</p>";
+                    $mensaje .= "<p>Tienes 5 minutos más de margen para registrar tu fichaje sin incidencias.</p>";
                     
-                    if ($tipo == 'entrada' || $tipo == 'fin_pausa') {
-                        $mensaje .= "<p>No olvides registrar tu <strong>entrada</strong> en el sistema de fichajes.</p>";
-                    } else if ($tipo == 'salida' || $tipo == 'inicio_pausa') {
-                        $mensaje .= "<p>No olvides registrar tu <strong>salida</strong> en el sistema de fichajes.</p>";
-                    }
+                    // Generar un token único para la acción de fichaje
+                    $token = md5($nif . $fechaActual . $tipo . time());
+                    
+                    // Guardar el token en la base de datos para validarlo después
+                    $guardar_token = "INSERT INTO tokens_fichaje (token, NIF, tipo_fichaje, fecha_creacion, usado) 
+                                    VALUES ('$token', '$nif', '{$datos['tipo_fichaje']}', NOW(), 0)";
+                    $conn->query($guardar_token);
+                    
+                    // URL base del sistema (obtener de configuración o usar valor por defecto)
+                    $url_base = defined('URL_BASE') ? URL_BASE : 'http://localhost/ImpulsaTelecom';
+                    
+                    // URL para el fichaje rápido
+                    $url_fichaje = "$url_base/backend/api/fichaje_rapido.php?token=$token";
+                    
+                    $mensaje .= "<p>No olvides registrar tu <strong>{$datos['tipo_fichaje']}</strong> en el sistema de fichajes.</p>";
+                    
+                    $mensaje .= "<div style='margin: 20px 0;'>
+                        <a href='$url_fichaje' style='display: inline-block; background-color: #78bd00; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;'>
+                            Registrar {$datos['tipo_fichaje']} ahora
+                        </a>
+                        <p style='font-size: 12px; margin-top: 10px;'>O copia y pega este enlace en tu navegador: $url_fichaje</p>
+                    </div>";
                     
                     $mensaje .= "<p>Gracias por tu atención.</p>";
                     
                     // Enviar correo
                     if (enviarCorreo($correo, $asunto, $mensaje, "$nombre $apellidos")) {
                         // Registrar envío en la base de datos
-                        $registrar_envio = "INSERT INTO recordatorios_enviados (NIF, tipo_recordatorio, fecha) 
-                                           VALUES ('$nif', '$tipo', '$fechaActual')";
+                        $tipo_fichaje = $datos['tipo_fichaje'];
+                        $registrar_envio = "INSERT INTO recordatorios_enviados (NIF, tipo_recordatorio, tipo_fichaje, fecha) 
+                                           VALUES ('$nif', '$tipo', '$tipo_fichaje', '$fechaActual')";
                         $conn->query($registrar_envio);
                         
                         escribirLog("Recordatorio de {$datos['accion']} enviado a $nombre $apellidos ($correo)");
                     }
+                } else if ($ya_ficho) {
+                    escribirLog("No se envía recordatorio de {$datos['accion']} a $nombre $apellidos porque ya ha registrado su {$datos['tipo_fichaje']}");
                 } else {
                     escribirLog("Recordatorio de {$datos['accion']} ya fue enviado hoy a $nombre $apellidos");
                 }
