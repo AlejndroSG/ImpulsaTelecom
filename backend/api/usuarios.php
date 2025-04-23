@@ -440,6 +440,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['id'])) {
         $query .= ", $avatarField";
     }
     
+    // Añadir id_horario si existe la columna
+    if (in_array('id_horario', $columns)) {
+        $query .= ", id_horario";
+    }
+    
     $query .= " FROM usuarios";
     
     // Añadir condición de activo si existe la columna
@@ -469,7 +474,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['id'])) {
             'dpto' => $row['dpto'] ?? '',
             'centro' => $row['centro'] ?? '',
             'tipo_usuario' => $row[$tipoUsuarioField] ?? 'empleado',
-            'id_avatar' => $row[$avatarField] ?? null
+            'id_avatar' => $row[$avatarField] ?? null,
+            'id_horario' => $row['id_horario'] ?? null
         ];
         
         $usuarios[] = $usuario;

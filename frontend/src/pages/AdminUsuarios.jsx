@@ -48,6 +48,7 @@ const AdminUsuarios = () => {
             });
 
             if (response.data.success) {
+
                 setUsuarios(response.data.usuarios);
             } else {
                 setError(`Error al cargar usuarios: ${response.data.error || 'Error desconocido'}`);
@@ -68,6 +69,7 @@ const AdminUsuarios = () => {
             });
 
             if (response.data.success) {
+
                 setHorarios(response.data.horarios);
             } else {
                 setError(`Error al cargar horarios: ${response.data.error || 'Error desconocido'}`);
@@ -161,15 +163,15 @@ const AdminUsuarios = () => {
         }
 
         return (
-            <div className="bg-gray-50 p-3 rounded-md dark:bg-gray-700">
-                <p className="font-medium">{horarioSeleccionado.nombre}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+            <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-md shadow-inner border border-gray-200 dark:border-gray-600">
+                <p className="font-medium text-gray-800 dark:text-white">{horarioSeleccionado.nombre}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">
                     Horario: {horarioSeleccionado.hora_inicio} - {horarioSeleccionado.hora_fin}
                 </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-gray-600 dark:text-gray-300">
                     Días: {obtenerDiasHorario(horarioSeleccionado)}
                 </p>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
+                <p className="text-sm text-gray-600 dark:text-gray-300">
                     Tiempo de pausa: {horarioSeleccionado.tiempo_pausa_permitido} minutos
                 </p>
             </div>
@@ -179,7 +181,7 @@ const AdminUsuarios = () => {
     // Renderizar componente de carga
     if (loading) {
         return (
-            <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-800'} p-6`}>
+            <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 bg-gradient-to-br from-gray-50 to-blue-50 text-gray-800'} p-6`}>
                 <div className="flex justify-center items-center h-full">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
                 </div>
@@ -188,9 +190,9 @@ const AdminUsuarios = () => {
     }
 
     return (
-        <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-800'} p-6`}>
+        <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 bg-gradient-to-br from-gray-50 to-blue-50 text-gray-800'} p-6`}>
             <div className="container mx-auto">
-                <h1 className="text-3xl font-bold mb-6">Administración de Usuarios</h1>
+                <h1 className="text-3xl font-bold mb-6 text-black dark:text-white">Administración de Usuarios</h1>
                 
                 {error && (
                     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
@@ -200,38 +202,50 @@ const AdminUsuarios = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Lista de usuarios */}
-                    <div className="md:col-span-1 bg-white rounded-lg shadow-md p-4 dark:bg-gray-800">
-                        <h2 className="text-xl font-semibold mb-4">Usuarios</h2>
+                    <div className="md:col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 border border-gray-200 dark:border-gray-700">
+                        <h2 className="text-xl font-semibold mb-4 text-black dark:text-white">Usuarios</h2>
                         <div className="overflow-y-auto max-h-[70vh]">
                             {usuarios.length > 0 ? (
                                 <ul className="divide-y divide-gray-200 dark:divide-gray-700">
                                     {usuarios.map((usuario) => (
                                         <li 
                                             key={usuario.NIF || usuario.id} 
-                                            className={`py-3 px-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded ${selectedUser && (selectedUser.NIF === usuario.NIF || selectedUser.id === usuario.id) ? 'bg-blue-50 dark:bg-blue-900' : ''}`}
+                                            className={`py-3 px-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition duration-150 ease-in-out ${selectedUser && (selectedUser.NIF === usuario.NIF || selectedUser.id === usuario.id) ? 'bg-blue-50 dark:bg-blue-900/70 border-l-4 border-blue-500' : ''}`}
                                             onClick={() => handleUserSelect(usuario)}
                                         >
-                                            <div className="flex items-center">
+                                            <div className="flex items-center justify-between w-full">
                                                 <div className="flex-shrink-0">
                                                     {usuario.avatar ? (
                                                         <img 
                                                             src={usuario.avatar.ruta} 
                                                             alt={`Avatar de ${usuario.nombre}`} 
-                                                            className="h-10 w-10 rounded-full"
+                                                            className="h-10 w-10 rounded-full shadow-sm"
                                                             style={{ backgroundColor: usuario.avatar.color_fondo }}
                                                         />
                                                     ) : (
-                                                        <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600">
+                                                        <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 shadow-sm">
                                                             {usuario.nombre.charAt(0).toUpperCase()}
                                                         </div>
                                                     )}
                                                 </div>
                                                 <div className="ml-3">
-                                                    <p className="text-sm font-medium">{usuario.nombre} {usuario.apellidos}</p>
-                                                    <p className="text-xs text-gray-500 dark:text-gray-400">{usuario.correo}</p>
-                                                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                                                    <p className="text-sm font-medium text-gray-800 dark:text-white">{usuario.nombre} {usuario.apellidos}</p>
+                                                    <p className="text-xs text-gray-600 dark:text-gray-300">{usuario.correo}</p>
+                                                    <p className="text-xs text-gray-600 dark:text-gray-300">
                                                         {usuario.tipo_Usu || usuario.tipo_usuario}
                                                     </p>
+                                                </div>
+                                                <div className="ml-auto">
+                                                    {usuario.id_horario && usuario.id_horario !== 'NULL' && usuario.id_horario !== '0' && usuario.id_horario !== 0 ? (
+                                                        <div className="bg-blue-600 text-white text-xs px-2 py-1 rounded shadow-sm">
+                                                            {(() => {
+                                                                const horario = horarios.find(h => String(h.id) === String(usuario.id_horario));
+                                                                return horario ? horario.nombre : `Horario ${usuario.id_horario}`;
+                                                            })()}
+                                                        </div>
+                                                    ) : (
+                                                        <span className="text-gray-400 text-xs">Sin horario</span>
+                                                    )}
                                                 </div>
                                             </div>
                                         </li>
@@ -246,30 +260,30 @@ const AdminUsuarios = () => {
                     {/* Detalles del usuario y asignación de horario */}
                     <div className="md:col-span-2">
                         {selectedUser ? (
-                            <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800">
-                                <h2 className="text-2xl font-semibold mb-4">{selectedUser.nombre} {selectedUser.apellidos}</h2>
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
+                                <h2 className="text-2xl font-semibold mb-4 text-black dark:text-white">{selectedUser.nombre} {selectedUser.apellidos}</h2>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">NIF</p>
-                                        <p className="font-medium">{selectedUser.NIF || selectedUser.id}</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">NIF</p>
+                                        <p className="font-medium text-gray-800 dark:text-white">{selectedUser.NIF || selectedUser.id}</p>
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Correo</p>
-                                        <p className="font-medium">{selectedUser.correo}</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">Correo</p>
+                                        <p className="font-medium text-gray-800 dark:text-white">{selectedUser.correo}</p>
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Tipo de Usuario</p>
-                                        <p className="font-medium">{selectedUser.tipo_Usu || selectedUser.tipo_usuario}</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">Tipo de Usuario</p>
+                                        <p className="font-medium text-gray-800 dark:text-white">{selectedUser.tipo_Usu || selectedUser.tipo_usuario}</p>
                                     </div>
                                     <div>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">Departamento</p>
-                                        <p className="font-medium">{selectedUser.dpto || 'No asignado'}</p>
+                                        <p className="text-sm text-gray-500 dark:text-gray-400">Departamento</p>
+                                        <p className="font-medium text-gray-800 dark:text-white">{selectedUser.dpto || 'No asignado'}</p>
                                     </div>
                                 </div>
 
                                 <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
-                                    <h3 className="text-lg font-semibold mb-4">Asignar Horario</h3>
+                                    <h3 className="text-lg font-semibold mb-4 text-black dark:text-white">Asignar Horario</h3>
                                     
                                     {successMessage && (
                                         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
@@ -290,7 +304,7 @@ const AdminUsuarios = () => {
                                             </label>
                                             <select
                                                 id="horario"
-                                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600"
+                                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white shadow-sm"
                                                 value={selectedHorario}
                                                 onChange={handleHorarioChange}
                                             >
@@ -304,7 +318,7 @@ const AdminUsuarios = () => {
                                         </div>
                                         <button
                                             type="button"
-                                            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
                                             onClick={handleAsignarHorario}
                                         >
                                             Asignar Horario
@@ -318,7 +332,7 @@ const AdminUsuarios = () => {
                                 </div>
                             </div>
                         ) : (
-                            <div className="bg-white rounded-lg shadow-md p-6 dark:bg-gray-800 flex items-center justify-center h-full">
+                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 flex items-center justify-center h-full border border-gray-200 dark:border-gray-700">
                                 <p className="text-gray-500 dark:text-gray-400">Seleccione un usuario para ver sus detalles y asignar horario</p>
                             </div>
                         )}
