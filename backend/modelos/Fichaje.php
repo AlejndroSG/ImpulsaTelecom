@@ -737,5 +737,158 @@ class Fichaje {
     public function getTableName() {
         return $this->table_name;
     }
+    
+    // Obtener todos los fichajes (para administradores)
+    public function getAllFichajes($filtros = []) {
+        // Preparar query base
+        $query = "SELECT r.*, u.nombre, u.apellidos, u.dpto, u.email 
+                  FROM {$this->table_name} r
+                  LEFT JOIN usuarios u ON r.NIF = u.NIF ";
+        
+        // Añadir condiciones según filtros
+        $whereConditions = [];
+        $params = [];
+        $types = "";
+        
+        // Filtro por fecha
+        if (!empty($filtros['fecha_inicio']) && !empty($filtros['fecha_fin'])) {
+            $whereConditions[] = "r.fecha BETWEEN ? AND ?";
+            $params[] = $filtros['fecha_inicio'];
+            $params[] = $filtros['fecha_fin'];
+            $types .= "ss";
+        } elseif (!empty($filtros['fecha_inicio'])) {
+            $whereConditions[] = "r.fecha >= ?";
+            $params[] = $filtros['fecha_inicio'];
+            $types .= "s";
+        } elseif (!empty($filtros['fecha_fin'])) {
+            $whereConditions[] = "r.fecha <= ?";
+            $params[] = $filtros['fecha_fin'];
+            $types .= "s";
+        }
+        
+        // Filtro por usuario
+        if (!empty($filtros['nif'])) {
+            $whereConditions[] = "r.NIF = ?";
+            $params[] = $filtros['nif'];
+            $types .= "s";
+        }
+        
+        // Filtro por departamento
+        if (!empty($filtros['departamento'])) {
+            $whereConditions[] = "u.departamento = ?";
+            $params[] = $filtros['departamento'];
+            $types .= "s";
+        }
+        
+        // Filtro por estado
+        if (!empty($filtros['estado'])) {
+            if ($filtros['estado'] === 'finalizado') {
+                $whereConditions[] = "r.horaFin IS NOT NULL";
+            } elseif ($filtros['estado'] === 'pausado') {
+                $whereConditions[] = "r.horaPausa IS NOT NULL AND r.horaReanudacion IS NULL AND r.horaFin IS NULL";
+            } elseif ($filtros['estado'] === 'trabajando') {
+                $whereConditions[] = "r.horaInicio IS NOT NULL AND r.horaFin IS NULL AND (r.horaPausa IS NULL OR r.horaReanudacion IS NOT NULL)";
+            }
+        }
+        
+        // Añadir condiciones WHERE si existen
+        if (!empty($whereConditions)) {
+            $query .= " WHERE " . implode(" AND ", $whereConditions);
+        }
+        
+        // Orden
+        $query .= " ORDER BY r.fecha DESC, r.horaInicio DESC";
+        
+        // Límite si se especifica
+        if (isset($filtros['limite']) && is_numeric($filtros['limite'])) {
+            $query .= " LIMIT ?";
+            $params[] = (int)$filtros['limite'];
+            $types .= "i";
+        }
+        
+        // Log para depuración
+        error_log("Query para obtener fichajes: " . $query);
+        error_log("Params: " . json_encode($params));
+        error_log("Types: " . $types);
+        
+        $stmt = $this->conn->prepare($query);
+        
+        if ($stmt === false) {
+            error_log("Error en la preparación de la consulta de todos los fichajes: " . $this->conn->error);
+            return [
+                'success' => false,
+                'error' => 'Error en la consulta: ' . $this->conn->error
+            ];
+        }
+        
+        // Bind parameters si existen
+        if (!empty($params)) {
+            // Usar call_user_func_array para manejar un número variable de parámetros
+            $bindParams = array_merge([$stmt, $types], $params);
+            call_user_func_array('mysqli_stmt_bind_param', $this->refValues($bindParams));
+        }
+        
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        $fichajes = [];
+        while ($row = $result->fetch_assoc()) {
+            // Calcular estado para cada fichaje
+            $estado = 'pendiente';
+            if (!empty($row['horaFin'])) {
+                $estado = 'finalizado';
+            } elseif (!empty($row['horaPausa']) && empty($row['horaReanudacion'])) {
+                $estado = 'pausado';
+            } elseif (!empty($row['horaInicio'])) {
+                $estado = 'trabajando';
+            }
+            
+            // Calcular tiempo trabajado
+            $tiempoTrabajado = 0;
+            if (!empty($row['horaInicio'])) {
+                $inicio = strtotime($row['fecha'] . ' ' . $row['horaInicio']);
+                $fin = !empty($row['horaFin']) ? strtotime($row['fecha'] . ' ' . $row['horaFin']) : time();
+                $tiempoPausa = intval($row['tiempoPausa'] ?? 0);
+                
+                // Si está en pausa, calcular hasta el inicio de la pausa
+                if ($estado === 'pausado' && !empty($row['horaPausa'])) {
+                    $fin = strtotime($row['fecha'] . ' ' . $row['horaPausa']);
+                }
+                
+                // Cu00e1lculo correcto del tiempo trabajado en segundos
+                $tiempoTrabajado = ($fin - $inicio);
+                
+                // Restar el tiempo de pausa (asegurarse que este valor ya estu00e1 en segundos)
+                if ($tiempoPausa > 0) {
+                    $tiempoTrabajado = $tiempoTrabajado - $tiempoPausa;
+                }
+                
+                // Asegurar que nunca es negativo
+                $tiempoTrabajado = max(0, $tiempoTrabajado);
+            }
+            
+            // Añadir información adicional
+            $row['estado'] = $estado;
+            $row['tiempoTrabajado'] = $tiempoTrabajado;
+            $row['nombreCompleto'] = trim($row['nombre'] . ' ' . $row['apellidos']);
+            
+            $fichajes[] = $row;
+        }
+        
+        return [
+            'success' => true,
+            'fichajes' => $fichajes,
+            'total' => count($fichajes)
+        ];
+    }
+    
+    // Función auxiliar para pasar parámetros por referencia
+    private function refValues($arr) {
+        $refs = [];
+        foreach ($arr as $key => $value) {
+            $refs[$key] = &$arr[$key];
+        }
+        return $refs;
+    }
 }
 ?>

@@ -1,0 +1,23 @@
+2025-04-24 15:40:16 - === INICIANDO PRUEBA DE ENVÍO DE CORREO ===
+
+2025-04-24 15:40:16 - Conexión a la base de datos establecida.
+2025-04-24 15:40:16 - Usuario seleccionado para la prueba: Carlos Rodríguez Sánchez (carlos.rodriguez@impulsatelecom.com)
+2025-04-24 15:40:16 - Intentando enviar correo a carlos.rodriguez@impulsatelecom.com...
+2025-04-24 15:40:18 - ❌ ERROR: No se pudo enviar el correo. Verifique la configuración de PHP mail().
+2025-04-24 15:40:18 - 
+Información de depuración:
+2025-04-24 15:40:18 - - Función mail() disponible: Sí
+2025-04-24 15:40:18 - - Configuración php.ini para SMTP: localhost
+2025-04-24 15:40:18 - - Puerto SMTP: 25
+2025-04-24 15:40:18 - - sendmail_from: 
+2025-04-24 15:40:18 - - sendmail_path: 
+2025-04-24 15:40:18 - 
+=== FIN DE LA PRUEBA DE ENVÍO DE CORREO ===
+
+2025-04-24 15:40:18 - 
+Para verificar si la prueba fue exitosa:
+2025-04-24 15:40:18 - 1. Revise la bandeja de entrada del correo: carlos.rodriguez@impulsatelecom.com
+2025-04-24 15:40:18 - 2. Revise también la carpeta de spam/correo no deseado
+2025-04-24 15:40:18 - 3. Revise los logs en: C:\xampp\htdocs\ImpulsaTelecom\backend\scripts/../logs
+2025-04-24 15:40:18 - 
+Si el correo no llega, verifique la configuración de PHP mail() en php.ini

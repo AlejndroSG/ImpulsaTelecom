@@ -1,0 +1,28 @@
+2025-04-24 15:45:24 - === INICIANDO PRUEBA DE ENVu00cdO DE CORREO CON PHPMAILER ===
+
+2025-04-24 15:45:24 - Configuraciu00f3n SMTP cargada correctamente.
+2025-04-24 15:45:24 - Biblioteca PHPMailer cargada correctamente.
+2025-04-24 15:45:24 - Conexiu00f3n a la base de datos establecida.
+2025-04-24 15:45:24 - Usuario seleccionado para la prueba: Usuario Prueba (test@example.com)
+2025-04-24 15:45:24 - Intentando enviar correo a test@example.com...
+2025-04-24 15:45:25 - 
+u2705 u00c9XITO: Correo enviado correctamente a test@example.com
+2025-04-24 15:45:25 - 
+Configuraciu00f3n SMTP utilizada:
+- Servidor: smtp.gmail.com
+- Puerto: 587
+- Usuario: elreibo30@gmail.com
+2025-04-24 15:45:25 - Registro guardado en la base de datos.
+2025-04-24 15:45:25 - 
+=== FIN DE LA PRUEBA DE ENVu00cdO DE CORREO CON PHPMAILER ===
+
+2025-04-24 15:45:25 - 
+Para verificar si la prueba fue exitosa:
+2025-04-24 15:45:25 - 1. Revise la bandeja de entrada del correo: test@example.com
+2025-04-24 15:45:25 - 2. Revise tambiu00e9n la carpeta de spam/correo no deseado
+2025-04-24 15:45:25 - 3. Revise los logs en: C:\xampp\htdocs\ImpulsaTelecom\backend\scripts/../logs
+2025-04-24 15:45:25 - 
+Si el correo no llega:
+1. Verifica la configuraciu00f3n en config/smtp_config.php
+2. Si usas Gmail, asegu00farate de usar una 'Contraseu00f1a de aplicaciu00f3n'
+3. Comprueba que el servidor SMTP estu00e9 correctamente configurado

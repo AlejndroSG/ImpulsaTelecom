@@ -6,7 +6,7 @@
   "scripts": {
     "predev": "node scripts/check-smtp-config.js",
     "dev": "vite",
-    "postdev": "node scripts/start-notifications.js",
+    "postdev": "echo 'Deteniendo servicios...'",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"

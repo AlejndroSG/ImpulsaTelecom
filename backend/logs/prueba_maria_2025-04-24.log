@@ -14,3 +14,19 @@ URL de fichaje ru00e1pido: http://localhost/ImpulsaTelecom/backend/api/fichaje_r
 u2705 Correo de prueba enviado correctamente a María García Martínez (elreibo30@gmail.com)
 [2025-04-24 01:54:46] 
 URL de fichaje ru00e1pido: http://localhost/ImpulsaTelecom/backend/api/fichaje_rapido.php?token=572be5ecdff17a6ac3d85ff3963c5ac8
+[2025-04-24 11:42:12] Buscando usuario Maru00eda en la base de datos...
+[2025-04-24 11:42:12] Usuario encontrado: María García Martínez (elreibo30@gmail.com)
+[2025-04-24 11:42:12] Token generado y guardado correctamente: d3a333b48ecaf9a24c2e5e65d18d2e73
+[2025-04-24 11:42:14] Correo enviado con u00e9xito a: elreibo30@gmail.com, Asunto: Prueba de fichaje ru00e1pido - 11:42:12
+[2025-04-24 11:42:14] 
+u2705 Correo de prueba enviado correctamente a María García Martínez (elreibo30@gmail.com)
+[2025-04-24 11:42:14] 
+URL de fichaje ru00e1pido: http://localhost/ImpulsaTelecom/backend/api/fichaje_rapido.php?token=d3a333b48ecaf9a24c2e5e65d18d2e73
+[2025-04-24 16:53:58] Buscando usuario Maru00eda en la base de datos...
+[2025-04-24 16:53:58] Usuario encontrado: María García Martínez (elreibo30@gmail.com)
+[2025-04-24 16:53:58] Token generado y guardado correctamente: 7bb846aa99c83fd7841cae6452a36cf3
+[2025-04-24 16:54:00] Correo enviado con u00e9xito a: elreibo30@gmail.com, Asunto: Prueba de fichaje ru00e1pido - 16:53:58
+[2025-04-24 16:54:00] 
+u2705 Correo de prueba enviado correctamente a María García Martínez (elreibo30@gmail.com)
+[2025-04-24 16:54:00] 
+URL de fichaje ru00e1pido: http://localhost/ImpulsaTelecom/backend/api/fichaje_rapido.php?token=7bb846aa99c83fd7841cae6452a36cf3

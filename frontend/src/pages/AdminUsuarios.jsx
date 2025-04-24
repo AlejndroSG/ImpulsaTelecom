@@ -202,11 +202,11 @@ const AdminUsuarios = () => {
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Lista de usuarios */}
-                    <div className="md:col-span-1 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-4 border border-gray-200 dark:border-gray-700">
-                        <h2 className="text-xl font-semibold mb-4 text-black dark:text-white">Usuarios</h2>
+                    <div className={`md:col-span-1 rounded-xl shadow-lg p-4 ${isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border-0'}`}>
+                        <h2 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Usuarios</h2>
                         <div className="overflow-y-auto max-h-[70vh]">
                             {usuarios.length > 0 ? (
-                                <ul className="divide-y divide-gray-200 dark:divide-gray-700">
+                                <ul className={`divide-y ${isDarkMode ? 'divide-gray-700' : 'divide-gray-200'}`}>
                                     {usuarios.map((usuario) => (
                                         <li 
                                             key={usuario.NIF || usuario.id} 
@@ -260,8 +260,8 @@ const AdminUsuarios = () => {
                     {/* Detalles del usuario y asignación de horario */}
                     <div className="md:col-span-2">
                         {selectedUser ? (
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-                                <h2 className="text-2xl font-semibold mb-4 text-black dark:text-white">{selectedUser.nombre} {selectedUser.apellidos}</h2>
+                            <div className={`rounded-xl shadow-lg p-6 ${isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border-0'}`}>
+                                <h2 className={`text-2xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{selectedUser.nombre} {selectedUser.apellidos}</h2>
                                 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                                     <div>
@@ -282,8 +282,8 @@ const AdminUsuarios = () => {
                                     </div>
                                 </div>
 
-                                <div className="border-t border-gray-200 dark:border-gray-700 pt-4 mt-4">
-                                    <h3 className="text-lg font-semibold mb-4 text-black dark:text-white">Asignar Horario</h3>
+                                <div className={`border-t pt-4 mt-4 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                                    <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Asignar Horario</h3>
                                     
                                     {successMessage && (
                                         <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
