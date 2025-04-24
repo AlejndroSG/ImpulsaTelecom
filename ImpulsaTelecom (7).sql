@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-04-2025 a las 12:30:50
+-- Tiempo de generación: 24-04-2025 a las 01:59:52
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -195,6 +195,52 @@ INSERT INTO `notificaciones` (`idNotificacion`, `NIF`, `tipo`, `mensaje`, `leida
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `recordatorios_config`
+--
+
+CREATE TABLE `recordatorios_config` (
+  `id` int(11) NOT NULL,
+  `enviar_recordatorio_entrada` tinyint(1) DEFAULT 1,
+  `enviar_recordatorio_salida` tinyint(1) DEFAULT 1,
+  `enviar_recordatorio_inicio_pausa` tinyint(1) DEFAULT 1,
+  `enviar_recordatorio_fin_pausa` tinyint(1) DEFAULT 1,
+  `minutos_antes` int(11) DEFAULT 5,
+  `actualizado` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `recordatorios_config`
+--
+
+INSERT INTO `recordatorios_config` (`id`, `enviar_recordatorio_entrada`, `enviar_recordatorio_salida`, `enviar_recordatorio_inicio_pausa`, `enviar_recordatorio_fin_pausa`, `minutos_antes`, `actualizado`) VALUES
+(1, 1, 1, 1, 1, 5, '2025-04-23 16:48:01'),
+(2, 1, 1, 1, 1, 5, '2025-04-23 16:48:21');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `recordatorios_enviados`
+--
+
+CREATE TABLE `recordatorios_enviados` (
+  `id` int(11) NOT NULL,
+  `NIF` varchar(20) NOT NULL,
+  `tipo_recordatorio` enum('entrada','salida','inicio_pausa','fin_pausa') NOT NULL,
+  `fecha` date NOT NULL,
+  `enviado` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `recordatorios_enviados`
+--
+
+INSERT INTO `recordatorios_enviados` (`id`, `NIF`, `tipo_recordatorio`, `fecha`, `enviado`) VALUES
+(1, '98765432B', '', '2025-04-23', '2025-04-23 16:57:57'),
+(2, '56789012C', '', '2025-04-23', '2025-04-23 16:59:10');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `registros`
 --
 
@@ -255,7 +301,11 @@ INSERT INTO `registros` (`idRegistro`, `NIF`, `fecha`, `horaInicio`, `horaFin`, 
 (35, '98765432B', '2025-04-21', '11:58:19', '11:58:19', NULL, NULL, 0, 37.15356560, -3.59965470, '37.1535656, -3.5996547', 'entrada'),
 (36, '98765432B', '2025-04-21', '12:50:24', '12:50:25', NULL, NULL, 0, 37.15356210, -3.59966500, '37.1535621, -3.599665', 'entrada'),
 (37, '98765432B', '2025-04-22', '12:04:38', '12:04:39', NULL, NULL, 0, 37.15356260, -3.59965940, '37.1535626, -3.5996594', 'entrada'),
-(38, '98765432B', '2025-04-23', '11:10:15', '11:10:18', '11:10:17', '11:10:16', 1, 37.15356030, -3.59965350, '37.1535603, -3.5996535', 'entrada');
+(38, '98765432B', '2025-04-23', '11:10:15', '11:10:18', '11:10:17', '11:10:16', 1, 37.15356030, -3.59965350, '37.1535603, -3.5996535', 'entrada'),
+(39, '98765432B', '2025-04-23', '17:17:03', '17:32:12', NULL, NULL, 0, 37.15356260, -3.59966470, '37.1535626, -3.5996647', 'entrada'),
+(40, '98765432B', '2025-04-23', '17:32:14', '17:32:14', NULL, NULL, 0, 37.15356260, -3.59966470, '37.1535626, -3.5996647', 'entrada'),
+(41, '56789012C', '2025-04-24', '01:54:58', '01:56:11', NULL, NULL, 0, 37.15356800, -3.59966210, '37.153568, -3.5996621', 'entrada'),
+(42, '56789012C', '2025-04-24', '01:57:39', '01:57:42', NULL, NULL, 0, 37.15356800, -3.59966210, '37.153568, -3.5996621', 'entrada');
 
 -- --------------------------------------------------------
 
@@ -319,6 +369,31 @@ INSERT INTO `tareas` (`id`, `titulo`, `descripcion`, `estado`, `prioridad`, `fec
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `tokens_fichaje`
+--
+
+CREATE TABLE `tokens_fichaje` (
+  `id` int(11) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `NIF` varchar(20) NOT NULL,
+  `tipo_fichaje` enum('entrada','salida') NOT NULL,
+  `fecha_creacion` datetime NOT NULL,
+  `fecha_uso` datetime DEFAULT NULL,
+  `usado` tinyint(1) DEFAULT 0,
+  `ip_uso` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `tokens_fichaje`
+--
+
+INSERT INTO `tokens_fichaje` (`id`, `token`, `NIF`, `tipo_fichaje`, `fecha_creacion`, `fecha_uso`, `usado`, `ip_uso`) VALUES
+(1, 'bf9c68d53979bf4fd633c0779f5f7043', '56789012C', 'entrada', '2025-04-24 01:50:30', NULL, 0, NULL),
+(2, '572be5ecdff17a6ac3d85ff3963c5ac8', '56789012C', 'entrada', '2025-04-24 01:54:45', '2025-04-24 01:54:58', 1, '::1');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuarios`
 --
 
@@ -344,8 +419,8 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`NIF`, `nombre`, `apellidos`, `email`, `pswd`, `dpto`, `centro`, `tipo_Usu`, `id_avatar`, `permitir_pausas`, `activo`, `id_horario`) VALUES
 ('12345678A', 'Admin', 'Sistema', 'admin@impulsatelecom.com', '$2y$10$IQg48EWDa1IgU3I0tpHEQ.Wp1YVXDhOvEwZtzbC1gNrtMUMKxRhV.', 'IT', 'Sede Central', 'admin', 240, 1, 1, NULL),
 ('34567890D', 'Carlos', 'Rodríguez Sánchez', 'carlos.rodriguez@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Soporte', 'Valencia', 'supervisor', 4, 1, 1, NULL),
-('56789012C', 'María', 'García Martínez', 'maria.garcia@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Ventas', 'Barcelona', 'empleado', 215, 1, 1, NULL),
-('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 0, 1, 2),
+('56789012C', 'María', 'García Martínez', 'elreibo30@gmail.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Ventas', 'Barcelona', 'empleado', 215, 1, 1, 1),
+('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 0, 1, 1),
 ('TEST123', 'Usuario', 'Prueba', 'test@example.com', '', NULL, NULL, 'empleado', NULL, 1, 1, NULL);
 
 --
@@ -378,6 +453,19 @@ ALTER TABLE `notificaciones`
   ADD KEY `NIF` (`NIF`);
 
 --
+-- Indices de la tabla `recordatorios_config`
+--
+ALTER TABLE `recordatorios_config`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `recordatorios_enviados`
+--
+ALTER TABLE `recordatorios_enviados`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `NIF` (`NIF`,`tipo_recordatorio`,`fecha`);
+
+--
 -- Indices de la tabla `registros`
 --
 ALTER TABLE `registros`
@@ -402,6 +490,14 @@ ALTER TABLE `tareas`
   ADD KEY `idx_departamento` (`departamento`),
   ADD KEY `idx_estado` (`estado`),
   ADD KEY `idx_fecha_vencimiento` (`fecha_vencimiento`);
+
+--
+-- Indices de la tabla `tokens_fichaje`
+--
+ALTER TABLE `tokens_fichaje`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `token` (`token`),
+  ADD KEY `NIF` (`NIF`);
 
 --
 -- Indices de la tabla `usuarios`
@@ -441,10 +537,22 @@ ALTER TABLE `notificaciones`
   MODIFY `idNotificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
+-- AUTO_INCREMENT de la tabla `recordatorios_config`
+--
+ALTER TABLE `recordatorios_config`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `recordatorios_enviados`
+--
+ALTER TABLE `recordatorios_enviados`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `registros`
 --
 ALTER TABLE `registros`
-  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitudes`
@@ -456,6 +564,12 @@ ALTER TABLE `solicitudes`
 -- AUTO_INCREMENT de la tabla `tareas`
 --
 ALTER TABLE `tareas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT de la tabla `tokens_fichaje`
+--
+ALTER TABLE `tokens_fichaje`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
