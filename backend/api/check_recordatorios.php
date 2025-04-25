@@ -1,5 +1,6 @@
 <?php
 // API ligera para verificar y enviar recordatorios desde el frontend
+// VERSIÓN MEJORADA: Utiliza exec() para garantizar una ejecución fiable
 
 // Configurar CORS (usando la misma configuración que utilizan tus otros endpoints)
 $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
@@ -50,16 +51,70 @@ function escribirLog($mensaje) {
     );
 }
 
-// Verificar y enviar recordatorios llamando al script principal
 try {
     // Registrar inicio de la verificación
-    escribirLog("Verificación de recordatorios solicitada desde el frontend");
+    escribirLog("Verificación de recordatorios solicitada desde el frontend (versión mejorada)");
     
-    // Incluir el script de recordatorios completo
-    include_once __DIR__ . '/../scripts/enviar_recordatorios.php';
+    // Incluir archivo de conexión a la base de datos para diagnóstico
+    require_once __DIR__ . '/../modelos/bd.php';
+
+    // Obtener información de María para diagnóstico
+    $db = new db();
+    $conn = $db->getConn();
+    $query = "SELECT u.NIF, u.nombre, u.email, h.hora_inicio, h.hora_fin 
+             FROM usuarios u 
+             JOIN horarios h ON u.id_horario = h.id 
+             WHERE u.NIF = '56789012C'";
+    $resultado = $conn->query($query);
+    if ($resultado && $resultado->num_rows > 0) {
+        $maria = $resultado->fetch_assoc();
+        escribirLog("INFO DIAGNÓSTICO: María configurada con hora entrada {$maria['hora_inicio']} - salida {$maria['hora_fin']}");
+    } else {
+        escribirLog("INFO DIAGNÓSTICO: No se pudo obtener información de María");
+    }
     
-    // Registrar finalización
-    escribirLog("Verificación completada desde el frontend");
+    // Ruta al script de recordatorios
+    $script_path = realpath(__DIR__ . '/../scripts/enviar_recordatorios.php');
+    
+    // Verificar que el script existe
+    if (!file_exists($script_path)) {
+        throw new Exception("El script de recordatorios no existe en la ruta: $script_path");
+    }
+    
+    // Ruta al PHP ejecutable (ruta fija para evitar errores)
+    $php_executable = 'C:\xampp\php\php.exe'; // Ruta fija al ejecutable de PHP
+    
+    // Construir comando
+    $command = escapeshellarg($php_executable) . ' ' . escapeshellarg($script_path);
+    
+    // Ejecutar el script en un proceso separado
+    escribirLog("Ejecutando comando: $command");
+    $output = [];
+    $return_var = 0;
+    exec($command, $output, $return_var);
+    
+    // Verificar el resultado
+    if ($return_var !== 0) {
+        escribirLog("Error al ejecutar el script. Código de retorno: $return_var");
+        escribirLog("Salida: " . implode("\n", $output));
+        throw new Exception("Error al ejecutar el script de recordatorios. Código: $return_var");
+    } else {
+        escribirLog("Script ejecutado correctamente");
+        if (!empty($output)) {
+            escribirLog("Salida del script: " . implode("\n", $output));
+        }
+    }
+    
+    // Verificar si se enviaron recordatorios a María
+    $query_check = "SELECT id, fecha_hora FROM recordatorios_enviados 
+                 WHERE NIF = '56789012C' 
+                 AND fecha = '" . date('Y-m-d') . "' 
+                 ORDER BY fecha_hora DESC LIMIT 1";
+    $resultado_check = $conn->query($query_check);
+    if ($resultado_check && $resultado_check->num_rows > 0) {
+        $recordatorio = $resultado_check->fetch_assoc();
+        escribirLog("RECORDATORIO ENVIADO A MARÍA ID: {$recordatorio['id']} - HORA: {$recordatorio['fecha_hora']}");
+    }
     
     // Responder con éxito
     echo json_encode([
@@ -76,4 +131,9 @@ try {
         'success' => false,
         'error' => 'Error al verificar recordatorios: ' . $e->getMessage()
     ]);
+}
+
+// Asegurarnos de que todos los errores estén registrados
+if (error_get_last()) {
+    escribirLog("ERROR FINAL: " . print_r(error_get_last(), true));
 }

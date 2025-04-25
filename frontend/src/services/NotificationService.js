@@ -24,8 +24,9 @@ class NotificationService {
     // Verificar inmediatamente al inicio
     this.checkNotifications();
     
-    // Configurar verificaciu00f3n cada minuto
-    this.interval = setInterval(() => this.checkNotifications(), 60000);
+    // Configurar verificaciu00f3n cada 30 minutos (1800000 ms)
+    // Esto evitaru00e1 que se envu00eden correos demasiado frecuentemente a los usuarios
+    this.interval = setInterval(() => this.checkNotifications(), 1800000);
     this.isRunning = true;
     
     console.log('\u2705 Servicio de notificaciones iniciado correctamente');
@@ -50,7 +51,8 @@ class NotificationService {
   async checkNotifications() {
     try {
       // Esta llamada es liviana, no genera parpadeos ni ventanas
-      const response = await axios.get(`${API_URL}/check_recordatorios.php`, {
+      // Actualizado para usar el nuevo script que ejecuta recordatorios de forma más fiable
+      const response = await axios.get(`${API_URL}/ejecutar_recordatorios.php`, {
         withCredentials: true
       });
       

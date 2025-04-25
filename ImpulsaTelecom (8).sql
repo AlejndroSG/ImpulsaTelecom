@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-04-2025 a las 01:59:52
+-- Tiempo de generación: 25-04-2025 a las 12:29:05
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -163,7 +163,7 @@ INSERT INTO `horarios` (`id`, `nombre`, `descripcion`, `hora_inicio`, `hora_fin`
 (1, 'Jornada Completa', 'Horario estándar de oficina de lunes a viernes', '09:00:00', '18:00:00', 1, 1, 1, 1, 1, 0, 0, 60, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
 (2, 'Media Jornada Mañana', 'Horario de media jornada por la mañana', '09:00:00', '13:00:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
 (3, 'Media Jornada Tarde', 'Horario de media jornada por la tarde', '14:00:00', '18:00:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
-(4, 'Jornada Intensiva', 'Horario intensivo sin pausa para comida', '08:00:00', '15:00:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
+(4, 'Jornada Intensiva', 'Horario intensivo sin pausa para comida', '09:00:00', '12:25:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-04-25 10:23:59'),
 (5, 'Fin de Semana', 'Horario para trabajadores de fin de semana', '10:00:00', '19:00:00', 0, 0, 0, 0, 0, 1, 1, 60, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16');
 
 -- --------------------------------------------------------
@@ -227,16 +227,20 @@ CREATE TABLE `recordatorios_enviados` (
   `NIF` varchar(20) NOT NULL,
   `tipo_recordatorio` enum('entrada','salida','inicio_pausa','fin_pausa') NOT NULL,
   `fecha` date NOT NULL,
-  `enviado` timestamp NOT NULL DEFAULT current_timestamp()
+  `enviado` timestamp NOT NULL DEFAULT current_timestamp(),
+  `fecha_hora` datetime DEFAULT current_timestamp(),
+  `hora_programada` time DEFAULT NULL,
+  `hora_referencia` varchar(5) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `recordatorios_enviados`
 --
 
-INSERT INTO `recordatorios_enviados` (`id`, `NIF`, `tipo_recordatorio`, `fecha`, `enviado`) VALUES
-(1, '98765432B', '', '2025-04-23', '2025-04-23 16:57:57'),
-(2, '56789012C', '', '2025-04-23', '2025-04-23 16:59:10');
+INSERT INTO `recordatorios_enviados` (`id`, `NIF`, `tipo_recordatorio`, `fecha`, `enviado`, `fecha_hora`, `hora_programada`, `hora_referencia`) VALUES
+(1, '98765432B', '', '2025-04-23', '2025-04-23 16:57:57', '2025-04-24 16:43:24', NULL, NULL),
+(2, '56789012C', '', '2025-04-23', '2025-04-23 16:59:10', '2025-04-24 16:43:24', NULL, NULL),
+(3, 'TEST123', '', '2025-04-24', '2025-04-24 13:45:25', '2025-04-24 16:43:24', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -305,7 +309,10 @@ INSERT INTO `registros` (`idRegistro`, `NIF`, `fecha`, `horaInicio`, `horaFin`, 
 (39, '98765432B', '2025-04-23', '17:17:03', '17:32:12', NULL, NULL, 0, 37.15356260, -3.59966470, '37.1535626, -3.5996647', 'entrada'),
 (40, '98765432B', '2025-04-23', '17:32:14', '17:32:14', NULL, NULL, 0, 37.15356260, -3.59966470, '37.1535626, -3.5996647', 'entrada'),
 (41, '56789012C', '2025-04-24', '01:54:58', '01:56:11', NULL, NULL, 0, 37.15356800, -3.59966210, '37.153568, -3.5996621', 'entrada'),
-(42, '56789012C', '2025-04-24', '01:57:39', '01:57:42', NULL, NULL, 0, 37.15356800, -3.59966210, '37.153568, -3.5996621', 'entrada');
+(42, '56789012C', '2025-04-24', '01:57:39', '01:57:42', NULL, NULL, 0, 37.15356800, -3.59966210, '37.153568, -3.5996621', 'entrada'),
+(43, '56789012C', '2025-04-24', '11:44:05', '15:22:07', NULL, NULL, 0, 37.15356510, -3.59965780, '37.1535651, -3.5996578', 'entrada'),
+(44, '56789012C', '2025-04-24', '15:24:08', '17:35:49', NULL, NULL, 0, 37.15356510, -3.59965780, '37.1535651, -3.5996578', 'entrada'),
+(45, '56789012C', '2025-04-25', '12:20:11', NULL, NULL, NULL, 0, 37.15356360, -3.59966470, '37.1535636, -3.5996647', 'entrada');
 
 -- --------------------------------------------------------
 
@@ -363,7 +370,7 @@ CREATE TABLE `tareas` (
 --
 
 INSERT INTO `tareas` (`id`, `titulo`, `descripcion`, `estado`, `prioridad`, `fecha_creacion`, `fecha_vencimiento`, `fecha_completada`, `NIF_creador`, `NIF_asignado`, `departamento`) VALUES
-(1, 'Revisar equipos de red', 'Realizar revisi¾n de todos los equipos de red en la oficina central y actualizar firmware si es necesario', 'en_progreso', 'alta', '2025-04-02 13:57:44', '2025-04-15', NULL, '12345678A', '98765432B', 'Ventas'),
+(1, 'Revisar equipos de red', 'Realizar revisi¾n de todos los equipos de red en la oficina central y actualizar firmware si es necesario', 'completada', 'alta', '2025-04-02 13:57:44', '2025-04-15', '2025-04-24 12:16:38', '12345678A', '98765432B', 'Ventas'),
 (2, 'Preparar informe mensual', 'Elaborar el informe de ventas del mes de marzo con comparativa del trimestre anterior', 'en_progreso', 'media', '2025-04-02 13:57:52', '2025-04-10', NULL, '12345678A', '98765432B', 'Ventas');
 
 -- --------------------------------------------------------
@@ -389,7 +396,52 @@ CREATE TABLE `tokens_fichaje` (
 
 INSERT INTO `tokens_fichaje` (`id`, `token`, `NIF`, `tipo_fichaje`, `fecha_creacion`, `fecha_uso`, `usado`, `ip_uso`) VALUES
 (1, 'bf9c68d53979bf4fd633c0779f5f7043', '56789012C', 'entrada', '2025-04-24 01:50:30', NULL, 0, NULL),
-(2, '572be5ecdff17a6ac3d85ff3963c5ac8', '56789012C', 'entrada', '2025-04-24 01:54:45', '2025-04-24 01:54:58', 1, '::1');
+(2, '572be5ecdff17a6ac3d85ff3963c5ac8', '56789012C', 'entrada', '2025-04-24 01:54:45', '2025-04-24 01:54:58', 1, '::1'),
+(3, 'd3a333b48ecaf9a24c2e5e65d18d2e73', '56789012C', 'entrada', '2025-04-24 11:42:12', '2025-04-24 11:44:05', 1, '::1'),
+(4, '7bb846aa99c83fd7841cae6452a36cf3', '56789012C', 'entrada', '2025-04-24 16:53:58', NULL, 0, NULL),
+(5, '176be35542eba56c5e1a388de0dd63c4', '56789012C', 'entrada', '2025-04-25 09:29:48', NULL, 0, NULL),
+(6, '74bd4bdbc189c4ad24470826c2dfe6a0', '56789012C', 'entrada', '2025-04-25 09:30:25', NULL, 0, NULL),
+(7, 'eee515fdc0a00c09f859d9f98a1e5801', '56789012C', 'entrada', '2025-04-25 10:23:15', NULL, 0, NULL),
+(8, '6cd4f1e7cc1301523b2e2b802b2bbb37', '56789012C', 'entrada', '2025-04-25 10:30:18', NULL, 0, NULL),
+(9, 'e334d8071b520bc4afd5d02141f00753', '56789012C', 'entrada', '2025-04-25 10:32:23', NULL, 0, NULL),
+(10, 'ae0de013cdb0652974a11dd8e0e12353', '56789012C', 'entrada', '2025-04-25 10:40:59', NULL, 0, NULL),
+(11, '0d2e0ad95c35568a8ad017468d412ef8', '56789012C', 'entrada', '2025-04-25 10:42:56', NULL, 0, NULL),
+(12, '5c018314a6705ad957052d0d411ca7e0', '56789012C', 'entrada', '2025-04-25 10:47:39', NULL, 0, NULL),
+(13, '41500295ede15a774011f0f2519ed7eb', '56789012C', 'entrada', '2025-04-25 10:48:39', NULL, 0, NULL),
+(14, '2278840c37a639abfa040a51b810096d', '56789012C', 'entrada', '2025-04-25 10:49:39', NULL, 0, NULL),
+(15, 'eb4a54148fa1ec47212e3a7318fa6b74', '56789012C', 'entrada', '2025-04-25 10:50:39', NULL, 0, NULL),
+(16, '63f7be232c77c3019687744ba776a991', '56789012C', 'entrada', '2025-04-25 10:51:39', NULL, 0, NULL),
+(17, 'aa84ce54b2d62e8a05f18b01f6d4ac6e', '56789012C', 'entrada', '2025-04-25 10:52:39', NULL, 0, NULL),
+(18, '9de4ce70d744977c1d82d9b732e0493e', '56789012C', 'entrada', '2025-04-25 10:53:39', NULL, 0, NULL),
+(19, 'bf60e7df770620e1ab583ea318d98d7c', '56789012C', 'entrada', '2025-04-25 10:54:39', NULL, 0, NULL),
+(20, 'bef2a7757885b2d584775be5972e7794', '56789012C', 'entrada', '2025-04-25 10:55:39', NULL, 0, NULL),
+(21, 'e1d2d3e7075c30896902109dfb36c29f', '56789012C', 'entrada', '2025-04-25 10:56:39', NULL, 0, NULL),
+(22, '188d521571f5fb9aee1c443af89a279f', '56789012C', 'entrada', '2025-04-25 10:57:39', NULL, 0, NULL),
+(23, 'a4b6795118731ac9e672bd685339c0ad', '56789012C', 'entrada', '2025-04-25 10:58:39', NULL, 0, NULL),
+(24, 'c83fc90c8ae6200ee2687a6d6ee52dd0', '56789012C', 'entrada', '2025-04-25 10:59:39', NULL, 0, NULL),
+(25, '4609c3db76fc4c078ce66e5b770bdb41', '56789012C', 'entrada', '2025-04-25 11:00:39', NULL, 0, NULL),
+(26, '8caf720175d5422bcaebf3acb604ee1d', '56789012C', 'entrada', '2025-04-25 11:01:39', NULL, 0, NULL),
+(27, '83e087b2089e0ebe799c22c9bf019213', '56789012C', 'entrada', '2025-04-25 11:18:37', NULL, 0, NULL),
+(28, 'baceb90e461009624efe1ddbbea392cc', '56789012C', 'entrada', '2025-04-25 11:19:37', NULL, 0, NULL),
+(29, '68be0c0986133b2f9573303fd6545bb9', '56789012C', 'entrada', '2025-04-25 11:20:37', NULL, 0, NULL),
+(30, '05ba53a401efa764420035f2a4f37589', '56789012C', 'entrada', '2025-04-25 11:21:37', NULL, 0, NULL),
+(31, 'a053e8a2e75c6d4bae2451a157cd9cd2', '56789012C', 'entrada', '2025-04-25 11:22:39', NULL, 0, NULL),
+(32, 'a68b851b0af34ec2e85c9b98554d1ea0', '56789012C', 'entrada', '2025-04-25 11:23:39', NULL, 0, NULL),
+(33, '0e8f8a447f42b60bdb06827fc2fc1b67', '56789012C', 'entrada', '2025-04-25 11:24:39', NULL, 0, NULL),
+(34, '37f1f7ceea8252d22384bb4dbfb1a99e', '56789012C', 'entrada', '2025-04-25 11:25:39', NULL, 0, NULL),
+(35, '5a12cd4bdd916bf37faf026b5b2a635c', '56789012C', 'entrada', '2025-04-25 11:26:39', NULL, 0, NULL),
+(36, '26acd8c8f19bfa14a7229050ddfdd1ad', '56789012C', 'entrada', '2025-04-25 11:27:41', NULL, 0, NULL),
+(37, 'a7a79eec4104d089c58bde8edcb33669', '56789012C', 'entrada', '2025-04-25 11:36:41', NULL, 0, NULL),
+(38, 'd4927a1122ddc2ef3346e9c67f4f1edf', '56789012C', 'entrada', '2025-04-25 11:37:38', NULL, 0, NULL),
+(39, '958ac402094e4619d0e06e2eb8b1db1a', '56789012C', 'entrada', '2025-04-25 11:37:40', NULL, 0, NULL),
+(40, '0cd6b8efb3948dc293f28281f39efacd', '56789012C', 'entrada', '2025-04-25 11:37:41', NULL, 0, NULL),
+(41, '4371b9a4ff1cf8b33e40d069973f0aa4', '56789012C', 'entrada', '2025-04-25 11:38:40', NULL, 0, NULL),
+(42, '1fa901f4c207b29478dda764a5234f3c', '56789012C', 'entrada', '2025-04-25 11:39:15', NULL, 0, NULL),
+(43, '21e838c99c3f01482a8390d610c8228d', '56789012C', 'entrada', '2025-04-25 11:39:17', NULL, 0, NULL),
+(44, '480d490caeda91d1d4cce6045a71bcc5', '56789012C', 'entrada', '2025-04-25 11:40:15', NULL, 0, NULL),
+(45, '46188ad4c2085b801299f9b6beda40e1', '56789012C', 'entrada', '2025-04-25 11:41:15', NULL, 0, NULL),
+(46, 'd0aa7412ab0b0bd963acbc76b147f235', '56789012C', 'entrada', '2025-04-25 11:42:15', NULL, 0, NULL),
+(47, 'aa9e07b486e7cbbd8d2df97541ca84b7', '56789012C', 'entrada', '2025-04-25 11:43:15', NULL, 0, NULL);
 
 -- --------------------------------------------------------
 
@@ -419,7 +471,7 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`NIF`, `nombre`, `apellidos`, `email`, `pswd`, `dpto`, `centro`, `tipo_Usu`, `id_avatar`, `permitir_pausas`, `activo`, `id_horario`) VALUES
 ('12345678A', 'Admin', 'Sistema', 'admin@impulsatelecom.com', '$2y$10$IQg48EWDa1IgU3I0tpHEQ.Wp1YVXDhOvEwZtzbC1gNrtMUMKxRhV.', 'IT', 'Sede Central', 'admin', 240, 1, 1, NULL),
 ('34567890D', 'Carlos', 'Rodríguez Sánchez', 'carlos.rodriguez@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Soporte', 'Valencia', 'supervisor', 4, 1, 1, NULL),
-('56789012C', 'María', 'García Martínez', 'elreibo30@gmail.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Ventas', 'Barcelona', 'empleado', 215, 1, 1, 1),
+('56789012C', 'María', 'García Martínez', 'elreibo30@gmail.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Ventas', 'Barcelona', 'empleado', 215, 1, 1, 4),
 ('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 0, 1, 1),
 ('TEST123', 'Usuario', 'Prueba', 'test@example.com', '', NULL, NULL, 'empleado', NULL, 1, 1, NULL);
 
@@ -546,13 +598,13 @@ ALTER TABLE `recordatorios_config`
 -- AUTO_INCREMENT de la tabla `recordatorios_enviados`
 --
 ALTER TABLE `recordatorios_enviados`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `registros`
 --
 ALTER TABLE `registros`
-  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitudes`
@@ -570,7 +622,7 @@ ALTER TABLE `tareas`
 -- AUTO_INCREMENT de la tabla `tokens_fichaje`
 --
 ALTER TABLE `tokens_fichaje`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- Restricciones para tablas volcadas

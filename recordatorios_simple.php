@@ -6,25 +6,25 @@
 date_default_timezone_set('Europe/Madrid');
 
 // Definir la ruta base
-$baseDir = __DIR__ . '/../';
+$baseDir = __DIR__ . '/';
 
 // Incluir archivos necesarios
-require_once $baseDir . 'modelos/bd.php';
+require_once $baseDir . 'backend/modelos/bd.php';
 
 // Incluir configuraciu00f3n SMTP
-require_once $baseDir . 'config/smtp_config.php';
+require_once $baseDir . 'backend/config/smtp_config.php';
 
 // Incluir PHPMailer
-require_once $baseDir . 'vendor/phpmailer/phpmailer/src/Exception.php';
-require_once $baseDir . 'vendor/phpmailer/phpmailer/src/PHPMailer.php';
-require_once $baseDir . 'vendor/phpmailer/phpmailer/src/SMTP.php';
+require_once $baseDir . 'backend/vendor/phpmailer/phpmailer/src/Exception.php';
+require_once $baseDir . 'backend/vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require_once $baseDir . 'backend/vendor/phpmailer/phpmailer/src/SMTP.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Variables globales
 $fecha_actual = date('Y-m-d');
-$archivo_control = $baseDir . "logs/recordatorios_enviados_$fecha_actual.json";
+$archivo_control = __DIR__ . "/backend/logs/recordatorios_enviados_$fecha_actual.json";
 
 // Cargar recordatorios ya enviados hoy
 $recordatorios_enviados = [];
@@ -37,8 +37,7 @@ if (file_exists($archivo_control)) {
 
 // Funciu00f3n para registrar acciones en un archivo de log
 function escribirLog($mensaje) {
-    global $baseDir;
-    $logFile = $baseDir . 'logs/recordatorios_' . date('Y-m-d') . '.log';
+    $logFile = __DIR__ . '/backend/logs/recordatorios_' . date('Y-m-d') . '.log';
     $logDir = dirname($logFile);
     
     // Verificar si el directorio existe, si no, crearlo
@@ -55,21 +54,23 @@ function escribirLog($mensaje) {
 
 // Funciu00f3n para enviar correo electru00f3nico
 function enviarCorreo($destinatario, $asunto, $mensaje, $nombreDestinatario = '') {
+    global $smtp_host, $smtp_port, $smtp_username, $smtp_password, $smtp_from_email, $smtp_from_name;
+    
     try {
         $mail = new PHPMailer(true);
         
         // Configuraciu00f3n del servidor SMTP
         $mail->isSMTP();
-        $mail->Host = SMTP_HOST;
+        $mail->Host = $smtp_host;
         $mail->SMTPAuth = true;
-        $mail->Username = SMTP_USUARIO;
-        $mail->Password = SMTP_PASSWORD;
+        $mail->Username = $smtp_username;
+        $mail->Password = $smtp_password;
         $mail->SMTPSecure = 'tls';
-        $mail->Port = SMTP_PORT;
+        $mail->Port = $smtp_port;
         $mail->CharSet = 'UTF-8';
         
         // Remitente y destinatario
-        $mail->setFrom(SMTP_USUARIO, SMTP_NOMBRE);
+        $mail->setFrom($smtp_from_email, $smtp_from_name);
         $mail->addAddress($destinatario, $nombreDestinatario);
         
         // Contenido del correo
@@ -89,8 +90,7 @@ function verificarRecordatorio($nif, $tipo_fichaje, $hora_programada, $email, $n
     global $recordatorios_enviados, $archivo_control, $conn, $fecha_actual;
     
     // Clave u00fanica para este usuario, fecha y tipo de fichaje
-    // IMPORTANTE: Diferenciar explicitamente entre entrada y salida
-    $clave_recordatorio = $nif . '_' . $tipo_fichaje . '_' . $hora_programada . '_' . $fecha_actual;
+    $clave_recordatorio = $nif . '_' . $tipo_fichaje . '_' . $fecha_actual;
     
     // Si ya se enviu00f3 un recordatorio hoy para este tipo, no enviar otro
     if (isset($recordatorios_enviados[$clave_recordatorio])) {
