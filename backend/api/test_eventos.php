@@ -132,6 +132,22 @@ if ($resultado['success'] && !empty($resultado['eventos'])) {
     echo "<p>No se encontraron eventos o hubo un error: " . ($resultado['message'] ?? 'No hay eventos') . "</p>";
 }
 
+// Configurar CORS para permitir solicitudes desde el dominio ngrok actual
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:63975',
+    'http://localhost:63975',
+    'https://asp-natural-annually.ngrok-free.app'  // Dominio ngrok actual
+];
+
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+} else {
+    header("Access-Control-Allow-Origin: http://localhost:5173");
+}
+
 // Mostrar información para el calendario
 echo "<h3>Instrucciones para el calendario:</h3>";
 echo "<p>Para probar el calendario, accede a la siguiente URL:</p>";

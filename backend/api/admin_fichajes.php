@@ -15,7 +15,8 @@ $allowed_origins = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
     'http://127.0.0.1:63975',  // Origen del proxy de Cascade
-    'http://localhost:63975'
+    'http://localhost:63975',
+    'https://asp-natural-annually.ngrok-free.app'  // Dominio de ngrok actual
 ];
 
 // Verificar si el origen estu00e1 permitido

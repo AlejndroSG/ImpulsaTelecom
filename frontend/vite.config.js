@@ -15,5 +15,12 @@ export default defineConfig({
       '@fullcalendar/list': path.resolve('node_modules', '@fullcalendar/list'),
       '@fullcalendar/interaction': path.resolve('node_modules', '@fullcalendar/interaction')
     }
+  },
+  server: {
+    host: true, // permite conexiones externas
+    port: 5173, // o el puerto que uses
+    allowedHosts: [
+      'asp-natural-annually.ngrok-free.app' // <- tu subdominio de ngrok
+    ]
   }
 })

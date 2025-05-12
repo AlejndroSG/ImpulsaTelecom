@@ -1,5 +1,19 @@
 <?php
 // Archivo de prueba para depurar la creación de eventos
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:63975',
+    'http://localhost:63975',
+    'https://asp-natural-annually.ngrok-free.app'  // Dominio ngrok actual
+];
+
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+} else {
+    header("Access-Control-Allow-Origin: http://localhost:5173");
+}
 header('Content-Type: application/json');
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);

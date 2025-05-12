@@ -4,7 +4,20 @@
  */
 
 // Cabeceras para permitir CORS
-header("Access-Control-Allow-Origin: *");
+$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
+$allowed_origins = [
+    'http://localhost:5173',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:63975',
+    'http://localhost:63975',
+    'https://asp-natural-annually.ngrok-free.app'  // Dominio ngrok actual
+];
+
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+} else {
+    header("Access-Control-Allow-Origin: http://localhost:5173");
+}
 header("Content-Type: text/html; charset=UTF-8");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Max-Age: 3600");

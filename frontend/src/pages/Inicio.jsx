@@ -12,6 +12,7 @@ import { useTheme } from '../context/ThemeContext'
 import { motion } from 'framer-motion'
 import InitialsAvatar from '../components/InitialsAvatar'
 import { Link } from 'react-router-dom'
+import AdminStatsChart from '../components/AdminStatsChart'
 
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -307,88 +308,107 @@ const Inicio = () => {
                     </motion.div>
                 ) : (
                     <motion.div 
-                        className="bg-white rounded-xl shadow-lg p-6"
+                        className={`relative rounded-2xl shadow-2xl p-8 border-l-8 overflow-hidden animate-fade-in transition-colors duration-300 
+                            ${isDarkMode ? 'bg-[#181c23] border-[#a5ff0d] text-gray-100' : 'bg-white border-[#d6e8b5] text-gray-800'}`}
                         variants={itemVariants}
                     >
-                        <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-3">Panel de Administración</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div className="bg-gradient-to-br from-[#91e302] to-[#5a8a01] rounded-xl shadow-lg p-6 text-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-xl font-semibold">Gestión de Usuarios</h3>
-                                    <div className="p-2 bg-white bg-opacity-20 rounded-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                                        </svg>
-                                    </div>
+                        {/* Logo minimalista y cabecera */}
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-4">
+                            <div className="flex items-center gap-4">
+                                <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-gradient-to-br from-[#a5ff0d] to-[#91e302] shadow-lg animate-pulse-slow">
+                                    <span className="text-3xl font-extrabold tracking-tight text-white drop-shadow-lg">IT</span>
                                 </div>
-                                <p className="text-white text-opacity-80 mb-4">Administra los usuarios del sistema, sus permisos y roles.</p>
-                                <Link to="/admin/usuarios" className="mt-2 px-4 py-2 bg-white text-[#5a8a01] rounded-lg font-medium hover:bg-opacity-90 transition-colors inline-block">
-                                    Gestionar
-                                </Link>
+                                <div>
+                                    <h1 className="text-3xl md:text-4xl font-bold text-[#5a8a01] drop-shadow-sm">Bienvenido, {user?.nombre || 'Administrador'}</h1>
+                                    <p className="text-gray-500 dark:text-gray-300 text-lg mt-1 flex items-center gap-2">
+                                        <svg className="w-5 h-5 inline-block text-[#91e302]" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                                        {new Date().toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+                                    </p>
+                                </div>
                             </div>
-                            
-                            <div className="bg-gradient-to-br from-[#c3515f] to-[#8c3a44] rounded-xl shadow-lg p-6 text-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-xl font-semibold">Reportes</h3>
-                                    <div className="p-2 bg-white bg-opacity-20 rounded-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <p className="text-white text-opacity-80 mb-4">Visualiza y genera informes de actividad y rendimiento.</p>
-                                <button className="mt-2 px-4 py-2 bg-white text-[#8c3a44] rounded-lg font-medium hover:bg-opacity-90 transition-colors">
-                                    Ver Reportes
-                                </button>
-                            </div>
-                            
-                            <div className="bg-gradient-to-br from-[#cccccc] to-[#888888] rounded-xl shadow-lg p-6 text-white hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 hover:scale-105">
-                                <div className="flex items-center justify-between mb-4">
-                                    <h3 className="text-xl font-semibold">Configuración</h3>
-                                    <div className="p-2 bg-white bg-opacity-20 rounded-lg">
-                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c.94-1.543-.826-3.31-2.37-2.37-.996-.608-2.296-.07-2.572 1.065z" />
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                        </svg>
-                                    </div>
-                                </div>
-                                <p className="text-white text-opacity-80 mb-4">Personaliza y configura los parámetros del sistema.</p>
-                                <button className="mt-2 px-4 py-2 bg-white text-[#666666] rounded-lg font-medium hover:bg-opacity-90 transition-colors">
-                                    Configurar
-                                </button>
+                            <div className="flex flex-col md:items-end gap-2">
+                                <span className="inline-flex items-center px-4 py-2 rounded-full font-semibold text-white bg-gradient-to-r from-[#5a8a01] to-[#91e302] shadow-md">
+                                    <svg className="w-5 h-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 11c0-1.104.896-2 2-2s2 .896 2 2-.896 2-2 2-2-.896-2-2z" /></svg>
+                                    Panel de Administración
+                                </span>
                             </div>
                         </div>
-                        
-                        <div className="mt-8 bg-[#f8f8f8] rounded-xl p-6">
-                            <h3 className="text-xl font-semibold mb-4 text-gray-800">Estadísticas Generales</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                                <div className="bg-white p-4 rounded-lg shadow border-l-4 border-[#91e302]">
-                                    <div className="text-gray-500 text-sm">Usuarios Activos</div>
-                                    <div className="text-2xl font-bold text-gray-800">24</div>
-                                    <div className="text-[#91e302] text-xs mt-1">↑ 12% desde el mes pasado</div>
+                        {/* Tarjetas de acceso rápido */}
+                        <div className={`grid grid-cols-1 md:grid-cols-3 gap-8 mb-10`}>
+                            <Link to="/admin/usuarios" className={`group rounded-2xl shadow-xl p-8 flex flex-col items-start gap-4 hover:scale-105 hover:shadow-2xl transition-all duration-300 
+                                ${isDarkMode ? 'bg-[#23272f] text-[#a5ff0d]' : 'bg-white text-[#5a8a01] border border-[#e5f2d6]'}
+                            `}>
+                                <div className={`flex items-center justify-center w-14 h-14 rounded-xl mb-2 
+                                    ${isDarkMode ? 'bg-[#181c23] text-[#a5ff0d]' : 'bg-[#f6faef] text-[#91e302]'}`}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                                    </svg>
                                 </div>
-                                <div className="bg-white p-4 rounded-lg shadow border-l-4 border-[#91e302]">
-                                    <div className="text-gray-500 text-sm">Tareas Completadas</div>
-                                    <div className="text-2xl font-bold text-gray-800">156</div>
-                                    <div className="text-[#91e302] text-xs mt-1">↑ 8% desde el mes pasado</div>
+                                <span className="text-2xl font-bold">Usuarios</span>
+                                <span className={`text-opacity-80 ${isDarkMode ? 'text-[#a5ff0d]' : 'text-[#7da53e]'}`}>Gestiona usuarios, roles y permisos.</span>
+                            </Link>
+                            <button className={`group rounded-2xl shadow-xl p-8 flex flex-col items-start gap-4 hover:scale-105 hover:shadow-2xl transition-all duration-300 
+                                ${isDarkMode ? 'bg-[#2d2023] text-[#ffb0c0]' : 'bg-[#fff6f7] text-[#c3515f] border border-[#ffe5ea]'}
+                            `}>
+                                <div className={`flex items-center justify-center w-14 h-14 rounded-xl mb-2 
+                                    ${isDarkMode ? 'bg-[#181c23] text-[#ffb0c0]' : 'bg-white text-[#c3515f]'}`}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                                    </svg>
                                 </div>
-                                <div className="bg-white p-4 rounded-lg shadow border-l-4 border-[#c3515f]">
-                                    <div className="text-gray-500 text-sm">Incidencias</div>
-                                    <div className="text-2xl font-bold text-gray-800">3</div>
-                                    <div className="text-[#c3515f] text-xs mt-1">↑ 2 más que el mes pasado</div>
+                                <span className="text-2xl font-bold">Reportes</span>
+                                <span className={`text-opacity-80 ${isDarkMode ? 'text-[#ffb0c0]' : 'text-[#c3515f]'}`}>Visualiza y genera informes de actividad.</span>
+                            </button>
+                            <button className={`group rounded-2xl shadow-xl p-8 flex flex-col items-start gap-4 hover:scale-105 hover:shadow-2xl transition-all duration-300 
+                                ${isDarkMode ? 'bg-[#23272f] text-[#cccccc]' : 'bg-[#f7f7f7] text-[#888888] border border-[#ededed]'}
+                            `}>
+                                <div className={`flex items-center justify-center w-14 h-14 rounded-xl mb-2 
+                                    ${isDarkMode ? 'bg-[#181c23] text-[#cccccc]' : 'bg-white text-[#888888]'}`}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A2 2 0 0021 6.382V5a2 2 0 00-2-2H5a2 2 0 00-2 2v1.382a2 2 0 00.447 1.342L8 10m7 0v6a2 2 0 01-2 2H7a2 2 0 01-2-2v-6m12 0v6a2 2 0 01-2 2h-2a2 2 0 01-2-2v-6" />
+                                    </svg>
                                 </div>
-                                <div className="bg-white p-4 rounded-lg shadow border-l-4 border-[#cccccc]">
-                                    <div className="text-gray-500 text-sm">Tiempo Promedio</div>
-                                    <div className="text-2xl font-bold text-gray-800">8.2h</div>
-                                    <div className="text-[#91e302] text-xs mt-1">↓ 0.5h desde el mes pasado</div>
-                                </div>
+                                <span className="text-2xl font-bold">Configuración</span>
+                                <span className={`text-opacity-80 ${isDarkMode ? 'text-[#cccccc]' : 'text-[#888888]'}`}>Personaliza parámetros del sistema.</span>
+                            </button>
+                        </div>
+
+                        {/* Estadísticas generales */}
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                            <div className="bg-gradient-to-br from-[#91e302] to-[#5a8a01] p-6 rounded-2xl shadow flex flex-col items-center justify-center text-white">
+                                <svg className="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" /></svg>
+                                <div className="text-3xl font-bold">24</div>
+                                <div className="text-lg">Usuarios Activos</div>
+                                <span className="text-[#d9ffb2] text-xs mt-1">↑ 12% desde el mes pasado</span>
+                            </div>
+                            <div className="bg-gradient-to-br from-[#c3515f] to-[#8c3a44] p-6 rounded-2xl shadow flex flex-col items-center justify-center text-white">
+                                <svg className="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                                <div className="text-3xl font-bold">156</div>
+                                <div className="text-lg">Tareas Completadas</div>
+                                <span className="text-[#ffdbe5] text-xs mt-1">↑ 8% desde el mes pasado</span>
+                            </div>
+                            <div className="bg-gradient-to-br from-[#f9e0e3] to-[#c3515f] p-6 rounded-2xl shadow flex flex-col items-center justify-center text-[#c3515f]">
+                                <svg className="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                                <div className="text-3xl font-bold">3</div>
+                                <div className="text-lg">Incidencias</div>
+                                <span className="text-[#c3515f] text-xs mt-1">↑ 2 más que el mes pasado</span>
+                            </div>
+                            <div className="bg-gradient-to-br from-[#cccccc] to-[#888888] p-6 rounded-2xl shadow flex flex-col items-center justify-center text-white">
+                                <svg className="w-8 h-8 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A2 2 0 0021 6.382V5a2 2 0 00-2-2H5a2 2 0 00-2 2v1.382a2 2 0 00.447 1.342L8 10m7 0v6a2 2 0 01-2 2H7a2 2 0 01-2-2v-6m12 0v6a2 2 0 01-2 2h-2a2 2 0 01-2-2v-6" />
+                                </svg>
+                                <div className="text-3xl font-bold">8.2h</div>
+                                <div className="text-lg">Tiempo Promedio</div>
+                                <span className="text-[#d9ffb2] text-xs mt-1">↓ 0.5h desde el mes pasado</span>
                             </div>
                         </div>
                     </motion.div>
                 )}
             </motion.div>
         </div>
-    )
-}
+    );
+};
 
-export default Inicio
+export default Inicio;

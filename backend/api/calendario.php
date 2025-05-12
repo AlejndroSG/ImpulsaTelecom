@@ -17,7 +17,14 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // Configuración de cabeceras para CORS y JSON
-$allowedOrigins = ['http://localhost:5173', 'http://localhost:3000'];
+$allowedOrigins = [
+    'http://localhost:5173', 
+    'http://localhost:3000',
+    'http://127.0.0.1:5173',
+    'http://127.0.0.1:63975',  // Origen del proxy de Cascade
+    'http://localhost:63975',
+    'https://asp-natural-annually.ngrok-free.app'  // Dominio de ngrok actual
+];
 $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
 
 if (in_array($origin, $allowedOrigins)) {

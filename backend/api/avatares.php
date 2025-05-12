@@ -7,7 +7,8 @@ $allowed_origins = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
     'http://127.0.0.1:63975',  // Origen del proxy de Cascade
-    'http://localhost:63975'
+    'http://localhost:63975',
+    'https://asp-natural-annually.ngrok-free.app'  // Dominio de ngrok actual
 ];
 
 // Verificar si el origen está permitido
@@ -58,7 +59,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             $avatar = $result->fetch_assoc();
             // Asegurarse de que la ruta sea absoluta
             if (!preg_match('/^https?:\/\//', $avatar['ruta'])) {
-                $avatar['ruta'] = 'http://' . $_SERVER['HTTP_HOST'] . '/ImpulsaTelecom/frontend' . $avatar['ruta'];
+                // Determinar el protocolo a usar basado en el origen de la solicitud
+                $protocol = 'http://';
+                
+                // Si la solicitud viene de HTTPS (como ngrok), usar HTTPS para los recursos
+                if (isset($_SERVER['HTTP_ORIGIN']) && strpos($_SERVER['HTTP_ORIGIN'], 'https://') === 0) {
+                    $protocol = 'https://';
+                }
+                
+                // Usar rutas relativas si el origen es ngrok
+                if (isset($_SERVER['HTTP_ORIGIN']) && strpos($_SERVER['HTTP_ORIGIN'], 'ngrok-free.app') !== false) {
+                    // Para ngrok, es mejor usar rutas relativas
+                    $avatar['ruta'] = '/src/img/avatares/' . basename($avatar['ruta']);
+                } else {
+                    // Para desarrollo local, usar rutas absolutas
+                    $avatar['ruta'] = $protocol . $_SERVER['HTTP_HOST'] . '/ImpulsaTelecom/frontend' . $avatar['ruta'];
+                }
             }
             echo json_encode($avatar);
         } else {
@@ -73,7 +89,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         while ($row = $result->fetch_assoc()) {
             // Asegurarse de que la ruta sea absoluta
             if (!preg_match('/^https?:\/\//', $row['ruta'])) {
-                $row['ruta'] = 'http://' . $_SERVER['HTTP_HOST'] . '/ImpulsaTelecom/frontend' . $row['ruta'];
+                // Determinar el protocolo a usar basado en el origen de la solicitud
+                $protocol = 'http://';
+                
+                // Si la solicitud viene de HTTPS (como ngrok), usar HTTPS para los recursos
+                if (isset($_SERVER['HTTP_ORIGIN']) && strpos($_SERVER['HTTP_ORIGIN'], 'https://') === 0) {
+                    $protocol = 'https://';
+                }
+                
+                // Usar rutas relativas si el origen es ngrok
+                if (isset($_SERVER['HTTP_ORIGIN']) && strpos($_SERVER['HTTP_ORIGIN'], 'ngrok-free.app') !== false) {
+                    // Para ngrok, es mejor usar rutas relativas
+                    $row['ruta'] = '/src/img/avatares/' . basename($row['ruta']);
+                } else {
+                    // Para desarrollo local, usar rutas absolutas
+                    $row['ruta'] = $protocol . $_SERVER['HTTP_HOST'] . '/ImpulsaTelecom/frontend' . $row['ruta'];
+                }
             }
             $avatares[] = $row;
         }
