@@ -1,33 +1,14 @@
 <?php
+    // Incluir configuración CORS
+    include_once "cors.php";
+    
     // Incluir los archivos necesarios
     include_once "modelos/Fichaje.php";
     
-    // Configuración de cabeceras para CORS y JSON
-    $origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : '';
-    $allowed_origins = [
-        'http://localhost:5173',
-        'http://127.0.0.1:5173',
-        'http://127.0.0.1:63975',  // Origen del proxy de Cascade
-        'http://localhost:63975',
-        'https://asp-natural-annually.ngrok-free.app'  // Dominio de ngrok actual
-    ];
-    
-    if (in_array($origin, $allowed_origins)) {
-        header("Access-Control-Allow-Origin: $origin");
-    } else {
-        // Si no se reconoce el origen, permitir localhost por defecto
-        header('Access-Control-Allow-Origin: http://localhost:5173');
-    }
-    
-    header("Access-Control-Allow-Credentials: true");
-    header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
-    header("Access-Control-Allow-Headers: Content-Type, Authorization, Cache-Control, Accept");
+    // Configurar tipo de contenido
     header("Content-Type: application/json; charset=UTF-8");
     
-    // Si es una solicitud OPTIONS, terminar aquí (preflight CORS)
-    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-        exit(0);
-    }
+    // cors.php ya maneja las solicitudes OPTIONS, así que no necesitamos duplicarlo aquí
     
     // Configurar cookies seguras (antes de iniciar sesión)
     ini_set('session.cookie_httponly', 1);
@@ -149,7 +130,11 @@
             $id_usuario = isset($requestData['id_usuario']) ? $requestData['id_usuario'] : (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
             
             if ($id_usuario) {
-                $result = $fichaje->getHistorialByUsuario($id_usuario);
+                // Obtener parámetros opcionales
+                $limite = isset($requestData['limite']) ? intval($requestData['limite']) : null;
+                $dias = isset($requestData['dias']) ? intval($requestData['dias']) : null;
+                
+                $result = $fichaje->getHistorialByUsuario($id_usuario, $limite, $dias);
                 echo json_encode($result);
             } else {
                 echo json_encode([
@@ -534,6 +519,39 @@
                 echo json_encode([
                     'success' => false,
                     'error' => 'Faltan datos para actualizar la ubicación del fichaje'
+                ]);
+            }
+            break;
+            
+        case 'historial_grafico':
+            // Verificar que el usuario esté autenticado o que se proporcionó un ID
+            $id_usuario = isset($requestData['id_usuario']) ? $requestData['id_usuario'] : (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
+            
+            if ($id_usuario) {
+                // Obtener parámetro opcional de días
+                $dias = isset($requestData['dias']) ? intval($requestData['dias']) : 7;
+                
+                $result = $fichaje->getHistorialGrafico($id_usuario, $dias);
+                echo json_encode($result);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Usuario no autenticado'
+                ]);
+            }
+            break;
+            
+        case 'horario_usuario':
+            // Verificar que el usuario esté autenticado o que se proporcionó un ID
+            $id_usuario = isset($requestData['id_usuario']) ? $requestData['id_usuario'] : (isset($_SESSION['user_id']) ? $_SESSION['user_id'] : null);
+            
+            if ($id_usuario) {
+                $result = $fichaje->getHorarioUsuario($id_usuario);
+                echo json_encode($result);
+            } else {
+                echo json_encode([
+                    'success' => false,
+                    'error' => 'Usuario no autenticado'
                 ]);
             }
             break;

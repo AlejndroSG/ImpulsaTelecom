@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { FaCalendarAlt, FaClock, FaFileAlt, FaCheck, FaTimes, FaUserAlt, FaCommentAlt } from 'react-icons/fa';
+import { FaCheckCircle, FaTimesCircle, FaFileAlt, FaUserAlt, FaClock, FaCalendarAlt, FaMedkit, FaPlane, FaFilePdf, FaFileUpload, FaExclamationTriangle, FaCommentAlt, FaFileImage, FaTimes, FaCheck } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -24,6 +24,15 @@ const Solicitudes = () => {
   const [horaInicio, setHoraInicio] = useState('09:00');
   const [horaFin, setHoraFin] = useState('14:00');
   const [motivo, setMotivo] = useState('');
+  
+  // Estados para manejo de archivos (justificantes)
+  const [archivoJustificante, setArchivoJustificante] = useState(null);
+  const [nombreArchivo, setNombreArchivo] = useState('');
+  const [subiendoArchivo, setSubiendoArchivo] = useState(false);
+  const [errorArchivo, setErrorArchivo] = useState(null);
+  const fileInputRef = useRef(null);
+  
+  // Estados para el formulario
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -142,7 +151,9 @@ const Solicitudes = () => {
       );
       
       if (response.data.success) {
-        setSolicitudes(response.data.solicitudes);
+        const solicitudesRecibidas = response.data.solicitudes;
+        console.log('Datos recibidos del backend:', solicitudesRecibidas);
+        setSolicitudes(solicitudesRecibidas);
       } else {
         setError('Error al cargar solicitudes: ' + response.data.error);
       }
@@ -151,6 +162,64 @@ const Solicitudes = () => {
       setError('Error al cargar solicitudes. Por favor, inténtelo de nuevo.');
     } finally {
       setLoadingSolicitudes(false);
+    }
+  };
+
+  // Manejar la selección de archivos
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    
+    // Validar tipo de archivo (PDF, JPG, PNG)
+    const validTypes = ['application/pdf', 'image/jpeg', 'image/png'];
+    if (!validTypes.includes(file.type)) {
+      setErrorArchivo('Formato de archivo no válido. Solo se permiten PDF, JPG y PNG.');
+      return;
+    }
+    
+    // Validar tamaño (max 5MB)
+    const maxSize = 5 * 1024 * 1024; // 5MB en bytes
+    if (file.size > maxSize) {
+      setErrorArchivo('El archivo es demasiado grande. Tamaño máximo: 5MB');
+      return;
+    }
+    
+    setErrorArchivo(null);
+    setArchivoJustificante(file);
+    setNombreArchivo(file.name);
+  };
+  
+  // Subir archivo al servidor
+  const subirArchivo = async () => {
+    if (!archivoJustificante) return null;
+    
+    try {
+      setSubiendoArchivo(true);
+      
+      const formData = new FormData();
+      formData.append('justificante', archivoJustificante);
+      formData.append('NIF', user.id);
+      
+      const response = await axios.post(
+        `${API_URL}?action=subir_justificante`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+      
+      if (response.data.success) {
+        return response.data.ruta_archivo;
+      } else {
+        throw new Error(response.data.error || 'Error al subir el archivo');
+      }
+    } catch (error) {
+      console.error('Error al subir archivo:', error);
+      throw error;
+    } finally {
+      setSubiendoArchivo(false);
     }
   };
 
@@ -175,11 +244,27 @@ const Solicitudes = () => {
         motivo: motivo
       };
       
+      // Configurar datos específicos según el tipo de solicitud
       if (tipoSolicitud === 'horaria') {
         solicitudData.hora_inicio = horaInicio;
         solicitudData.hora_fin = horaFin;
-      } else { // diaria
+      } else if (tipoSolicitud === 'diaria' || tipoSolicitud === 'medica' || tipoSolicitud === 'vacaciones') {
+        // Para solicitudes que abarcan días completos
         solicitudData.fecha_fin = formatDate(fechaFin);
+      }
+      
+      // Si es una baja médica y hay un archivo adjunto, subirlo primero
+      if (tipoSolicitud === 'medica' && archivoJustificante) {
+        try {
+          const rutaArchivo = await subirArchivo();
+          if (rutaArchivo) {
+            solicitudData.justificante = rutaArchivo;
+          }
+        } catch (archivoError) {
+          setError(`Error al subir el justificante: ${archivoError.message}`);
+          setLoading(false);
+          return;
+        }
       }
       
       const response = await axios.post(`${API_URL}?action=crear`,
@@ -195,6 +280,11 @@ const Solicitudes = () => {
         setSuccess('Solicitud enviada correctamente');
         // Limpiar formulario
         setMotivo('');
+        setArchivoJustificante(null);
+        setNombreArchivo('');
+        if (fileInputRef.current) {
+          fileInputRef.current.value = '';
+        }
         // Recargar solicitudes
         cargarSolicitudes();
         // Cambiar a la pestaña de historial
@@ -207,6 +297,64 @@ const Solicitudes = () => {
       setError('Error al enviar la solicitud. Por favor, inténtelo de nuevo.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Renderizar el tipo de solicitud con su icono correspondiente
+  const renderTipoSolicitud = (solicitud) => {
+    // Si se pasa una solicitud completa, extraer el tipo
+    // Si solo se pasa una cadena, usarla como tipo
+    let tipo = '';
+    
+    if (typeof solicitud === 'object' && solicitud !== null) {
+      tipo = solicitud.tipo || '';
+    } else {
+      tipo = solicitud || '';
+    }
+    
+    // Convertir a minúsculas para hacer comparaciones flexibles
+    const tipoNormalizado = typeof tipo === 'string' ? tipo.toLowerCase() : '';
+    
+    // Identificar el tipo de solicitud
+    switch(tipoNormalizado) {
+      case 'horaria':
+        return (
+          <>
+            <FaClock className="text-[#78bd00] mr-2" />
+            <span>Horaria</span>
+          </>
+        );
+      case 'diaria':
+        return (
+          <>
+            <FaCalendarAlt className="text-[#78bd00] mr-2" />
+            <span>Diaria</span>
+          </>
+        );
+      case 'medica':
+        return (
+          <>
+            <FaMedkit className="text-red-500 mr-2" />
+            <span>Baja Médica</span>
+          </>
+        );
+      case 'vacaciones':
+        return (
+          <>
+            <FaPlane className="text-blue-500 mr-2" />
+            <span>Vacaciones</span>
+          </>
+        );
+      default:
+        // Caso por defecto con logging para debug
+        console.log('Tipo no reconocido:', tipo, 'normalizado como:', tipoNormalizado);
+        console.log('Objeto completo:', solicitud);
+        return (
+          <>
+            <FaFileAlt className="text-gray-500 mr-2" />
+            <span>{tipo || 'Desconocido'}</span>
+          </>
+        );
     }
   };
 
@@ -282,28 +430,69 @@ const Solicitudes = () => {
           <form onSubmit={enviarSolicitud}>
             <div className="mb-4">
               <label className="block text-gray-700 font-medium mb-2">Tipo de Solicitud</label>
-              <div className="flex space-x-4">
-                <label className="inline-flex items-center">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mt-2">
+                <label className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 ${tipoSolicitud === 'horaria' ? 'border-[#78bd00] bg-green-50' : 'border-gray-300'}`}>
                   <input
                     type="radio"
-                    className="form-radio text-[#78bd00]"
+                    className="form-radio text-[#78bd00] hidden"
                     name="tipoSolicitud"
                     value="horaria"
                     checked={tipoSolicitud === 'horaria'}
                     onChange={() => setTipoSolicitud('horaria')}
                   />
-                  <span className="ml-2">Horaria (horas en un día)</span>
+                  <FaClock className={`mr-3 ${tipoSolicitud === 'horaria' ? 'text-[#78bd00]' : 'text-gray-500'}`} size={18} />
+                  <div>
+                    <p className="font-medium">Ausencia Horaria</p>
+                    <p className="text-xs text-gray-500">Horas dentro de un día</p>
+                  </div>
                 </label>
-                <label className="inline-flex items-center">
+                
+                <label className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 ${tipoSolicitud === 'diaria' ? 'border-[#78bd00] bg-green-50' : 'border-gray-300'}`}>
                   <input
                     type="radio"
-                    className="form-radio text-[#78bd00]"
+                    className="form-radio text-[#78bd00] hidden"
                     name="tipoSolicitud"
                     value="diaria"
                     checked={tipoSolicitud === 'diaria'}
                     onChange={() => setTipoSolicitud('diaria')}
                   />
-                  <span className="ml-2">Diaria (días completos)</span>
+                  <FaCalendarAlt className={`mr-3 ${tipoSolicitud === 'diaria' ? 'text-[#78bd00]' : 'text-gray-500'}`} size={18} />
+                  <div>
+                    <p className="font-medium">Ausencia Diaria</p>
+                    <p className="text-xs text-gray-500">Días completos</p>
+                  </div>
+                </label>
+                
+                <label className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 ${tipoSolicitud === 'medica' ? 'border-[#78bd00] bg-green-50' : 'border-gray-300'}`}>
+                  <input
+                    type="radio"
+                    className="form-radio text-[#78bd00] hidden"
+                    name="tipoSolicitud"
+                    value="medica"
+                    checked={tipoSolicitud === 'medica'}
+                    onChange={() => setTipoSolicitud('medica')}
+                  />
+                  <FaMedkit className={`mr-3 ${tipoSolicitud === 'medica' ? 'text-red-500' : 'text-gray-500'}`} size={18} />
+                  <div>
+                    <p className="font-medium">Baja Médica</p>
+                    <p className="text-xs text-gray-500">Ausencia por enfermedad</p>
+                  </div>
+                </label>
+                
+                <label className={`flex items-center p-3 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50 ${tipoSolicitud === 'vacaciones' ? 'border-[#78bd00] bg-green-50' : 'border-gray-300'}`}>
+                  <input
+                    type="radio"
+                    className="form-radio text-[#78bd00] hidden"
+                    name="tipoSolicitud"
+                    value="vacaciones"
+                    checked={tipoSolicitud === 'vacaciones'}
+                    onChange={() => setTipoSolicitud('vacaciones')}
+                  />
+                  <FaPlane className={`mr-3 ${tipoSolicitud === 'vacaciones' ? 'text-blue-500' : 'text-gray-500'}`} size={18} />
+                  <div>
+                    <p className="font-medium">Vacaciones</p>
+                    <p className="text-xs text-gray-500">Periodo vacacional</p>
+                  </div>
                 </label>
               </div>
             </div>
@@ -317,7 +506,6 @@ const Solicitudes = () => {
                     onChange={(date) => setFechaInicio(date)}
                     className="w-full p-2 border rounded"
                     dateFormat="dd/MM/yyyy"
-                    minDate={new Date()}
                   />
                 </div>
                 
@@ -375,15 +563,63 @@ const Solicitudes = () => {
               </div>
             )}
             
+            {/* Sección para cargar justificante médico */}
+            {tipoSolicitud === 'medica' && (
+              <div className="mb-4 p-4 border border-dashed rounded-lg border-gray-300 bg-gray-50">
+                <label className="text-gray-700 font-medium mb-2 flex items-center">
+                  <FaFilePdf className="mr-2 text-red-500" />
+                  Justificante Médico
+                </label>
+                
+                <div className="flex items-center mb-2">
+                  <input
+                    type="file"
+                    ref={fileInputRef}
+                    className="hidden"
+                    onChange={handleFileChange}
+                    accept=".pdf,.jpg,.jpeg,.png"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded inline-flex items-center mr-2"
+                  >
+                    <FaFileUpload className="mr-2" />
+                    Seleccionar archivo
+                  </button>
+                  <span className="text-sm text-gray-600">
+                    {nombreArchivo ? nombreArchivo : 'Ningún archivo seleccionado'}
+                  </span>
+                </div>
+                
+                {errorArchivo && (
+                  <div className="text-sm text-red-500 flex items-center mt-1">
+                    <FaExclamationTriangle className="mr-1" />
+                    {errorArchivo}
+                  </div>
+                )}
+                
+                <p className="text-xs text-gray-500 mt-1">
+                  Formatos permitidos: PDF, JPG, PNG. Tamaño máximo: 5MB.
+                </p>
+              </div>
+            )}
+            
             <div className="mb-4">
-              <label className="block text-gray-700 font-medium mb-2">Motivo de la Ausencia</label>
+              <label className="block text-gray-700 font-medium mb-2">
+                {tipoSolicitud === 'medica' ? 'Detalles de la Baja Médica' :
+                 tipoSolicitud === 'vacaciones' ? 'Detalles de las Vacaciones' :
+                 'Motivo de la Ausencia'}
+              </label>
               <textarea
                 className="w-full p-2 border rounded"
                 rows="4"
                 value={motivo}
                 onChange={(e) => setMotivo(e.target.value)}
                 required
-                placeholder="Describe brevemente el motivo de tu solicitud..."
+                placeholder={tipoSolicitud === 'medica' ? "Describa brevemente el motivo de su baja médica..." :
+                            tipoSolicitud === 'vacaciones' ? "Indique cualquier información relevante sobre sus vacaciones..." :
+                            "Describa brevemente el motivo de su solicitud..."}
               ></textarea>
             </div>
             
@@ -391,15 +627,15 @@ const Solicitudes = () => {
               <button
                 type="submit"
                 className="bg-[#78bd00] hover:bg-[#69a500] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline flex items-center"
-                disabled={loading}
+                disabled={loading || subiendoArchivo || (tipoSolicitud === 'medica' && errorArchivo)}
               >
-                {loading ? (
+                {loading || subiendoArchivo ? (
                   <>
                     <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    Enviando...
+                    {subiendoArchivo ? 'Subiendo archivo...' : 'Enviando solicitud...'}
                   </>
                 ) : (
                   'Enviar Solicitud'
@@ -445,19 +681,9 @@ const Solicitudes = () => {
                   {solicitudes.map((solicitud) => (
                     <tr key={solicitud.idSolicitud}>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          {solicitud.tipo === 'horaria' ? (
-                            <>
-                              <FaClock className="text-[#78bd00] mr-2" />
-                              <span>Horaria</span>
-                            </>
-                          ) : (
-                            <>
-                              <FaCalendarAlt className="text-[#78bd00] mr-2" />
-                              <span>Diaria</span>
-                            </>
-                          )}
-                        </div>
+                      <div className="flex items-center">
+                        {renderTipoSolicitud(solicitud)}
+                      </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {solicitud.tipo === 'horaria' ? (
@@ -565,19 +791,9 @@ const Solicitudes = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          {solicitud.tipo === 'horaria' ? (
-                            <>
-                              <FaClock className="text-[#78bd00] mr-2" />
-                              <span>Horaria</span>
-                            </>
-                          ) : (
-                            <>
-                              <FaCalendarAlt className="text-[#78bd00] mr-2" />
-                              <span>Diaria</span>
-                            </>
-                          )}
-                        </div>
+                      <div className="flex items-center">
+  {renderTipoSolicitud(solicitud)}
+</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {solicitud.tipo === 'horaria' ? (
@@ -660,8 +876,10 @@ const Solicitudes = () => {
                 </p>
                 
                 <p className="mb-4">
-                  <span className="font-medium">Tipo:</span> {solicitudSeleccionada.tipo === 'horaria' ? 'Horaria' : 'Diaria'}
-                </p>
+  <span className="font-medium">Tipo:</span> <span className="flex items-center inline-flex mt-1">
+    {renderTipoSolicitud(solicitudSeleccionada)}
+  </span>
+</p>
                 
                 <p className="mb-4">
                   <span className="font-medium">Fecha:</span> {formatearFecha(solicitudSeleccionada.fecha_inicio)}

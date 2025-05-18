@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import RGL, { WidthProvider } from 'react-grid-layout'
 import 'react-grid-layout/css/styles.css'
 import 'react-resizable/css/styles.css'
@@ -7,12 +7,17 @@ import CalendarioWidget from '../components/CalendarioWidget'
 import PerfilWidget from '../components/PerfilWidget'
 import FichajeWidget from '../components/FichajeWidget'
 import MapaWidget from '../components/MapaWidget'
+import HistorialFichajesWidget from '../components/HistorialFichajesWidget'
+import PerfilHorarioWidget from '../components/PerfilHorarioWidget'
+import GraficoFichajesWidget from '../components/GraficoFichajesWidget'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import { motion } from 'framer-motion'
 import InitialsAvatar from '../components/InitialsAvatar'
 import { Link } from 'react-router-dom'
 import AdminStatsChart from '../components/AdminStatsChart'
+import axios from 'axios'
+import { FaCalendarAlt, FaFilter, FaUserClock, FaBuilding, FaSearch, FaClipboardList, FaChartPie, FaEdit, FaTrash, FaUser } from 'react-icons/fa'
 
 const ReactGridLayout = WidthProvider(RGL);
 
@@ -29,11 +34,55 @@ const mapCalendarWidgetStyle = {
     minHeight: '300px'
 };
 
+// URL base para las peticiones API
+const API_URL = 'http://localhost/ImpulsaTelecom/backend/api';
+
+// Función para formatear la hora extraída de un timestamp o valor de hora
+const formatearHora = (horaStr) => {
+    if (!horaStr) return '-';
+    
+    // Si la hora incluye segundos (HH:MM:SS), quitar los segundos
+    if (horaStr.includes(':')) {
+        const partes = horaStr.split(':');
+        if (partes.length >= 2) {
+            return `${partes[0]}:${partes[1]}`;
+        }
+    }
+    
+    return horaStr;
+};
+
+// Función para extraer la hora del formato fecha-hora
+const extraerHora = (fechaHoraStr) => {
+    if (!fechaHoraStr) return null;
+    
+    // Intentar extraer la hora si viene en formato "YYYY-MM-DD HH:MM:SS"
+    const partes = fechaHoraStr.split(' ');
+    if (partes.length > 1) {
+        return formatearHora(partes[1]);
+    }
+    
+    return null;
+};
+
 const Inicio = () => {
     const { user } = useAuth();
     const { isDarkMode } = useTheme();
     const [isLoading, setIsLoading] = useState(true);
     const isEmpleado = user?.tipo_usuario === 'empleado';
+    
+    // Estados para la sección de fichajes en el panel de administrador
+    const [fichajes, setFichajes] = useState([]);
+    const [loadingFichajes, setLoadingFichajes] = useState(false);
+    const [errorFichajes, setErrorFichajes] = useState(null);
+    const [editandoFichaje, setEditandoFichaje] = useState(null);
+    const [filtrosFichajes, setFiltrosFichajes] = useState({
+        fecha_inicio: '',
+        fecha_fin: '',
+        nif: '',
+        departamento: ''
+    });
+    const [showFiltros, setShowFiltros] = useState(false);
     
     // Simular tiempo de carga para mostrar animación
     useEffect(() => {
@@ -43,13 +92,87 @@ const Inicio = () => {
         return () => clearTimeout(timer);
     }, []);
     
+    // Cargar los fichajes del sistema para el panel de administrador
+    const cargarFichajes = useCallback(async () => {
+        if (isEmpleado) return; // Solo cargamos fichajes si es administrador
+        
+        try {
+            setLoadingFichajes(true);
+            setErrorFichajes(null);
+            
+            // Preparar parámetros de consulta con filtros activos
+            const params = {};
+            
+            // Agregar filtros que tengan valor
+            Object.entries(filtrosFichajes).forEach(([key, value]) => {
+                if (value) {
+                    params[key] = value;
+                }
+            });
+            
+            const response = await axios.get(`${API_URL}/admin_fichajes.php`, {
+                params: {
+                    action: 'getAll',
+                    ...params
+                },
+                withCredentials: true,
+                timeout: 10000
+            });
+            
+            // Mostrar la respuesta completa para depuración detallada
+            console.log('Respuesta completa de fichajes:', response.data);
+            
+            if (response.data.fichajes && response.data.fichajes.length > 0) {
+                const primerFichaje = response.data.fichajes[0];
+                console.log('Primer fichaje (ejemplo - vista completa):', JSON.stringify(primerFichaje, null, 2));
+                console.log('Propiedades del primer fichaje:', Object.keys(primerFichaje).join(', '));
+                
+                // Depurar TODAS las propiedades para encontrar donde están las horas
+                Object.keys(primerFichaje).forEach(key => {
+                    console.log(`${key}:`, primerFichaje[key]);
+                });
+                
+                // Buscar específicamente campos que contengan la palabra "hora"
+                const horaFields = Object.keys(primerFichaje).filter(key => 
+                    key.toLowerCase().includes('hora') || 
+                    key.toLowerCase().includes('time') || 
+                    key.toLowerCase().includes('inicio') || 
+                    key.toLowerCase().includes('fin')
+                );
+                
+                console.log('Campos relacionados con hora/tiempo:', horaFields);
+                horaFields.forEach(field => {
+                    console.log(`${field}:`, primerFichaje[field]);
+                });
+            }
+            
+            if (response.data && response.data.success) {
+                setFichajes(response.data.fichajes || []);
+            } else {
+                setErrorFichajes(response.data ? (response.data.error || 'Error al cargar fichajes') : 'No se recibieron datos');
+                setFichajes([]);
+            }
+        } catch (err) {
+            console.error('Error al cargar fichajes:', err);
+            setErrorFichajes(`Error de conexión: ${err.message || 'Error desconocido'}`);
+            setFichajes([]);
+        } finally {
+            setLoadingFichajes(false);
+        }
+    }, [filtrosFichajes, isEmpleado]);
+    
+    // Efecto para cargar los fichajes al iniciar o cuando cambien los filtros
+    useEffect(() => {
+        if (!isEmpleado && user) {
+            cargarFichajes();
+        }
+    }, [cargarFichajes, isEmpleado, user]);
+    
     const [layout, setLayout] = useState([
       { i: 'fichaje', x: 0, y: 0, w: 6, h: 6 },
-      { i: 'tareas', x: 6, y: 0, w: 6, h: 4 },
-      { i: 'notificaciones', x: 6, y: 4, w: 6, h: 4 },
-      { i: 'calendario', x: 0, y: 6, w: 6, h: 9.5 },
-      { i: 'perfil', x: 6, y: 8, w: 6, h: 4 },
-      { i: 'mapa', x: 0, y: 10, w: 12, h: 10 },
+      { i: 'historial', x: 6, y: 0, w: 6, h: 6 },
+      { i: 'perfil-horario', x: 0, y: 6, w: 6, h: 8 },
+      { i: 'grafico', x: 6, y: 6, w: 6, h: 8 },
     ]);
   
     const onLayoutChange = (newLayout) => {
@@ -149,169 +272,26 @@ const Inicio = () => {
                                 <FichajeWidget />
                             </div>
                             
-                            <div key="tareas" className="widget-container" style={widgetContainerStyle}>
-                                <DashboardWidget title="Tareas Pendientes" icon="task">
-                                    <ul className="space-y-3">
-                                        <li className="flex items-center p-2 hover:bg-[#f0f9e0] rounded-lg transition-colors duration-200">
-                                            <div className="flex items-center justify-center w-6 h-6 bg-[#f0f9e0] text-[#91e302] rounded-full mr-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                                                </svg>
-                                            </div>
-                                            <div className="flex-grow">
-                                                <div className="flex items-center justify-between">
-                                                    <span className="font-medium">Revisar documentación</span>
-                                                    <span className="text-xs text-gray-500">Hoy</span>
-                                                </div>
-                                                <div className="text-xs text-gray-500 mt-1">Prioridad: Alta</div>
-                                            </div>
-                                        </li>
-                                        <li className="flex items-center p-2 hover:bg-[#f0f9e0] rounded-lg transition-colors duration-200">
-                                            <div className="flex items-center justify-center w-6 h-6 bg-[#f0f9e0] text-[#91e302] rounded-full mr-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                                                </svg>
-                                            </div>
-                                            <div className="flex-grow">
-                                                <div className="flex items-center justify-between">
-                                                    <span className="font-medium">Actualizar reportes</span>
-                                                    <span className="text-xs text-gray-500">Mañana</span>
-                                                </div>
-                                                <div className="text-xs text-gray-500 mt-1">Prioridad: Media</div>
-                                            </div>
-                                        </li>
-                                        <li className="flex items-center p-2 hover:bg-[#f0f9e0] rounded-lg transition-colors duration-200">
-                                            <div className="flex items-center justify-center w-6 h-6 bg-[#f0f9e0] text-[#91e302] rounded-full mr-3">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                                                </svg>
-                                            </div>
-                                            <div className="flex-grow">
-                                                <div className="flex items-center justify-between">
-                                                    <span className="font-medium">Reunión de equipo</span>
-                                                    <span className="text-xs text-gray-500">Jueves</span>
-                                                </div>
-                                                <div className="text-xs text-gray-500 mt-1">Prioridad: Baja</div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </DashboardWidget>
+                            <div key="historial" className="widget-container" style={widgetContainerStyle}>
+                                <HistorialFichajesWidget />
                             </div>
 
-                            <div key="notificaciones" className="widget-container" style={widgetContainerStyle}>
-                                <DashboardWidget title="Notificaciones" icon="notification">
-                                    <div className="space-y-3">
-                                        <div className="p-3 bg-[#f0f9e0] rounded-lg border-l-4 border-[#91e302] hover:shadow-md transition-shadow duration-200">
-                                            <div className="flex items-center">
-                                                <div className="flex-shrink-0 mr-3">
-                                                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#91e302]">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-medium">Nueva actualización del sistema</h4>
-                                                    <p className="text-sm text-gray-600">Se ha lanzado la versión 2.3.0 con nuevas funcionalidades</p>
-                                                    <span className="text-xs text-gray-500 mt-1">Hace 2 horas</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div className="p-3 bg-[#f9e0e3] rounded-lg border-l-4 border-[#c3515f] hover:shadow-md transition-shadow duration-200">
-                                            <div className="flex items-center">
-                                                <div className="flex-shrink-0 mr-3">
-                                                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#c3515f]">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                        </svg>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <h4 className="font-medium">Reunión programada</h4>
-                                                    <p className="text-sm text-gray-600">Reunión de equipo mañana a las 10:00 AM</p>
-                                                    <span className="text-xs text-gray-500 mt-1">Hace 5 horas</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </DashboardWidget>
+                            <div key="perfil-horario" className="widget-container" style={widgetContainerStyle}>
+                                <PerfilHorarioWidget />
                             </div>
 
-                            <div key="calendario" className="widget-container" style={mapCalendarWidgetStyle}>
-                                <DashboardWidget title="Calendario" icon="calendar">
-                                    <CalendarioWidget />
-                                </DashboardWidget>
-                            </div>
-
-                            <div key="perfil" className="widget-container" style={widgetContainerStyle}>
-                                <DashboardWidget title="Mi Perfil" icon="user">
-                                    <div className="flex items-center space-x-4 mb-4">
-                                        {user.avatar ? (
-                                            <div className="relative">
-                                                <img 
-                                                    src={user.avatar.ruta} 
-                                                    alt={user.nombre}
-                                                    className="w-16 h-16 rounded-full border-2 border-blue-100"
-                                                    style={{ backgroundColor: user.avatar.color_fondo }}
-                                                />
-                                                <div className="absolute -bottom-1 -right-1 bg-green-400 w-4 h-4 rounded-full border-2 border-white"></div>
-                                            </div>
-                                        ) : (
-                                            <InitialsAvatar 
-                                                nombre={user.nombre} 
-                                                size="lg"
-                                                className="border-2 border-blue-100"
-                                            />
-                                        )}
-                                        <div className="flex-1">
-                                            <h4 className="text-lg font-semibold text-gray-800">{user.nombre}</h4>
-                                            <p className="text-sm text-gray-500">{user.correo}</p>
-                                            <p className="text-xs text-blue-600 mt-1">Activo ahora</p>
-                                        </div>
-                                    </div>
-                                    <div className="space-y-3">
-                                        <div className="flex items-center text-gray-600">
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                                            </svg>
-                                            <span className="text-sm">{user.correo}</span>
-                                        </div>
-                                        {user.telefono && (
-                                            <div className="flex items-center text-gray-600">
-                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                                                </svg>
-                                                <span className="text-sm">{user.telefono}</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                    <div className="mt-4 pt-4 border-t border-gray-100">
-                                        <Link 
-                                            to="/perfil" 
-                                            className="inline-flex items-center px-4 py-2 bg-blue-50 text-blue-600 rounded-lg text-sm font-medium hover:bg-blue-100 transition-colors"
-                                        >
-                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                            </svg>
-                                            Editar perfil
-                                        </Link>
-                                    </div>
-                                </DashboardWidget>
-                            </div>
-
-                            <div key="mapa" className="widget-container" style={mapCalendarWidgetStyle}>
-                                <DashboardWidget title="Mapa" icon="map">
-                                    <MapaWidget />
-                                </DashboardWidget>
+                            <div key="grafico" className="widget-container" style={widgetContainerStyle}>
+                                <GraficoFichajesWidget />
                             </div>
                         </ReactGridLayout>
                     </motion.div>
                 ) : (
-                    <motion.div 
-                        className={`relative rounded-2xl shadow-2xl p-8 border-l-8 overflow-hidden animate-fade-in transition-colors duration-300 
-                            ${isDarkMode ? 'bg-[#181c23] border-[#a5ff0d] text-gray-100' : 'bg-white border-[#d6e8b5] text-gray-800'}`}
-                        variants={itemVariants}
-                    >
+                    <>
+                        <motion.div 
+                            className={`relative rounded-2xl shadow-2xl p-8 border-l-8 overflow-hidden animate-fade-in transition-colors duration-300 mb-8
+                                ${isDarkMode ? 'bg-[#181c23] border-[#a5ff0d] text-gray-100' : 'bg-white border-[#d6e8b5] text-gray-800'}`}
+                            variants={itemVariants}>
+
                         {/* Logo minimalista y cabecera */}
                         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-10 gap-4">
                             <div className="flex items-center gap-4">
@@ -405,6 +385,152 @@ const Inicio = () => {
                             </div>
                         </div>
                     </motion.div>
+
+                    {/* Sección de Historial de Fichajes */}
+                    <motion.div 
+                        className={`relative rounded-2xl shadow-2xl p-8 border-l-8 overflow-hidden animate-fade-in transition-colors duration-300 mt-8
+                            ${isDarkMode ? 'bg-[#181c23] border-[#a5ff0d] text-gray-100' : 'bg-white border-[#d6e8b5] text-gray-800'}`}
+                        variants={itemVariants}
+                    >
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+                            <div className="flex items-center gap-3">
+                                <div className={`flex items-center justify-center w-10 h-10 rounded-lg ${isDarkMode ? 'bg-[#232833] text-[#a5ff0d]' : 'bg-[#f6faef] text-[#91e302]'}`}>
+                                    <FaUserClock className="w-5 h-5" />
+                                </div>
+                                <h2 className="text-2xl font-bold">Historial de Fichajes</h2>
+                            </div>
+                            <Link to="/admin/fichajes" className="inline-flex items-center px-4 py-2 rounded-lg font-semibold text-white bg-gradient-to-r from-[#5a8a01] to-[#91e302] shadow-md hover:shadow-lg transition-shadow duration-300">
+                                <FaClipboardList className="mr-2" />
+                                Ver Completo
+                            </Link>
+                        </div>
+
+                        {/* Tabla de fichajes */}
+                        <div className="relative overflow-x-auto shadow-md rounded-lg">
+                            {loadingFichajes ? (
+                                <div className="flex justify-center items-center py-12">
+                                    <div className={`animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 ${isDarkMode ? 'border-[#a5ff0d]' : 'border-[#91e302]'}`}></div>
+                                </div>
+                            ) : errorFichajes ? (
+                                <div className="p-4 text-center text-red-500">
+                                    <p>{errorFichajes}</p>
+                                </div>
+                            ) : fichajes.length === 0 ? (
+                                <div className="p-4 text-center">
+                                    <p>No se encontraron fichajes.</p>
+                                </div>
+                            ) : (
+                                <table className={`min-w-full divide-y ${isDarkMode ? 'divide-gray-700' : 'divide-gray-200'}`}>
+                                    <thead className={isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}>
+                                        <tr>
+                                            <th scope="col" className="px-4 py-3 text-left text-sm font-medium uppercase tracking-wider">
+                                                <div className="flex items-center">
+                                                    <FaUser className="mr-1" /> Usuario
+                                                </div>
+                                            </th>
+                                            <th scope="col" className="px-4 py-3 text-left text-sm font-medium uppercase tracking-wider">Fecha</th>
+                                            <th scope="col" className="px-4 py-3 text-left text-sm font-medium uppercase tracking-wider">Entrada</th>
+                                            <th scope="col" className="px-4 py-3 text-left text-sm font-medium uppercase tracking-wider">Salida</th>
+                                            <th scope="col" className="px-4 py-3 text-left text-sm font-medium uppercase tracking-wider">Estado</th>
+                                            <th scope="col" className="px-4 py-3 text-right text-sm font-medium uppercase tracking-wider">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className={`${isDarkMode ? 'bg-gray-900 divide-y divide-gray-800' : 'bg-white divide-y divide-gray-200'}`}>
+                                        {fichajes.slice(0, 10).map((fichaje) => (
+                                            <tr key={fichaje.idRegistro} className={`${isDarkMode ? 'hover:bg-gray-800' : 'hover:bg-gray-50'} transition-colors duration-150`}>
+                                                <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                                    <div className="flex items-center">
+                                                        <div className="flex-shrink-0">
+                                                            <InitialsAvatar 
+                                                                nombre={fichaje.nombre || fichaje.nif || 'Usuario'} 
+                                                                size="md" 
+                                                            />
+                                                        </div>
+                                                        <div className="ml-3">
+                                                            <div className="font-medium">{fichaje.nombre || fichaje.usuario || fichaje.nif}</div>
+                                                            {fichaje.nif && <div className="text-xs text-gray-500">{fichaje.nif}</div>}
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                                    {/* Intentar diferentes formatos para la fecha */}
+                                                    {fichaje.fecha || 
+                                                     fichaje.fechaFormato || 
+                                                     (fichaje.fechaEntrada ? fichaje.fechaEntrada.split(' ')[0] : '') || 
+                                                     (fichaje.fecha_entrada ? fichaje.fecha_entrada.split(' ')[0] : '') ||
+                                                     '-'}
+                                                </td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-green-600">
+                                                    {/* Usar nuestras funciones de formateo para la hora de entrada */}
+                                                    {(() => {
+                                                        // Comprobar todos los posibles nombres de campo para hora entrada
+                                                        if (fichaje.hora_entrada) return formatearHora(fichaje.hora_entrada);
+                                                        if (fichaje.hora_inicio) return formatearHora(fichaje.hora_inicio);
+                                                        if (fichaje.horaInicio) return formatearHora(fichaje.horaInicio);
+                                                        if (fichaje.horaEntrada) return formatearHora(fichaje.horaEntrada);
+                                                        if (fichaje.fechaHoraEntrada) return extraerHora(fichaje.fechaHoraEntrada);
+                                                        if (fichaje.fecha_hora_entrada) return extraerHora(fichaje.fecha_hora_entrada);
+                                                        if (fichaje.fechaEntrada) return extraerHora(fichaje.fechaEntrada);
+                                                        if (fichaje.fecha_inicio) return extraerHora(fichaje.fecha_inicio);
+                                                        if (fichaje.start_time) return formatearHora(fichaje.start_time);
+                                                        
+                                                        // Depuración para comprobar todos los campos
+                                                        console.log('Campos de hora entrada no encontrados en:', Object.keys(fichaje));
+                                                        return '-';
+                                                    })()}
+                                                </td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-sm font-medium text-red-600">
+                                                    {/* Usar nuestras funciones de formateo para la hora de salida */}
+                                                    {(() => {
+                                                        // Comprobar todos los posibles nombres de campo para hora salida
+                                                        if (fichaje.hora_salida) return formatearHora(fichaje.hora_salida);
+                                                        if (fichaje.hora_fin) return formatearHora(fichaje.hora_fin);
+                                                        if (fichaje.horaFin) return formatearHora(fichaje.horaFin);
+                                                        if (fichaje.horaSalida) return formatearHora(fichaje.horaSalida);
+                                                        if (fichaje.fechaHoraSalida) return extraerHora(fichaje.fechaHoraSalida);
+                                                        if (fichaje.fecha_hora_salida) return extraerHora(fichaje.fecha_hora_salida);
+                                                        if (fichaje.fechaSalida) return extraerHora(fichaje.fechaSalida);
+                                                        if (fichaje.fecha_fin) return extraerHora(fichaje.fecha_fin);
+                                                        if (fichaje.end_time) return formatearHora(fichaje.end_time);
+                                                        
+                                                        // Si no hay información de salida
+                                                        return '-';
+                                                    })()}
+                                                </td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-sm">
+                                                    <span className={`px-2 py-1 rounded-full text-xs font-semibold
+                                                        ${fichaje.estado === 'finalizado' ? 
+                                                          (isDarkMode ? 'bg-green-900 text-green-200' : 'bg-green-100 text-green-800') : 
+                                                        fichaje.estado === 'pausado' ? 
+                                                          (isDarkMode ? 'bg-yellow-900 text-yellow-200' : 'bg-yellow-100 text-yellow-800') : 
+                                                          (isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800')}
+                                                    `}>
+                                                        {fichaje.estado === 'finalizado' ? 'Finalizado' : 
+                                                         fichaje.estado === 'pausado' ? 'Pausado' : 'Activo'}
+                                                    </span>
+                                                </td>
+                                                <td className="px-4 py-3 whitespace-nowrap text-right text-sm">
+                                                    <button 
+                                                        className={`ml-2 p-1 rounded ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
+                                                        title="Editar fichaje"
+                                                    >
+                                                        <FaEdit className="h-4 w-4 text-blue-500" />
+                                                    </button>
+                                                    <button 
+                                                        className={`ml-2 p-1 rounded ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-200'}`}
+                                                        title="Eliminar fichaje"
+                                                    >
+                                                        <FaTrash className="h-4 w-4 text-red-500" />
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            )}
+                        </div>
+                    </motion.div>
+                </>    
                 )}
             </motion.div>
         </div>

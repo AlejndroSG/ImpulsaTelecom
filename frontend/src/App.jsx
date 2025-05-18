@@ -14,6 +14,7 @@ import Solicitudes from './pages/Solicitudes'
 import AdminUsuarios from './pages/AdminUsuarios'
 import AdminRecordatorios from './pages/AdminRecordatorios'
 import AdminFichajes from './pages/AdminFichajes'
+import Documentacion from './pages/Documentacion'
 import { AuthProvider, ProtectedRoute, PublicRoute } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 
@@ -73,6 +74,7 @@ function App() {
               <Route path="/tareas" element={<Tareas />} />
               <Route path="/calendario" element={<Calendario />} />
               <Route path="/solicitudes" element={<Solicitudes />} />
+              <Route path="/documentacion" element={<Documentacion />} />
               <Route path="/admin/usuarios" element={<AdminUsuarios />} />
               <Route path="/admin/recordatorios" element={<AdminRecordatorios />} />
               <Route path="/admin/fichajes" element={<AdminFichajes />} />

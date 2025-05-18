@@ -5995,3 +5995,197 @@
 2025-05-12 12:17:23 - Rango de fechas: 2025-05-05 a 2025-05-11
 2025-05-12 12:17:23 - Número de registros encontrados: 0
 2025-05-12 12:17:23 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-13 12:01:24 - Obteniendo estadísticas para usuario: 98765432B, período: semana
+2025-05-13 12:01:24 - Rango de fechas: 2025-05-05 a 2025-05-11
+2025-05-13 12:01:24 - Número de registros encontrados: 0
+2025-05-13 12:01:24 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-13 12:01:24 - Obteniendo estadísticas para usuario: 98765432B, período: semana
+2025-05-13 12:01:24 - Rango de fechas: 2025-05-05 a 2025-05-11
+2025-05-13 12:01:24 - Número de registros encontrados: 0
+2025-05-13 12:01:24 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-13 12:01:31 - Obteniendo estadísticas para usuario: 98765432B, período: mes
+2025-05-13 12:01:31 - Rango de fechas: 2025-04-01 a 2025-04-30
+2025-05-13 12:01:31 - Número de registros encontrados: 32
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-01, inicio=11:12:05, fin=11:12:11
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.0013888888888889
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-01, inicio=11:56:05, fin=11:56:07
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00055555555555556
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-01, inicio=11:58:52, fin=11:59:08
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.0030555555555556
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-01, inicio=12:03:39, fin=12:03:52
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.0025
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-01, inicio=12:04:32, fin=12:04:34
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-01, inicio=12:04:45, fin=12:04:46
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-01, inicio=12:04:49, fin=12:04:50
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-01, inicio=12:26:35, fin=12:26:49
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.0025
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-01, inicio=12:46:40, fin=12:46:43
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00083333333333333
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-02, inicio=10:33:57, fin=10:34:02
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.0013888888888889
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-02, inicio=10:36:43, fin=10:36:46
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00083333333333333
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-02, inicio=10:36:53, fin=10:37:10
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00083333333333333
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-02, inicio=10:40:26, fin=10:40:26
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-02, inicio=10:40:27, fin=10:40:27
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-07, inicio=16:02:09, fin=16:02:10
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-07, inicio=16:02:10, fin=16:02:12
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-07, inicio=16:02:20, fin=16:02:21
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-07, inicio=16:02:26, fin=16:02:28
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00055555555555556
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-07, inicio=16:02:37, fin=16:02:40
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00055555555555556
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-08, inicio=12:34:20, fin=12:34:24
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00083333333333333
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-09, inicio=12:28:33, fin=12:28:36
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00083333333333333
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-10, inicio=13:50:26, fin=13:50:43
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.0016666666666667
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-11, inicio=17:27:39, fin=17:27:43
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00083333333333333
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-11, inicio=17:27:52, fin=17:27:56
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.0011111111111111
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-11, inicio=17:27:58, fin=17:28:00
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00055555555555556
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-21, inicio=11:50:34, fin=11:50:37
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00055555555555556
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-21, inicio=11:58:19, fin=11:58:19
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-21, inicio=12:50:24, fin=12:50:25
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-22, inicio=12:04:38, fin=12:04:39
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-23, inicio=11:10:15, fin=11:10:18
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.00055555555555556
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-23, inicio=17:17:03, fin=17:32:12
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0.2525
+2025-05-13 12:01:31 - Procesando registro: fecha=2025-04-23, inicio=17:32:14, fin=17:32:14
+2025-05-13 12:01:31 - Horas trabajadas en este registro: 0
+2025-05-13 12:01:31 - Resumen de estadísticas: totalHoras=0.27666666666667, totalDias=10
+2025-05-13 12:01:33 - Obteniendo estadísticas para usuario: 98765432B, período: trimestre
+2025-05-13 12:01:33 - Rango de fechas: 2025-01-01 a 2025-03-31
+2025-05-13 12:01:33 - Número de registros encontrados: 4
+2025-05-13 12:01:33 - Procesando registro: fecha=2025-01-01, inicio=17:11:57, fin=22:10:57
+2025-05-13 12:01:33 - Horas trabajadas en este registro: 4.9833333333333
+2025-05-13 12:01:33 - Procesando registro: fecha=2025-02-04, inicio=09:19:24, fin=09:19:32
+2025-05-13 12:01:33 - Horas trabajadas en este registro: 0.0016666666666667
+2025-05-13 12:01:33 - Procesando registro: fecha=2025-03-30, inicio=08:30:00, fin=17:30:00
+2025-05-13 12:01:33 - Horas trabajadas en este registro: 8
+2025-05-13 12:01:33 - Procesando registro: fecha=2025-03-31, inicio=08:30:00, fin=17:00:00
+2025-05-13 12:01:33 - Horas trabajadas en este registro: 8.5
+2025-05-13 12:01:33 - Resumen de estadísticas: totalHoras=21.485, totalDias=4
+2025-05-13 12:01:34 - Obteniendo estadísticas para usuario: 98765432B, período: anio
+2025-05-13 12:01:34 - Rango de fechas: 2025-01-01 a 2025-05-13
+2025-05-13 12:01:34 - Número de registros encontrados: 39
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-01-01, inicio=17:11:57, fin=22:10:57
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 4.9833333333333
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-02-04, inicio=09:19:24, fin=09:19:32
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.0016666666666667
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-03-30, inicio=08:30:00, fin=17:30:00
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 8
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-03-31, inicio=08:30:00, fin=17:00:00
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 8.5
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-01, inicio=11:12:05, fin=11:12:11
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.0013888888888889
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-01, inicio=11:56:05, fin=11:56:07
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00055555555555556
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-01, inicio=11:58:52, fin=11:59:08
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.0030555555555556
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-01, inicio=12:03:39, fin=12:03:52
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.0025
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-01, inicio=12:04:32, fin=12:04:34
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-01, inicio=12:04:45, fin=12:04:46
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-01, inicio=12:04:49, fin=12:04:50
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-01, inicio=12:26:35, fin=12:26:49
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.0025
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-01, inicio=12:46:40, fin=12:46:43
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00083333333333333
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-02, inicio=10:33:57, fin=10:34:02
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.0013888888888889
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-02, inicio=10:36:43, fin=10:36:46
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00083333333333333
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-02, inicio=10:36:53, fin=10:37:10
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00083333333333333
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-02, inicio=10:40:26, fin=10:40:26
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-02, inicio=10:40:27, fin=10:40:27
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-07, inicio=16:02:09, fin=16:02:10
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-07, inicio=16:02:10, fin=16:02:12
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-07, inicio=16:02:20, fin=16:02:21
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-07, inicio=16:02:26, fin=16:02:28
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00055555555555556
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-07, inicio=16:02:37, fin=16:02:40
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00055555555555556
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-08, inicio=12:34:20, fin=12:34:24
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00083333333333333
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-09, inicio=12:28:33, fin=12:28:36
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00083333333333333
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-10, inicio=13:50:26, fin=13:50:43
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.0016666666666667
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-11, inicio=17:27:39, fin=17:27:43
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00083333333333333
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-11, inicio=17:27:52, fin=17:27:56
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.0011111111111111
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-11, inicio=17:27:58, fin=17:28:00
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00055555555555556
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-21, inicio=11:50:34, fin=11:50:37
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00055555555555556
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-21, inicio=11:58:19, fin=11:58:19
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-21, inicio=12:50:24, fin=12:50:25
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-22, inicio=12:04:38, fin=12:04:39
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00027777777777778
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-23, inicio=11:10:15, fin=11:10:18
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.00055555555555556
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-23, inicio=17:17:03, fin=17:32:12
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.2525
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-04-23, inicio=17:32:14, fin=17:32:14
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-05-12, inicio=12:08:46, fin=12:08:52
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.0016666666666667
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-05-13, inicio=11:58:23, fin=11:59:51
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.021111111111111
+2025-05-13 12:01:34 - Procesando registro: fecha=2025-05-13, inicio=11:59:52, fin=12:00:03
+2025-05-13 12:01:34 - Horas trabajadas en este registro: 0.0030555555555556
+2025-05-13 12:01:34 - Resumen de estadísticas: totalHoras=21.7875, totalDias=16
+2025-05-13 12:03:36 - Obteniendo estadísticas para usuario: 12345678A, período: semana
+2025-05-13 12:03:36 - Rango de fechas: 2025-05-05 a 2025-05-11
+2025-05-13 12:03:36 - Número de registros encontrados: 0
+2025-05-13 12:03:36 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-13 12:03:36 - Obteniendo estadísticas para usuario: 12345678A, período: semana
+2025-05-13 12:03:36 - Rango de fechas: 2025-05-05 a 2025-05-11
+2025-05-13 12:03:36 - Número de registros encontrados: 0
+2025-05-13 12:03:36 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-18 11:11:08 - Obteniendo estadísticas para usuario: 98765432B, período: semana
+2025-05-18 11:11:08 - Rango de fechas: 2025-05-05 a 2025-05-11
+2025-05-18 11:11:08 - Número de registros encontrados: 0
+2025-05-18 11:11:08 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-18 11:11:08 - Obteniendo estadísticas para usuario: 98765432B, período: semana
+2025-05-18 11:11:08 - Rango de fechas: 2025-05-05 a 2025-05-11
+2025-05-18 11:11:08 - Número de registros encontrados: 0
+2025-05-18 11:11:08 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-18 13:52:02 - Obteniendo estadísticas para usuario: 12345678A, período: semana
+2025-05-18 13:52:02 - Rango de fechas: 2025-05-05 a 2025-05-11
+2025-05-18 13:52:02 - Número de registros encontrados: 0
+2025-05-18 13:52:02 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-18 13:52:02 - Obteniendo estadísticas para usuario: 12345678A, período: semana
+2025-05-18 13:52:02 - Rango de fechas: 2025-05-05 a 2025-05-11
+2025-05-18 13:52:02 - Número de registros encontrados: 0
+2025-05-18 13:52:02 - Resumen de estadísticas: totalHoras=0, totalDias=0

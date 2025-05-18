@@ -1,0 +1,54 @@
+-- CAMBIO 1: Historial de usuario (líneas aproximadas 671-683) --
+// REEMPLAZAR ESTO:
+<div className="flex items-center">
+  {solicitud.tipo === 'horaria' ? (
+    <>
+      <FaClock className="text-[#78bd00] mr-2" />
+      <span>Horaria</span>
+    </>
+  ) : (
+    <>
+      <FaCalendarAlt className="text-[#78bd00] mr-2" />
+      <span>Diaria</span>
+    </>
+  )}
+</div>
+
+// POR ESTO:
+<div className="flex items-center">
+  {renderTipoSolicitud(solicitud.tipo)}
+</div>
+
+-- CAMBIO 2: Vista de administrador (líneas aproximadas 750-763) --
+// REEMPLAZAR ESTO:
+<div className="flex items-center">
+  {solicitud.tipo === 'horaria' ? (
+    <>
+      <FaClock className="text-[#78bd00] mr-2" />
+      <span>Horaria</span>
+    </>
+  ) : (
+    <>
+      <FaCalendarAlt className="text-[#78bd00] mr-2" />
+      <span>Diaria</span>
+    </>
+  )}
+</div>
+
+// POR ESTO:
+<div className="flex items-center">
+  {renderTipoSolicitud(solicitud.tipo)}
+</div>
+
+-- CAMBIO 3: Modal de respuesta (líneas aproximadas 845-848) --
+// REEMPLAZAR ESTO:
+<p className="mb-4">
+  <span className="font-medium">Tipo:</span> {solicitudSeleccionada.tipo === 'horaria' ? 'Horaria' : 'Diaria'}
+</p>
+
+// POR ESTO:
+<p className="mb-4">
+  <span className="font-medium">Tipo:</span> <span className="flex items-center inline-flex mt-1">
+    {renderTipoSolicitud(solicitudSeleccionada.tipo)}
+  </span>
+</p>
