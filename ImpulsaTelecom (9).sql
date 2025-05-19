@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-04-2025 a las 12:29:05
+-- Tiempo de generación: 19-05-2025 a las 03:00:48
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -163,7 +163,7 @@ INSERT INTO `horarios` (`id`, `nombre`, `descripcion`, `hora_inicio`, `hora_fin`
 (1, 'Jornada Completa', 'Horario estándar de oficina de lunes a viernes', '09:00:00', '18:00:00', 1, 1, 1, 1, 1, 0, 0, 60, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
 (2, 'Media Jornada Mañana', 'Horario de media jornada por la mañana', '09:00:00', '13:00:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
 (3, 'Media Jornada Tarde', 'Horario de media jornada por la tarde', '14:00:00', '18:00:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
-(4, 'Jornada Intensiva', 'Horario intensivo sin pausa para comida', '09:00:00', '12:25:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-04-25 10:23:59'),
+(4, 'Jornada Intensiva', 'Horario intensivo sin pausa para comida', '10:29:00', '16:47:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-05-05 14:47:47'),
 (5, 'Fin de Semana', 'Horario para trabajadores de fin de semana', '10:00:00', '19:00:00', 0, 0, 0, 0, 0, 1, 1, 60, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16');
 
 -- --------------------------------------------------------
@@ -190,7 +190,12 @@ INSERT INTO `notificaciones` (`idNotificacion`, `NIF`, `tipo`, `mensaje`, `leida
 (3, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido aprobada', 0, '2025-04-10 10:46:06', 2),
 (4, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido rechazada', 0, '2025-04-10 10:46:10', 1),
 (6, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido aprobada. Comentario: ertertertert', 0, '2025-04-10 11:37:36', 3),
-(8, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido aprobada', 0, '2025-04-11 15:32:58', 4);
+(8, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido aprobada', 0, '2025-04-11 15:32:58', 4),
+(10, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido aprobada', 0, '2025-05-05 15:10:45', 5),
+(12, '56789012C', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido rechazada. Comentario: POR PUTA TRAVELO DE MIERDA', 0, '2025-05-07 23:09:55', 6),
+(14, '56789012C', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido rechazada. Comentario: No puedes', 0, '2025-05-12 10:06:04', 7),
+(16, '98765432B', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido rechazada. Comentario: TRABAJA', 0, '2025-05-13 10:01:04', 8),
+(20, '56789012C', 'respuesta_solicitud', 'Tu solicitud de ausencia ha sido aprobada', 0, '2025-05-18 10:50:10', 11);
 
 -- --------------------------------------------------------
 
@@ -312,7 +317,19 @@ INSERT INTO `registros` (`idRegistro`, `NIF`, `fecha`, `horaInicio`, `horaFin`, 
 (42, '56789012C', '2025-04-24', '01:57:39', '01:57:42', NULL, NULL, 0, 37.15356800, -3.59966210, '37.153568, -3.5996621', 'entrada'),
 (43, '56789012C', '2025-04-24', '11:44:05', '15:22:07', NULL, NULL, 0, 37.15356510, -3.59965780, '37.1535651, -3.5996578', 'entrada'),
 (44, '56789012C', '2025-04-24', '15:24:08', '17:35:49', NULL, NULL, 0, 37.15356510, -3.59965780, '37.1535651, -3.5996578', 'entrada'),
-(45, '56789012C', '2025-04-25', '12:20:11', NULL, NULL, NULL, 0, 37.15356360, -3.59966470, '37.1535636, -3.5996647', 'entrada');
+(45, '56789012C', '2025-04-25', '12:20:11', '17:26:34', NULL, NULL, 0, 37.15356240, -3.59966210, '37.1535624, -3.5996621', 'entrada'),
+(46, '56789012C', '2025-05-05', '15:51:26', '15:51:42', '15:51:41', '15:51:34', 5, NULL, NULL, NULL, 'entrada'),
+(47, '56789012C', '2025-05-05', '16:49:02', NULL, NULL, NULL, 0, NULL, NULL, NULL, 'entrada'),
+(48, '56789012C', '2025-05-06', '11:41:45', '11:41:59', NULL, NULL, 0, 37.20262330, -3.62219100, '37.2026233, -3.622191', 'entrada'),
+(49, '56789012C', '2025-05-12', '11:56:56', NULL, '11:57:42', '11:58:54', 72, NULL, NULL, NULL, 'entrada'),
+(50, '56789012C', '2025-05-12', '11:58:37', '12:01:24', NULL, NULL, 0, 37.15356610, -3.59964840, '37.1535661, -3.5996484', 'entrada'),
+(51, '56789012C', '2025-05-12', '12:01:25', '12:01:29', NULL, NULL, 0, 37.15356610, -3.59964840, '37.1535661, -3.5996484', 'entrada'),
+(52, '56789012C', '2025-05-12', '12:01:33', NULL, NULL, NULL, 0, 37.15356610, -3.59964840, '37.1535661, -3.5996484', 'entrada'),
+(53, '98765432B', '2025-05-12', '12:08:46', '12:08:52', NULL, NULL, 0, 37.15356610, -3.59964840, '37.1535661, -3.5996484', 'entrada'),
+(54, '98765432B', '2025-05-13', '11:58:23', '11:59:51', '11:59:38', '11:59:50', 12, 37.15355900, -3.59965570, '37.153559, -3.5996557', 'entrada'),
+(55, '98765432B', '2025-05-13', '11:59:52', '12:00:03', NULL, NULL, 0, NULL, NULL, NULL, 'entrada'),
+(56, '98765432B', '2025-05-18', '11:26:49', '11:26:51', NULL, NULL, 0, 37.15354720, -3.59965430, '37.1535472, -3.5996543', 'entrada'),
+(58, '56789012C', '2025-05-17', '15:07:18', '22:07:19', NULL, NULL, 0, 37.15355440, -3.59964890, '37.1535544, -3.5996489', '');
 
 -- --------------------------------------------------------
 
@@ -323,7 +340,7 @@ INSERT INTO `registros` (`idRegistro`, `NIF`, `fecha`, `horaInicio`, `horaFin`, 
 CREATE TABLE `solicitudes` (
   `idSolicitud` int(11) NOT NULL,
   `NIF` varchar(15) NOT NULL,
-  `tipo` enum('horaria','diaria') NOT NULL,
+  `tipo` enum('horaria','diaria','medica','vacaciones') NOT NULL,
   `fecha_inicio` date NOT NULL,
   `fecha_fin` date DEFAULT NULL,
   `hora_inicio` time DEFAULT NULL,
@@ -341,9 +358,13 @@ CREATE TABLE `solicitudes` (
 
 INSERT INTO `solicitudes` (`idSolicitud`, `NIF`, `tipo`, `fecha_inicio`, `fecha_fin`, `hora_inicio`, `hora_fin`, `motivo`, `estado`, `fecha_solicitud`, `fecha_respuesta`, `comentario_respuesta`) VALUES
 (1, '98765432B', 'horaria', '2025-04-10', NULL, '09:00:00', '14:00:00', 'Tengo Médico', 'rechazada', '2025-04-10 10:28:15', '2025-04-10 10:46:10', ''),
-(2, '98765432B', 'horaria', '2025-04-12', NULL, '09:00:00', '14:00:00', 'Me gusta Juande', 'aprobada', '2025-04-10 10:45:46', '2025-04-10 10:46:06', ''),
 (3, '98765432B', 'horaria', '2025-04-10', NULL, '09:00:00', '14:00:00', 'Hola buenas', 'aprobada', '2025-04-10 11:36:56', '2025-04-10 11:37:36', 'ertertertert'),
-(4, '98765432B', 'horaria', '2025-04-11', NULL, '09:00:00', '14:00:00', 'Follar con Alejandra', 'aprobada', '2025-04-11 15:31:51', '2025-04-11 15:32:58', '');
+(5, '98765432B', 'horaria', '2025-05-05', NULL, '09:00:00', '14:00:00', 'rtyerftyedftertert', 'aprobada', '2025-05-05 15:10:31', '2025-05-05 15:10:45', ''),
+(7, '56789012C', 'diaria', '2025-05-12', '2025-05-12', NULL, NULL, 'Tengo medico', 'rechazada', '2025-05-12 10:05:35', '2025-05-12 10:06:04', 'No puedes'),
+(8, '98765432B', 'horaria', '2025-05-13', NULL, '09:00:00', '14:00:00', 'QUIERO JUGAR AL ELDEN RING', 'rechazada', '2025-05-13 10:00:38', '2025-05-13 10:01:04', 'TRABAJA'),
+(24, '56789012C', 'horaria', '2025-05-18', NULL, '09:00:00', '14:00:00', 'ertertert', 'pendiente', '2025-05-18 11:32:07', NULL, NULL),
+(25, '56789012C', 'medica', '2025-05-18', '2025-05-18', NULL, NULL, 'retertert', 'pendiente', '2025-05-18 11:32:13', NULL, NULL),
+(26, '56789012C', 'vacaciones', '2025-05-18', '2025-05-18', NULL, NULL, 'ertertertert', 'pendiente', '2025-05-18 11:32:18', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -371,7 +392,7 @@ CREATE TABLE `tareas` (
 
 INSERT INTO `tareas` (`id`, `titulo`, `descripcion`, `estado`, `prioridad`, `fecha_creacion`, `fecha_vencimiento`, `fecha_completada`, `NIF_creador`, `NIF_asignado`, `departamento`) VALUES
 (1, 'Revisar equipos de red', 'Realizar revisi¾n de todos los equipos de red en la oficina central y actualizar firmware si es necesario', 'completada', 'alta', '2025-04-02 13:57:44', '2025-04-15', '2025-04-24 12:16:38', '12345678A', '98765432B', 'Ventas'),
-(2, 'Preparar informe mensual', 'Elaborar el informe de ventas del mes de marzo con comparativa del trimestre anterior', 'en_progreso', 'media', '2025-04-02 13:57:52', '2025-04-10', NULL, '12345678A', '98765432B', 'Ventas');
+(2, 'Preparar informe mensual', 'Elaborar el informe de ventas del mes de marzo con comparativa del trimestre anterior', 'completada', 'media', '2025-04-02 13:57:52', '2025-04-10', '2025-05-13 12:02:49', '12345678A', '98765432B', 'Ventas');
 
 -- --------------------------------------------------------
 
@@ -410,7 +431,7 @@ INSERT INTO `tokens_fichaje` (`id`, `token`, `NIF`, `tipo_fichaje`, `fecha_creac
 (13, '41500295ede15a774011f0f2519ed7eb', '56789012C', 'entrada', '2025-04-25 10:48:39', NULL, 0, NULL),
 (14, '2278840c37a639abfa040a51b810096d', '56789012C', 'entrada', '2025-04-25 10:49:39', NULL, 0, NULL),
 (15, 'eb4a54148fa1ec47212e3a7318fa6b74', '56789012C', 'entrada', '2025-04-25 10:50:39', NULL, 0, NULL),
-(16, '63f7be232c77c3019687744ba776a991', '56789012C', 'entrada', '2025-04-25 10:51:39', NULL, 0, NULL),
+(16, '63f7be232c77c3019687744ba776a991', '56789012C', 'entrada', '2025-04-25 10:51:39', '2025-05-05 16:49:02', 1, '::1'),
 (17, 'aa84ce54b2d62e8a05f18b01f6d4ac6e', '56789012C', 'entrada', '2025-04-25 10:52:39', NULL, 0, NULL),
 (18, '9de4ce70d744977c1d82d9b732e0493e', '56789012C', 'entrada', '2025-04-25 10:53:39', NULL, 0, NULL),
 (19, 'bf60e7df770620e1ab583ea318d98d7c', '56789012C', 'entrada', '2025-04-25 10:54:39', NULL, 0, NULL),
@@ -441,7 +462,7 @@ INSERT INTO `tokens_fichaje` (`id`, `token`, `NIF`, `tipo_fichaje`, `fecha_creac
 (44, '480d490caeda91d1d4cce6045a71bcc5', '56789012C', 'entrada', '2025-04-25 11:40:15', NULL, 0, NULL),
 (45, '46188ad4c2085b801299f9b6beda40e1', '56789012C', 'entrada', '2025-04-25 11:41:15', NULL, 0, NULL),
 (46, 'd0aa7412ab0b0bd963acbc76b147f235', '56789012C', 'entrada', '2025-04-25 11:42:15', NULL, 0, NULL),
-(47, 'aa9e07b486e7cbbd8d2df97541ca84b7', '56789012C', 'entrada', '2025-04-25 11:43:15', NULL, 0, NULL);
+(47, 'aa9e07b486e7cbbd8d2df97541ca84b7', '56789012C', 'entrada', '2025-04-25 11:43:15', '2025-05-12 11:58:37', 1, '::1');
 
 -- --------------------------------------------------------
 
@@ -471,7 +492,7 @@ CREATE TABLE `usuarios` (
 INSERT INTO `usuarios` (`NIF`, `nombre`, `apellidos`, `email`, `pswd`, `dpto`, `centro`, `tipo_Usu`, `id_avatar`, `permitir_pausas`, `activo`, `id_horario`) VALUES
 ('12345678A', 'Admin', 'Sistema', 'admin@impulsatelecom.com', '$2y$10$IQg48EWDa1IgU3I0tpHEQ.Wp1YVXDhOvEwZtzbC1gNrtMUMKxRhV.', 'IT', 'Sede Central', 'admin', 240, 1, 1, NULL),
 ('34567890D', 'Carlos', 'Rodríguez Sánchez', 'carlos.rodriguez@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Soporte', 'Valencia', 'supervisor', 4, 1, 1, NULL),
-('56789012C', 'María', 'García Martínez', 'elreibo30@gmail.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Ventas', 'Barcelona', 'empleado', 215, 1, 1, 4),
+('56789012C', 'María', 'García Martínez', 'elreibo30@gmail.com', '$2y$10$29suFOJkJS0tpRaLKs.b9eo1xI8TAdGrZhHUFkbog32styexnPRMe', 'Ventas', 'Barcelona', 'empleado', 215, 1, 1, 4),
 ('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 0, 1, 1),
 ('TEST123', 'Usuario', 'Prueba', 'test@example.com', '', NULL, NULL, 'empleado', NULL, 1, 1, NULL);
 
@@ -586,7 +607,7 @@ ALTER TABLE `horarios`
 -- AUTO_INCREMENT de la tabla `notificaciones`
 --
 ALTER TABLE `notificaciones`
-  MODIFY `idNotificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idNotificacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- AUTO_INCREMENT de la tabla `recordatorios_config`
@@ -604,13 +625,13 @@ ALTER TABLE `recordatorios_enviados`
 -- AUTO_INCREMENT de la tabla `registros`
 --
 ALTER TABLE `registros`
-  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitudes`
 --
 ALTER TABLE `solicitudes`
-  MODIFY `idSolicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idSolicitud` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `tareas`
