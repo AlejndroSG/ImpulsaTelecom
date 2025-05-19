@@ -3,6 +3,9 @@ import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { FaUserCog, FaUserClock, FaCheckCircle, FaTimesCircle, FaSearch, FaFilter, FaCalendarAlt, FaUserAlt, FaEnvelope, FaIdCard, FaBuilding } from 'react-icons/fa';
+import InitialsAvatar from '../components/InitialsAvatar';
 
 // URL base para las peticiones API
 const API_URL = 'http://localhost/ImpulsaTelecom/backend/api';
@@ -21,6 +24,7 @@ const AdminUsuarios = () => {
     const [selectedHorario, setSelectedHorario] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+    const [searchTerm, setSearchTerm] = useState('');
 
     // Verificar autenticación y permisos
     useEffect(() => {
@@ -48,7 +52,6 @@ const AdminUsuarios = () => {
             });
 
             if (response.data.success) {
-
                 setUsuarios(response.data.usuarios);
             } else {
                 setError(`Error al cargar usuarios: ${response.data.error || 'Error desconocido'}`);
@@ -69,7 +72,6 @@ const AdminUsuarios = () => {
             });
 
             if (response.data.success) {
-
                 setHorarios(response.data.horarios);
             } else {
                 setError(`Error al cargar horarios: ${response.data.error || 'Error desconocido'}`);
@@ -99,160 +101,248 @@ const AdminUsuarios = () => {
         if (!selectedUser) return;
 
         try {
-            // Asegurarse de que NIF existe y es una cadena
-            const userNIF = selectedUser.NIF || selectedUser.id;
-            
-            // Convertir el ID del horario a entero o null si está vacío
-            const horarioID = selectedHorario === '' ? null : parseInt(selectedHorario, 10);
-            
-            console.log('Enviando datos:', { NIF: userNIF, id_horario: horarioID });
-            
-            const response = await axios.post(
-                `${API_URL}/horarios.php?asignar`, 
-                {
-                    NIF: userNIF,
-                    id_horario: horarioID
-                },
-                { withCredentials: true }
-            );
+            const response = await axios.post(`${API_URL}/usuarios.php`, {
+                action: 'asignarHorario',
+                nif: selectedUser.NIF || selectedUser.id,
+                id_horario: selectedHorario
+            }, {
+                withCredentials: true
+            });
 
             if (response.data.success) {
+                // Actualizar usuario en la lista
+                setUsuarios(prev => prev.map(u => {
+                    if ((u.NIF === selectedUser.NIF) || (u.id === selectedUser.id)) {
+                        return { ...u, id_horario: selectedHorario };
+                    }
+                    return u;
+                }));
+                
+                // Actualizar usuario seleccionado
+                setSelectedUser(prev => ({ ...prev, id_horario: selectedHorario }));
+                
+                // Mostrar mensaje de éxito
                 setSuccessMessage('Horario asignado correctamente');
-                // Actualizar la lista de usuarios
-                fetchUsuarios();
+                setErrorMessage('');
+                
+                // Limpiar mensaje después de 3 segundos
+                setTimeout(() => {
+                    setSuccessMessage('');
+                }, 3000);
             } else {
-                setErrorMessage(`Error al asignar horario: ${response.data.error || 'Error desconocido'}`);
+                setErrorMessage(`Error: ${response.data.error || 'Error desconocido'}`);
+                setSuccessMessage('');
             }
         } catch (err) {
             setErrorMessage(`Error de conexión: ${err.message}`);
+            setSuccessMessage('');
             console.error('Error al asignar horario:', err);
         }
-    }, [selectedUser, selectedHorario, fetchUsuarios]);
+    }, [selectedUser, selectedHorario]);
 
-    // Función para obtener los días de la semana de un horario
-    const obtenerDiasHorario = useCallback((horario) => {
-        if (!horario) return '';
-        
-        const diasSemana = [
-            { id: 'lunes', nombre: 'Lunes' },
-            { id: 'martes', nombre: 'Martes' },
-            { id: 'miercoles', nombre: 'Miércoles' },
-            { id: 'jueves', nombre: 'Jueves' },
-            { id: 'viernes', nombre: 'Viernes' },
-            { id: 'sabado', nombre: 'Sábado' },
-            { id: 'domingo', nombre: 'Domingo' }
-        ];
-        
-        const diasActivos = diasSemana
-            .filter(dia => horario[dia.id])
-            .map(dia => dia.nombre);
-            
-        return diasActivos.join(', ');
-    }, []);
-
-    // Renderizar información del horario seleccionado
-    const renderInfoHorario = useCallback(() => {
-        if (!selectedUser || !selectedUser.id_horario) {
-            return <p className="text-sm text-gray-500 dark:text-gray-400">No hay horario asignado</p>;
-        }
-
-        const horarioSeleccionado = horarios.find(h => h.id === parseInt(selectedUser.id_horario));
-        
-        if (!horarioSeleccionado) {
-            return <p className="text-sm text-gray-500 dark:text-gray-400">Cargando información del horario...</p>;
-        }
-
+    // Filtrar usuarios por término de búsqueda
+    const filteredUsuarios = usuarios.filter(usuario => {
+        const searchTermLower = searchTerm.toLowerCase();
         return (
-            <div className="bg-gray-100 dark:bg-gray-700 p-3 rounded-md shadow-inner border border-gray-200 dark:border-gray-600">
-                <p className="font-medium text-gray-800 dark:text-white">{horarioSeleccionado.nombre}</p>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Horario: {horarioSeleccionado.hora_inicio} - {horarioSeleccionado.hora_fin}
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Días: {obtenerDiasHorario(horarioSeleccionado)}
-                </p>
-                <p className="text-sm text-gray-600 dark:text-gray-300">
-                    Tiempo de pausa: {horarioSeleccionado.tiempo_pausa_permitido} minutos
-                </p>
-            </div>
+            (usuario.nombre?.toLowerCase().includes(searchTermLower) || false) ||
+            (usuario.apellidos?.toLowerCase().includes(searchTermLower) || false) ||
+            (usuario.NIF?.toLowerCase().includes(searchTermLower) || false) ||
+            (usuario.correo?.toLowerCase().includes(searchTermLower) || false)
         );
-    }, [selectedUser, horarios, obtenerDiasHorario]);
+    });
 
-    // Renderizar componente de carga
-    if (loading) {
+    // Función para renderizar información del horario seleccionado
+    const renderInfoHorario = useCallback(() => {
+        if (!selectedHorario) {
+            return (
+                <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>No hay horario asignado.</p>
+                </div>
+            );
+        }
+
+        const horario = horarios.find(h => String(h.id) === String(selectedHorario));
+        if (!horario) {
+            return (
+                <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                    <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>No se encontró información del horario.</p>
+                </div>
+            );
+        }
+
         return (
-            <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 bg-gradient-to-br from-gray-50 to-blue-50 text-gray-800'} p-6`}>
-                <div className="flex justify-center items-center h-full">
-                    <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+            <div className={`p-4 rounded-lg ${isDarkMode ? 'bg-blue-900/40' : 'bg-blue-50'} border ${isDarkMode ? 'border-blue-800' : 'border-blue-200'}`}>
+                <h5 className={`font-medium mb-2 ${isDarkMode ? 'text-blue-300' : 'text-blue-700'}`}>{horario.nombre}</h5>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div>
+                        <p className={`text-xs mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Horario de trabajo</p>
+                        <p className={`flex items-center text-sm ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                            <FaCalendarAlt className="mr-2 text-blue-500" />
+                            {horario.hora_inicio} - {horario.hora_fin}
+                        </p>
+                    </div>
+                    <div>
+                        <p className={`text-xs mb-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Días de trabajo</p>
+                        <p className={`text-sm ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                            {horario.dias_trabajo ? horario.dias_trabajo : 'Lunes a Viernes'}
+                        </p>
+                    </div>
                 </div>
             </div>
         );
-    }
+    }, [selectedHorario, horarios, isDarkMode]);
+
+    // Animaciones
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: {
+                when: "beforeChildren",
+                staggerChildren: 0.1
+            }
+        }
+    };
+    
+    const itemVariants = {
+        hidden: { y: 20, opacity: 0 },
+        visible: {
+            y: 0,
+            opacity: 1,
+            transition: { type: "spring", stiffness: 100 }
+        }
+    };
 
     return (
-        <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 bg-gradient-to-br from-gray-50 to-blue-50 text-gray-800'} p-6`}>
+        <motion.div 
+            className={`min-h-screen py-8 px-6 ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50'}`}
+            initial="hidden"
+            animate="visible"
+            variants={containerVariants}
+        >
             <div className="container mx-auto">
-                <h1 className="text-3xl font-bold mb-6 text-black dark:text-white">Administración de Usuarios</h1>
-                
-                {error && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                        {error}
+                {/* Header */}
+                <motion.div variants={itemVariants} className="mb-8">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                        <div className="flex items-center">
+                            <div className={`rounded-lg p-3 mr-4 ${isDarkMode ? 'bg-blue-900' : 'bg-blue-100'}`}>
+                                <FaUserCog className={`text-2xl ${isDarkMode ? 'text-blue-300' : 'text-blue-600'}`} />
+                            </div>
+                            <div>
+                                <h1 className={`text-3xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Administración de Usuarios</h1>
+                                <p className={`mt-1 ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>Gestiona usuarios y asigna horarios</p>
+                            </div>
+                        </div>
+                        
+                        <div className="mt-4 md:mt-0 flex items-center">
+                            <div className={`relative rounded-lg overflow-hidden shadow-sm ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <FaSearch className="h-4 w-4 text-gray-400" />
+                                </div>
+                                <input
+                                    type="text"
+                                    className={`block w-full pl-10 pr-3 py-2 border-0 ${isDarkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-900'} placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:outline-none sm:text-sm`}
+                                    placeholder="Buscar usuario..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
+                            </div>
+                            <button className={`ml-3 p-2 rounded-lg ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-700'} hover:bg-blue-500 hover:text-white transition-colors`}>
+                                <FaFilter className="h-4 w-4" />
+                            </button>
+                        </div>
                     </div>
+                </motion.div>
+
+                {/* Mensajes de error generales */}
+                {error && (
+                    <motion.div 
+                        variants={itemVariants}
+                        className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded mb-6 shadow"
+                    >
+                        <div className="flex items-center">
+                            <FaTimesCircle className="text-red-500 mr-3" />
+                            <p>{error}</p>
+                        </div>
+                    </motion.div>
                 )}
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Contenido principal */}
+                <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {/* Lista de usuarios */}
-                    <div className={`md:col-span-1 rounded-xl shadow-lg p-4 ${isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border-0'}`}>
-                        <h2 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Usuarios</h2>
-                        <div className="overflow-y-auto max-h-[70vh]">
-                            {usuarios.length > 0 ? (
-                                <ul className={`divide-y ${isDarkMode ? 'divide-gray-700' : 'divide-gray-200'}`}>
-                                    {usuarios.map((usuario) => (
+                    <div className={`md:col-span-1 rounded-xl shadow-lg overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                        <div className={`py-4 px-5 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-100'}`}>
+                            <div className="flex items-center justify-between">
+                                <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                                    <div className="flex items-center">
+                                        <FaUserAlt className={`mr-2 ${isDarkMode ? 'text-blue-400' : 'text-blue-500'}`} />
+                                        Usuarios
+                                    </div>
+                                </h2>
+                                <span className={`inline-flex items-center justify-center px-3 py-1 text-xs font-medium rounded-full ${isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'}`}>
+                                    {filteredUsuarios.length} {filteredUsuarios.length === 1 ? 'usuario' : 'usuarios'}
+                                </span>
+                            </div>
+                        </div>
+                        <div className="p-4 overflow-y-auto" style={{ maxHeight: '65vh' }}>
+                            {loading ? (
+                                <div className="flex justify-center items-center h-48">
+                                    <div className={`animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 ${isDarkMode ? 'border-blue-400' : 'border-blue-600'}`}></div>
+                                </div>
+                            ) : filteredUsuarios.length > 0 ? (
+                                <ul className="space-y-2">
+                                    {filteredUsuarios.map((usuario) => (
                                         <li 
-                                            key={usuario.NIF || usuario.id} 
-                                            className={`py-3 px-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition duration-150 ease-in-out ${selectedUser && (selectedUser.NIF === usuario.NIF || selectedUser.id === usuario.id) ? 'bg-blue-50 dark:bg-blue-900/70 border-l-4 border-blue-500' : ''}`}
+                                            key={usuario.NIF || usuario.id}
+                                            className={`p-3 cursor-pointer rounded-lg transition duration-200 ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'} ${selectedUser && (selectedUser.NIF === usuario.NIF || selectedUser.id === usuario.id) ? `${isDarkMode ? 'bg-blue-900/30 border-l-4 border-blue-500' : 'bg-blue-50 border-l-4 border-blue-500'}` : ''}`}
                                             onClick={() => handleUserSelect(usuario)}
                                         >
-                                            <div className="flex items-center justify-between w-full">
+                                            <div className="flex items-center">
                                                 <div className="flex-shrink-0">
-                                                    {usuario.avatar ? (
+                                                    {usuario.id_avatar ? (
                                                         <img 
-                                                            src={usuario.avatar.ruta} 
+                                                            src={`http://localhost/ImpulsaTelecom/frontend/src/img/avatares/avatar-${usuario.id_avatar}.png`} 
                                                             alt={`Avatar de ${usuario.nombre}`} 
-                                                            className="h-10 w-10 rounded-full shadow-sm"
-                                                            style={{ backgroundColor: usuario.avatar.color_fondo }}
+                                                            className="h-12 w-12 rounded-full object-cover border-2 border-gray-200"
+                                                            onError={(e) => {
+                                                                e.target.onerror = null;
+                                                                e.target.src = 'http://localhost/ImpulsaTelecom/frontend/src/img/avatares/user-profile-icon.png';
+                                                            }}
                                                         />
                                                     ) : (
-                                                        <div className="h-10 w-10 rounded-full bg-gray-300 flex items-center justify-center text-gray-600 shadow-sm">
-                                                            {usuario.nombre.charAt(0).toUpperCase()}
-                                                        </div>
+                                                        <InitialsAvatar 
+                                                            nombre={usuario.nombre || usuario.NIF || 'Usuario'} 
+                                                            size="md" 
+                                                        />
                                                     )}
                                                 </div>
-                                                <div className="ml-3">
-                                                    <p className="text-sm font-medium text-gray-800 dark:text-white">{usuario.nombre} {usuario.apellidos}</p>
-                                                    <p className="text-xs text-gray-600 dark:text-gray-300">{usuario.correo}</p>
-                                                    <p className="text-xs text-gray-600 dark:text-gray-300">
-                                                        {usuario.tipo_Usu || usuario.tipo_usuario}
-                                                    </p>
-                                                </div>
-                                                <div className="ml-auto">
-                                                    {usuario.id_horario && usuario.id_horario !== 'NULL' && usuario.id_horario !== '0' && usuario.id_horario !== 0 ? (
-                                                        <div className="bg-blue-600 text-white text-xs px-2 py-1 rounded shadow-sm">
-                                                            {(() => {
-                                                                const horario = horarios.find(h => String(h.id) === String(usuario.id_horario));
-                                                                return horario ? horario.nombre : `Horario ${usuario.id_horario}`;
-                                                            })()}
-                                                        </div>
-                                                    ) : (
-                                                        <span className="text-gray-400 text-xs">Sin horario</span>
-                                                    )}
+                                                <div className="ml-4 flex-1">
+                                                    <div className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                        {usuario.nombre} {usuario.apellidos}
+                                                    </div>
+                                                    <div className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                                        {usuario.correo}
+                                                    </div>
+                                                    <div className="flex items-center mt-1">
+                                                        <span className={`text-xs px-2 py-0.5 rounded-full ${isDarkMode ? 'bg-gray-700 text-gray-300' : 'bg-gray-200 text-gray-700'}`}>
+                                                            {usuario.tipo_Usu || usuario.tipo_usuario}
+                                                        </span>
+                                                        {usuario.id_horario && usuario.id_horario !== 'NULL' && usuario.id_horario !== '0' && usuario.id_horario !== 0 && (
+                                                            <span className={`text-xs px-2 py-0.5 rounded-full ml-2 ${isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800'}`}>
+                                                                <FaUserClock className="inline mr-1 text-xs" />
+                                                                Con horario
+                                                            </span>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </li>
                                     ))}
                                 </ul>
                             ) : (
-                                <p className="text-gray-500 dark:text-gray-400">No hay usuarios disponibles</p>
+                                <div className={`text-center py-8 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    {searchTerm ? 'No se encontraron usuarios con ese criterio de búsqueda' : 'No hay usuarios disponibles'}
+                                </div>
                             )}
                         </div>
                     </div>
@@ -260,86 +350,162 @@ const AdminUsuarios = () => {
                     {/* Detalles del usuario y asignación de horario */}
                     <div className="md:col-span-2">
                         {selectedUser ? (
-                            <div className={`rounded-xl shadow-lg p-6 ${isDarkMode ? 'bg-gray-800 border border-gray-700' : 'bg-white border-0'}`}>
-                                <h2 className={`text-2xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>{selectedUser.nombre} {selectedUser.apellidos}</h2>
-                                
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                                    <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">NIF</p>
-                                        <p className="font-medium text-gray-800 dark:text-white">{selectedUser.NIF || selectedUser.id}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">Correo</p>
-                                        <p className="font-medium text-gray-800 dark:text-white">{selectedUser.correo}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">Tipo de Usuario</p>
-                                        <p className="font-medium text-gray-800 dark:text-white">{selectedUser.tipo_Usu || selectedUser.tipo_usuario}</p>
-                                    </div>
-                                    <div>
-                                        <p className="text-sm text-gray-500 dark:text-gray-400">Departamento</p>
-                                        <p className="font-medium text-gray-800 dark:text-white">{selectedUser.dpto || 'No asignado'}</p>
+                            <div className={`rounded-xl shadow-lg overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                                <div className={`py-4 px-6 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-100'}`}>
+                                    <div className="flex items-center">
+                                        <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                                            Detalles del Usuario
+                                        </h2>
                                     </div>
                                 </div>
-
-                                <div className={`border-t pt-4 mt-4 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                                    <h3 className={`text-lg font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>Asignar Horario</h3>
+                                
+                                <div className="p-6">
+                                    <div className="flex items-center mb-6">
+                                        <div className="mr-4">
+                                            {selectedUser.id_avatar ? (
+                                                <img 
+                                                    src={`http://localhost/ImpulsaTelecom/frontend/src/img/avatares/avatar-${selectedUser.id_avatar}.png`} 
+                                                    alt={`Avatar de ${selectedUser.nombre}`} 
+                                                    className="h-20 w-20 rounded-full object-cover border-4 border-gray-200"
+                                                    onError={(e) => {
+                                                        e.target.onerror = null;
+                                                        e.target.src = 'http://localhost/ImpulsaTelecom/frontend/src/img/avatares/user-profile-icon.png';
+                                                    }}
+                                                />
+                                            ) : (
+                                                <InitialsAvatar 
+                                                    nombre={selectedUser.nombre || 'Usuario'} 
+                                                    size="lg" 
+                                                />
+                                            )}
+                                        </div>
+                                        <div>
+                                            <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                                                {selectedUser.nombre} {selectedUser.apellidos}
+                                            </h3>
+                                            <p className={`text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+                                                {selectedUser.tipo_Usu || selectedUser.tipo_usuario}
+                                            </p>
+                                        </div>
+                                    </div>
                                     
-                                    {successMessage && (
-                                        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                                            {successMessage}
+                                    <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
+                                        <div className="flex items-start">
+                                            <FaIdCard className={`mt-1 mr-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                                            <div>
+                                                <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>NIF</p>
+                                                <p className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                                                    {selectedUser.NIF || selectedUser.id}
+                                                </p>
+                                            </div>
                                         </div>
-                                    )}
-                                    
-                                    {errorMessage && (
-                                        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                                            {errorMessage}
+                                        
+                                        <div className="flex items-start">
+                                            <FaEnvelope className={`mt-1 mr-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                                            <div>
+                                                <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Correo</p>
+                                                <p className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                                                    {selectedUser.correo}
+                                                </p>
+                                            </div>
                                         </div>
-                                    )}
-
-                                    <div className="flex flex-col md:flex-row gap-4 items-end">
-                                        <div className="flex-grow">
-                                            <label htmlFor="horario" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                                                Horario
-                                            </label>
-                                            <select
-                                                id="horario"
-                                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white shadow-sm"
-                                                value={selectedHorario}
-                                                onChange={handleHorarioChange}
-                                            >
-                                                <option value="">Sin horario asignado</option>
-                                                {horarios.map((horario) => (
-                                                    <option key={`horario-${horario.id}`} value={horario.id}>
-                                                        {horario.nombre} ({horario.hora_inicio} - {horario.hora_fin})
-                                                    </option>
-                                                ))}
-                                            </select>
+                                        
+                                        <div className="flex items-start">
+                                            <FaUserAlt className={`mt-1 mr-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                                            <div>
+                                                <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Tipo de Usuario</p>
+                                                <p className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                                                    {selectedUser.tipo_Usu || selectedUser.tipo_usuario}
+                                                </p>
+                                            </div>
                                         </div>
-                                        <button
-                                            type="button"
-                                            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out"
-                                            onClick={handleAsignarHorario}
-                                        >
-                                            Asignar Horario
-                                        </button>
+                                        
+                                        <div className="flex items-start">
+                                            <FaBuilding className={`mt-1 mr-3 ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`} />
+                                            <div>
+                                                <p className={`text-xs ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>Departamento</p>
+                                                <p className={`font-medium ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                                                    {selectedUser.dpto || 'No asignado'}
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    <div className="mt-4">
-                                        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Información del Horario</h4>
-                                        {renderInfoHorario()}
+                                    <div className={`rounded-lg p-6 ${isDarkMode ? 'bg-blue-900/20' : 'bg-blue-50'} border ${isDarkMode ? 'border-blue-900' : 'border-blue-100'}`}>
+                                        <div className="flex items-center mb-4">
+                                            <FaUserClock className={`mr-2 ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`} />
+                                            <h3 className={`text-lg font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                                                Gestión de Horario
+                                            </h3>
+                                        </div>
+                                        
+                                        {successMessage && (
+                                            <div className="mb-4 p-3 rounded-lg bg-green-100 border border-green-200 text-green-800 flex items-center">
+                                                <FaCheckCircle className="text-green-500 mr-2" />
+                                                {successMessage}
+                                            </div>
+                                        )}
+                                        
+                                        {errorMessage && (
+                                            <div className="mb-4 p-3 rounded-lg bg-red-100 border border-red-200 text-red-800 flex items-center">
+                                                <FaTimesCircle className="text-red-500 mr-2" />
+                                                {errorMessage}
+                                            </div>
+                                        )}
+
+                                        <div className="mb-4">
+                                            <label className={`block text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                Seleccionar Horario
+                                            </label>
+                                            <div className="flex flex-col sm:flex-row gap-3">
+                                                <select
+                                                    className={`flex-grow rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                    value={selectedHorario}
+                                                    onChange={handleHorarioChange}
+                                                >
+                                                    <option value="">Sin horario asignado</option>
+                                                    {horarios.map((horario) => (
+                                                        <option key={`horario-${horario.id}`} value={horario.id}>
+                                                            {horario.nombre} ({horario.hora_inicio} - {horario.hora_fin})
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                                <button
+                                                    className={`px-4 py-2 rounded-lg font-medium text-white ${selectedUser.id_horario === selectedHorario ? 'bg-gray-500' : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'} shadow-sm transition-all duration-200`}
+                                                    onClick={handleAsignarHorario}
+                                                    disabled={selectedUser.id_horario === selectedHorario}
+                                                >
+                                                    {selectedUser.id_horario === selectedHorario ? 'Ya Asignado' : 'Asignar Horario'}
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div className="mt-4">
+                                            <h4 className={`text-sm font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                Información del Horario
+                                            </h4>
+                                            {renderInfoHorario()}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         ) : (
-                            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 flex items-center justify-center h-full border border-gray-200 dark:border-gray-700">
-                                <p className="text-gray-500 dark:text-gray-400">Seleccione un usuario para ver sus detalles y asignar horario</p>
+                            <div className={`rounded-xl shadow-lg overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-white'} h-full flex flex-col items-center justify-center p-10`}>
+                                <div className={`w-20 h-20 rounded-full flex items-center justify-center mb-4 ${isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                                    <FaUserClock className={`text-4xl ${isDarkMode ? 'text-gray-500' : 'text-gray-400'}`} />
+                                </div>
+                                <h3 className={`text-xl font-medium mb-2 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    Seleccione un Usuario
+                                </h3>
+                                <p className={`text-center max-w-md ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                    Seleccione un usuario de la lista para ver sus detalles y asignar un horario de trabajo
+                                </p>
                             </div>
                         )}
                     </div>
-                </div>
+                </motion.div>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

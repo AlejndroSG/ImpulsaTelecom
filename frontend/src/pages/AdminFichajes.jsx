@@ -3,7 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
-import { FaCalendarAlt, FaFilter, FaUserClock, FaBuilding, FaSearch, FaClipboardList, FaChartPie } from 'react-icons/fa';
+import { FaCalendarAlt, FaFilter, FaUserClock, FaBuilding, FaSearch, FaClipboardList, FaChartPie, FaEdit, FaTrash, FaCheckCircle, FaTimesCircle, FaUser } from 'react-icons/fa';
+import InitialsAvatar from '../components/InitialsAvatar';
 
 // URL base para las peticiones API
 const API_URL = 'http://localhost/ImpulsaTelecom/backend/api';
@@ -20,6 +21,20 @@ const AdminFichajes = () => {
     const [activeTab, setActiveTab] = useState('listado');
     const [showFilters, setShowFilters] = useState(false);
     const [departamentos, setDepartamentos] = useState([]);
+    
+    // Estados para modales de edición y eliminación
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [selectedFichaje, setSelectedFichaje] = useState(null);
+    const [successMessage, setSuccessMessage] = useState('');
+    
+    // Estado para formulario de edición
+    const [editForm, setEditForm] = useState({
+        fecha: '',
+        horaInicio: '',
+        horaFin: '',
+        estado: ''
+    });
     
     // Estados para filtros
     const [filtros, setFiltros] = useState({
@@ -187,6 +202,99 @@ const AdminFichajes = () => {
                 return 'bg-blue-100 text-blue-800 border-blue-300';
             default:
                 return 'bg-gray-100 text-gray-800 border-gray-300';
+        }
+    };
+    
+    // Función para abrir el modal de edición
+    const handleOpenEdit = (fichaje) => {
+        setSelectedFichaje(fichaje);
+        setEditForm({
+            fecha: fichaje.fecha,
+            horaInicio: fichaje.horaInicio,
+            horaFin: fichaje.horaFin,
+            estado: fichaje.estado
+        });
+        setShowEditModal(true);
+    };
+    
+    // Función para abrir el modal de confirmación de eliminación
+    const handleOpenDelete = (fichaje) => {
+        setSelectedFichaje(fichaje);
+        setShowDeleteModal(true);
+    };
+    
+    // Función para manejar cambios en el formulario de edición
+    const handleEditFormChange = (e) => {
+        const { name, value } = e.target;
+        setEditForm(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+    
+    // Función para guardar los cambios de edición
+    const handleGuardarEdicion = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.post(`${API_URL}/admin_fichajes.php`, {
+                action: 'updateFichaje',
+                idRegistro: selectedFichaje.idRegistro,
+                fecha: editForm.fecha,
+                horaInicio: editForm.horaInicio,
+                horaFin: editForm.horaFin,
+                estado: editForm.estado
+            }, {
+                withCredentials: true
+            });
+            
+            if (response.data.success) {
+                // Actualizar la lista de fichajes
+                const updatedFichajes = fichajes.map(f => 
+                    f.idRegistro === selectedFichaje.idRegistro 
+                        ? { ...f, ...editForm } 
+                        : f
+                );
+                setFichajes(updatedFichajes);
+                setShowEditModal(false);
+                setSuccessMessage('Fichaje actualizado correctamente.');
+                setTimeout(() => setSuccessMessage(''), 3000);
+            } else {
+                setError('Error al actualizar el fichaje: ' + (response.data.error || 'Error desconocido'));
+            }
+        } catch (err) {
+            console.error('Error al actualizar el fichaje:', err);
+            setError(`Error al actualizar: ${err.message || 'Error desconocido'}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
+    // Función para eliminar un fichaje
+    const handleEliminarFichaje = async () => {
+        try {
+            setLoading(true);
+            const response = await axios.post(`${API_URL}/admin_fichajes.php`, {
+                action: 'deleteFichaje',
+                idRegistro: selectedFichaje.idRegistro
+            }, {
+                withCredentials: true
+            });
+            
+            if (response.data.success) {
+                // Eliminar el fichaje de la lista
+                const updatedFichajes = fichajes.filter(f => f.idRegistro !== selectedFichaje.idRegistro);
+                setFichajes(updatedFichajes);
+                setShowDeleteModal(false);
+                setSuccessMessage('Fichaje eliminado correctamente.');
+                setTimeout(() => setSuccessMessage(''), 3000);
+            } else {
+                setError('Error al eliminar el fichaje: ' + (response.data.error || 'Error desconocido'));
+            }
+        } catch (err) {
+            console.error('Error al eliminar el fichaje:', err);
+            setError(`Error al eliminar: ${err.message || 'Error desconocido'}`);
+        } finally {
+            setLoading(false);
         }
     };
     
@@ -498,17 +606,42 @@ const AdminFichajes = () => {
                                                     <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                                                         Estado
                                                     </th>
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                        Acciones
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody className={`divide-y divide-gray-200 dark:divide-gray-700 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
                                                 {fichajes.map((fichaje) => (
                                                     <tr key={fichaje.idRegistro} className={isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}>
                                                         <td className="px-6 py-4 whitespace-nowrap">
-                                                            <div className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
-                                                                {fichaje.nombreCompleto || 'Sin nombre'}
-                                                            </div>
-                                                            <div className="text-sm text-gray-500 dark:text-gray-400">
-                                                                {fichaje.NIF}
+                                                            <div className="flex items-center">
+                                                                <div className="flex-shrink-0">
+                                                                    {fichaje.avatar_ruta ? (
+                                                                        <img 
+                                                                            src={`http://localhost/ImpulsaTelecom/frontend${fichaje.avatar_ruta}`} 
+                                                                            alt={`Avatar de ${fichaje.nombreCompleto || 'Usuario'}`}
+                                                                            className="h-10 w-10 rounded-full object-cover border-2 border-gray-200"
+                                                                            onError={(e) => {
+                                                                                e.target.onerror = null;
+                                                                                e.target.src = 'http://localhost/ImpulsaTelecom/frontend/src/img/avatares/user-profile-icon.png';
+                                                                            }}
+                                                                        />
+                                                                    ) : (
+                                                                        <InitialsAvatar 
+                                                                            nombre={fichaje.nombreCompleto || fichaje.NIF || 'Usuario'} 
+                                                                            size="md" 
+                                                                        />
+                                                                    )}
+                                                                </div>
+                                                                <div className="ml-3">
+                                                                    <div className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                                        {fichaje.nombreCompleto || 'Sin nombre'}
+                                                                    </div>
+                                                                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                                                                        {fichaje.NIF}
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
@@ -548,6 +681,24 @@ const AdminFichajes = () => {
                                                                 fichaje.estado === 'finalizado' ? 'Finalizado' : 'Pendiente'}
                                                             </span>
                                                         </td>
+                                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                            <div className="flex space-x-2">
+                                                                <button
+                                                                    onClick={() => handleOpenEdit(fichaje)}
+                                                                    className={`text-blue-600 hover:text-blue-900 ${isDarkMode ? 'hover:text-blue-400' : ''}`}
+                                                                    title="Editar fichaje"
+                                                                >
+                                                                    <FaEdit />
+                                                                </button>
+                                                                <button
+                                                                    onClick={() => handleOpenDelete(fichaje)}
+                                                                    className={`text-red-600 hover:text-red-900 ${isDarkMode ? 'hover:text-red-400' : ''}`}
+                                                                    title="Eliminar fichaje"
+                                                                >
+                                                                    <FaTrash />
+                                                                </button>
+                                                            </div>
+                                                        </td>
                                                     </tr>
                                                 ))}
                                             </tbody>
@@ -573,6 +724,158 @@ const AdminFichajes = () => {
                     </div>
                 )}
             </div>
+            
+            {/* Modal de edición */}
+            {showEditModal && selectedFichaje && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className={`w-full max-w-lg rounded-lg shadow-xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} overflow-hidden`}>
+                        <div className={`p-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                            <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                                Editar Fichaje
+                            </h2>
+                        </div>
+                        <div className="p-6">
+                            <div className="grid grid-cols-1 gap-4">
+                                <div>
+                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                        Fecha
+                                    </label>
+                                    <input
+                                        type="date"
+                                        name="fecha"
+                                        value={editForm.fecha}
+                                        onChange={handleEditFormChange}
+                                        className={`block w-full p-2 rounded-md shadow-sm border ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                    />
+                                </div>
+                                <div>
+                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                        Hora de entrada
+                                    </label>
+                                    <input
+                                        type="time"
+                                        name="horaInicio"
+                                        value={editForm.horaInicio}
+                                        onChange={handleEditFormChange}
+                                        className={`block w-full p-2 rounded-md shadow-sm border ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                    />
+                                </div>
+                                <div>
+                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                        Hora de salida
+                                    </label>
+                                    <input
+                                        type="time"
+                                        name="horaFin"
+                                        value={editForm.horaFin}
+                                        onChange={handleEditFormChange}
+                                        className={`block w-full p-2 rounded-md shadow-sm border ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                    />
+                                </div>
+                                <div>
+                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                        Estado
+                                    </label>
+                                    <select
+                                        name="estado"
+                                        value={editForm.estado}
+                                        onChange={handleEditFormChange}
+                                        className={`block w-full p-2 rounded-md shadow-sm border ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                    >
+                                        <option value="trabajando">Trabajando</option>
+                                        <option value="pausado">En pausa</option>
+                                        <option value="finalizado">Finalizado</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div className={`p-4 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} flex justify-end space-x-3`}>
+                            <button
+                                onClick={() => setShowEditModal(false)}
+                                className={`px-4 py-2 rounded-lg ${isDarkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={handleGuardarEdicion}
+                                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors shadow-sm"
+                                disabled={loading}
+                            >
+                                {loading ? 'Guardando...' : 'Guardar cambios'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Modal de confirmación para eliminar */}
+            {showDeleteModal && selectedFichaje && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                    <div className={`w-full max-w-md rounded-lg shadow-xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} overflow-hidden`}>
+                        <div className={`p-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+                            <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                                Confirmar eliminación
+                            </h2>
+                        </div>
+                        <div className="p-6">
+                            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
+                                ¿Estás seguro que deseas eliminar este fichaje?
+                            </p>
+                            <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                                <div className="flex">
+                                    <div className="flex-shrink-0">
+                                        <svg className="h-5 w-5 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                                        </svg>
+                                    </div>
+                                    <div className="ml-3">
+                                        <p className="text-sm text-yellow-700">
+                                            Esta acción no se puede deshacer y eliminará permanentemente el registro del fichaje.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="mt-2">
+                                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    Empleado: <span className="font-semibold">{selectedFichaje.nombreCompleto}</span>
+                                </p>
+                                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    Fecha: <span className="font-semibold">{formatDate(selectedFichaje.fecha)}</span>
+                                </p>
+                                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                    Horario: <span className="font-semibold">{formatTime(selectedFichaje.horaInicio)} - {formatTime(selectedFichaje.horaFin)}</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div className={`p-4 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} flex justify-end space-x-3`}>
+                            <button
+                                onClick={() => setShowDeleteModal(false)}
+                                className={`px-4 py-2 rounded-lg ${isDarkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={handleEliminarFichaje}
+                                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors shadow-sm flex items-center"
+                                disabled={loading}
+                            >
+                                <FaTrash className="mr-1" />
+                                {loading ? 'Eliminando...' : 'Confirmar eliminación'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Modal de éxito */}
+            {successMessage && (
+                <div className="fixed bottom-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-lg z-50 animate-fadeIn">
+                    <div className="flex items-center">
+                        <FaCheckCircle className="text-green-500 mr-2" />
+                        <p>{successMessage}</p>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

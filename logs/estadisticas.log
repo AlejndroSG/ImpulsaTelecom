@@ -6189,3 +6189,47 @@
 2025-05-18 13:52:02 - Rango de fechas: 2025-05-05 a 2025-05-11
 2025-05-18 13:52:02 - Número de registros encontrados: 0
 2025-05-18 13:52:02 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-19 00:15:54 - Obteniendo estadísticas para usuario: 12345678A, período: semana
+2025-05-19 00:15:54 - Rango de fechas: 2025-05-12 a 2025-05-18
+2025-05-19 00:15:54 - Número de registros encontrados: 0
+2025-05-19 00:15:54 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-19 00:15:54 - Obteniendo estadísticas para usuario: 12345678A, período: semana
+2025-05-19 00:15:54 - Rango de fechas: 2025-05-12 a 2025-05-18
+2025-05-19 00:15:54 - Número de registros encontrados: 0
+2025-05-19 00:15:54 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-19 00:16:26 - Obteniendo estadísticas para usuario: 12345678A, período: semana
+2025-05-19 00:16:26 - Rango de fechas: 2025-05-12 a 2025-05-18
+2025-05-19 00:16:26 - Número de registros encontrados: 0
+2025-05-19 00:16:26 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-19 00:16:26 - Obteniendo estadísticas para usuario: 12345678A, período: semana
+2025-05-19 00:16:26 - Rango de fechas: 2025-05-12 a 2025-05-18
+2025-05-19 00:16:26 - Número de registros encontrados: 0
+2025-05-19 00:16:26 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-19 00:16:28 - Obteniendo estadísticas para usuario: 12345678A, período: semana
+2025-05-19 00:16:28 - Rango de fechas: 2025-05-12 a 2025-05-18
+2025-05-19 00:16:28 - Número de registros encontrados: 0
+2025-05-19 00:16:28 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-19 00:16:28 - Obteniendo estadísticas para usuario: 12345678A, período: semana
+2025-05-19 00:16:28 - Rango de fechas: 2025-05-12 a 2025-05-18
+2025-05-19 00:16:28 - Número de registros encontrados: 0
+2025-05-19 00:16:28 - Resumen de estadísticas: totalHoras=0, totalDias=0
+2025-05-19 01:04:18 - Obteniendo estadísticas para usuario: 56789012C, período: semana
+2025-05-19 01:04:18 - Rango de fechas: 2025-05-12 a 2025-05-18
+2025-05-19 01:04:18 - Número de registros encontrados: 4
+2025-05-19 01:04:18 - Procesando registro: fecha=2025-05-12, inicio=11:56:56, fin=
+2025-05-19 01:04:18 - Procesando registro: fecha=2025-05-12, inicio=11:58:37, fin=12:01:24
+2025-05-19 01:04:18 - Horas trabajadas en este registro: 0.046388888888889
+2025-05-19 01:04:18 - Procesando registro: fecha=2025-05-12, inicio=12:01:25, fin=12:01:29
+2025-05-19 01:04:18 - Horas trabajadas en este registro: 0.0011111111111111
+2025-05-19 01:04:18 - Procesando registro: fecha=2025-05-12, inicio=12:01:33, fin=
+2025-05-19 01:04:18 - Resumen de estadísticas: totalHoras=0.0475, totalDias=1
+2025-05-19 01:04:19 - Obteniendo estadísticas para usuario: 56789012C, período: semana
+2025-05-19 01:04:19 - Rango de fechas: 2025-05-12 a 2025-05-18
+2025-05-19 01:04:19 - Número de registros encontrados: 4
+2025-05-19 01:04:19 - Procesando registro: fecha=2025-05-12, inicio=11:56:56, fin=
+2025-05-19 01:04:19 - Procesando registro: fecha=2025-05-12, inicio=11:58:37, fin=12:01:24
+2025-05-19 01:04:19 - Horas trabajadas en este registro: 0.046388888888889
+2025-05-19 01:04:19 - Procesando registro: fecha=2025-05-12, inicio=12:01:25, fin=12:01:29
+2025-05-19 01:04:19 - Horas trabajadas en este registro: 0.0011111111111111
+2025-05-19 01:04:19 - Procesando registro: fecha=2025-05-12, inicio=12:01:33, fin=
+2025-05-19 01:04:19 - Resumen de estadísticas: totalHoras=0.0475, totalDias=1

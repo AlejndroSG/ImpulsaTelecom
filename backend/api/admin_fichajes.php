@@ -194,10 +194,77 @@ switch ($action) {
         ]);
         break;
     
+    case 'updateFichaje':
+        // Verificar permisos de administrador
+        verificarAdmin();
+        
+        // Verificar datos necesarios
+        if (!isset($request['idRegistro']) || !is_numeric($request['idRegistro'])) {
+            echo json_encode([
+                'success' => false,
+                'error' => 'ID de fichaje no válido'
+            ]);
+            break;
+        }
+        
+        // Preparar datos para actualización
+        $fichaje_id = intval($request['idRegistro']);
+        $datos = [];
+        
+        // Recoger los campos a actualizar
+        if (isset($request['fecha'])) {
+            $datos['fecha'] = $request['fecha'];
+        }
+        
+        if (isset($request['horaInicio'])) {
+            $datos['horaInicio'] = $request['horaInicio'];
+        }
+        
+        if (isset($request['horaFin'])) {
+            $datos['horaFin'] = $request['horaFin'];
+        }
+        
+        if (isset($request['estado'])) {
+            $datos['estado'] = $request['estado'];
+        }
+        
+        // Registrar intento de edición
+        error_log('Intentando editar fichaje ID: ' . $fichaje_id . ' con datos: ' . json_encode($datos));
+        
+        // Actualizar el fichaje
+        $result = $fichajeModel->actualizarFichaje($fichaje_id, $datos);
+        
+        echo json_encode($result);
+        break;
+    
+    case 'deleteFichaje':
+        // Verificar permisos de administrador
+        verificarAdmin();
+        
+        // Verificar datos necesarios
+        if (!isset($request['idRegistro']) || !is_numeric($request['idRegistro'])) {
+            echo json_encode([
+                'success' => false,
+                'error' => 'ID de fichaje no válido'
+            ]);
+            break;
+        }
+        
+        $fichaje_id = intval($request['idRegistro']);
+        
+        // Registrar intento de eliminación
+        error_log('Intentando eliminar fichaje ID: ' . $fichaje_id);
+        
+        // Eliminar el fichaje
+        $result = $fichajeModel->eliminarFichaje($fichaje_id);
+        
+        echo json_encode($result);
+        break;
+        
     default:
         echo json_encode([
             'success' => false,
-            'error' => 'Acciu00f3n no vu00e1lida o no especificada'
+            'error' => 'Acción no válida o no especificada'
         ]);
         break;
 }

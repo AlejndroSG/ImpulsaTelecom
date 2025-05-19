@@ -234,13 +234,11 @@ class Fichaje {
                 $types .= "s";
             }
             
-            // Filtro por departamento - desactivado hasta confirmar el nombre correcto de la columna
+            // Filtro por departamento
             if (!empty($filtros['departamento'])) {
-                // Comentado hasta resolver el problema de la columna
-                // $condiciones[] = "u.departamento = ?";
-                // $params[] = $filtros['departamento'];
-                // $types .= "s";
-                error_log("Filtro de departamento desactivado temporalmente: " . $filtros['departamento']);
+                $condiciones[] = "u.departamento = ?";
+                $params[] = $filtros['departamento'];
+                $types .= "s";
             }
             
             // Filtro por estado
@@ -273,26 +271,24 @@ class Fichaje {
                           
             // Construir consulta principal
             $query = "SELECT r.idRegistro, r.NIF, CONCAT(u.nombre, ' ', u.apellidos) as nombreCompleto,
-                   u.tipo_Usu as departamento, r.fecha, r.horaInicio, r.horaFin, r.horaPausa, r.horaReanudacion,
-                   r.tiempoPausa, r.latitud, r.longitud, r.localizacion, r.estado, u.id_avatar,
-                   a.ruta as avatar_ruta,
+                   u.departamento, r.fecha, r.horaInicio, r.horaFin, r.horaPausa, r.horaReanudacion,
+                   r.tiempoPausa, r.latitud, r.longitud, r.localizacion, r.estado,
                    CASE
-                        WHEN r.horaFin IS NOT NULL THEN 'finalizado'
-                        WHEN r.horaPausa IS NOT NULL AND r.horaReanudacion IS NULL THEN 'pausado'
-                        WHEN r.horaInicio IS NOT NULL THEN 'trabajando'
-                        ELSE 'pendiente'
-                    END as estado,
-                    CASE 
-                        WHEN r.horaInicio IS NOT NULL AND r.horaFin IS NOT NULL THEN 
-                            TIME_TO_SEC(TIMEDIFF(r.horaFin, r.horaInicio)) - IFNULL(r.tiempoPausa, 0)
-                        WHEN r.horaInicio IS NOT NULL THEN 
-                            TIME_TO_SEC(TIMEDIFF(NOW(), r.horaInicio)) - IFNULL(r.tiempoPausa, 0)
-                        ELSE 0
-                    END as tiempoTrabajado
-             FROM {$this->table_name} r
-             LEFT JOIN usuarios u ON r.NIF = u.NIF
-             LEFT JOIN avatares a ON u.id_avatar = a.id" . $where . "
-             ORDER BY r.fecha DESC, r.idRegistro DESC" . $limit;
+                       WHEN r.horaFin IS NOT NULL THEN 'finalizado'
+                       WHEN r.horaPausa IS NOT NULL AND r.horaReanudacion IS NULL THEN 'pausado'
+                       WHEN r.horaInicio IS NOT NULL THEN 'trabajando'
+                       ELSE 'pendiente'
+                   END as estado,
+                   CASE 
+                       WHEN r.horaInicio IS NOT NULL AND r.horaFin IS NOT NULL THEN 
+                           TIME_TO_SEC(TIMEDIFF(r.horaFin, r.horaInicio)) - IFNULL(r.tiempoPausa, 0)
+                       WHEN r.horaInicio IS NOT NULL THEN 
+                           TIME_TO_SEC(TIMEDIFF(NOW(), r.horaInicio)) - IFNULL(r.tiempoPausa, 0)
+                       ELSE 0
+                   END as tiempoTrabajado
+            FROM {$this->table_name} r
+            LEFT JOIN usuarios u ON r.NIF = u.NIF" . $where . "
+            ORDER BY r.fecha DESC, r.idRegistro DESC" . $limit;
             
             // Preparar consulta para contar registros
             $stmt_count = $this->conn->prepare($query_count);
