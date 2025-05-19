@@ -226,6 +226,23 @@ const Sidebar = ({ expanded }) => {
               </svg>
               <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Fichajes</span>
             </NavLink>
+
+            <NavLink 
+              to="/admin/reportes" 
+              className={({isActive}) => 
+                `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                    ? 'bg-[#78bd00] text-white' 
+                    : isDarkMode 
+                      ? 'hover:bg-gray-800 text-gray-300' 
+                      : 'hover:bg-gray-200 text-gray-700'
+                } ${expanded ? 'mx-2' : 'justify-center'}`
+              }
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Informes PDF</span>
+            </NavLink>
           </>
         )}
         
