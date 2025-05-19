@@ -169,7 +169,117 @@ class Fichaje {
     
     // Obtener historial de fichajes de un usuario
     public function getHistorialByUsuario($id_usuario, $limite = null, $dias = null) {
-        // Implementación original
+        try {
+            // Base de la consulta
+            $query = "SELECT idRegistro, fecha, horaInicio, horaFin, horaPausa, horaReanudacion, tiempoPausa, 
+                      latitud, longitud, localizacion, estado
+                      FROM {$this->table_name} 
+                      WHERE NIF = ?";
+            
+            // Parámetros y sus tipos para bind_param
+            $params = [$id_usuario];
+            $types = "s";
+            
+            // Filtrar por fecha si se especifica un número de días
+            if ($dias !== null && $dias > 0) {
+                $fecha_limite = date('Y-m-d', strtotime("-{$dias} days"));
+                $query .= " AND fecha >= ?";
+                $params[] = $fecha_limite;
+                $types .= "s";
+            }
+            
+            // Ordenar por fecha descendente (más reciente primero)
+            $query .= " ORDER BY fecha DESC, horaInicio DESC";
+            
+            // Limitar resultados si se especifica
+            if ($limite !== null && $limite > 0) {
+                $query .= " LIMIT ?";
+                $params[] = $limite;
+                $types .= "i";
+            }
+            
+            // Preparar y ejecutar la consulta
+            $stmt = $this->conn->prepare($query);
+            
+            if ($stmt === false) {
+                throw new Exception("Error en la preparación de la consulta: " . $this->conn->error);
+            }
+            
+            // Vincular parámetros dinámicamente
+            if (!empty($params)) {
+                $stmt->bind_param($types, ...$params);
+            }
+            
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            // Procesar resultados
+            $registros = [];
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    // Determinar estado si no está definido
+                    if (empty($row['estado'])) {
+                        if (!empty($row['horaFin'])) {
+                            $row['estado'] = 'finalizado';
+                        } elseif (!empty($row['horaPausa']) && empty($row['horaReanudacion'])) {
+                            $row['estado'] = 'pausado';
+                        } else {
+                            $row['estado'] = 'trabajando';
+                        }
+                    }
+                    
+                    // Formatear fechas y horas para mejor legibilidad
+                    $row['fechaHoraEntrada'] = $row['fecha'] . ' ' . $row['horaInicio'];
+                    if (!empty($row['horaFin'])) {
+                        $row['fechaHoraSalida'] = $row['fecha'] . ' ' . $row['horaFin'];
+                    } else {
+                        $row['fechaHoraSalida'] = null;
+                    }
+                    
+                    // Obtener pausas asociadas
+                    $pausas = [];
+                    if (!empty($row['horaPausa'])) {
+                        $pausa = [
+                            'inicio' => $row['horaPausa'],
+                            'fin' => $row['horaReanudacion'] ?? null
+                        ];
+                        $pausas[] = $pausa;
+                    }
+                    $row['pausas'] = $pausas;
+                    
+                    $registros[] = $row;
+                }
+            }
+            
+            // Si no hay registros y el usuario existe, devolver array vacío con éxito
+            if (empty($registros)) {
+                // Verificar que el usuario existe
+                $query_user = "SELECT NIF FROM usuarios WHERE NIF = ? LIMIT 1";
+                $stmt_user = $this->conn->prepare($query_user);
+                $stmt_user->bind_param("s", $id_usuario);
+                $stmt_user->execute();
+                $result_user = $stmt_user->get_result();
+                
+                if ($result_user->num_rows === 0) {
+                    return [
+                        'success' => false,
+                        'error' => 'Usuario no encontrado'
+                    ];
+                }
+            }
+            
+            return [
+                'success' => true,
+                'registros' => $registros
+            ];
+            
+        } catch (Exception $e) {
+            error_log("Error al obtener historial: " . $e->getMessage());
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
     }
     
     // Generar datos de historial de muestra para pruebas
@@ -184,7 +294,116 @@ class Fichaje {
     
     // Obtener datos para el gráfico de fichajes
     public function getHistorialGrafico($id_usuario, $dias = 7) {
-        // Implementación original
+        try {
+            // Obtener fecha actual y fecha hace X días
+            $fecha_actual = date('Y-m-d');
+            $fecha_inicio = date('Y-m-d', strtotime("-$dias days"));
+            
+            // Consulta para obtener fichajes en un rango de fechas
+            $query = "SELECT fecha, horaInicio, horaFin, horaPausa, horaReanudacion, tiempoPausa 
+                      FROM registros 
+                      WHERE NIF = ? AND fecha BETWEEN ? AND ? 
+                      ORDER BY fecha ASC";
+            
+            $stmt = $this->conn->prepare($query);
+            if ($stmt === false) {
+                throw new Exception("Error en la preparación de la consulta: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("sss", $id_usuario, $fecha_inicio, $fecha_actual);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            // Estructura para almacenar datos procesados
+            $datos_grafico = [];
+            $dias_semana = [];
+            
+            // Generar array con los últimos N días
+            for ($i = $dias - 1; $i >= 0; $i--) {
+                $fecha = date('Y-m-d', strtotime("-$i days"));
+                $dia_semana = date('D', strtotime($fecha)); // Obtiene abreviatura del día (Mon, Tue, etc.)
+                
+                $dias_semana[$fecha] = [
+                    'fecha' => $fecha,
+                    'diaSemana' => $dia_semana,
+                    'horasTrabajadas' => 0,
+                    'horasPausadas' => 0,
+                    'name' => $dia_semana // Para compatibilidad con el gráfico
+                ];
+            }
+            
+            // Procesar resultados
+            if ($result && $result->num_rows > 0) {
+                while ($row = $result->fetch_assoc()) {
+                    $fecha = $row['fecha'];
+                    
+                    // Si la fecha está en nuestro rango de días
+                    if (isset($dias_semana[$fecha])) {
+                        // Calcular horas trabajadas si hay hora de fin
+                        if (!empty($row['horaFin'])) {
+                            $inicio = strtotime($row['fecha'] . ' ' . $row['horaInicio']);
+                            $fin = strtotime($row['fecha'] . ' ' . $row['horaFin']);
+                            
+                            // Asegurarse que fin es posterior a inicio
+                            if ($fin > $inicio) {
+                                $diferencia = ($fin - $inicio) / 3600; // Convertir a horas
+                                
+                                // Restar tiempo de pausas
+                                $tiempo_pausa = !empty($row['tiempoPausa']) ? $row['tiempoPausa'] / 60 : 0; // Convertir minutos a horas
+                                
+                                $dias_semana[$fecha]['horasTrabajadas'] += $diferencia - $tiempo_pausa;
+                                $dias_semana[$fecha]['horasPausadas'] += $tiempo_pausa;
+                            }
+                        }
+                        // Para registros sin hora de fin (día actual posiblemente)
+                        elseif (!empty($row['horaInicio'])) {
+                            $inicio = strtotime($row['fecha'] . ' ' . $row['horaInicio']);
+                            $ahora = time();
+                            
+                            // Solo contar si es hoy
+                            if ($fecha == date('Y-m-d')) {
+                                $diferencia = ($ahora - $inicio) / 3600; // Convertir a horas
+                                
+                                // Si está en pausa
+                                if (!empty($row['horaPausa']) && empty($row['horaReanudacion'])) {
+                                    $inicio_pausa = strtotime($row['fecha'] . ' ' . $row['horaPausa']);
+                                    $tiempo_pausa = ($ahora - $inicio_pausa) / 3600; // Horas de pausa actual
+                                    
+                                    // Restar la pausa actual del tiempo trabajado
+                                    $diferencia -= $tiempo_pausa;
+                                    $dias_semana[$fecha]['horasPausadas'] += $tiempo_pausa;
+                                }
+                                
+                                // Añadir tiempo de pausas anteriores
+                                $tiempo_pausa_previo = !empty($row['tiempoPausa']) ? $row['tiempoPausa'] / 60 : 0;
+                                $dias_semana[$fecha]['horasTrabajadas'] += $diferencia - $tiempo_pausa_previo;
+                                $dias_semana[$fecha]['horasPausadas'] += $tiempo_pausa_previo;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Convertir a array y redondear valores
+            foreach ($dias_semana as &$dia) {
+                // Redondear a 1 decimal
+                $dia['horasTrabajadas'] = round($dia['horasTrabajadas'], 1);
+                $dia['horasPausadas'] = round($dia['horasPausadas'], 1);
+            }
+            
+            // Devolver solo los valores del array asociativo
+            return [
+                'success' => true,
+                'datos' => array_values($dias_semana)
+            ];
+            
+        } catch (Exception $e) {
+            error_log("Error al obtener historial gráfico: " . $e->getMessage());
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
     }
     
     // Verificar si un usuario tiene algún registro
@@ -374,7 +593,65 @@ class Fichaje {
     
     // Obtener el horario de un usuario
     public function getHorarioUsuario($id_usuario) {
-        // Implementación original
+        try {
+            // Obtener horario del usuario desde la base de datos
+            $query = "SELECT h.*, u.nombre, u.apellidos, u.email 
+                      FROM usuarios u 
+                      LEFT JOIN horarios h ON u.id_horario = h.id 
+                      WHERE u.NIF = ? LIMIT 1";
+            
+            $stmt = $this->conn->prepare($query);
+            if ($stmt === false) {
+                throw new Exception("Error en la preparación de la consulta: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("s", $id_usuario);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            // Si encontramos el usuario con su horario
+            if ($result && $result->num_rows > 0) {
+                $usuario = $result->fetch_assoc();
+                
+                // Si el usuario tiene un horario asignado
+                if ($usuario['id']) {
+                    // Construir una cadena que represente los días laborables basados en los campos de la tabla
+                    $dias_laborables = '';
+                    if($usuario['lunes']) $dias_laborables .= 'L,';
+                    if($usuario['martes']) $dias_laborables .= 'M,';
+                    if($usuario['miercoles']) $dias_laborables .= 'X,';
+                    if($usuario['jueves']) $dias_laborables .= 'J,';
+                    if($usuario['viernes']) $dias_laborables .= 'V,';
+                    if($usuario['sabado']) $dias_laborables .= 'S,';
+                    if($usuario['domingo']) $dias_laborables .= 'D,';
+                    $dias_laborables = rtrim($dias_laborables, ',');
+                    
+                    return [
+                        'success' => true,
+                        'datos' => [
+                            'nombre' => $usuario['nombre'],
+                            'apellidos' => $usuario['apellidos'],
+                            'email' => $usuario['email'],
+                            'horario' => [
+                                'entrada' => $usuario['hora_inicio'],
+                                'salida' => $usuario['hora_fin'],
+                                'dias_laborables' => $dias_laborables
+                            ]
+                        ]
+                    ];
+                }
+            }
+            
+            // Si no encontramos el horario, generamos datos de muestra
+            return $this->generarHorarioUsuarioMuestra($id_usuario);
+            
+        } catch (Exception $e) {
+            error_log("Error al obtener horario de usuario: " . $e->getMessage());
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
     }
     
     // Generar datos de horario de usuario de muestra
