@@ -143,23 +143,403 @@ class Fichaje {
     }
     
     // Registrar entrada con geolocalización
-    public function registrarEntrada($id_usuario, $fecha, $hora, $latitud = null, $longitud = null) {
-        // Implementación original
+    public function registrarEntrada($id_usuario, $fecha = null, $hora = null, $latitud = null, $longitud = null) {
+        try {
+            // Usar fecha y hora actuales si no se proporcionan
+            if ($fecha === null) {
+                $fecha = date('Y-m-d');
+            }
+            
+            if ($hora === null) {
+                $hora = date('H:i:s');
+            }
+            
+            // Verificar si ya existe un fichaje activo para el día
+            $query_check = "SELECT idRegistro FROM {$this->table_name} 
+                           WHERE NIF = ? AND fecha = ? AND horaFin IS NULL";
+            $stmt_check = $this->conn->prepare($query_check);
+            
+            if ($stmt_check === false) {
+                throw new Exception("Error en la preparación de la consulta de verificación: " . $this->conn->error);
+            }
+            
+            $stmt_check->bind_param("ss", $id_usuario, $fecha);
+            $stmt_check->execute();
+            $result_check = $stmt_check->get_result();
+            
+            // Si ya hay un fichaje activo, devolver error
+            if ($result_check->num_rows > 0) {
+                return [
+                    'success' => false,
+                    'error' => 'Ya existe un fichaje activo para este día'
+                ];
+            }
+            
+            // Guardar localización formateada si hay coordenadas
+            $localizacion = null;
+            if ($latitud !== null && $longitud !== null) {
+                $localizacion = $latitud . ", " . $longitud;
+            }
+            
+            // Insertar nuevo fichaje
+            $query = "INSERT INTO {$this->table_name} (NIF, fecha, horaInicio, estado, latitud, longitud, localizacion) 
+                     VALUES (?, ?, ?, 'trabajando', ?, ?, ?)";
+            
+            $stmt = $this->conn->prepare($query);
+            
+            if ($stmt === false) {
+                throw new Exception("Error en la preparación de la consulta de inserción: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("sssdds", $id_usuario, $fecha, $hora, $latitud, $longitud, $localizacion);
+            
+            if ($stmt->execute()) {
+                $id_fichaje = $stmt->insert_id;
+                
+                // Registrar en el log la entrada exitosa
+                error_log("Entrada registrada con éxito. Usuario: $id_usuario, Fecha: $fecha, Hora: $hora, ID: $id_fichaje");
+                
+                // Obtener el fichaje recien insertado
+                $nuevo_fichaje = [
+                    'idRegistro' => $id_fichaje,
+                    'NIF' => $id_usuario,
+                    'fecha' => $fecha,
+                    'horaInicio' => $hora,
+                    'horaFin' => null,
+                    'horaPausa' => null,
+                    'horaReanudacion' => null,
+                    'tiempoPausa' => 0,
+                    'estado' => 'trabajando',
+                    'latitud' => $latitud,
+                    'longitud' => $longitud,
+                    'localizacion' => $localizacion
+                ];
+                
+                return [
+                    'success' => true,
+                    'message' => 'Entrada registrada correctamente',
+                    'fichaje' => $nuevo_fichaje
+                ];
+            } else {
+                throw new Exception("Error al registrar entrada: " . $stmt->error);
+            }
+            
+        } catch (Exception $e) {
+            error_log("Error al registrar entrada: " . $e->getMessage());
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
     }
     
     // Registrar pausa
-    public function registrarPausa($id_usuario, $id_fichaje, $hora) {
-        // Implementación original
+    public function registrarPausa($id_usuario, $id_fichaje, $hora = null) {
+        try {
+            // Usar hora actual si no se proporciona
+            if ($hora === null) {
+                $hora = date('H:i:s');
+            }
+            
+            // Verificar que el fichaje existe y pertenece al usuario
+            $query_check = "SELECT * FROM {$this->table_name} WHERE idRegistro = ? AND NIF = ? LIMIT 1";
+            $stmt_check = $this->conn->prepare($query_check);
+            
+            if ($stmt_check === false) {
+                throw new Exception("Error en la preparación de la consulta de verificación: " . $this->conn->error);
+            }
+            
+            $stmt_check->bind_param("is", $id_fichaje, $id_usuario);
+            $stmt_check->execute();
+            $result_check = $stmt_check->get_result();
+            
+            // Si no existe el fichaje o no pertenece al usuario
+            if ($result_check->num_rows === 0) {
+                return [
+                    'success' => false,
+                    'error' => 'No se encontró el fichaje o no pertenece al usuario'
+                ];
+            }
+            
+            $fichaje = $result_check->fetch_assoc();
+            
+            // Verificar que el fichaje está activo (no tiene hora fin)
+            if (!empty($fichaje['horaFin'])) {
+                return [
+                    'success' => false,
+                    'error' => 'No se puede pausar un fichaje finalizado'
+                ];
+            }
+            
+            // Verificar si ya hay una pausa activa
+            if (!empty($fichaje['horaPausa']) && empty($fichaje['horaReanudacion'])) {
+                return [
+                    'success' => false,
+                    'error' => 'Ya hay una pausa activa para este fichaje'
+                ];
+            }
+            
+            // Actualizar el fichaje con la hora de pausa
+            $query = "UPDATE {$this->table_name} SET horaPausa = ?, estado = 'pausado' WHERE idRegistro = ?";
+            $stmt = $this->conn->prepare($query);
+            
+            if ($stmt === false) {
+                throw new Exception("Error en la preparación de la consulta de actualización: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("si", $hora, $id_fichaje);
+            
+            if ($stmt->execute()) {
+                // Obtener el fichaje actualizado
+                $query_get = "SELECT * FROM {$this->table_name} WHERE idRegistro = ?";
+                $stmt_get = $this->conn->prepare($query_get);
+                $stmt_get->bind_param("i", $id_fichaje);
+                $stmt_get->execute();
+                $result_get = $stmt_get->get_result();
+                $fichaje_actualizado = $result_get->fetch_assoc();
+                
+                // Registrar en el log la pausa exitosa
+                error_log("Pausa registrada con éxito. Usuario: $id_usuario, ID Fichaje: $id_fichaje, Hora: $hora");
+                
+                return [
+                    'success' => true,
+                    'message' => 'Pausa registrada correctamente',
+                    'fichaje' => $fichaje_actualizado
+                ];
+            } else {
+                throw new Exception("Error al registrar pausa: " . $stmt->error);
+            }
+            
+        } catch (Exception $e) {
+            error_log("Error al registrar pausa: " . $e->getMessage());
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
     }
     
     // Reanudar trabajo después de una pausa
-    public function reanudarTrabajo($id_usuario, $id_fichaje, $hora) {
-        // Implementación original
+    public function reanudarTrabajo($id_usuario, $id_fichaje, $hora = null) {
+        try {
+            // Usar hora actual si no se proporciona
+            if ($hora === null) {
+                $hora = date('H:i:s');
+            }
+            
+            // Verificar que el fichaje existe y pertenece al usuario
+            $query_check = "SELECT * FROM {$this->table_name} WHERE idRegistro = ? AND NIF = ? LIMIT 1";
+            $stmt_check = $this->conn->prepare($query_check);
+            
+            if ($stmt_check === false) {
+                throw new Exception("Error en la preparación de la consulta de verificación: " . $this->conn->error);
+            }
+            
+            $stmt_check->bind_param("is", $id_fichaje, $id_usuario);
+            $stmt_check->execute();
+            $result_check = $stmt_check->get_result();
+            
+            // Si no existe el fichaje o no pertenece al usuario
+            if ($result_check->num_rows === 0) {
+                return [
+                    'success' => false,
+                    'error' => 'No se encontró el fichaje o no pertenece al usuario'
+                ];
+            }
+            
+            $fichaje = $result_check->fetch_assoc();
+            
+            // Verificar que el fichaje está activo (no tiene hora fin)
+            if (!empty($fichaje['horaFin'])) {
+                return [
+                    'success' => false,
+                    'error' => 'No se puede reanudar un fichaje finalizado'
+                ];
+            }
+            
+            // Verificar que hay una pausa activa
+            if (empty($fichaje['horaPausa']) || !empty($fichaje['horaReanudacion'])) {
+                return [
+                    'success' => false,
+                    'error' => 'No hay una pausa activa para reanudar'
+                ];
+            }
+            
+            // Calcular tiempo de pausa en minutos
+            $fecha = $fichaje['fecha'];
+            $inicio_pausa = strtotime("$fecha {$fichaje['horaPausa']}");
+            $fin_pausa = strtotime("$fecha $hora");
+            $tiempo_pausa_seg = $fin_pausa - $inicio_pausa;
+            $tiempo_pausa_min = floor($tiempo_pausa_seg / 60); // Convertir a minutos
+            
+            // Sumar al tiempo de pausa actual
+            $tiempo_pausa_total = intval($fichaje['tiempoPausa']) + $tiempo_pausa_min;
+            
+            // Actualizar el fichaje con la hora de reanudación y el tiempo de pausa
+            $query = "UPDATE {$this->table_name} SET horaReanudacion = ?, tiempoPausa = ?, estado = 'trabajando' WHERE idRegistro = ?";
+            $stmt = $this->conn->prepare($query);
+            
+            if ($stmt === false) {
+                throw new Exception("Error en la preparación de la consulta de actualización: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param("sii", $hora, $tiempo_pausa_total, $id_fichaje);
+            
+            if ($stmt->execute()) {
+                // Obtener el fichaje actualizado
+                $query_get = "SELECT * FROM {$this->table_name} WHERE idRegistro = ?";
+                $stmt_get = $this->conn->prepare($query_get);
+                $stmt_get->bind_param("i", $id_fichaje);
+                $stmt_get->execute();
+                $result_get = $stmt_get->get_result();
+                $fichaje_actualizado = $result_get->fetch_assoc();
+                
+                // Registrar en el log la reanudación exitosa
+                error_log("Trabajo reanudado con éxito. Usuario: $id_usuario, ID Fichaje: $id_fichaje, Hora: $hora, Tiempo pausado: $tiempo_pausa_min min");
+                
+                return [
+                    'success' => true,
+                    'message' => 'Trabajo reanudado correctamente',
+                    'fichaje' => $fichaje_actualizado,
+                    'tiempo_pausa' => $tiempo_pausa_min
+                ];
+            } else {
+                throw new Exception("Error al reanudar trabajo: " . $stmt->error);
+            }
+            
+        } catch (Exception $e) {
+            error_log("Error al reanudar trabajo: " . $e->getMessage());
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
     }
     
     // Registrar salida
-    public function registrarSalida($id_usuario, $id_fichaje, $hora, $latitud = null, $longitud = null) {
-        // Implementación original
+    public function registrarSalida($id_usuario, $id_fichaje, $hora = null, $latitud = null, $longitud = null) {
+        try {
+            // Usar hora actual si no se proporciona
+            if ($hora === null) {
+                $hora = date('H:i:s');
+            }
+            
+            // Verificar que el fichaje existe y pertenece al usuario
+            $query_check = "SELECT * FROM {$this->table_name} WHERE idRegistro = ? AND NIF = ? LIMIT 1";
+            $stmt_check = $this->conn->prepare($query_check);
+            
+            if ($stmt_check === false) {
+                throw new Exception("Error en la preparación de la consulta de verificación: " . $this->conn->error);
+            }
+            
+            $stmt_check->bind_param("is", $id_fichaje, $id_usuario);
+            $stmt_check->execute();
+            $result_check = $stmt_check->get_result();
+            
+            // Si no existe el fichaje o no pertenece al usuario
+            if ($result_check->num_rows === 0) {
+                return [
+                    'success' => false,
+                    'error' => 'No se encontró el fichaje o no pertenece al usuario'
+                ];
+            }
+            
+            $fichaje = $result_check->fetch_assoc();
+            
+            // Verificar que el fichaje no tenga ya hora de fin
+            if (!empty($fichaje['horaFin'])) {
+                return [
+                    'success' => false,
+                    'error' => 'El fichaje ya tiene registrada una hora de salida'
+                ];
+            }
+            
+            // Actualizar localización si hay coordenadas
+            $localizacion = null;
+            if ($latitud !== null && $longitud !== null) {
+                $localizacion = $latitud . ", " . $longitud;
+            }
+            
+            // Calcular tiempo pausado total
+            $tiempo_pausa = intval($fichaje['tiempoPausa'] ?? 0);
+            
+            // Si hay una pausa sin reanudar, calcular el tiempo pausado adicional
+            if (!empty($fichaje['horaPausa']) && empty($fichaje['horaReanudacion'])) {
+                // Reanudación automática al registrar salida
+                $hora_pausa = strtotime($fichaje['fecha'] . ' ' . $fichaje['horaPausa']);
+                $hora_actual = strtotime($fichaje['fecha'] . ' ' . $hora);
+                
+                // Calcular segundos de pausa
+                $segundos_pausa = $hora_actual - $hora_pausa;
+                
+                // Convertir a minutos y añadir al tiempo de pausa
+                $minutos_pausa = floor($segundos_pausa / 60);
+                $tiempo_pausa += $minutos_pausa;
+                
+                // Actualizar horaReanudacion
+                $query_pausa = "UPDATE {$this->table_name} SET horaReanudacion = ?, tiempoPausa = ? WHERE idRegistro = ?";
+                $stmt_pausa = $this->conn->prepare($query_pausa);
+                $stmt_pausa->bind_param("sii", $hora, $tiempo_pausa, $id_fichaje);
+                $stmt_pausa->execute();
+            }
+            
+            // Actualizar fichaje con hora de fin y geolocalización
+            $query = "UPDATE {$this->table_name} SET 
+                      horaFin = ?, 
+                      estado = 'finalizado'";
+            
+            // Añadir geolocalización si hay coordenadas
+            $params = [$hora];
+            $types = "s";
+            
+            if ($latitud !== null && $longitud !== null) {
+                $query .= ", latitud = ?, longitud = ?, localizacion = ?";
+                $params[] = $latitud;
+                $params[] = $longitud;
+                $params[] = $localizacion;
+                $types .= "dds";
+            }
+            
+            $query .= " WHERE idRegistro = ?";
+            $params[] = $id_fichaje;
+            $types .= "i";
+            
+            $stmt = $this->conn->prepare($query);
+            
+            if ($stmt === false) {
+                throw new Exception("Error en la preparación de la consulta de actualización: " . $this->conn->error);
+            }
+            
+            $stmt->bind_param($types, ...$params);
+            
+            if ($stmt->execute()) {
+                // Obtener el fichaje actualizado
+                $query_get = "SELECT * FROM {$this->table_name} WHERE idRegistro = ?";
+                $stmt_get = $this->conn->prepare($query_get);
+                $stmt_get->bind_param("i", $id_fichaje);
+                $stmt_get->execute();
+                $result_get = $stmt_get->get_result();
+                $fichaje_actualizado = $result_get->fetch_assoc();
+                
+                // Registrar en el log la salida exitosa
+                error_log("Salida registrada con éxito. Usuario: $id_usuario, ID Fichaje: $id_fichaje, Hora: $hora");
+                
+                return [
+                    'success' => true,
+                    'message' => 'Salida registrada correctamente',
+                    'fichaje' => $fichaje_actualizado
+                ];
+            } else {
+                throw new Exception("Error al registrar salida: " . $stmt->error);
+            }
+            
+        } catch (Exception $e) {
+            error_log("Error al registrar salida: " . $e->getMessage());
+            return [
+                'success' => false,
+                'error' => $e->getMessage()
+            ];
+        }
     }
     
     // Obtener estadísticas de fichajes de un usuario
