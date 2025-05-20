@@ -14,7 +14,7 @@ const Perfil = () => {
     telefono: user?.telefono || '',
     password: '',
     confirmarPassword: '',
-    permitir_pausas: user?.permitir_pausas !== undefined ? user.permitir_pausas : true,
+    permitir_pausas: user?.permitir_pausas !== undefined ? user.permitir_pausas : 0,
   });
   
   const [selectedAvatar, setSelectedAvatar] = useState(user?.id_avatar || null);
@@ -52,14 +52,29 @@ const Perfil = () => {
   // Actualizar el formulario cuando cambia el usuario
   useEffect(() => {
     if (user) {
+      // Mostrar en consola para debugging
+      console.log('Usuario completo recibido:', user);
+      console.log('Valor de permitir_pausas recibido:', user.permitir_pausas);
+      console.log('Tipo de dato de permitir_pausas:', typeof user.permitir_pausas);
+      
+      // Convertir explícitamente a número para asegurar consistencia
+      const pausasValue = Number(user.permitir_pausas);
+      console.log('Valor convertido a Number:', pausasValue);
+      
       setFormData({
         nombre: user.nombre || '',
         correo: user.correo || '',
         telefono: user.telefono || '',
         password: '',
         confirmarPassword: '',
-        permitir_pausas: user.permitir_pausas !== undefined ? user.permitir_pausas : true,
+        permitir_pausas: pausasValue, // Usar el valor explícitamente convertido a número
       });
+      
+      // Log después de establecer el estado
+      setTimeout(() => {
+        console.log('Valor en formData después de setFormData:', formData.permitir_pausas);
+      }, 0);
+      
       setSelectedAvatar(user.id_avatar || null);
       
       // Cargar el horario del usuario
@@ -267,8 +282,16 @@ const Perfil = () => {
                     </div>
                     <div>
                       <span className="block text-sm font-medium text-gray-700">Pausas en fichajes</span>
-                      <span className="block mt-1 text-gray-900">
-                        {formData.permitir_pausas ? 'Habilitadas' : 'Deshabilitadas'}
+                      <span className="block mt-1">
+                        {/* Debugging info - se puede quitar en producción */}
+                        <span className="hidden">Valor en DB: {JSON.stringify(formData.permitir_pausas)}</span>
+                        
+                        <span className="px-2 py-1 rounded-full text-xs font-medium" style={{
+                          backgroundColor: Number(formData.permitir_pausas) === 1 ? 'rgba(52, 211, 153, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                          color: Number(formData.permitir_pausas) === 1 ? 'rgb(16, 185, 129)' : 'rgb(239, 68, 68)'
+                        }}>
+                          {Number(formData.permitir_pausas) === 1 ? 'Habilitadas' : 'Deshabilitadas'}
+                        </span>
                       </span>
                     </div>
                   </div>
@@ -377,26 +400,17 @@ const Perfil = () => {
                     <div className="mb-4">
                       <div className="flex items-center justify-between">
                         <span className="block text-sm font-medium text-gray-700">
-                          Permitir pausas en fichajes
+                          Pausas en fichajes
                         </span>
-                        <div 
-                          className="relative inline-block w-12 mr-2 align-middle select-none cursor-pointer"
-                          onClick={() => setFormData(prev => ({ ...prev, permitir_pausas: !prev.permitir_pausas }))}
-                        >
-                          <input
-                            type="checkbox"
-                            id="permitir_pausas"
-                            name="permitir_pausas"
-                            checked={formData.permitir_pausas}
-                            onChange={(e) => setFormData(prev => ({ ...prev, permitir_pausas: e.target.checked }))}
-                            className="sr-only"
-                          />
-                          <div className={`block w-12 h-6 rounded-full transition-colors duration-300 ${formData.permitir_pausas ? 'bg-green-400' : 'bg-gray-300'}`}></div>
-                          <div className={`absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-transform duration-300 transform ${formData.permitir_pausas ? 'translate-x-6' : ''}`}></div>
+                        <div className="px-3 py-1 rounded-full text-xs font-medium" style={{ 
+                          backgroundColor: formData.permitir_pausas ? 'rgba(52, 211, 153, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                          color: formData.permitir_pausas ? 'rgb(16, 185, 129)' : 'rgb(239, 68, 68)'
+                        }}>
+                          {formData.permitir_pausas ? 'Habilitadas' : 'Deshabilitadas'}
                         </div>
                       </div>
                       <p className="mt-1 text-sm text-gray-500">
-                        {formData.permitir_pausas ? 'Las pausas están habilitadas en tus fichajes' : 'Las pausas están deshabilitadas en tus fichajes'}
+                        Esta configuración solo puede ser modificada por un administrador.
                       </p>
                     </div>
                   </div>

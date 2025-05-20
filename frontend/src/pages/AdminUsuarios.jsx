@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaUserCog, FaUserClock, FaCheckCircle, FaTimesCircle, FaSearch, FaFilter, FaCalendarAlt, FaUserAlt, FaEnvelope, FaIdCard, FaBuilding } from 'react-icons/fa';
+import { FaUserCog, FaUserClock, FaCheckCircle, FaTimesCircle, FaSearch, FaFilter, FaCalendarAlt, FaUserAlt, FaEnvelope, FaIdCard, FaBuilding, FaEdit, FaKey, FaPhone, FaBriefcase, FaSave } from 'react-icons/fa';
 import InitialsAvatar from '../components/InitialsAvatar';
 
 // URL base para las peticiones API
@@ -25,6 +25,23 @@ const AdminUsuarios = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+    
+    // Estados para edición de usuario
+    const [editMode, setEditMode] = useState(false);
+    const [editFormData, setEditFormData] = useState({
+        nombre: '',
+        apellidos: '',
+        correo: '',
+        telefono: '',
+        dpto: '',
+        id_avatar: '',
+        tipo_usuario: '',
+        password: '',
+        permitir_pausas: false
+    });
+    
+    // Estado para mostrar o no el campo de contraseña
+    const [showPasswordField, setShowPasswordField] = useState(false);
 
     // Verificar autenticación y permisos
     useEffect(() => {
@@ -47,12 +64,13 @@ const AdminUsuarios = () => {
     const fetchUsuarios = useCallback(async () => {
         try {
             setLoading(true);
-            const response = await axios.get(`${API_URL}/usuarios.php?action=list`, {
+            const response = await axios.get(`${API_URL}/usuarios.php?action=list&include_avatars=true`, {
                 withCredentials: true
             });
 
             if (response.data.success) {
                 setUsuarios(response.data.usuarios);
+                console.log('Usuarios cargados:', response.data.usuarios);
             } else {
                 setError(`Error al cargar usuarios: ${response.data.error || 'Error desconocido'}`);
             }
@@ -86,6 +104,26 @@ const AdminUsuarios = () => {
     const handleUserSelect = useCallback((usuario) => {
         setSelectedUser(usuario);
         setSelectedHorario(usuario.id_horario || '');
+        
+        // Mostrar en consola para debugging
+        console.log('Usuario seleccionado:', usuario);
+        console.log('Valor permitir_pausas recibido:', usuario.permitir_pausas);
+        
+        // Inicializar formulario de edición con datos del usuario
+        setEditFormData({
+            nombre: usuario.nombre || '',
+            apellidos: usuario.apellidos || '',
+            correo: usuario.correo || '',
+            telefono: usuario.telefono || '',
+            dpto: usuario.dpto || '',
+            id_avatar: usuario.id_avatar || '',
+            tipo_usuario: usuario.tipo_Usu || usuario.tipo_usuario || '',
+            password: '',
+            permitir_pausas: usuario.permitir_pausas !== undefined ? usuario.permitir_pausas : 0
+        });
+        // Salir del modo edición si estaba activo
+        setEditMode(false);
+        setShowPasswordField(false);
         // Limpiar mensajes
         setSuccessMessage('');
         setErrorMessage('');
@@ -139,6 +177,77 @@ const AdminUsuarios = () => {
             console.error('Error al asignar horario:', err);
         }
     }, [selectedUser, selectedHorario]);
+    
+    // Función para manejar cambios en el formulario de edición
+    const handleEditFormChange = useCallback((e) => {
+        const { name, value, type, checked } = e.target;
+        setEditFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    }, []);
+    
+    // Función para guardar cambios en el usuario
+    const handleSaveUserChanges = useCallback(async () => {
+        if (!selectedUser) return;
+        
+        try {
+            const userId = selectedUser.NIF || selectedUser.id;
+            // Preparar datos para enviar
+            const userData = {
+                ...editFormData,
+                // Si no se ha modificado la contraseña, no la enviamos
+                password: showPasswordField && editFormData.password ? editFormData.password : undefined
+            };
+            
+            const response = await axios.post(`${API_URL}/usuarios.php?action=update&id=${userId}`, userData, {
+                withCredentials: true
+            });
+            
+            if (response.data.success) {
+                // Volver a cargar la lista completa de usuarios para evitar duplicaciones
+                await fetchUsuarios();
+                
+                // Actualizar usuario seleccionado
+                const updatedUserData = {
+                    ...selectedUser,
+                    nombre: editFormData.nombre,
+                    apellidos: editFormData.apellidos,
+                    correo: editFormData.correo,
+                    telefono: editFormData.telefono,
+                    dpto: editFormData.dpto,
+                    id_avatar: editFormData.id_avatar,
+                    tipo_Usu: editFormData.tipo_usuario,
+                    tipo_usuario: editFormData.tipo_usuario,
+                    permitir_pausas: editFormData.permitir_pausas // Ya es un valor numérico (0/1)
+                };
+                
+                console.log('Datos actualizados enviados al servidor:', updatedUserData);
+                
+                setSelectedUser(updatedUserData);
+                
+                // Salir del modo edición
+                setEditMode(false);
+                setShowPasswordField(false);
+                
+                // Mostrar mensaje de éxito
+                setSuccessMessage('Usuario actualizado correctamente');
+                setErrorMessage('');
+                
+                // Limpiar mensaje después de 3 segundos
+                setTimeout(() => {
+                    setSuccessMessage('');
+                }, 3000);
+            } else {
+                setErrorMessage(`Error: ${response.data.error || 'Error desconocido'}`);
+                setSuccessMessage('');
+            }
+        } catch (err) {
+            setErrorMessage(`Error de conexión: ${err.message}`);
+            setSuccessMessage('');
+            console.error('Error al actualizar usuario:', err);
+        }
+    }, [selectedUser, editFormData, showPasswordField, fetchUsuarios]);
 
     // Filtrar usuarios por término de búsqueda
     const filteredUsuarios = usuarios.filter(usuario => {
@@ -293,22 +402,27 @@ const AdminUsuarios = () => {
                                 <ul className="space-y-2">
                                     {filteredUsuarios.map((usuario) => (
                                         <li 
-                                            key={usuario.NIF || usuario.id}
+                                            key={usuario.NIF || usuario.id || Math.random()}
                                             className={`p-3 cursor-pointer rounded-lg transition duration-200 ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'} ${selectedUser && (selectedUser.NIF === usuario.NIF || selectedUser.id === usuario.id) ? `${isDarkMode ? 'bg-blue-900/30 border-l-4 border-blue-500' : 'bg-blue-50 border-l-4 border-blue-500'}` : ''}`}
                                             onClick={() => handleUserSelect(usuario)}
                                         >
                                             <div className="flex items-center">
                                                 <div className="flex-shrink-0">
                                                     {usuario.id_avatar ? (
-                                                        <img 
-                                                            src={`http://localhost/ImpulsaTelecom/frontend/src/img/avatares/avatar-${usuario.id_avatar}.png`} 
-                                                            alt={`Avatar de ${usuario.nombre}`} 
-                                                            className="h-12 w-12 rounded-full object-cover border-2 border-gray-200"
-                                                            onError={(e) => {
-                                                                e.target.onerror = null;
-                                                                e.target.src = 'http://localhost/ImpulsaTelecom/frontend/src/img/avatares/user-profile-icon.png';
-                                                            }}
-                                                        />
+                                                        <div 
+                                                            className="h-12 w-12 rounded-full overflow-hidden flex items-center justify-center border-2 border-gray-200"
+                                                            style={{ backgroundColor: usuario.avatar?.color_fondo || '#f3f4f6' }}
+                                                        >
+                                                            <img 
+                                                                src={usuario.avatar?.ruta || `http://localhost/ImpulsaTelecom/frontend/src/img/avatares/001-man.png`} 
+                                                                alt={`Avatar de ${usuario.nombre}`} 
+                                                                className="h-full w-full object-contain"
+                                                                onError={(e) => {
+                                                                    e.target.onerror = null;
+                                                                    e.target.src = 'http://localhost/ImpulsaTelecom/frontend/src/img/avatares/user-profile-icon.png';
+                                                                }}
+                                                            />
+                                                        </div>
                                                     ) : (
                                                         <InitialsAvatar 
                                                             nombre={usuario.nombre || usuario.NIF || 'Usuario'} 
@@ -360,34 +474,230 @@ const AdminUsuarios = () => {
                                 </div>
                                 
                                 <div className="p-6">
-                                    <div className="flex items-center mb-6">
-                                        <div className="mr-4">
-                                            {selectedUser.id_avatar ? (
-                                                <img 
-                                                    src={`http://localhost/ImpulsaTelecom/frontend/src/img/avatares/avatar-${selectedUser.id_avatar}.png`} 
-                                                    alt={`Avatar de ${selectedUser.nombre}`} 
-                                                    className="h-20 w-20 rounded-full object-cover border-4 border-gray-200"
-                                                    onError={(e) => {
-                                                        e.target.onerror = null;
-                                                        e.target.src = 'http://localhost/ImpulsaTelecom/frontend/src/img/avatares/user-profile-icon.png';
-                                                    }}
-                                                />
-                                            ) : (
-                                                <InitialsAvatar 
-                                                    nombre={selectedUser.nombre || 'Usuario'} 
-                                                    size="lg" 
-                                                />
-                                            )}
-                                        </div>
-                                        <div>
-                                            <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
-                                                {selectedUser.nombre} {selectedUser.apellidos}
-                                            </h3>
-                                            <p className={`text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
-                                                {selectedUser.tipo_Usu || selectedUser.tipo_usuario}
-                                            </p>
-                                        </div>
+                                    {/* Botón para activar modo edición */}
+                                    <div className="flex justify-end mb-4">
+                                        <button
+                                            onClick={() => setEditMode(!editMode)}
+                                            className={`px-4 py-2 rounded-lg font-medium flex items-center ${isDarkMode ? 'bg-blue-700 hover:bg-blue-600' : 'bg-blue-500 hover:bg-blue-600'} text-white shadow-sm transition-all duration-200`}
+                                        >
+                                            <FaEdit className="mr-2" />
+                                            {editMode ? 'Cancelar Edición' : 'Editar Usuario'}
+                                        </button>
                                     </div>
+                                    {!editMode ? (
+                                        <div className="flex items-center mb-6">
+                                            <div className="mr-4">
+                                                {selectedUser.id_avatar ? (
+                                                    <div 
+                                                        className="h-20 w-20 rounded-full overflow-hidden flex items-center justify-center border-4 border-gray-200"
+                                                        style={{ backgroundColor: selectedUser.avatar?.color_fondo || '#f3f4f6' }}
+                                                    >
+                                                        <img 
+                                                            src={selectedUser.avatar?.ruta || `http://localhost/ImpulsaTelecom/frontend/src/img/avatares/001-man.png`} 
+                                                            alt={`Avatar de ${selectedUser.nombre}`} 
+                                                            className="h-full w-full object-contain"
+                                                            onError={(e) => {
+                                                                e.target.onerror = null;
+                                                                e.target.src = 'http://localhost/ImpulsaTelecom/frontend/src/img/avatares/user-profile-icon.png';
+                                                            }}
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <InitialsAvatar 
+                                                        nombre={selectedUser.nombre || 'Usuario'} 
+                                                        size="lg" 
+                                                    />
+                                                )}
+                                            </div>
+                                            <div>
+                                                <h3 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                                                    {selectedUser.nombre} {selectedUser.apellidos}
+                                                </h3>
+                                                <p className={`text-sm ${isDarkMode ? 'text-blue-400' : 'text-blue-600'}`}>
+                                                    {selectedUser.tipo_Usu || selectedUser.tipo_usuario}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="mb-6">
+                                            <h3 className={`text-xl font-bold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                                                Editar Información del Usuario
+                                            </h3>
+                                            
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                                                {/* Nombre */}
+                                                <div>
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Nombre
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="nombre"
+                                                        value={editFormData.nombre}
+                                                        onChange={handleEditFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                    />
+                                                </div>
+                                                
+                                                {/* Apellidos */}
+                                                <div>
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Apellidos
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="apellidos"
+                                                        value={editFormData.apellidos}
+                                                        onChange={handleEditFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                    />
+                                                </div>
+                                                
+                                                {/* Correo */}
+                                                <div>
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Correo Electrónico
+                                                    </label>
+                                                    <input
+                                                        type="email"
+                                                        name="correo"
+                                                        value={editFormData.correo}
+                                                        onChange={handleEditFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                    />
+                                                </div>
+                                                
+                                                {/* Teléfono */}
+                                                <div>
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Teléfono
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="telefono"
+                                                        value={editFormData.telefono}
+                                                        onChange={handleEditFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                    />
+                                                </div>
+                                                
+                                                {/* Departamento */}
+                                                <div>
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Departamento
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="dpto"
+                                                        value={editFormData.dpto}
+                                                        onChange={handleEditFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                    />
+                                                </div>
+                                                
+                                                {/* Tipo de Usuario */}
+                                                <div>
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Tipo de Usuario
+                                                    </label>
+                                                    <select
+                                                        name="tipo_usuario"
+                                                        value={editFormData.tipo_usuario}
+                                                        onChange={handleEditFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                    >
+                                                        <option value="admin">Administrador</option>
+                                                        <option value="empleado">Empleado</option>
+                                                        <option value="gestor">Gestor</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                {/* ID Avatar (se podría mejorar con un selector de avatares) */}
+                                                <div>
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        ID Avatar
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        name="id_avatar"
+                                                        value={editFormData.id_avatar}
+                                                        onChange={handleEditFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                    />
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Permitir pausas */}
+                                            <div className="mb-4">
+                                                <div className="flex items-center">
+                                                    <input
+                                                        type="checkbox"
+                                                        id="permitir_pausas"
+                                                        name="permitir_pausas"
+                                                        checked={editFormData.permitir_pausas === 1}
+                                                        onChange={(e) => {
+                                                            // Convertir el valor booleano del checkbox a 0/1
+                                                            const numericValue = e.target.checked ? 1 : 0;
+                                                            setEditFormData(prev => ({
+                                                                ...prev,
+                                                                permitir_pausas: numericValue
+                                                            }));
+                                                        }}
+                                                        className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
+                                                    />
+                                                    <label htmlFor="permitir_pausas" className={`ml-2 block text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Permitir pausas en fichajes 
+                                                        <span className="ml-2 px-2 py-0.5 rounded text-xs" style={{
+                                                            backgroundColor: editFormData.permitir_pausas === 1 ? 'rgba(52, 211, 153, 0.1)' : 'rgba(239, 68, 68, 0.1)',
+                                                            color: editFormData.permitir_pausas === 1 ? 'rgb(16, 185, 129)' : 'rgb(239, 68, 68)'
+                                                        }}>
+                                                            {editFormData.permitir_pausas === 1 ? 'Habilitadas' : 'Deshabilitadas'}
+                                                        </span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            
+                                            {/* Cambiar contraseña (botón toggle) */}
+                                            <div className="mb-4">
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowPasswordField(!showPasswordField)}
+                                                    className={`px-3 py-1 text-sm rounded-lg flex items-center ${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'} transition-colors`}
+                                                >
+                                                    <FaKey className="mr-2" />
+                                                    {showPasswordField ? 'Cancelar cambio de contraseña' : 'Cambiar contraseña'}
+                                                </button>
+                                            </div>
+                                            
+                                            {/* Campo de contraseña (condicional) */}
+                                            {showPasswordField && (
+                                                <div className="mb-4">
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Nueva Contraseña
+                                                    </label>
+                                                    <input
+                                                        type="password"
+                                                        name="password"
+                                                        value={editFormData.password}
+                                                        onChange={handleEditFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                        placeholder="Ingrese nueva contraseña"
+                                                    />
+                                                </div>
+                                            )}
+                                            
+                                            {/* Botón para guardar cambios */}
+                                            <div className="mt-6">
+                                                <button
+                                                    onClick={handleSaveUserChanges}
+                                                    className={`px-6 py-3 rounded-lg font-medium text-white bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 shadow-sm transition-all duration-200 flex items-center justify-center`}
+                                                >
+                                                    <FaSave className="mr-2" />
+                                                    Guardar Cambios
+                                                </button>
+                                            </div>
+                                        </div>
+                                    )}
                                     
                                     <div className={`grid grid-cols-1 md:grid-cols-2 gap-6 mb-6 p-4 rounded-lg ${isDarkMode ? 'bg-gray-700/50' : 'bg-gray-50'}`}>
                                         <div className="flex items-start">

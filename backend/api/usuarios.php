@@ -141,8 +141,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
                 'tipo_usuario' => $usuario['tipo_Usu'] ?? $usuario['tipo_usuario'] ?? 'empleado',
                 'dpto' => $usuario['dpto'] ?? '',
                 'centro' => $usuario['centro'] ?? '',
-                'id_avatar' => $usuario[$avatarField] ?? null
+                'id_avatar' => $usuario[$avatarField] ?? null,
+                'permitir_pausas' => isset($usuario['permitir_pausas']) ? (int)$usuario['permitir_pausas'] : 0
             ];
+            
+            // Log para debugging
+            error_log('Valor de permitir_pausas en login: ' . (isset($usuario['permitir_pausas']) ? $usuario['permitir_pausas'] : 'no definido'));
             
             // Si tiene avatar, incluir la información
             if ($usuario[$avatarField]) {
@@ -361,13 +365,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
             'tipo_usuario' => $usuario[$tipoUsuarioField] ?? 'empleado',
             'dpto' => $usuario['dpto'] ?? '',
             'centro' => $usuario['centro'] ?? '',
-            'id_avatar' => $usuario[$avatarField] ?? null
+            'id_avatar' => $usuario[$avatarField] ?? null,
+            'permitir_pausas' => isset($usuario['permitir_pausas']) ? (int)$usuario['permitir_pausas'] : 0
         ];
-        
-        // Añadir permitir_pausas si existe
-        if (in_array('permitir_pausas', $columns) && isset($usuario['permitir_pausas'])) {
-            $usuarioResponse['permitir_pausas'] = (bool)$usuario['permitir_pausas'];
-        }
         
         // Si tiene avatar, incluir la información
         if ($usuario[$avatarField]) {
@@ -446,12 +446,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['id'])) {
         $query .= ", id_horario";
     }
     
+    // Añadir permitir_pausas si existe la columna
+    if (in_array('permitir_pausas', $columns)) {
+        $query .= ", permitir_pausas";
+    }
+    
     $query .= " FROM usuarios";
     
     // Añadir condición de activo si existe la columna
     if (in_array('activo', $columns)) {
         $query .= " WHERE activo = 1";
     }
+    
+    // Si se solicita incluir información de avatares
+    $includeAvatars = isset($_GET['include_avatars']) && $_GET['include_avatars'] === 'true';
     
     // Ejecutar la consulta con manejo de errores
     $result = $modelo->getConn()->query($query);
@@ -476,8 +484,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['id'])) {
             'centro' => $row['centro'] ?? '',
             'tipo_usuario' => $row[$tipoUsuarioField] ?? 'empleado',
             'id_avatar' => $row[$avatarField] ?? null,
-            'id_horario' => $row['id_horario'] ?? null
+            'id_horario' => $row['id_horario'] ?? null,
+            'permitir_pausas' => isset($row['permitir_pausas']) ? (int)$row['permitir_pausas'] : 0
         ];
+        
+        // Si se ha solicitado incluir datos completos de avatares y el usuario tiene un avatar
+        if ($includeAvatars && !empty($row[$avatarField])) {
+            // Consultar información del avatar
+            $avatarQuery = "SELECT * FROM avatares WHERE id = ?";
+            $avatarStmt = $modelo->getConn()->prepare($avatarQuery);
+            $avatarStmt->bind_param("i", $row[$avatarField]);
+            $avatarStmt->execute();
+            $avatarResult = $avatarStmt->get_result();
+            
+            if ($avatarResult && $avatarResult->num_rows > 0) {
+                $avatarData = $avatarResult->fetch_assoc();
+                
+                // Asegurarse de que la ruta sea absoluta
+                if (!empty($avatarData['ruta']) && !preg_match('/^https?:\/\//', $avatarData['ruta'])) {
+                    $avatarData['ruta'] = 'http://' . $_SERVER['HTTP_HOST'] . '/ImpulsaTelecom/frontend' . $avatarData['ruta'];
+                }
+                
+                $usuario['avatar'] = [
+                    'id' => $avatarData['id'],
+                    'ruta' => $avatarData['ruta'],
+                    'categoria' => $avatarData['categoria'] ?? '',
+                    'color_fondo' => $avatarData['color_fondo'] ?? '#f3f4f6'
+                ];
+            }
+        }
         
         $usuarios[] = $usuario;
     }

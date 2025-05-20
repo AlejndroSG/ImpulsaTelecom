@@ -223,6 +223,16 @@ const FichajeWidget = ({ onFichajeChange }) => {
   const handlePausa = async () => {
     if (!user || !user.id || !fichajeActual) return;
     
+    // Verificar si el usuario tiene permitidas las pausas (valor debe ser 1)
+    if (user.permitir_pausas !== 1) {
+      setError('No tienes permiso para pausar fichajes. Contacta con tu administrador.');
+      console.error('Intento de pausar sin permiso:', { 
+        usuarioId: user.id, 
+        permitirPausas: user.permitir_pausas
+      });
+      return;
+    }
+    
     try {
       setLoading(true);
       setError(null);
@@ -374,8 +384,15 @@ const FichajeWidget = ({ onFichajeChange }) => {
     }
 
     if (estado === 'trabajando') {
-      // Verificar si el usuario tiene permitidas las pausas
-      const mostrarBotonPausa = user?.permitir_pausas !== false;
+      // Verificar si el usuario tiene permitidas las pausas (valor debe ser 1)
+      const mostrarBotonPausa = user?.permitir_pausas === 1;
+      
+      console.log('Permisos de pausa del usuario:', {
+        usuarioId: user?.id,
+        permitirPausas: user?.permitir_pausas,
+        tipoDato: typeof user?.permitir_pausas,
+        mostrarBoton: mostrarBotonPausa
+      });
       
       return (
         <div className="flex flex-col gap-3">
