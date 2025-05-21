@@ -18,7 +18,7 @@ import InitialsAvatar from '../components/InitialsAvatar'
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { FaCalendarAlt, FaFilter, FaUserClock, FaBuilding, FaSearch, FaClipboardList, FaChartPie, FaEdit, FaTrash, FaUser, FaCheckCircle, FaTimesCircle } from 'react-icons/fa'
+import { FaCalendarAlt, FaFilter, FaUserClock, FaBuilding, FaSearch, FaClipboardList, FaChartPie, FaEdit, FaTrash, FaUser, FaCheckCircle, FaTimesCircle, FaMap, FaMapMarkedAlt, FaMapMarkerAlt } from 'react-icons/fa'
 import AdminStatsChart from '../components/AdminStatsChart'
 
 const ReactGridLayout = WidthProvider(RGL);
@@ -391,6 +391,19 @@ const Inicio = () => {
                                 <GraficoFichajesWidget />
                             </div>
                         </ReactGridLayout>
+                        
+                        {/* Mapa para usuarios normales (aparece en la parte inferior) */}
+                        <div className="mt-8 mb-4">
+                            <div className="widget-container" style={mapCalendarWidgetStyle}>
+                                <div className="drag-handle w-full bg-gradient-to-r from-[#f0f9e0] to-white dark:from-[#1e293b] dark:to-[#1a1f2b] p-3 rounded-t-xl flex items-center justify-between border-b border-gray-200 dark:border-gray-700">
+                                    <div className="flex items-center">
+                                        <FaMap className="text-[#78bd00] mr-2" />
+                                        <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100">Tu Ubicación</h3>
+                                    </div>
+                                </div>
+                                <MapaWidget className="rounded-t-none" />
+                            </div>
+                        </div>
                     </motion.div>
                 ) : (
                     <>

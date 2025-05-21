@@ -226,6 +226,23 @@ const Sidebar = ({ expanded }) => {
               </svg>
               <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Fichajes</span>
             </NavLink>
+            
+            <NavLink 
+              to="/admin/mapa" 
+              className={({isActive}) => 
+                `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                    ? 'bg-[#78bd00] text-white' 
+                    : isDarkMode 
+                      ? 'hover:bg-gray-800 text-gray-300' 
+                      : 'hover:bg-gray-200 text-gray-700'
+                } ${expanded ? 'mx-2' : 'justify-center'}`
+              }
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+              </svg>
+              <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Mapa Personal</span>
+            </NavLink>
 
             <NavLink 
               to="/admin/reportes" 

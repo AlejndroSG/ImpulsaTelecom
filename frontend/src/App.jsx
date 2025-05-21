@@ -15,6 +15,7 @@ import AdminUsuarios from './pages/AdminUsuarios'
 import AdminRecordatorios from './pages/AdminRecordatorios'
 import AdminFichajes from './pages/AdminFichajes'
 import AdminReportes from './pages/AdminReportes'
+import AdminMapa from './pages/AdminMapa'
 import Documentacion from './pages/Documentacion'
 import { AuthProvider, ProtectedRoute, PublicRoute } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
@@ -80,6 +81,7 @@ function App() {
               <Route path="/admin/recordatorios" element={<AdminRecordatorios />} />
               <Route path="/admin/fichajes" element={<AdminFichajes />} />
               <Route path="/admin/reportes" element={<AdminReportes />} />
+              <Route path="/admin/mapa" element={<AdminMapa />} />
             </Route>
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>

@@ -1,0 +1,234 @@
+/* Estilos para el widget de mapa */
+
+.mapa-widget {
+  width: 100%;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.mapa-widget.dark-theme {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+}
+
+.mapa-titulo {
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  color: #2c3e50;
+}
+
+.dark-theme .mapa-titulo {
+  color: #ecf0f1;
+}
+
+.mapa-container {
+  position: relative;
+  width: 100%;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.error-mensaje {
+  padding: 10px;
+  margin-bottom: 15px;
+  background-color: #ffe5e5;
+  border-left: 4px solid #ff6b6b;
+  color: #d63031;
+  border-radius: 4px;
+}
+
+.dark-theme .error-mensaje {
+  background-color: rgba(255, 107, 107, 0.2);
+  color: #ff9a9a;
+}
+
+.controles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.btn-ubicacion, .btn-guardar, .btn-retry, .btn-refresh {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.btn-ubicacion {
+  background-color: #4dabf7;
+  color: white;
+}
+
+.btn-ubicacion:hover {
+  background-color: #339af0;
+}
+
+.btn-guardar {
+  background-color: #51cf66;
+  color: white;
+}
+
+.btn-guardar:hover {
+  background-color: #40c057;
+}
+
+.btn-retry, .btn-refresh {
+  background-color: #868e96;
+  color: white;
+}
+
+.btn-retry:hover, .btn-refresh:hover {
+  background-color: #495057;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.dark-theme .toggle-label {
+  color: #ced4da;
+}
+
+.toggle-label input {
+  margin-right: 5px;
+}
+
+.popup-content {
+  padding: 5px;
+  min-width: 200px;
+}
+
+.usuario-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.avatar-mini {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 8px;
+  object-fit: cover;
+}
+
+.dentro-rango {
+  color: #40c057;
+  font-weight: 500;
+}
+
+.fuera-rango {
+  color: #fa5252;
+  font-weight: 500;
+}
+
+.ejemplo-nota {
+  color: #fd7e14;
+  font-style: italic;
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.mapa-leyenda {
+  margin-top: 15px;
+  padding: 10px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  font-size: 0.9rem;
+}
+
+.dark-theme .mapa-leyenda {
+  background-color: #343a40;
+}
+
+.mapa-leyenda h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+.mapa-leyenda ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 10px;
+}
+
+.mapa-leyenda li {
+  margin-bottom: 5px;
+  display: flex;
+  align-items: center;
+}
+
+.marcador-oficina,
+.marcador-usuario,
+.marcador-ejemplo,
+.circulo-rango {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  border-radius: 50%;
+}
+
+.marcador-oficina {
+  background-color: #4dabf7;
+}
+
+.marcador-usuario {
+  background-color: #51cf66;
+}
+
+.marcador-ejemplo {
+  background-color: #fcc419;
+}
+
+.circulo-rango {
+  background-color: rgba(66, 139, 202, 0.3);
+  border: 1px solid #4dabf7;
+}
+
+.mapa-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 10px;
+  font-size: 0.85rem;
+}
+
+.mapa-stats p {
+  margin: 0;
+}
+
+/* Clases para iconos de marcadores personalizados */
+.usuario-marcador {
+  filter: hue-rotate(var(--hue-rotate, 0deg));
+}
+
+@media (max-width: 768px) {
+  .controles {
+    flex-direction: column;
+  }
+  
+  .toggle-label {
+    margin-left: 0;
+    margin-top: 10px;
+  }
+  
+  .mapa-stats {
+    flex-direction: column;
+    gap: 5px;
+  }
+}

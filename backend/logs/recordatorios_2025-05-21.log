@@ -636,3 +636,899 @@
 [2025-05-21 01:10:36] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
 [2025-05-21 01:10:36] Verificaciu00f3n de recordatorios finalizada
 [2025-05-21 01:10:36] Script ejecutado correctamente
+[2025-05-21 11:59:19] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 11:59:24] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 11:59:24] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 11:59:24] Iniciando verificaciu00f3n de recordatorios. Hora actual: 11:59:24
+[2025-05-21 11:59:24] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 11:59:24] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 11:59:24] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 11:59:25] Script ejecutado correctamente
+[2025-05-21 11:59:25] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 11:59:25] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 11:59:25] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 11:59:25] Iniciando verificaciu00f3n de recordatorios. Hora actual: 11:59:25
+[2025-05-21 11:59:25] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 11:59:25] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 11:59:25] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 11:59:25] Script ejecutado correctamente
+[2025-05-21 11:59:27] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 11:59:27] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 11:59:27] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 11:59:27] Iniciando verificaciu00f3n de recordatorios. Hora actual: 11:59:27
+[2025-05-21 11:59:27] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 11:59:27] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 11:59:27] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 11:59:27] Script ejecutado correctamente
+[2025-05-21 11:59:27] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 11:59:27] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 11:59:27] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 11:59:27] Iniciando verificaciu00f3n de recordatorios. Hora actual: 11:59:27
+[2025-05-21 11:59:27] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 11:59:27] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 11:59:27] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 11:59:27] Script ejecutado correctamente
+[2025-05-21 12:00:27] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:00:27] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:00:27] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:00:27] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:00:27
+[2025-05-21 12:00:27] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:00:27] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:00:27] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:00:27] Script ejecutado correctamente
+[2025-05-21 12:01:00] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:01:00] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:01:00] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:01:00] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:01:00
+[2025-05-21 12:01:00] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:01:00] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:01:00] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:01:00] Script ejecutado correctamente
+[2025-05-21 12:01:00] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:01:00] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:01:00] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:01:00] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:01:00
+[2025-05-21 12:01:00] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:01:00] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:01:00] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:01:00] Script ejecutado correctamente
+[2025-05-21 12:02:01] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:02:01] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:02:01] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:02:01] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:02:01
+[2025-05-21 12:02:01] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:02:01] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:02:01] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:02:01] Script ejecutado correctamente
+[2025-05-21 12:03:01] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:03:01] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:03:01] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:03:01] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:03:01
+[2025-05-21 12:03:01] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:03:01] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:03:01] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:03:01] Script ejecutado correctamente
+[2025-05-21 12:04:01] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:04:01] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:04:01] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:04:01] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:04:01
+[2025-05-21 12:04:01] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:04:01] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:04:01] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:04:01] Script ejecutado correctamente
+[2025-05-21 12:05:01] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:05:01] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:05:01] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:05:01] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:05:01
+[2025-05-21 12:05:01] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:05:01] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:05:01] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:05:01] Script ejecutado correctamente
+[2025-05-21 12:06:01] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:06:01] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:06:01] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:06:01] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:06:01
+[2025-05-21 12:06:01] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:06:01] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:06:01] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:06:01] Script ejecutado correctamente
+[2025-05-21 12:07:01] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:07:01] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:07:01] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:07:01] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:07:01
+[2025-05-21 12:07:01] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:07:01] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:07:01] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:07:01] Script ejecutado correctamente
+[2025-05-21 12:08:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:08:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:08:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:08:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:08:50
+[2025-05-21 12:08:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:08:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:08:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:08:50] Script ejecutado correctamente
+[2025-05-21 12:09:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:09:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:09:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:09:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:09:50
+[2025-05-21 12:09:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:09:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:09:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:09:50] Script ejecutado correctamente
+[2025-05-21 12:10:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:10:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:10:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:10:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:10:50
+[2025-05-21 12:10:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:10:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:10:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:10:50] Script ejecutado correctamente
+[2025-05-21 12:11:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:11:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:11:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:11:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:11:50
+[2025-05-21 12:11:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:11:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:11:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:11:50] Script ejecutado correctamente
+[2025-05-21 12:12:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:12:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:12:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:12:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:12:50
+[2025-05-21 12:12:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:12:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:12:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:12:50] Script ejecutado correctamente
+[2025-05-21 12:13:18] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:13:18] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:13:18] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:13:18] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:13:18
+[2025-05-21 12:13:18] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:13:18] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:13:18] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:13:18] Script ejecutado correctamente
+[2025-05-21 12:13:20] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:13:20] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:13:20] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:13:20] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:13:20
+[2025-05-21 12:13:20] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:13:20] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:13:20] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:13:20] Script ejecutado correctamente
+[2025-05-21 12:13:20] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:13:20] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:13:20] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:13:20] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:13:20
+[2025-05-21 12:13:20] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:13:20] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:13:20] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:13:20] Script ejecutado correctamente
+[2025-05-21 12:14:20] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:14:20] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:14:20] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:14:20] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:14:20
+[2025-05-21 12:14:20] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:14:20] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:14:20] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:14:20] Script ejecutado correctamente
+[2025-05-21 12:14:22] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:14:22] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:14:22] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:14:22] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:14:22
+[2025-05-21 12:14:22] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:14:22] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:14:22] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:14:22] Script ejecutado correctamente
+[2025-05-21 12:14:23] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:14:23] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:14:23] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:14:23] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:14:23
+[2025-05-21 12:14:23] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:14:23] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:14:23] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:14:23] Script ejecutado correctamente
+[2025-05-21 12:15:23] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:15:23] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:15:23] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:15:23] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:15:23
+[2025-05-21 12:15:23] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:15:23] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:15:23] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:15:23] Script ejecutado correctamente
+[2025-05-21 12:16:23] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:16:23] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:16:23] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:16:23] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:16:23
+[2025-05-21 12:16:23] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:16:23] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:16:23] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:16:23] Script ejecutado correctamente
+[2025-05-21 12:17:23] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:17:23] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:17:23] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:17:23] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:17:23
+[2025-05-21 12:17:23] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:17:23] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:17:23] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:17:23] Script ejecutado correctamente
+[2025-05-21 12:17:57] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:17:57] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:17:57] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:17:57] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:17:57
+[2025-05-21 12:17:57] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:17:57] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:17:57] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:17:57] Script ejecutado correctamente
+[2025-05-21 12:17:57] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:17:57] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:17:57] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:17:57] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:17:57
+[2025-05-21 12:17:57] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:17:57] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:17:57] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:17:57] Script ejecutado correctamente
+[2025-05-21 12:18:57] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:18:57] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:18:57] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:18:57] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:18:57
+[2025-05-21 12:18:57] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:18:57] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:18:57] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:18:57] Script ejecutado correctamente
+[2025-05-21 12:19:57] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:19:57] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:19:57] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:19:57] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:19:57
+[2025-05-21 12:19:57] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:19:57] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:19:57] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:19:57] Script ejecutado correctamente
+[2025-05-21 12:20:57] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:20:57] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:20:57] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:20:57] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:20:57
+[2025-05-21 12:20:57] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:20:57] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:20:57] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:20:57] Script ejecutado correctamente
+[2025-05-21 12:21:22] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:21:22] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:21:22] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:21:22] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:21:22
+[2025-05-21 12:21:22] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:21:22] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:21:22] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:21:22] Script ejecutado correctamente
+[2025-05-21 12:21:22] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:21:22] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:21:22] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:21:22] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:21:22
+[2025-05-21 12:21:22] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:21:22] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:21:22] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:21:22] Script ejecutado correctamente
+[2025-05-21 12:22:23] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:22:23] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:22:23] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:22:23] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:22:23
+[2025-05-21 12:22:23] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:22:23] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:22:23] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:22:23] Script ejecutado correctamente
+[2025-05-21 12:23:23] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:23:23] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:23:23] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:23:23] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:23:23
+[2025-05-21 12:23:23] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:23:23] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:23:23] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:23:23] Script ejecutado correctamente
+[2025-05-21 12:24:23] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:24:23] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:24:23] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:24:23] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:24:23
+[2025-05-21 12:24:23] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:24:23] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:24:23] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:24:23] Script ejecutado correctamente
+[2025-05-21 12:25:23] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:25:23] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:25:23] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:25:23] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:25:23
+[2025-05-21 12:25:23] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:25:23] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:25:23] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:25:23] Script ejecutado correctamente
+[2025-05-21 12:26:23] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:26:23] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:26:23] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:26:23] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:26:23
+[2025-05-21 12:26:23] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:26:23] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:26:23] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:26:23] Script ejecutado correctamente
+[2025-05-21 12:27:23] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:27:23] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:27:23] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:27:23] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:27:23
+[2025-05-21 12:27:23] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:27:23] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:27:23] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:27:23] Script ejecutado correctamente
+[2025-05-21 12:27:45] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:27:45] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:27:45] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:27:45] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:27:45
+[2025-05-21 12:27:46] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:27:46] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:27:46] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:27:46] Script ejecutado correctamente
+[2025-05-21 12:27:46] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:27:46] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:27:46] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:27:46] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:27:46
+[2025-05-21 12:27:46] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:27:46] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:27:46] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:27:46] Script ejecutado correctamente
+[2025-05-21 12:28:46] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:28:46] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:28:46] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:28:46] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:28:46
+[2025-05-21 12:28:46] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:28:46] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:28:46] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:28:46] Script ejecutado correctamente
+[2025-05-21 12:29:45] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:29:45] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:29:45] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:29:45] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:29:45
+[2025-05-21 12:29:45] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:29:45] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:29:45] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:29:45] Script ejecutado correctamente
+[2025-05-21 12:29:45] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:29:45] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:29:45] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:29:45] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:29:45
+[2025-05-21 12:29:45] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:29:45] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:29:45] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:29:45] Script ejecutado correctamente
+[2025-05-21 12:30:46] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:30:46] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:30:46] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:30:46] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:30:46
+[2025-05-21 12:30:46] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:30:46] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:30:46] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:30:46] Script ejecutado correctamente
+[2025-05-21 12:31:46] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:31:46] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:31:46] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:31:46] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:31:46
+[2025-05-21 12:31:46] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:31:46] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:31:46] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:31:46] Script ejecutado correctamente
+[2025-05-21 12:32:46] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:32:46] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:32:46] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:32:46] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:32:46
+[2025-05-21 12:32:46] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:32:46] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:32:46] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:32:46] Script ejecutado correctamente
+[2025-05-21 12:33:46] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:33:46] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:33:46] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:33:46] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:33:46
+[2025-05-21 12:33:46] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:33:46] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:33:46] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:33:46] Script ejecutado correctamente
+[2025-05-21 12:34:46] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:34:46] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:34:46] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:34:46] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:34:46
+[2025-05-21 12:34:46] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:34:46] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:34:46] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:34:46] Script ejecutado correctamente
+[2025-05-21 12:35:46] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:35:46] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:35:46] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:35:46] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:35:46
+[2025-05-21 12:35:46] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:35:46] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:35:46] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:35:46] Script ejecutado correctamente
+[2025-05-21 12:36:46] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:36:46] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:36:46] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:36:46] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:36:46
+[2025-05-21 12:36:46] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:36:46] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:36:46] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:36:46] Script ejecutado correctamente
+[2025-05-21 12:37:46] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:37:46] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:37:46] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:37:46] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:37:46
+[2025-05-21 12:37:46] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:37:46] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:37:46] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:37:46] Script ejecutado correctamente
+[2025-05-21 12:38:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:38:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:38:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:38:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:38:50
+[2025-05-21 12:38:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:38:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:38:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:38:50] Script ejecutado correctamente
+[2025-05-21 12:39:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:39:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:39:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:39:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:39:50
+[2025-05-21 12:39:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:39:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:39:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:39:50] Script ejecutado correctamente
+[2025-05-21 12:40:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:40:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:40:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:40:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:40:50
+[2025-05-21 12:40:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:40:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:40:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:40:50] Script ejecutado correctamente
+[2025-05-21 12:41:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:41:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:41:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:41:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:41:50
+[2025-05-21 12:41:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:41:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:41:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:41:50] Script ejecutado correctamente
+[2025-05-21 12:42:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:42:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:42:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:42:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:42:50
+[2025-05-21 12:42:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:42:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:42:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:42:50] Script ejecutado correctamente
+[2025-05-21 12:43:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:43:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:43:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:43:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:43:50
+[2025-05-21 12:43:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:43:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:43:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:43:50] Script ejecutado correctamente
+[2025-05-21 12:44:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:44:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:44:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:44:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:44:50
+[2025-05-21 12:44:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:44:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:44:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:44:50] Script ejecutado correctamente
+[2025-05-21 12:45:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:45:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:45:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:45:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:45:50
+[2025-05-21 12:45:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:45:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:45:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:45:50] Script ejecutado correctamente
+[2025-05-21 12:46:45] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:46:45] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:46:45] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:46:45] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:46:45
+[2025-05-21 12:46:45] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:46:45] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:46:45] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:46:45] Script ejecutado correctamente
+[2025-05-21 12:47:32] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:47:32] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:47:32] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:47:32] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:47:32
+[2025-05-21 12:47:32] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:47:32] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:47:32] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:47:32] Script ejecutado correctamente
+[2025-05-21 12:47:32] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:47:32] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:47:32] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:47:32] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:47:32
+[2025-05-21 12:47:32] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:47:32] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:47:32] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:47:32] Script ejecutado correctamente
+[2025-05-21 12:48:33] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:48:33] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:48:33] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:48:33] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:48:33
+[2025-05-21 12:48:33] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:48:33] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:48:33] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:48:33] Script ejecutado correctamente
+[2025-05-21 12:48:35] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:48:35] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:48:35] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:48:35] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:48:35
+[2025-05-21 12:48:35] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:48:35] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:48:35] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:48:35] Script ejecutado correctamente
+[2025-05-21 12:48:35] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:48:35] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:48:35] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:48:35] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:48:35
+[2025-05-21 12:48:35] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:48:35] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:48:35] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:48:35] Script ejecutado correctamente
+[2025-05-21 12:49:36] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:49:36] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:49:36] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:49:36] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:49:36
+[2025-05-21 12:49:36] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:49:36] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:49:36] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:49:36] Script ejecutado correctamente
+[2025-05-21 12:50:36] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:50:36] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:50:36] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:50:36] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:50:36
+[2025-05-21 12:50:36] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:50:36] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:50:36] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:50:36] Script ejecutado correctamente
+[2025-05-21 12:51:36] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:51:36] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:51:36] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:51:36] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:51:36
+[2025-05-21 12:51:36] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:51:36] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:51:36] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:51:36] Script ejecutado correctamente
+[2025-05-21 12:51:55] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:51:55] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:51:55] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:51:55] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:51:55
+[2025-05-21 12:51:55] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:51:55] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:51:55] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:51:55] Script ejecutado correctamente
+[2025-05-21 12:51:55] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:51:55] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:51:55] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:51:55] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:51:55
+[2025-05-21 12:51:55] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:51:55] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:51:55] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:51:55] Script ejecutado correctamente
+[2025-05-21 12:52:56] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:52:56] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:52:56] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:52:56] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:52:56
+[2025-05-21 12:52:56] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:52:56] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:52:56] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:52:56] Script ejecutado correctamente
+[2025-05-21 12:53:47] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:53:47] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:53:47] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:53:47] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:53:47
+[2025-05-21 12:53:47] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:53:47] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:53:47] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:53:47] Script ejecutado correctamente
+[2025-05-21 12:53:47] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:53:47] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:53:47] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:53:47] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:53:47
+[2025-05-21 12:53:47] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:53:47] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:53:47] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:53:47] Script ejecutado correctamente
+[2025-05-21 12:53:49] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:53:49] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:53:49] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:53:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:53:50
+[2025-05-21 12:53:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:53:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:53:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:53:50] Script ejecutado correctamente
+[2025-05-21 12:53:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:53:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:53:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:53:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:53:50
+[2025-05-21 12:53:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:53:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:53:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:53:50] Script ejecutado correctamente
+[2025-05-21 12:54:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:54:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:54:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:54:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:54:50
+[2025-05-21 12:54:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:54:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:54:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:54:50] Script ejecutado correctamente
+[2025-05-21 12:55:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:55:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:55:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:55:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:55:50
+[2025-05-21 12:55:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:55:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:55:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:55:50] Script ejecutado correctamente
+[2025-05-21 12:56:35] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:56:35] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:56:35] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:56:36] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:56:36
+[2025-05-21 12:56:36] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:56:36] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:56:36] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:56:36] Script ejecutado correctamente
+[2025-05-21 12:56:36] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:56:36] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:56:36] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:56:36] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:56:36
+[2025-05-21 12:56:36] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:56:36] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:56:36] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:56:36] Script ejecutado correctamente
+[2025-05-21 12:57:36] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:57:36] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:57:36] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:57:36] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:57:36
+[2025-05-21 12:57:36] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:57:36] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:57:36] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:57:36] Script ejecutado correctamente
+[2025-05-21 12:58:36] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:58:36] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:58:36] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:58:36] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:58:36
+[2025-05-21 12:58:36] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:58:36] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:58:36] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:58:36] Script ejecutado correctamente
+[2025-05-21 12:59:36] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 12:59:36] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 12:59:36] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 12:59:36] Iniciando verificaciu00f3n de recordatorios. Hora actual: 12:59:36
+[2025-05-21 12:59:36] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 12:59:36] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 12:59:36] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 12:59:36] Script ejecutado correctamente
+[2025-05-21 13:00:36] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:00:36] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:00:36] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:00:36] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:00:36
+[2025-05-21 13:00:36] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:00:36] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:00:36] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:00:36] Script ejecutado correctamente
+[2025-05-21 13:01:36] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:01:36] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:01:36] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:01:36] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:01:36
+[2025-05-21 13:01:36] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:01:36] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:01:36] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:01:36] Script ejecutado correctamente
+[2025-05-21 13:02:36] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:02:36] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:02:36] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:02:36] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:02:36
+[2025-05-21 13:02:36] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:02:36] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:02:36] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:02:36] Script ejecutado correctamente
+[2025-05-21 13:03:50] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:03:50] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:03:50] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:03:50] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:03:50
+[2025-05-21 13:03:50] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:03:50] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:03:50] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:03:50] Script ejecutado correctamente
+[2025-05-21 13:04:01] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:04:01] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:04:01] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:04:01] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:04:01
+[2025-05-21 13:04:01] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:04:01] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:04:01] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:04:01] Script ejecutado correctamente
+[2025-05-21 13:04:01] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:04:01] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:04:01] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:04:01] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:04:01
+[2025-05-21 13:04:01] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:04:01] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:04:01] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:04:01] Script ejecutado correctamente
+[2025-05-21 13:05:01] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:05:01] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:05:01] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:05:01] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:05:01
+[2025-05-21 13:05:01] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:05:01] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:05:01] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:05:01] Script ejecutado correctamente
+[2025-05-21 13:06:01] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:06:01] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:06:01] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:06:01] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:06:01
+[2025-05-21 13:06:01] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:06:01] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:06:01] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:06:01] Script ejecutado correctamente
+[2025-05-21 13:06:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:06:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:06:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:06:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:06:04
+[2025-05-21 13:06:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:06:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:06:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:06:04] Script ejecutado correctamente
+[2025-05-21 13:06:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:06:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:06:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:06:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:06:04
+[2025-05-21 13:06:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:06:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:06:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:06:04] Script ejecutado correctamente
+[2025-05-21 13:07:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:07:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:07:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:07:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:07:04
+[2025-05-21 13:07:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:07:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:07:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:07:04] Script ejecutado correctamente
+[2025-05-21 13:08:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:08:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:08:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:08:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:08:04
+[2025-05-21 13:08:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:08:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:08:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:08:04] Script ejecutado correctamente
+[2025-05-21 13:09:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:09:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:09:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:09:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:09:04
+[2025-05-21 13:09:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:09:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:09:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:09:04] Script ejecutado correctamente
+[2025-05-21 13:10:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:10:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:10:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:10:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:10:04
+[2025-05-21 13:10:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:10:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:10:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:10:04] Script ejecutado correctamente
+[2025-05-21 13:11:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:11:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:11:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:11:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:11:04
+[2025-05-21 13:11:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:11:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:11:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:11:04] Script ejecutado correctamente
+[2025-05-21 13:12:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:12:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:12:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:12:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:12:04
+[2025-05-21 13:12:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:12:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:12:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:12:04] Script ejecutado correctamente
+[2025-05-21 13:13:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:13:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:13:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:13:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:13:04
+[2025-05-21 13:13:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:13:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:13:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:13:04] Script ejecutado correctamente
+[2025-05-21 13:14:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:14:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:14:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:14:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:14:04
+[2025-05-21 13:14:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:14:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:14:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:14:04] Script ejecutado correctamente
+[2025-05-21 13:15:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:15:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:15:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:15:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:15:04
+[2025-05-21 13:15:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:15:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:15:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:15:04] Script ejecutado correctamente
+[2025-05-21 13:16:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:16:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:16:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:16:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:16:04
+[2025-05-21 13:16:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:16:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:16:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:16:04] Script ejecutado correctamente
+[2025-05-21 13:17:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:17:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:17:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:17:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:17:04
+[2025-05-21 13:17:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:17:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:17:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:17:04] Script ejecutado correctamente
+[2025-05-21 13:18:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:18:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:18:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:18:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:18:04
+[2025-05-21 13:18:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:18:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:18:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:18:04] Script ejecutado correctamente
+[2025-05-21 13:19:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:19:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:19:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:19:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:19:04
+[2025-05-21 13:19:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:19:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:19:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:19:04] Script ejecutado correctamente
+[2025-05-21 13:20:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:20:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:20:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:20:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:20:04
+[2025-05-21 13:20:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:20:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:20:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:20:04] Script ejecutado correctamente
+[2025-05-21 13:21:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:21:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:21:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:21:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:21:04
+[2025-05-21 13:21:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:21:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:21:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:21:04] Script ejecutado correctamente
+[2025-05-21 13:22:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:22:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:22:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:22:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:22:04
+[2025-05-21 13:22:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:22:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:22:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:22:04] Script ejecutado correctamente
+[2025-05-21 13:23:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:23:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:23:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:23:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:23:04
+[2025-05-21 13:23:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:23:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:23:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:23:04] Script ejecutado correctamente
+[2025-05-21 13:24:04] Verificación de recordatorios solicitada desde el frontend (versión mejorada)
+[2025-05-21 13:24:04] INFO DIAGNÓSTICO: María configurada con hora entrada 10:29:00 - salida 16:47:00
+[2025-05-21 13:24:04] Ejecutando comando: "C:\xampp\php\php.exe" "C:\xampp\htdocs\ImpulsaTelecom\backend\scripts\enviar_recordatorios.php"
+[2025-05-21 13:24:04] Iniciando verificaciu00f3n de recordatorios. Hora actual: 13:24:04
+[2025-05-21 13:24:04] Verificando recordatorios para: María García Martínez (elreibo30@gmail.com), Horario: 10:29:00 - 16:47:00
+[2025-05-21 13:24:04] Verificando recordatorios para: Juan Pérez López (juan.perez@impulsatelecom.com), Horario: 09:00:00 - 18:00:00
+[2025-05-21 13:24:04] Verificaciu00f3n de recordatorios finalizada
+[2025-05-21 13:24:04] Script ejecutado correctamente
