@@ -30,26 +30,22 @@ require_once __DIR__ . '/../modelos/bd.php';
 // El modelo Usuario.php no es necesario para este script, lo eliminamos
 session_start();
 
-// Verificar que el usuario ha iniciado sesiu00f3n y es administrador
-// MODO DE DEPURACIÓN: Comentamos temporalmente la verificación para pruebas
-// Descomentar en producción
-/*
-if (!isset($_SESSION['id_usuario']) || !isset($_SESSION['tipo_usuario']) || $_SESSION['tipo_usuario'] !== 'admin') {
+// Verificar que el usuario ha iniciado sesión y tiene permisos suficientes (admin o supervisor)
+if (!isset($_SESSION['NIF']) || !isset($_SESSION['tipo_usuario']) || ($_SESSION['tipo_usuario'] !== 'admin' && $_SESSION['tipo_usuario'] !== 'supervisor')) {
     echo json_encode([
         'success' => false, 
-        'message' => 'Acceso denegado. Se requieren permisos de administrador',
+        'message' => 'Acceso denegado. Se requieren permisos de administrador o supervisor',
         'session_data' => [
-            'id_usuario' => $_SESSION['id_usuario'] ?? 'no_definido',
+            'NIF' => $_SESSION['NIF'] ?? 'no_definido',
             'tipo_usuario' => $_SESSION['tipo_usuario'] ?? 'no_definido'
         ]
     ]);
     exit;
 }
-*/
 
 // Información de depuración de la sesión - no la mostramos, continuamos con el proceso
 $debug_info = [
-    'id_usuario' => $_SESSION['id_usuario'] ?? 'no disponible',
+    'NIF' => $_SESSION['NIF'] ?? 'no disponible',
     'tipo_usuario' => $_SESSION['tipo_usuario'] ?? 'no disponible',
     'session_id' => session_id(),
     'cookies' => $_COOKIE

@@ -167,8 +167,8 @@ const Sidebar = ({ expanded }) => {
           <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Perfil</span>
         </NavLink>
         
-        {/* Sección de administración - solo visible para administradores */}
-        {user?.tipo_usuario === 'admin' && (
+        {/* Sección de administración - visible para administradores y supervisores (con limitaciones) */}
+        {(user?.tipo_usuario === 'admin' || user?.tipo_usuario === 'supervisor') && (
           <>
             <div className={`mt-8 px-4 ${expanded ? 'block' : 'hidden'}`}>
               <h3 className={`text-xs font-semibold uppercase tracking-wider ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
@@ -176,56 +176,60 @@ const Sidebar = ({ expanded }) => {
               </h3>
             </div>
             
-            <NavLink 
-              to="/admin/usuarios" 
-              className={({isActive}) => 
-                `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
-                    ? 'bg-[#78bd00] text-white' 
-                    : isDarkMode 
-                      ? 'hover:bg-gray-800 text-gray-300' 
-                      : 'hover:bg-gray-200 text-gray-700'
-                } ${expanded ? 'mx-2' : 'justify-center'}`
-              }
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
-              <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Usuarios</span>
-            </NavLink>
-            
-            <NavLink 
-              to="/admin/recordatorios" 
-              className={({isActive}) => 
-                `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
-                    ? 'bg-[#78bd00] text-white' 
-                    : isDarkMode 
-                      ? 'hover:bg-gray-800 text-gray-300' 
-                      : 'hover:bg-gray-200 text-gray-700'
-                } ${expanded ? 'mx-2' : 'justify-center'}`
-              }
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-              </svg>
-              <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Recordatorios</span>
-            </NavLink>
-            
-            <NavLink 
-              to="/admin/fichajes" 
-              className={({isActive}) => 
-                `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
-                    ? 'bg-[#78bd00] text-white' 
-                    : isDarkMode 
-                      ? 'hover:bg-gray-800 text-gray-300' 
-                      : 'hover:bg-gray-200 text-gray-700'
-                } ${expanded ? 'mx-2' : 'justify-center'}`
-              }
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Fichajes</span>
-            </NavLink>
+            {user?.tipo_usuario === 'admin' && (
+              <>
+                <NavLink 
+                  to="/admin/usuarios" 
+                  className={({isActive}) => 
+                    `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                        ? 'bg-[#78bd00] text-white' 
+                        : isDarkMode 
+                          ? 'hover:bg-gray-800 text-gray-300' 
+                          : 'hover:bg-gray-200 text-gray-700'
+                    } ${expanded ? 'mx-2' : 'justify-center'}`
+                  }
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                  <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Usuarios</span>
+                </NavLink>
+                
+                <NavLink 
+                  to="/admin/recordatorios" 
+                  className={({isActive}) => 
+                    `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                        ? 'bg-[#78bd00] text-white' 
+                        : isDarkMode 
+                          ? 'hover:bg-gray-800 text-gray-300' 
+                          : 'hover:bg-gray-200 text-gray-700'
+                    } ${expanded ? 'mx-2' : 'justify-center'}`
+                  }
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+                  </svg>
+                  <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Recordatorios</span>
+                </NavLink>
+                
+                <NavLink 
+                  to="/admin/fichajes" 
+                  className={({isActive}) => 
+                    `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                        ? 'bg-[#78bd00] text-white' 
+                        : isDarkMode 
+                          ? 'hover:bg-gray-800 text-gray-300' 
+                          : 'hover:bg-gray-200 text-gray-700'
+                    } ${expanded ? 'mx-2' : 'justify-center'}`
+                  }
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Fichajes</span>
+                </NavLink>
+              </>
+            )}
             
             <NavLink 
               to="/admin/mapa" 

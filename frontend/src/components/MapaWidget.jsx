@@ -154,13 +154,13 @@ const MapaWidget = ({ admin = false, className = '' }) => {
           const ubicacionesFormateadas = response.data.ubicaciones.map(u => ({
             id: u.id_usuario,
             nombre: u.nombre || 'Usuario ' + u.id_usuario,
-            avatar: null, // Campo simplificado, ya no se recibe de la API
+            avatar: u.avatar_ruta,
             posicion: { 
               lat: parseFloat(u.latitud || 0), 
               lng: parseFloat(u.longitud || 0) 
             },
             fecha: u.fecha_actualizacion || 'No disponible',
-            departamento: 'No especificado' // Campo simplificado, ya no se recibe de la API
+            departamento: u.departamento || 'No especificado'
           }));
           
           console.log('Ubicaciones formateadas:', ubicacionesFormateadas);
@@ -177,10 +177,10 @@ const MapaWidget = ({ admin = false, className = '' }) => {
               return {
                 id: u.id_usuario,
                 nombre: u.nombre || 'Usuario ' + u.id_usuario,
-                avatar: null, // Campo simplificado
+                avatar: u.avatar_ruta,
                 posicion: { lat: randomLat, lng: randomLng },
                 fecha: 'No disponible',
-                departamento: 'No especificado', // Campo simplificado
+                departamento: u.departamento || 'No especificado',
                 esEjemplo: true // Marcar como ejemplo
               };
             });
@@ -188,23 +188,8 @@ const MapaWidget = ({ admin = false, className = '' }) => {
             console.log('Usuarios sin ubicación (ejemplos):', usuariosSinUbicacion);
           }
           
-          // Crear un Map para evitar duplicados, usando el id como clave
-          const usuariosMap = new Map();
-          
-          // Primero agregamos las ubicaciones reales
-          ubicacionesFormateadas.forEach(user => {
-            usuariosMap.set(user.id, user);
-          });
-          
-          // Luego agregamos los usuarios sin ubicación, solo si no están ya en el mapa
-          usuariosSinUbicacion.forEach(user => {
-            if (!usuariosMap.has(user.id)) {
-              usuariosMap.set(user.id, user);
-            }
-          });
-          
-          // Convertir el Map a array
-          const todasLasUbicaciones = Array.from(usuariosMap.values());
+          // Combinar con las ubicaciones reales
+          const todasLasUbicaciones = [...ubicacionesFormateadas, ...usuariosSinUbicacion];
           setUsuariosUbicaciones(todasLasUbicaciones);
           
           // Si hay ubicaciones, centrar el mapa en la primera real, o en la oficina si no hay reales

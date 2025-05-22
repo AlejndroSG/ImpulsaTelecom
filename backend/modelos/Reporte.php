@@ -190,6 +190,18 @@ class Reporte {
             $pdf->SetAuthor('Impulsa Telecom');
             $pdf->SetTitle('Informe de Horas Trabajadas');
             $pdf->SetSubject('Informe Mensual');
+            $pdf->SetKeywords('Impulsa Telecom, Horas, Informe, Registro');
+            
+            // Definir información de la empresa
+            $empresa = [
+                'nombre' => 'IMPULSA TELECOM S.L.',
+                'direccion' => 'Calle San Bernardo, 123',
+                'codigo_postal' => '28015 Madrid',
+                'telefono' => '91 456 78 90',
+                'email' => 'info@impulsatelecom.com',
+                'web' => 'www.impulsatelecom.com',
+                'cif' => 'B12345678'
+            ];
             
             // Eliminar cabeceras y pies de página por defecto
             $pdf->setPrintHeader(false);
@@ -215,111 +227,257 @@ class Reporte {
             ];
             $nombreMes = isset($nombresMeses[$mes]) ? $nombresMeses[$mes] : '';
             
-            // Logo de la empresa (comentado para evitar errores si no existe el archivo)
-            /*
+            // Logo de la empresa
             if (file_exists(__DIR__ . '/../assets/logo.png')) {
                 $pdf->Image(__DIR__ . '/../assets/logo.png', 15, 15, 40, 0, 'PNG');
             }
-            */
+            
+            // Información de la empresa (cabecera)
+            $pdf->SetFont('helvetica', 'B', 10);
+            $pdf->SetXY(120, 15);
+            $pdf->Cell(75, 5, $empresa['nombre'], 0, 1, 'R');
+            $pdf->SetFont('helvetica', '', 8);
+            $pdf->SetXY(120, 20);
+            $pdf->Cell(75, 5, $empresa['direccion'], 0, 1, 'R');
+            $pdf->SetXY(120, 25);
+            $pdf->Cell(75, 5, $empresa['codigo_postal'], 0, 1, 'R');
+            $pdf->SetXY(120, 30);
+            $pdf->Cell(75, 5, 'Tel: ' . $empresa['telefono'], 0, 1, 'R');
+            $pdf->SetXY(120, 35);
+            $pdf->Cell(75, 5, 'CIF: ' . $empresa['cif'], 0, 1, 'R');
             
             // Título del documento
             $pdf->SetFont('helvetica', 'B', 16);
-            $pdf->Cell(0, 10, 'INFORME DE HORAS TRABAJADAS', 0, 1, 'R');
-            $pdf->SetFont('helvetica', '', 12);
-            $pdf->Cell(0, 10, "{$nombreMes} {$anio}", 0, 1, 'R');
+            $pdf->SetXY(15, 50);
+            $pdf->Cell(180, 10, 'INFORME DE HORAS TRABAJADAS', 0, 1, 'C');
+            $pdf->SetFont('helvetica', 'B', 14);
+            $pdf->Cell(180, 10, "{$nombreMes} {$anio}", 0, 1, 'C');
             
-            $pdf->Ln(20);
+            // Línea horizontal decorativa
+            $pdf->SetDrawColor(0, 102, 153);
+            $pdf->SetLineWidth(0.5);
+            $pdf->Line(15, 72, 195, 72);
+            $pdf->SetLineWidth(0.2);
+            $pdf->SetDrawColor(0, 0, 0);
+            
+            $pdf->Ln(5);
             
             // Información del empleado
+            $pdf->SetFillColor(240, 248, 255);
             $pdf->SetFont('helvetica', 'B', 12);
-            $pdf->Cell(0, 10, 'DATOS DEL EMPLEADO', 0, 1, 'L');
+            $pdf->Cell(180, 8, 'DATOS DEL EMPLEADO', 0, 1, 'L', true);
             
-            $pdf->SetFont('helvetica', '', 10);
+            $pdf->SetFont('helvetica', 'B', 10);
             $pdf->Cell(40, 7, 'Nombre:', 0, 0, 'L');
-            $pdf->Cell(0, 7, $usuario['nombre'] . ' ' . ($usuario['apellidos'] ?? ''), 0, 1, 'L');
+            $pdf->SetFont('helvetica', '', 10);
+            $pdf->Cell(140, 7, $usuario['nombre'] . ' ' . ($usuario['apellidos'] ?? ''), 0, 1, 'L');
             
+            $pdf->SetFont('helvetica', 'B', 10);
             $pdf->Cell(40, 7, 'NIF:', 0, 0, 'L');
-            $pdf->Cell(0, 7, $usuario['NIF'], 0, 1, 'L');
-            
+            $pdf->SetFont('helvetica', '', 10);
+            $pdf->Cell(60, 7, $usuario['NIF'], 0, 0, 'L');
+            $pdf->SetFont('helvetica', 'B', 10);
             $pdf->Cell(40, 7, 'Departamento:', 0, 0, 'L');
-            $pdf->Cell(0, 7, $usuario['dpto'] ?? 'No asignado', 0, 1, 'L');
+            $pdf->SetFont('helvetica', '', 10);
+            $pdf->Cell(40, 7, $usuario['dpto'] ?? 'No asignado', 0, 1, 'L');
             
+            $pdf->SetFont('helvetica', 'B', 10);
             $pdf->Cell(40, 7, 'Correo:', 0, 0, 'L');
-            $pdf->Cell(0, 7, $usuario['correo'] ?? 'No disponible', 0, 1, 'L');
+            $pdf->SetFont('helvetica', '', 10);
+            $pdf->Cell(140, 7, $usuario['correo'] ?? 'No disponible', 0, 1, 'L');
             
-            $pdf->Ln(10);
+            $pdf->SetFont('helvetica', 'B', 10);
+            $pdf->Cell(40, 7, 'Puesto:', 0, 0, 'L');
+            $pdf->SetFont('helvetica', '', 10);
+            $pdf->Cell(140, 7, $this->obtenerPuestoUsuario($usuario['NIF']), 0, 1, 'L');
+            
+            $pdf->Ln(5);
             
             // Tabla de registros
             $pdf->SetFont('helvetica', 'B', 12);
-            $pdf->Cell(0, 10, 'REGISTROS DE FICHAJES', 0, 1, 'L');
+            $pdf->SetFillColor(240, 248, 255);
+            $pdf->Cell(180, 8, 'REGISTRO DETALLADO DE FICHAJES', 0, 1, 'L', true);
             
             // Encabezados de tabla
-            $pdf->SetFont('helvetica', 'B', 10);
-            $pdf->SetFillColor(230, 230, 230);
+            $pdf->SetFont('helvetica', 'B', 9);
+            $pdf->SetFillColor(0, 102, 153);
+            $pdf->SetTextColor(255, 255, 255);
             
-            $pdf->Cell(40, 7, 'Fecha', 1, 0, 'C', true);
-            $pdf->Cell(30, 7, 'Entrada', 1, 0, 'C', true);
-            $pdf->Cell(30, 7, 'Salida', 1, 0, 'C', true);
-            $pdf->Cell(30, 7, 'Horas', 1, 0, 'C', true);
-            $pdf->Cell(55, 7, 'Comentario', 1, 1, 'C', true);
+            $pdf->Cell(25, 7, 'FECHA', 1, 0, 'C', true);
+            $pdf->Cell(20, 7, 'DÍA', 1, 0, 'C', true);
+            $pdf->Cell(25, 7, 'ENTRADA', 1, 0, 'C', true);
+            $pdf->Cell(25, 7, 'SALIDA', 1, 0, 'C', true);
+            $pdf->Cell(25, 7, 'HORAS', 1, 0, 'C', true);
+            $pdf->Cell(60, 7, 'OBSERVACIONES', 1, 1, 'C', true);
             
             // Filas de datos
-            $pdf->SetFont('helvetica', '', 10);
+            $pdf->SetFont('helvetica', '', 9);
+            $pdf->SetTextColor(0, 0, 0);
+            
+            $diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            $totalMinutosReales = 0;
+            $totalDiasAsistidos = 0;
+            $colorAlternado = false;
             
             if (!empty($fichajes)) {
                 foreach ($fichajes as $fichaje) {
                     // Formatear fecha
-                    $fecha = date('d/m/Y', strtotime($fichaje['fecha']));
+                    $fechaObj = new DateTime($fichaje['fecha']);
+                    $fecha = $fechaObj->format('d/m/Y');
+                    $diaSemana = $diasSemana[$fechaObj->format('w')];
                     
                     // Calcular horas trabajadas en este fichaje
                     $horasTrabajadas = '';
+                    $minutosReales = 0;
                     if (isset($fichaje['hora_entrada']) && isset($fichaje['hora_salida'])) {
                         $entrada = strtotime($fichaje['hora_entrada']);
                         $salida = strtotime($fichaje['hora_salida']);
                         
                         if ($entrada && $salida && $salida > $entrada) {
-                            $minutos = ($salida - $entrada) / 60;
-                            $horas = floor($minutos / 60);
-                            $mins = $minutos % 60;
+                            $minutosReales = ($salida - $entrada) / 60;
+                            $horas = floor($minutosReales / 60);
+                            $mins = $minutosReales % 60;
                             $horasTrabajadas = sprintf("%02d:%02d", $horas, $mins);
+                            $totalMinutosReales += $minutosReales;
+                            $totalDiasAsistidos++;
                         }
                     }
                     
-                    // Limitar longitud del comentario
+                    // Colores alternados para filas
+                    if ($colorAlternado) {
+                        $pdf->SetFillColor(245, 245, 245);
+                    } else {
+                        $pdf->SetFillColor(255, 255, 255);
+                    }
+                    $colorAlternado = !$colorAlternado;
+                    
+                    // Formatear comentario
                     $comentario = isset($fichaje['comentario']) ? $fichaje['comentario'] : '';
-                    if (strlen($comentario) > 25) {
-                        $comentario = substr($comentario, 0, 22) . '...';
+                    if (strlen($comentario) > 32) {
+                        $comentario = substr($comentario, 0, 29) . '...';
                     }
                     
-                    $pdf->Cell(40, 7, $fecha, 1, 0, 'C');
-                    $pdf->Cell(30, 7, $fichaje['hora_entrada'] ?? '-', 1, 0, 'C');
-                    $pdf->Cell(30, 7, $fichaje['hora_salida'] ?? '-', 1, 0, 'C');
-                    $pdf->Cell(30, 7, $horasTrabajadas, 1, 0, 'C');
-                    $pdf->Cell(55, 7, $comentario, 1, 1, 'L');
+                    $pdf->Cell(25, 6, $fecha, 1, 0, 'C', true);
+                    $pdf->Cell(20, 6, $diaSemana, 1, 0, 'C', true);
+                    $pdf->Cell(25, 6, $fichaje['hora_entrada'] ?? '-', 1, 0, 'C', true);
+                    $pdf->Cell(25, 6, $fichaje['hora_salida'] ?? '-', 1, 0, 'C', true);
+                    $pdf->Cell(25, 6, $horasTrabajadas, 1, 0, 'C', true);
+                    $pdf->Cell(60, 6, $comentario, 1, 1, 'L', true);
                 }
             } else {
-                $pdf->Cell(0, 7, 'No hay registros para este período', 1, 1, 'C');
+                $pdf->SetFillColor(255, 255, 255);
+                $pdf->Cell(180, 7, 'No hay registros para este período', 1, 1, 'C', true);
             }
             
-            $pdf->Ln(10);
+            $pdf->Ln(5);
             
-            // Resumen de horas
+            // Resumen de horas - Versión mejorada
+            $pdf->SetFillColor(240, 248, 255);
             $pdf->SetFont('helvetica', 'B', 12);
-            $pdf->Cell(0, 10, 'RESUMEN', 0, 1, 'L');
+            $pdf->Cell(180, 8, 'RESUMEN DE ACTIVIDAD', 0, 1, 'L', true);
             
-            $pdf->SetFont('helvetica', '', 10);
+            // Crear tabla de resumen
+            $pdf->SetFont('helvetica', 'B', 10);
             
-            $pdf->Cell(80, 7, 'Total días trabajados:', 0, 0, 'L');
-            $pdf->Cell(0, 7, $totales['dias_trabajados'], 0, 1, 'L');
+            // Primera fila de la tabla de resumen
+            $pdf->SetFillColor(0, 102, 153);
+            $pdf->SetTextColor(255, 255, 255);
+            $pdf->Cell(90, 7, 'CONCEPTO', 1, 0, 'C', true);
+            $pdf->Cell(90, 7, 'VALOR', 1, 1, 'C', true);
             
-            $pdf->Cell(80, 7, 'Total horas trabajadas:', 0, 0, 'L');
-            $pdf->Cell(0, 7, sprintf("%d horas y %d minutos", $totales['horas'], $totales['minutos']), 0, 1, 'L');
+            // Contenido de la tabla de resumen
+            $pdf->SetTextColor(0, 0, 0);
+            
+            // Calcular horas totales reales (basadas en los registros procesados)
+            $horasReales = floor($totalMinutosReales / 60);
+            $minutosReales = $totalMinutosReales % 60;
+            
+            // Días laborables del mes
+            $diasLaborables = $this->obtenerDiasLaborablesMes($mes, $anio);
+            
+            // Alternar colores en las filas
+            $filas = [
+                ['Total días trabajados', $totalDiasAsistidos . ' días'],
+                ['Días laborables en el mes', $diasLaborables . ' días'],
+                ['Asistencia', round(($totalDiasAsistidos / $diasLaborables) * 100, 2) . '%'],
+                ['Total horas trabajadas', sprintf("%02d:%02d h", $horasReales, $minutosReales)],
+                ['Media diaria', sprintf("%02d:%02d h", floor(($totalMinutosReales / $totalDiasAsistidos) / 60), ($totalMinutosReales / $totalDiasAsistidos) % 60)]
+            ];
+            
+            $colorAlternado = false;
+            foreach ($filas as $fila) {
+                if ($colorAlternado) {
+                    $pdf->SetFillColor(245, 245, 245);
+                } else {
+                    $pdf->SetFillColor(255, 255, 255);
+                }
+                $colorAlternado = !$colorAlternado;
+                
+                $pdf->SetFont('helvetica', 'B', 10);
+                $pdf->Cell(90, 7, $fila[0], 1, 0, 'L', true);
+                $pdf->SetFont('helvetica', '', 10);
+                $pdf->Cell(90, 7, $fila[1], 1, 1, 'C', true);
+            }
+            
+            // Agregar gráfico de barras simple
+            $pdf->Ln(5);
+            $pdf->SetFillColor(240, 248, 255);
+            $pdf->SetFont('helvetica', 'B', 12);
+            $pdf->Cell(180, 8, 'DISTRIBUCIÓN SEMANAL DE HORAS', 0, 1, 'L', true);
+            
+            // Calcular horas por semana
+            $horasPorSemana = $this->calcularHorasPorSemana($fichajes);
+            
+            // Dibujar gráfico de barras
+            $pdf->Ln(5);
+            $maxHoras = max($horasPorSemana);
+            $anchoGrafico = 180;
+            $altoGrafico = 40;
+            $altoMaxBarra = 30;
+            $xInicio = 15;
+            $yInicio = $pdf->GetY() + $altoGrafico;
+            
+            // Dibujar ejes
+            $pdf->SetDrawColor(0, 0, 0);
+            $pdf->Line($xInicio, $yInicio, $xInicio + $anchoGrafico, $yInicio); // Eje X
+            $pdf->Line($xInicio, $yInicio, $xInicio, $yInicio - $altoGrafico); // Eje Y
+            
+            // Dibujar barras
+            $anchoBarra = 30;
+            $espacioEntreBarras = 10;
+            $xActual = $xInicio + 20;
+            
+            foreach ($horasPorSemana as $semana => $horas) {
+                $altoBarra = ($horas / $maxHoras) * $altoMaxBarra;
+                $pdf->SetFillColor(0, 102, 153);
+                $pdf->Rect($xActual, $yInicio - $altoBarra, $anchoBarra, $altoBarra, 'F');
+                
+                // Etiqueta de semana
+                $pdf->SetXY($xActual, $yInicio + 2);
+                $pdf->SetFont('helvetica', '', 8);
+                $pdf->Cell($anchoBarra, 5, 'Semana ' . $semana, 0, 0, 'C');
+                
+                // Valor de horas
+                $pdf->SetXY($xActual, $yInicio - $altoBarra - 5);
+                $pdf->Cell($anchoBarra, 5, number_format($horas, 1) . 'h', 0, 0, 'C');
+                
+                $xActual += $anchoBarra + $espacioEntreBarras;
+            }
             
             // Pie de página con información legal
-            $pdf->Ln(20);
+            $pdf->SetY(265);
+            $pdf->SetDrawColor(0, 102, 153);
+            $pdf->SetLineWidth(0.5);
+            $pdf->Line(15, $pdf->GetY(), 195, $pdf->GetY());
+            $pdf->SetLineWidth(0.2);
+            $pdf->SetDrawColor(0, 0, 0);
+            
+            $pdf->Ln(2);
             $pdf->SetFont('helvetica', 'I', 8);
-            $pdf->Cell(0, 5, 'Este documento es un informe oficial de horas trabajadas generado por Impulsa Telecom.', 0, 1, 'L');
-            $pdf->Cell(0, 5, 'Fecha de generación: ' . date('d/m/Y H:i:s'), 0, 1, 'L');
+            $pdf->Cell(180, 5, 'Este documento es un informe oficial de horas trabajadas emitido por ' . $empresa['nombre'], 0, 1, 'C');
+            $pdf->Cell(180, 5, 'Documento generado el ' . date('d/m/Y') . ' a las ' . date('H:i:s'), 0, 1, 'C');
+            $pdf->SetFont('helvetica', 'B', 8);
+            $pdf->Cell(180, 5, $empresa['web'] . ' - ' . $empresa['email'], 0, 1, 'C');
             
             // Guardar PDF
             $pdf->Output($rutaArchivo, 'F');

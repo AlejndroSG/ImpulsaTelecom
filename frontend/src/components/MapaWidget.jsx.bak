@@ -1,0 +1,328 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { useTheme } from '../context/ThemeContext';
+import axios from 'axios';
+import './MapaWidget.css';
+
+// Coordenadas de la oficina
+const OFICINA_COORDS = { lat: 40.416775, lng: -3.703790 }; // Madrid, España
+const RANGO_PERMITIDO = 300; // 300 metros
+
+// URL de la API
+const API_URL = 'http://localhost/ImpulsaTelecom/backend';
+
+// Función para calcular distancia entre dos puntos geográficos (fórmula de Haversine)
+const calcularDistancia = (lat1, lon1, lat2, lon2) => {
+  const R = 6371; // Radio de la Tierra en km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  const d = R * c; // Distancia en km
+  return d;
+};
+
+// Formatear distancia
+const formatearDistancia = (distancia) => {
+  if (distancia < 1000) {
+    return `${Math.round(distancia)} metros`;
+  } else {
+    return `${(distancia / 1000).toFixed(2)} km`;
+  }
+};
+
+const MapaWidget = ({ admin = false, className = '' }) => {
+  const { theme } = useTheme();
+  const [ubicacion, setUbicacion] = useState(null);
+  const [distancia, setDistancia] = useState(null);
+  const [enRango, setEnRango] = useState(false);
+  const [errorMensaje, setErrorMensaje] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [usuariosUbicaciones, setUsuariosUbicaciones] = useState([]);
+  const [loadingUsuarios, setLoadingUsuarios] = useState(false);
+  
+  // Función para obtener la ubicación actual del usuario
+  const obtenerUbicacion = useCallback(() => {
+    if (!admin) {
+      setLoading(true);
+      setErrorMensaje('');
+      
+      // Comprobar si el navegador soporta geolocalización
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const nuevaUbicacion = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            
+            setUbicacion(nuevaUbicacion);
+            
+            // Calcular distancia a la oficina
+            const distanciaMetros = calcularDistancia(
+              nuevaUbicacion.lat, nuevaUbicacion.lng,
+              OFICINA_COORDS.lat, OFICINA_COORDS.lng
+            ) * 1000; // convertir km a metros
+            
+            setDistancia(distanciaMetros);
+            setEnRango(distanciaMetros <= RANGO_PERMITIDO);
+            setLoading(false);
+          },
+          (error) => {
+            console.error('Error al obtener la ubicación:', error);
+            let mensajeError = 'Error al obtener la ubicación';
+            
+            switch (error.code) {
+              case error.PERMISSION_DENIED:
+                mensajeError = 'Permiso denegado para obtener ubicación';
+                break;
+              case error.POSITION_UNAVAILABLE:
+                mensajeError = 'Ubicación no disponible';
+                break;
+              case error.TIMEOUT:
+                mensajeError = 'Tiempo de espera agotado';
+                break;
+              default:
+                mensajeError = `Error desconocido: ${error.message}`;
+            }
+            
+            setErrorMensaje(mensajeError);
+            setLoading(false);
+          }
+        );
+      } else {
+        setErrorMensaje('Tu navegador no soporta geolocalización');
+        setLoading(false);
+      }
+    }
+  }, [admin]);
+  
+  // Función para obtener ubicaciones de todos los usuarios (modo admin)
+  const obtenerUbicacionesUsuarios = useCallback(async () => {
+    if (!admin) return;
+    
+    try {
+      setLoadingUsuarios(true);
+      setErrorMensaje('');
+      
+      console.log('Obteniendo ubicaciones de usuarios...');
+      
+      const response = await axios.get(`${API_URL}/api/obtener_ubicaciones.php`, {
+        withCredentials: true
+      });
+      
+      console.log('Respuesta recibida:', response.data);
+      
+      if (response.data.success) {
+        // Convertir los datos recibidos al formato adecuado
+        const ubicacionesFormateadas = response.data.ubicaciones.map(u => ({
+          id: u.id_usuario,
+          nombre: u.nombre || `Usuario ${u.id_usuario}`,
+          posicion: { 
+            lat: parseFloat(u.latitud || 0), 
+            lng: parseFloat(u.longitud || 0) 
+          },
+          fecha: u.fecha_actualizacion || 'No disponible',
+          departamento: u.departamento || 'No especificado'
+        }));
+        
+        // Para usuarios sin ubicación, agregar ubicaciones de ejemplo
+        let usuariosSinUbicacion = [];
+        if (response.data.usuarios_sin_ubicacion && response.data.usuarios_sin_ubicacion.length > 0) {
+          usuariosSinUbicacion = response.data.usuarios_sin_ubicacion.map((u, index) => {
+            // Generar posición aleatoria cercana a la oficina (+-0.01 grados ~ 1km)
+            const randomLat = OFICINA_COORDS.lat + (Math.random() * 0.02 - 0.01);
+            const randomLng = OFICINA_COORDS.lng + (Math.random() * 0.02 - 0.01);
+            
+            return {
+              id: u.id_usuario,
+              nombre: u.nombre || `Usuario ${u.id_usuario}`,
+              posicion: { lat: randomLat, lng: randomLng },
+              fecha: 'No disponible',
+              departamento: u.departamento || 'No especificado',
+              esEjemplo: true // Marcar como ejemplo
+            };
+          });
+        }
+        
+        // Unir las ubicaciones reales con las de ejemplo
+        setUsuariosUbicaciones([...ubicacionesFormateadas, ...usuariosSinUbicacion]);
+      } else {
+        setErrorMensaje(response.data.message || 'Error al obtener ubicaciones');
+      }
+      
+      setLoadingUsuarios(false);
+    } catch (error) {
+      console.error('Error al obtener ubicaciones:', error);
+      setErrorMensaje('Error de conexión con el servidor');
+      setLoadingUsuarios(false);
+    }
+  }, [admin]);
+  
+  // Función para refrescar el mapa
+  const refrescarMapa = () => {
+    if (admin) {
+      obtenerUbicacionesUsuarios();
+    } else {
+      obtenerUbicacion();
+    }
+  };
+  
+  // Cargar ubicaciones al montar el componente
+  useEffect(() => {
+    if (admin) {
+      obtenerUbicacionesUsuarios();
+    } else {
+      obtenerUbicacion();
+    }
+  }, [admin, obtenerUbicacion, obtenerUbicacionesUsuarios]);
+
+  return (
+    <div className={`mapa-container ${theme === 'dark' ? 'dark' : ''} ${className}`}>
+      <div className="mapa-header">
+        <h3>{admin ? 'Mapa de usuarios' : 'Distancia a la oficina'}</h3>
+        
+        {admin && (
+          <div className="mapa-controls">
+            <button 
+              className="mapa-button refresh-button" 
+              onClick={refrescarMapa} 
+              disabled={loadingUsuarios}
+            >
+              <i className="fas fa-sync-alt"></i> 
+              {loadingUsuarios ? 'Cargando...' : 'Actualizar'}
+            </button>
+          </div>
+        )}
+        
+        {!admin && ubicacion && distancia !== null && (
+          <div className="mapa-info">
+            {enRango ? (
+              <span className="distancia en-rango">¡Estás en rango!</span>
+            ) : (
+              <span className="distancia fuera-rango">Fuera de rango</span>
+            )}
+            <span className="distancia-valor">{formatearDistancia(distancia)}</span>
+          </div>
+        )}
+      </div>
+      
+      {errorMensaje && (
+        <div className="error-mensaje">
+          <p>{errorMensaje}</p>
+          {!admin && (
+            <button 
+              className="mapa-button retry-button" 
+              onClick={obtenerUbicacion} 
+              disabled={loading}
+            >
+              Reintentar
+            </button>
+          )}
+        </div>
+      )}
+      
+      {/* Sección del mapa estático con información */}
+      <div className="mapa-estatico" style={{ 
+        height: admin ? '500px' : '340px', 
+        width: '100%', 
+        position: 'relative', 
+        backgroundColor: '#f3f4f6', 
+        borderRadius: '8px', 
+        overflow: 'hidden',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: '20px'
+      }}>
+        <h4 style={{ marginBottom: '10px', color: '#333' }}>
+          {admin ? 'Vista de ubicaciones de usuarios' : 'Tu ubicación actual'}
+        </h4>
+
+        {/* Mostrar información básica */}
+        {!admin && ubicacion && (
+          <div style={{ margin: '10px 0', textAlign: 'center' }}>
+            <p>Latitud: <strong>{ubicacion.lat.toFixed(6)}</strong></p>
+            <p>Longitud: <strong>{ubicacion.lng.toFixed(6)}</strong></p>
+            {distancia !== null && (
+              <p>
+                Distancia a la oficina: <strong>{formatearDistancia(distancia)}</strong>
+                <br />
+                <span style={{ color: enRango ? 'green' : 'red', fontWeight: 'bold' }}>
+                  {enRango ? '¡Estás dentro del rango permitido!' : 'Estás fuera del rango permitido'}
+                </span>
+              </p>
+            )}
+          </div>
+        )}
+
+        {/* En modo admin, mostrar lista de usuarios */}
+        {admin && (
+          <div style={{ margin: '10px 0', width: '100%', maxHeight: '350px', overflowY: 'auto' }}>
+            <h5>Lista de usuarios con su ubicación:</h5>
+            {loadingUsuarios ? (
+              <p>Cargando usuarios...</p>
+            ) : (
+              <ul style={{ listStyle: 'none', padding: 0 }}>
+                {usuariosUbicaciones.map((usuario) => (
+                  <li key={usuario.id} style={{
+                    padding: '10px', 
+                    margin: '5px 0', 
+                    borderRadius: '5px', 
+                    backgroundColor: usuario.esEjemplo ? '#fff8e1' : '#e3f2fd',
+                    border: '1px solid #ddd'
+                  }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <strong>{usuario.nombre}</strong>
+                      {usuario.esEjemplo && (
+                        <span style={{ color: '#ff9800', fontSize: '12px' }}>Sin check-in registrado</span>
+                      )}
+                    </div>
+                    <div>
+                      <small>Posición: {usuario.posicion.lat.toFixed(6)}, {usuario.posicion.lng.toFixed(6)}</small>
+                      {usuario.departamento && <div><small>Departamento: {usuario.departamento}</small></div>}
+                      {usuario.fecha && <div><small>Última actualización: {usuario.fecha}</small></div>}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
+
+        {/* Botón para ver en Google Maps */}
+        <button 
+          onClick={() => {
+            const url = admin  
+              ? `https://www.google.com/maps/search/?api=1&query=${OFICINA_COORDS.lat},${OFICINA_COORDS.lng}`
+              : ubicacion 
+                ? `https://www.google.com/maps/search/?api=1&query=${ubicacion.lat},${ubicacion.lng}` 
+                : `https://www.google.com/maps/search/?api=1&query=${OFICINA_COORDS.lat},${OFICINA_COORDS.lng}`;
+            window.open(url, '_blank');
+          }}
+          style={{
+            backgroundColor: '#2563eb',
+            color: 'white',
+            border: 'none',
+            padding: '10px 16px',
+            margin: '15px 0 0 0',
+            borderRadius: '8px',
+            cursor: 'pointer',
+            fontWeight: '500',
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '6px'
+          }}
+        >
+          <i className="fas fa-map-marker-alt"></i> Ver en Google Maps
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default MapaWidget;

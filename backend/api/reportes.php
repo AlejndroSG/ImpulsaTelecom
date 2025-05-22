@@ -25,11 +25,11 @@ require_once '../vendor/autoload.php'; // Asegúrate de tener TCPDF instalado v�
 // Control de sesión
 session_start();
 
-// Función para verificar si el usuario tiene permisos de administrador
+// Función para verificar si el usuario tiene permisos de administrador o supervisor
 function verificarAdmin() {
-    if (!isset($_SESSION['usuario']) || $_SESSION['tipo_usuario'] !== 'admin') {
+    if (!isset($_SESSION['usuario']) || ($_SESSION['tipo_usuario'] !== 'admin' && $_SESSION['tipo_usuario'] !== 'supervisor')) {
         http_response_code(403);
-        echo json_encode(['success' => false, 'error' => 'No tiene permisos para acceder a esta funcionalidad']);
+        echo json_encode(['success' => false, 'error' => 'No tiene permisos para acceder a esta funcionalidad. Se requiere ser administrador o supervisor']);
         exit();
     }
 }
