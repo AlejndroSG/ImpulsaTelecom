@@ -12,7 +12,6 @@ import Tareas from './pages/Tareas'
 import Calendario from './pages/Calendario'
 import Solicitudes from './pages/Solicitudes'
 import AdminUsuarios from './pages/AdminUsuarios'
-import AdminRecordatorios from './pages/AdminRecordatorios'
 import AdminFichajes from './pages/AdminFichajes'
 import AdminReportes from './pages/AdminReportes'
 import AdminMapa from './pages/AdminMapa'
@@ -21,29 +20,8 @@ import { AuthProvider, ProtectedRoute, PublicRoute } from './context/AuthContext
 import { ThemeProvider } from './context/ThemeContext'
 
 function App() {
-  useEffect(() => {
-    // API URL para verificar recordatorios
-    const API_URL = 'http://localhost/ImpulsaTelecom/backend/api';
-    
-    // Funciu00f3n para verificar recordatorios
-    const checkNotifications = async () => {
-      try {
-        await axios.get(`${API_URL}/check_recordatorios.php`, { withCredentials: true });
-        console.log('✅ Verificaciu00f3n de recordatorios completada');
-      } catch (error) {
-        // Ignorar errores silenciosamente para no interrumpir la aplicaciu00f3n
-      }
-    };
-    
-    // Verificar inmediatamente al cargar la app
-    checkNotifications();
-    
-    // Configurar verificaciu00f3n periu00f3dica cada minuto
-    const interval = setInterval(checkNotifications, 60000);
-    
-    // Limpiar al desmontar la aplicaciu00f3n
-    return () => clearInterval(interval);
-  }, []);
+  // La aplicación ya no requiere verificación de recordatorios
+  useEffect(() => {}, []);
   
   return (
     <AuthProvider>
@@ -78,7 +56,6 @@ function App() {
               <Route path="/solicitudes" element={<Solicitudes />} />
               <Route path="/documentacion" element={<Documentacion />} />
               <Route path="/admin/usuarios" element={<AdminUsuarios />} />
-              <Route path="/admin/recordatorios" element={<AdminRecordatorios />} />
               <Route path="/admin/fichajes" element={<AdminFichajes />} />
               <Route path="/admin/reportes" element={<AdminReportes />} />
               <Route path="/admin/mapa" element={<AdminMapa />} />
