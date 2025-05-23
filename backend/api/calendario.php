@@ -86,7 +86,7 @@ function verificarAutenticacion() {
     // Esta es una solución temporal para el problema de sesión
     if (isset($_GET['token']) && !empty($_GET['token'])) {
         // Aquí podrías validar el token contra la base de datos
-        // Por ahora, simplemente aceptamos cualquier token para pruebas
+        // Por ahora, simplemente devolvemos un ID temporal para pruebas
         return 'usuario_temporal';
     }
     
@@ -102,6 +102,20 @@ function verificarAutenticacion() {
     echo json_encode(['success' => false, 'message' => 'Usuario no autenticado']);
     exit();
 }
+
+// Determinar si el usuario es administrador
+$es_admin = false;
+if (isset($_SESSION['usuario_tipo']) && $_SESSION['usuario_tipo'] === 'admin') {
+    $es_admin = true;
+} else if (isset($_POST['user_type']) && $_POST['user_type'] === 'admin') {
+    $es_admin = true;
+} else if (isset($_GET['user_type']) && $_GET['user_type'] === 'admin') {
+    $es_admin = true;
+}
+
+// Obtener el ID del usuario actual
+$usuario_id = isset($_SESSION['usuario_id']) ? $_SESSION['usuario_id'] : (isset($_POST['user_id']) ? $_POST['user_id'] : $_GET['user_id']);
+$usuario_nif = isset($_SESSION['usuario_nif']) ? $_SESSION['usuario_nif'] : (isset($_POST['user_nif']) ? $_POST['user_nif'] : (isset($_GET['user_nif']) ? $_GET['user_nif'] : null));
 
 // Obtener el departamento del usuario actual
 function obtenerDepartamentoUsuario($NIF) {
@@ -158,11 +172,34 @@ try {
             // Registrar información de depuración
             error_log("Procesando solicitud POST para guardar evento. NIF: $NIF");
             
-            // Obtener los datos del evento desde el cuerpo de la solicitud
-            $datosJson = file_get_contents('php://input');
-            error_log("Datos JSON recibidos: $datosJson");
+            // Determinar el tipo de contenido y procesar los datos en consecuencia
+            $contentType = isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '';
+            error_log("Content-Type recibido: $contentType");
             
-            $datos = json_decode($datosJson, true);
+            $datos = null;
+            
+            // Si es una solicitud multipart/form-data (FormData)
+            if (strpos($contentType, 'multipart/form-data') !== false) {
+                error_log("Procesando datos de FormData");
+                
+                // Verificar si tenemos datos en $_POST
+                if (isset($_POST['accion'])) {
+                    $datos = $_POST;
+                    
+                    // Si el evento viene como string JSON, decodificarlo
+                    if (isset($_POST['evento']) && is_string($_POST['evento'])) {
+                        $datos['evento'] = json_decode($_POST['evento'], true);
+                    }
+                }
+            } 
+            // Si es application/json
+            else {
+                // Obtener los datos del evento desde el cuerpo de la solicitud como JSON
+                $datosJson = file_get_contents('php://input');
+                error_log("Datos JSON recibidos: $datosJson");
+                
+                $datos = json_decode($datosJson, true);
+            }
             
             if (!$datos) {
                 $jsonError = json_last_error_msg();
@@ -170,7 +207,21 @@ try {
                 handleError("Datos de evento inválidos o vacíos: $jsonError", 400);
             }
             
-            // Validar datos básicos del evento
+            // Comprobar si se trata de una solicitud para obtener todos los eventos
+            if (isset($datos['accion']) && $datos['accion'] === 'obtener_todos_eventos') {
+                // No validar campos de eventos para esta acción
+                
+                // Determinar si el usuario es administrador
+                $esAdmin = (isset($datos['tipo_usuario']) && $datos['tipo_usuario'] === 'admin');
+                
+                // Obtener todos los eventos según el NIF y el rol
+                $resultado = $modeloEvento->obtenerTodosEventos($NIF, $esAdmin);
+                
+                echo json_encode($resultado);
+                exit();
+            }
+            
+            // Validar datos básicos del evento para otras acciones
             if (!isset($datos['titulo']) || (!isset($datos['inicio']) && !isset($datos['fecha_inicio']))) {
                 error_log("Faltan datos obligatorios. Datos recibidos: " . print_r($datos, true));
                 handleError('Faltan datos obligatorios del evento (título o fecha de inicio)', 400);
@@ -275,53 +326,71 @@ try {
         }
     }
     
-    // Obtener eventos del usuario
-    if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['mis_eventos'])) {
+    // MANEJAR SOLICITUDES GET PARA OBTENER EVENTOS
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         try {
+            // Obtener NIF del usuario
             $NIF = verificarAutenticacion();
+            error_log("Procesando solicitud GET para obtener eventos. NIF: $NIF");
             
-            // Fechas para filtrar (opcional)
-            $fecha_inicio = isset($_GET['inicio']) ? $_GET['inicio'] : null;
-            $fecha_fin = isset($_GET['fin']) ? $_GET['fin'] : null;
+            // Determinar si el usuario es administrador
+            $esAdmin = isset($_GET['user_type']) && $_GET['user_type'] === 'admin';
             
-            // Incluir todos los tipos de eventos (tareas, fichajes, etc.)
-            $incluir_todo = isset($_GET['incluir_todo']) ? $_GET['incluir_todo'] === 'true' : true;
+            // Obtener fechas de inicio y fin si se proporcionan
+            $fechaInicio = isset($_GET['inicio']) ? $_GET['inicio'] : null;
+            $fechaFin = isset($_GET['fin']) ? $_GET['fin'] : null;
             
-            // Obtener eventos personales
-            $resultado = $modeloEvento->obtenerEventosPorUsuario($NIF, $fecha_inicio, $fecha_fin);
+            // Llamar a la función para obtener todos los eventos visibles para el usuario
+            $resultado = $modeloEvento->obtenerTodosEventos($NIF, $esAdmin);
             
-            // Si se solicitan todos los tipos, incluir tareas y fichajes
-            if ($incluir_todo) {
-                // Obtener tareas como eventos
-                $resultadoTareas = $modeloEvento->obtenerTareasComoEventos($NIF, $fecha_inicio, $fecha_fin);
-                if ($resultadoTareas['success'] && !empty($resultadoTareas['tareas'])) {
-                    $resultado['tareas'] = $resultadoTareas['tareas'];
-                } else {
-                    $resultado['tareas'] = [];
-                }
-                
-                // Obtener fichajes como eventos
-                $resultadoFichajes = $modeloEvento->obtenerFichajesComoEventos($NIF, $fecha_inicio, $fecha_fin);
-                if ($resultadoFichajes['success'] && !empty($resultadoFichajes['fichajes'])) {
-                    $resultado['fichajes'] = $resultadoFichajes['fichajes'];
-                } else {
-                    $resultado['fichajes'] = [];
-                }
+            if ($resultado['success']) {
+                // Devolver los eventos en formato JSON
+                echo json_encode($resultado);
+            } else {
+                handleError($resultado['message'] ?? 'Error al obtener eventos', 500);
             }
-            
-            // Agregar información de depuración
-            $resultado['debug']['NIF'] = $NIF;
-            $resultado['debug']['session_id'] = session_id();
-            $resultado['debug']['session_active'] = isset($_SESSION['NIF']);
-            
-            echo json_encode($resultado);
             exit();
         } catch (Exception $e) {
-            error_log("Error al obtener eventos: " . $e->getMessage());
-            http_response_code(500);
-            echo json_encode(['success' => false, 'message' => 'Error al obtener eventos: ' . $e->getMessage()]);
-            exit();
+            error_log("Error en GET calendario: " . $e->getMessage());
+            handleError('Error al procesar la solicitud GET: ' . $e->getMessage(), 500);
         }
+    }
+
+    // Acción para obtener todos los eventos (para administradores)
+    if (isset($datos['accion']) && $datos['accion'] === 'obtener_todos_eventos') {
+        $nif = isset($datos['nif']) ? $datos['nif'] : null;
+        $tipo_usuario = isset($datos['tipo_usuario']) ? $datos['tipo_usuario'] : null;
+        
+        if (!$nif || $tipo_usuario !== 'admin') {
+            http_response_code(403);
+            echo json_encode(['success' => false, 'message' => 'No tiene permisos para acceder a todos los eventos']);
+            exit;
+        }
+        
+        $evento = new Evento($conn);
+        $personales = $evento->obtenerEventosPersonales($nif);
+        $departamentales = $evento->obtenerEventosDepartamentales($nif);
+        $otrosEventos = $evento->obtenerEventosDeOtrosUsuarios();
+        
+        $todosEventos = [];
+        
+        if ($personales['success']) {
+            $todosEventos = array_merge($todosEventos, $personales['eventos']);
+        }
+        
+        if ($departamentales['success']) {
+            $todosEventos = array_merge($todosEventos, $departamentales['eventos']);
+        }
+        
+        if ($otrosEventos['success']) {
+            $todosEventos = array_merge($todosEventos, $otrosEventos['eventos']);
+        }
+        
+        echo json_encode([
+            'success' => true,
+            'eventos' => $todosEventos
+        ]);
+        exit();
     }
     
     // Obtener eventos del departamento

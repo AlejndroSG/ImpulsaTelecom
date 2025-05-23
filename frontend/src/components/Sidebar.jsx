@@ -3,13 +3,14 @@ import { NavLink } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import InitialsAvatar from './InitialsAvatar'
 import { useTheme } from '../context/ThemeContext'
+import '../styles/sidebar.css' // Importar estilos para ocultar scrollbar
 
 const Sidebar = ({ expanded }) => {
   const { user } = useAuth();
   const { isDarkMode } = useTheme();
   
   return (
-    <aside className={`${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'} h-full w-full transition-colors duration-300`}>
+    <aside className={`${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'} h-full w-full transition-colors duration-300 flex flex-col`}>
       {/* Perfil del usuario en el sidebar */}
       {expanded && (
         <div className={`p-4 mb-4 pt-10 ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} border-b`}>
@@ -42,7 +43,8 @@ const Sidebar = ({ expanded }) => {
         </div>
       )}
       
-      <nav className="py-6">
+      <nav className="py-6 flex-1 overflow-y-auto hide-scrollbar">
+        {/* La clase hide-scrollbar se define en el CSS global de la aplicaciu00f3n */}
         <NavLink 
           to="/inicio" 
           className={({isActive}) => 
@@ -97,22 +99,7 @@ const Sidebar = ({ expanded }) => {
               <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Fichaje</span>
             </NavLink>
             
-            <NavLink 
-              to="/usuario" 
-              className={({isActive}) => 
-                `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
-                    ? 'bg-[#78bd00] text-white' 
-                    : isDarkMode 
-                      ? 'hover:bg-gray-800 text-gray-300' 
-                      : 'hover:bg-gray-200 text-gray-700'
-                } ${expanded ? 'mx-2' : 'justify-center'}`
-              }
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-              <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Mi Panel</span>
-            </NavLink>
+
             
             <NavLink 
               to="/calendario" 
@@ -170,7 +157,7 @@ const Sidebar = ({ expanded }) => {
         {/* Sección de administración - visible para administradores y supervisores (con limitaciones) */}
         {(user?.tipo_usuario === 'admin' || user?.tipo_usuario === 'supervisor') && (
           <>
-            <div className={`mt-8 px-4 ${expanded ? 'block' : 'hidden'}`}>
+            <div className={`mt-6 mb-2 px-4 ${expanded ? 'block' : 'hidden'}`}>
               <h3 className={`text-xs font-semibold uppercase tracking-wider ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
                 Administración
               </h3>
@@ -211,6 +198,40 @@ const Sidebar = ({ expanded }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Fichajes</span>
+                </NavLink>
+
+                <NavLink 
+                  to="/admin/documentos" 
+                  className={({isActive}) => 
+                    `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                        ? 'bg-[#78bd00] text-white' 
+                        : isDarkMode 
+                          ? 'hover:bg-gray-800 text-gray-300' 
+                          : 'hover:bg-gray-200 text-gray-700'
+                    } ${expanded ? 'mx-2' : 'justify-center'}`
+                  }
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Documentos</span>
+                </NavLink>
+
+                <NavLink 
+                  to="/admin/eventos" 
+                  className={({isActive}) => 
+                    `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                        ? 'bg-[#78bd00] text-white' 
+                        : isDarkMode 
+                          ? 'hover:bg-gray-800 text-gray-300' 
+                          : 'hover:bg-gray-200 text-gray-700'
+                    } ${expanded ? 'mx-2' : 'justify-center'}`
+                  }
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Eventos</span>
                 </NavLink>
               </>
             )}

@@ -1,13 +1,116 @@
-import React, { useState } from 'react';
-import { useTheme } from '../context/ThemeContext';
-import { motion } from 'framer-motion';
-import { FaFileAlt, FaFilePdf, FaDownload, FaEye } from 'react-icons/fa';
+import React, { useState, useEffect } from "react";
+import { FaFileAlt, FaFilePdf, FaEye, FaDownload, FaFileInvoiceDollar, FaGraduationCap, FaChartLine, FaUserEdit, FaFile, FaCalendarAlt, FaExclamationTriangle } from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useTheme } from "../context/ThemeContext";
+import { motion } from "framer-motion";
 
 const Documentacion = () => {
   const { isDarkMode } = useTheme();
-  const [activeTab, setActiveTab] = useState('proteccion-datos');
+  const [activeTab, setActiveTab] = useState('mis-documentos');
   const [expandedDocId, setExpandedDocId] = useState(null);
 
+  // Estado para documentos personales
+  const [documentosPersonales, setDocumentosPersonales] = useState([]);
+  const [loadingDocs, setLoadingDocs] = useState(true);
+  const [errorDocs, setErrorDocs] = useState(null);
+  const { usuario } = useAuth();
+  
+  // Cargar documentos personales
+  useEffect(() => {
+    const API_URL = 'http://localhost/ImpulsaTelecom/backend/api';
+    
+    const cargarDocumentosPersonales = async () => {
+      setLoadingDocs(true);
+      try {
+        const response = await axios.get(`${API_URL}/documentos.php?action=user_docs&nif=${usuario.NIF}`, {
+          withCredentials: true
+        });
+        
+        if (response.data && response.data.documentos) {
+          setDocumentosPersonales(response.data.documentos);
+          setErrorDocs(null);
+        } else {
+          setDocumentosPersonales([]);
+          setErrorDocs('No se pudieron cargar los documentos');
+        }
+      } catch (err) {
+        console.error('Error al cargar documentos personales:', err);
+        setErrorDocs('Error al cargar documentos: ' + (err.response?.data?.error || err.message));
+      } finally {
+        setLoadingDocs(false);
+      }
+    };
+    
+    if (usuario && usuario.NIF) {
+      cargarDocumentosPersonales();
+    }
+  }, [usuario]);
+  
+  // Descargar documento
+  const descargarDocumento = async (id, titulo) => {
+    const API_URL = 'http://localhost/ImpulsaTelecom/backend/api';
+    try {
+      const response = await axios.get(`${API_URL}/documentos.php?action=download&id=${id}`, {
+        withCredentials: true
+      });
+      
+      if (response.data && response.data.success) {
+        // Crear un enlace invisible para descargar
+        const a = document.createElement('a');
+        a.href = 'http://localhost/ImpulsaTelecom' + response.data.ruta;
+        a.download = titulo || 'documento';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        
+        toast.success('Descargando documento...');
+      } else {
+        toast.error(response.data?.error || 'Error al descargar el documento');
+      }
+    } catch (err) {
+      console.error('Error al descargar:', err);
+      toast.error('Error: ' + (err.response?.data?.error || err.message));
+    }
+  };
+  
+  // Obtener icono segu00fan tipo de documento
+  const getIconoTipo = (tipo) => {
+    const iconos = {
+      'nomina': <FaFileInvoiceDollar className="text-green-500" />,
+      'contrato': <FaFilePdf className="text-red-500" />,
+      'formacion': <FaGraduationCap className="text-blue-500" />,
+      'evaluacion': <FaChartLine className="text-yellow-500" />,
+      'personal': <FaUserEdit className="text-purple-500" />,
+      'otro': <FaFile className="text-gray-500" />
+    };
+    
+    return iconos[tipo] || iconos['otro'];
+  };
+  
+  // Formatear fecha
+  const formatearFecha = (fechaStr) => {
+    if (!fechaStr) return '-';
+    const fecha = new Date(fechaStr);
+    return fecha.toLocaleDateString('es-ES');
+  };
+  
+  // Nombre segu00fan tipo de documento
+  const getNombreTipo = (tipo) => {
+    const nombres = {
+      'nomina': 'Nu00f3mina',
+      'contrato': 'Contrato',
+      'formacion': 'Formaciu00f3n',
+      'evaluacion': 'Evaluaciu00f3n',
+      'personal': 'Personal',
+      'otro': 'Otro'
+    };
+    
+    return nombres[tipo] || 'Otro';
+  };
+  
   // Documentos legales disponibles
   const documentos = [
     {
@@ -122,6 +225,18 @@ const Documentacion = () => {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-white' : 'bg-gray-50 text-gray-800'} transition-colors duration-300`}>
+      <ToastContainer 
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme={isDarkMode ? 'dark' : 'light'}
+      />
       <div className="container mx-auto px-4 py-8">
         <div className="flex flex-col">
           <h1 className={`text-3xl font-bold mb-2 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
@@ -137,30 +252,135 @@ const Documentacion = () => {
               <button
                 key={categoria.id}
                 onClick={() => setActiveTab(categoria.id)}
-                className={`px-4 py-2 mr-4 font-medium rounded-t-lg whitespace-nowrap transition-colors ${
-                  activeTab === categoria.id
-                    ? isDarkMode 
-                      ? 'bg-gray-800 text-[#a5ff0d] border-b-2 border-[#a5ff0d]' 
-                      : 'bg-white text-[#78bd00] border-b-2 border-[#78bd00]'
-                    : isDarkMode 
-                      ? 'text-gray-300 hover:bg-gray-800' 
-                      : 'text-gray-600 hover:bg-gray-100'
+                className={`px-4 py-2 border-b-2 font-medium text-sm ${activeTab === categoria.id
+                  ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
                 }`}
               >
                 {categoria.titulo}
               </button>
             ))}
+            <button
+              onClick={() => setActiveTab('mis-documentos')}
+              className={`px-4 py-2 border-b-2 font-medium text-sm ${activeTab === 'mis-documentos'
+                ? 'border-blue-500 text-blue-600 dark:text-blue-400'
+                : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
+              }`}
+            >
+              Mis Documentos Personales
+            </button>
           </div>
 
-          {/* Descripción de la categoría seleccionada */}
-          <div className={`p-4 mb-6 rounded-md ${isDarkMode ? 'bg-gray-800' : 'bg-white border border-gray-200'}`}>
-            <h2 className="text-xl font-semibold mb-2">{categoriaActiva.titulo}</h2>
-            <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>{categoriaActiva.descripcion}</p>
-          </div>
+          {/* Descripción de la categoría seleccionada - solo para documentos legales */}
+          {activeTab !== 'mis-documentos' && (
+            <div className={`p-4 mb-6 rounded-md ${isDarkMode ? 'bg-gray-800' : 'bg-white border border-gray-200'}`}>
+              <h2 className="text-xl font-semibold mb-2">{categoriaActiva.titulo}</h2>
+              <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>{categoriaActiva.descripcion}</p>
+            </div>
+          )}
+          
+          {/* Sección de documentos personales */}
+          {activeTab === 'mis-documentos' && (
+            <div className="mb-6">
+              <div className={`p-4 mb-6 rounded-md ${isDarkMode ? 'bg-gray-800' : 'bg-white border border-gray-200'}`}>
+                <h2 className="text-xl font-semibold mb-2">Mis Documentos Personales</h2>
+                <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
+                  Aquí encontrará todos los documentos personales que la empresa ha compartido con usted, como nóminas, contratos y otros documentos importantes.
+                </p>
+              </div>
+              
+              {loadingDocs ? (
+                <div className="flex justify-center items-center py-8">
+                  <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+                </div>
+              ) : errorDocs ? (
+                <div className={`p-4 rounded-md text-center ${isDarkMode ? 'bg-red-900 text-red-200' : 'bg-red-100 text-red-700'}`}>
+                  <p>{errorDocs}</p>
+                </div>
+              ) : documentosPersonales.length === 0 ? (
+                <div className={`p-4 rounded-md text-center ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
+                  <p>No tiene documentos personales asignados actualmente.</p>
+                </div>
+              ) : (
+                <div className="grid gap-4">
+                  {documentosPersonales.map(doc => (
+                    <motion.div
+                      key={doc.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className={`p-4 rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-white border border-gray-200'}`}
+                    >
+                      <div 
+                        className="flex items-center justify-between cursor-pointer"
+                        onClick={() => toggleExpandDocument(doc.id)}
+                      >
+                        <div className="flex items-center">
+                          {getIconoTipo(doc.tipo_documento)}
+                          <div className="ml-3">
+                            <h3 className="font-semibold text-lg">{doc.titulo}</h3>
+                            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                              Subido: {formatearFecha(doc.fecha_subida)} | Tipo: {getNombreTipo(doc.tipo_documento)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="flex items-center">
+                          <button 
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              descargarDocumento(doc.id, doc.titulo);
+                            }}
+                            className={`p-2 rounded-full transition-colors ${isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
+                            title="Descargar documento"
+                          >
+                            <FaDownload className={isDarkMode ? 'text-green-300' : 'text-green-600'} />
+                          </button>
+                        </div>
+                      </div>
+                      
+                      {/* Descripción expandible */}
+                      {expandedDocId === doc.id && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          transition={{ duration: 0.3 }}
+                          className="mt-4 pt-4 border-t"
+                        >
+                          <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>
+                            {doc.descripcion || 'No hay descripción disponible para este documento.'}
+                          </p>
+                          <div className="mt-2">
+                            <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                              Tamaño: {Math.round(doc.tamanio / 1024)} KB
+                            </p>
+                            {doc.fecha_expiracion && (
+                              <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+                                Expira: {formatearFecha(doc.fecha_expiracion)}
+                              </p>
+                            )}
+                          </div>
+                          <div className="mt-4">
+                            <button 
+                              onClick={() => descargarDocumento(doc.id, doc.titulo)}
+                              className={`flex items-center px-4 py-2 rounded-md ${isDarkMode ? 'bg-green-600 hover:bg-green-700 text-white' : 'bg-green-500 hover:bg-green-600 text-white'}`}
+                            >
+                              <FaDownload className="mr-2" />
+                              Descargar
+                            </button>
+                          </div>
+                        </motion.div>
+                      )}
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
-          {/* Lista de documentos */}
-          <div className="grid gap-4 mb-6">
-            {categoriaActiva.documentos.map(documento => (
+          {/* Lista de documentos legales - solo se muestra para pestau00f1as de documentos legales */}
+          {activeTab !== 'mis-documentos' && (
+            <div className="grid gap-4 mb-6">
+              {categoriaActiva.documentos.map(documento => (
               <motion.div
                 key={documento.id}
                 initial={{ opacity: 0, y: 20 }}
@@ -249,15 +469,18 @@ const Documentacion = () => {
               </motion.div>
             ))}
           </div>
+          )}
 
           {/* Información adicional */}
-          <div className={`p-4 rounded-md ${isDarkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
-            <h3 className="font-semibold mb-2">Información importante</h3>
-            <p>
-              Si necesita alguna aclaración o documento adicional, por favor contacte con el departamento de Recursos Humanos.
-              Todos los documentos están disponibles en formato PDF y están firmados digitalmente para garantizar su autenticidad.
-            </p>
-          </div>
+          {activeTab === 'mis-documentos' && (
+            <div className={`p-4 rounded-md ${isDarkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-700'}`}>
+              <h3 className="font-semibold mb-2">Información importante</h3>
+              <p>
+                Si necesita alguna aclaración o documento adicional, por favor contacte con el departamento de Recursos Humanos.
+                Todos los documentos están disponibles en formato PDF y están firmados digitalmente para garantizar su autenticidad.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

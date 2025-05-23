@@ -33,8 +33,8 @@ class Evento {
             }
             
             // Preparar la consulta SQL
-            $query = "INSERT INTO eventos (titulo, descripcion, fecha_inicio, fecha_fin, NIF_usuario, id_departamento, tipo, tipo_evento, color, dia_completo) "
-                   . "VALUES (:titulo, :descripcion, :fecha_inicio, :fecha_fin, :NIF_usuario, :id_departamento, :tipo, :tipo_evento, :color, :dia_completo)";
+            $query = "INSERT INTO eventos (titulo, descripcion, fecha_inicio, fecha_fin, NIF_usuario, id_departamento, tipo, color, dia_completo) "
+                   . "VALUES (:titulo, :descripcion, :fecha_inicio, :fecha_fin, :NIF_usuario, :id_departamento, :tipo, :color, :dia_completo)";
             
             $stmt = $this->conn->prepare($query);
             
@@ -48,13 +48,11 @@ class Evento {
             // Parámetros opcionales
             $id_departamento = isset($datos['id_departamento']) ? $datos['id_departamento'] : null;
             $tipo = isset($datos['tipo']) ? $datos['tipo'] : 'evento';
-            $tipo_evento = isset($datos['tipo_evento']) ? $datos['tipo_evento'] : 'personal';  
             $color = isset($datos['color']) ? $datos['color'] : '#3788d8';
             $dia_completo = isset($datos['dia_completo']) ? $datos['dia_completo'] : '0';
             
             $stmt->bindParam(':id_departamento', $id_departamento);
             $stmt->bindParam(':tipo', $tipo);
-            $stmt->bindParam(':tipo_evento', $tipo_evento);
             $stmt->bindParam(':color', $color);
             $stmt->bindParam(':dia_completo', $dia_completo);
             
@@ -96,7 +94,7 @@ class Evento {
             $params = [];
             
             // Campos permitidos para actualizar
-            $camposPermitidos = ['titulo', 'descripcion', 'fecha_inicio', 'fecha_fin', 'id_departamento', 'tipo', 'tipo_evento', 'color', 'dia_completo'];
+            $camposPermitidos = ['titulo', 'descripcion', 'fecha_inicio', 'fecha_fin', 'id_departamento'];
             
             foreach ($camposPermitidos as $campo) {
                 if (isset($datos[$campo])) {
@@ -344,9 +342,9 @@ class Evento {
             $query = "SELECT * FROM eventos";
             $params = [];
             
-            // Si no es admin, filtrar por NIF o eventos globales
+            // Si no es admin, filtrar por NIF o por eventos públicos
             if (!$esAdmin) {
-                $query .= " WHERE (NIF_usuario = :NIF OR tipo_evento = 'global')";
+                $query .= " WHERE NIF_usuario = :NIF";
                 $params[':NIF'] = $NIF;
             }
             
@@ -372,28 +370,6 @@ class Evento {
         } catch (PDOException $e) {
             error_log("Error al obtener eventos: " . $e->getMessage());
             return ['success' => false, 'message' => 'Error al obtener eventos: ' . $e->getMessage()];
-        }
-    }
-    
-    /**
-     * Guardar un evento (crear nuevo o actualizar existente)
-     * Determina automáticamente si debe crear o actualizar basándose en si existe un ID
-     */
-    public function guardarEvento($datos) {
-        try {
-            // Comprobar si es un evento nuevo o existente
-            if (isset($datos['id']) && !empty($datos['id'])) {
-                // Es un evento existente, actualizar
-                $id = $datos['id'];
-                unset($datos['id']); // Quitar el ID de los datos a actualizar
-                return $this->actualizar($id, $datos);
-            } else {
-                // Es un evento nuevo, crear
-                return $this->crear($datos);
-            }
-        } catch (Exception $e) {
-            error_log("Error al guardar evento: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error al guardar evento: ' . $e->getMessage()];
         }
     }
 }

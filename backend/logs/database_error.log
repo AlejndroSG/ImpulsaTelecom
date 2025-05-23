@@ -3248,3 +3248,1645 @@ Stack trace:
 [20-May-2025 10:12:05 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
 [20-May-2025 10:12:05 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 726
 [20-May-2025 10:12:05 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 11:43:25 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 726
+[22-May-2025 11:43:25 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 11:43:25 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 726
+[22-May-2025 11:43:25 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 11:43:25 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 726
+[22-May-2025 11:43:25 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 11:43:25 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 726
+[22-May-2025 11:43:25 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 11:54:40 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 729
+[22-May-2025 11:54:40 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 11:54:40 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 729
+[22-May-2025 11:54:41 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 11:54:41 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 729
+[22-May-2025 11:54:41 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 11:54:41 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 729
+[22-May-2025 11:54:41 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 11:54:50 Europe/Berlin] Error al obtener eventos departamentales: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'u.tipo_usuario' in 'where clause'
+[22-May-2025 11:54:53 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 729
+[22-May-2025 11:54:53 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 11:54:53 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 729
+[22-May-2025 11:54:53 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 11:54:53 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 729
+[22-May-2025 11:54:53 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 11:54:53 Europe/Berlin] PHP Warning:  Undefined array key "success" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 729
+[22-May-2025 11:54:53 Europe/Berlin] Excepción al procesar fichajes: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'impulsatelecom.fichajes' doesn't exist
+[22-May-2025 14:18:47 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:18:47 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:18:47 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:18:47 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","evento":{"id":null,"titulo":"Evento de prueba","descripcion":"","fecha_inicio":"2025-05-23T22:00:00.000Z","fecha_fin":"2025-05-23T23:00:00.000Z","tipo":"evento","color":"#5d4f7d","id_departamento":null,"recurrente":0,"dia_completo":1},"tipo_usuario":"admin"}
+[22-May-2025 14:18:47 Europe/Berlin] Faltan datos obligatorios. Datos recibidos: Array
+(
+    [accion] => crear_evento
+    [evento] => Array
+        (
+            [id] => 
+            [titulo] => Evento de prueba
+            [descripcion] => 
+            [fecha_inicio] => 2025-05-23T22:00:00.000Z
+            [fecha_fin] => 2025-05-23T23:00:00.000Z
+            [tipo] => evento
+            [color] => #5d4f7d
+            [id_departamento] => 
+            [recurrente] => 0
+            [dia_completo] => 1
+        )
+
+    [tipo_usuario] => admin
+)
+
+[22-May-2025 14:18:47 Europe/Berlin] API calendario error: Faltan datos obligatorios del evento (título o fecha de inicio)
+[22-May-2025 14:19:00 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:19:00 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:19:00 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:19:00 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","evento":{"id":null,"titulo":"Evento de prueba","descripcion":"ewrwerwerwrwer","fecha_inicio":"2025-05-23T22:00:00.000Z","fecha_fin":"2025-05-23T23:00:00.000Z","tipo":"evento","color":"#5d4f7d","id_departamento":null,"recurrente":0,"dia_completo":1},"tipo_usuario":"admin"}
+[22-May-2025 14:19:00 Europe/Berlin] Faltan datos obligatorios. Datos recibidos: Array
+(
+    [accion] => crear_evento
+    [evento] => Array
+        (
+            [id] => 
+            [titulo] => Evento de prueba
+            [descripcion] => ewrwerwerwrwer
+            [fecha_inicio] => 2025-05-23T22:00:00.000Z
+            [fecha_fin] => 2025-05-23T23:00:00.000Z
+            [tipo] => evento
+            [color] => #5d4f7d
+            [id_departamento] => 
+            [recurrente] => 0
+            [dia_completo] => 1
+        )
+
+    [tipo_usuario] => admin
+)
+
+[22-May-2025 14:19:00 Europe/Berlin] API calendario error: Faltan datos obligatorios del evento (título o fecha de inicio)
+[22-May-2025 14:19:06 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:19:06 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:19:06 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:19:06 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","evento":{"id":null,"titulo":"Evento de prueba","descripcion":"ewrwerwerwrwer","fecha_inicio":"2025-05-23T22:00:00.000Z","fecha_fin":"2025-05-23T23:00:00.000Z","tipo":"evento","color":"#5d4f7d","id_departamento":null,"recurrente":0,"dia_completo":1},"tipo_usuario":"admin"}
+[22-May-2025 14:19:06 Europe/Berlin] Faltan datos obligatorios. Datos recibidos: Array
+(
+    [accion] => crear_evento
+    [evento] => Array
+        (
+            [id] => 
+            [titulo] => Evento de prueba
+            [descripcion] => ewrwerwerwrwer
+            [fecha_inicio] => 2025-05-23T22:00:00.000Z
+            [fecha_fin] => 2025-05-23T23:00:00.000Z
+            [tipo] => evento
+            [color] => #5d4f7d
+            [id_departamento] => 
+            [recurrente] => 0
+            [dia_completo] => 1
+        )
+
+    [tipo_usuario] => admin
+)
+
+[22-May-2025 14:19:06 Europe/Berlin] API calendario error: Faltan datos obligatorios del evento (título o fecha de inicio)
+[22-May-2025 14:22:13 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:22:13 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:22:13 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:22:13 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","evento":{"id":null,"titulo":"Evento de prueba","descripcion":"","inicio":"2025-05-23T22:00:00.000Z","fecha_inicio":"2025-05-23T22:00:00.000Z","fin":"2025-05-23T23:00:00.000Z","fecha_fin":"2025-05-23T23:00:00.000Z","tipo":"evento","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":1},"tipo_usuario":"admin"}
+[22-May-2025 14:22:13 Europe/Berlin] Faltan datos obligatorios. Datos recibidos: Array
+(
+    [accion] => crear_evento
+    [evento] => Array
+        (
+            [id] => 
+            [titulo] => Evento de prueba
+            [descripcion] => 
+            [inicio] => 2025-05-23T22:00:00.000Z
+            [fecha_inicio] => 2025-05-23T22:00:00.000Z
+            [fin] => 2025-05-23T23:00:00.000Z
+            [fecha_fin] => 2025-05-23T23:00:00.000Z
+            [tipo] => evento
+            [color] => #8b5cf6
+            [id_departamento] => 
+            [recurrente] => 0
+            [dia_completo] => 1
+        )
+
+    [tipo_usuario] => admin
+)
+
+[22-May-2025 14:22:13 Europe/Berlin] API calendario error: Faltan datos obligatorios del evento (título o fecha de inicio)
+[22-May-2025 14:22:22 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:22:22 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:22:22 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:22:22 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","evento":{"id":null,"titulo":"Evento de prueba","descripcion":"edrftgdftgdfgdfgdfgdfgdfg","inicio":"2025-05-23T22:00:00.000Z","fecha_inicio":"2025-05-23T22:00:00.000Z","fin":"2025-05-23T23:00:00.000Z","fecha_fin":"2025-05-23T23:00:00.000Z","tipo":"evento","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":1},"tipo_usuario":"admin"}
+[22-May-2025 14:22:22 Europe/Berlin] Faltan datos obligatorios. Datos recibidos: Array
+(
+    [accion] => crear_evento
+    [evento] => Array
+        (
+            [id] => 
+            [titulo] => Evento de prueba
+            [descripcion] => edrftgdftgdfgdfgdfgdfgdfg
+            [inicio] => 2025-05-23T22:00:00.000Z
+            [fecha_inicio] => 2025-05-23T22:00:00.000Z
+            [fin] => 2025-05-23T23:00:00.000Z
+            [fecha_fin] => 2025-05-23T23:00:00.000Z
+            [tipo] => evento
+            [color] => #8b5cf6
+            [id_departamento] => 
+            [recurrente] => 0
+            [dia_completo] => 1
+        )
+
+    [tipo_usuario] => admin
+)
+
+[22-May-2025 14:22:22 Europe/Berlin] API calendario error: Faltan datos obligatorios del evento (título o fecha de inicio)
+[22-May-2025 14:24:40 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:24:40 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:24:40 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:24:40 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","id":null,"titulo":"Evento de prueba","descripcion":"","inicio":"2025-05-23T22:00:00.000Z","fecha_inicio":"2025-05-23T22:00:00.000Z","fin":"2025-05-23T23:00:00.000Z","fecha_fin":"2025-05-23T23:00:00.000Z","tipo":"evento","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":1,"tipo_usuario":"admin"}
+[22-May-2025 14:24:40 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => crear_evento
+    [id] => 
+    [titulo] => Evento de prueba
+    [descripcion] => 
+    [inicio] => 2025-05-23T22:00:00.000Z
+    [fecha_inicio] => 2025-05-23T22:00:00.000Z
+    [fin] => 2025-05-23T23:00:00.000Z
+    [fecha_fin] => 2025-05-23T23:00:00.000Z
+    [tipo] => evento
+    [color] => #8b5cf6
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 1
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:24:40 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:27:20 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:27:20 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:27:20 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:27:20 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","id":null,"titulo":"Evento de prueba","descripcion":"","inicio":"2025-05-23T22:00:00.000Z","fecha_inicio":"2025-05-23T22:00:00.000Z","fin":"2025-05-23T23:00:00.000Z","fecha_fin":"2025-05-23T23:00:00.000Z","tipo":"evento","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":1,"tipo_usuario":"admin"}
+[22-May-2025 14:27:20 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => crear_evento
+    [id] => 
+    [titulo] => Evento de prueba
+    [descripcion] => 
+    [inicio] => 2025-05-23T22:00:00.000Z
+    [fecha_inicio] => 2025-05-23T22:00:00.000Z
+    [fin] => 2025-05-23T23:00:00.000Z
+    [fecha_fin] => 2025-05-23T23:00:00.000Z
+    [tipo] => evento
+    [color] => #8b5cf6
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 1
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:27:20 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:28:27 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:28:28 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:28:28 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:28:28 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","id":null,"titulo":"ESTE LO ACABA DE HACER EL ADMIN","descripcion":"PARA TODOS LOS EMPLEADOS DEW LA HIOSTORIAERWSHFROWSEDJHFUIOWSDAEHIDFHSAWDUIFBGHWSEDIUF","inicio":"2025-05-23T22:00:00.000Z","fecha_inicio":"2025-05-23T22:00:00.000Z","fin":"2025-05-23T23:00:00.000Z","fecha_fin":"2025-05-23T23:00:00.000Z","tipo":"evento","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":1,"tipo_usuario":"admin"}
+[22-May-2025 14:28:28 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => crear_evento
+    [id] => 
+    [titulo] => ESTE LO ACABA DE HACER EL ADMIN
+    [descripcion] => PARA TODOS LOS EMPLEADOS DEW LA HIOSTORIAERWSHFROWSEDJHFUIOWSDAEHIDFHSAWDUIFBGHWSEDIUF
+    [inicio] => 2025-05-23T22:00:00.000Z
+    [fecha_inicio] => 2025-05-23T22:00:00.000Z
+    [fin] => 2025-05-23T23:00:00.000Z
+    [fecha_fin] => 2025-05-23T23:00:00.000Z
+    [tipo] => evento
+    [color] => #8b5cf6
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 1
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:28:28 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:28:58 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:28:58 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:28:58 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:28:58 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","id":null,"titulo":"AHIJWERTOIEJWDHSOGFTJSODG","descripcion":"REGEDSRGEDRGERGERG","inicio":"2025-05-24T22:00:00.000Z","fecha_inicio":"2025-05-24T22:00:00.000Z","fin":"2025-05-24T23:00:00.000Z","fecha_fin":"2025-05-24T23:00:00.000Z","tipo":"evento","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":1,"tipo_usuario":"admin"}
+[22-May-2025 14:28:58 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => crear_evento
+    [id] => 
+    [titulo] => AHIJWERTOIEJWDHSOGFTJSODG
+    [descripcion] => REGEDSRGEDRGERGERG
+    [inicio] => 2025-05-24T22:00:00.000Z
+    [fecha_inicio] => 2025-05-24T22:00:00.000Z
+    [fin] => 2025-05-24T23:00:00.000Z
+    [fecha_fin] => 2025-05-24T23:00:00.000Z
+    [tipo] => evento
+    [color] => #8b5cf6
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 1
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:28:58 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:32:21 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:32:21 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:32:21 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:32:21 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin"}
+[22-May-2025 14:32:21 Europe/Berlin] Faltan datos obligatorios. Datos recibidos: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+)
+
+[22-May-2025 14:32:21 Europe/Berlin] API calendario error: Faltan datos obligatorios del evento (título o fecha de inicio)
+[22-May-2025 14:32:21 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:32:21 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:32:21 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:32:21 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin"}
+[22-May-2025 14:32:21 Europe/Berlin] Faltan datos obligatorios. Datos recibidos: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+)
+
+[22-May-2025 14:32:21 Europe/Berlin] API calendario error: Faltan datos obligatorios del evento (título o fecha de inicio)
+[22-May-2025 14:33:07 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:33:07 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:33:07 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:33:07 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin"}
+[22-May-2025 14:33:07 Europe/Berlin] Faltan datos obligatorios. Datos recibidos: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+)
+
+[22-May-2025 14:33:07 Europe/Berlin] API calendario error: Faltan datos obligatorios del evento (título o fecha de inicio)
+[22-May-2025 14:33:07 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:33:07 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:33:07 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:33:07 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin"}
+[22-May-2025 14:33:07 Europe/Berlin] Faltan datos obligatorios. Datos recibidos: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+)
+
+[22-May-2025 14:33:07 Europe/Berlin] API calendario error: Faltan datos obligatorios del evento (título o fecha de inicio)
+[22-May-2025 14:33:07 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:33:07 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:33:07 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:33:07 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin"}
+[22-May-2025 14:33:07 Europe/Berlin] Faltan datos obligatorios. Datos recibidos: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+)
+
+[22-May-2025 14:33:07 Europe/Berlin] API calendario error: Faltan datos obligatorios del evento (título o fecha de inicio)
+[22-May-2025 14:33:07 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:33:07 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:33:07 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:33:07 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin"}
+[22-May-2025 14:33:07 Europe/Berlin] Faltan datos obligatorios. Datos recibidos: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+)
+
+[22-May-2025 14:33:07 Europe/Berlin] API calendario error: Faltan datos obligatorios del evento (título o fecha de inicio)
+[22-May-2025 14:33:50 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:33:50 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:33:50 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:33:50 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:33:50.178Z","fecha_inicio":"2025-05-22T12:33:50.178Z"}
+[22-May-2025 14:33:50 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:33:50.178Z
+    [fecha_inicio] => 2025-05-22T12:33:50.178Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:33:50 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:33:50 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:33:50 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:33:50 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:33:50 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:33:50.179Z","fecha_inicio":"2025-05-22T12:33:50.179Z"}
+[22-May-2025 14:33:50 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:33:50.179Z
+    [fecha_inicio] => 2025-05-22T12:33:50.179Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:33:50 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:34:45 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:34:45 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:34:45 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:34:45 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:34:45.855Z","fecha_inicio":"2025-05-22T12:34:45.855Z"}
+[22-May-2025 14:34:45 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:34:45.855Z
+    [fecha_inicio] => 2025-05-22T12:34:45.855Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:34:45 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:34:45 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:34:45 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:34:45 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:34:45 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:34:45.856Z","fecha_inicio":"2025-05-22T12:34:45.856Z"}
+[22-May-2025 14:34:45 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:34:45.856Z
+    [fecha_inicio] => 2025-05-22T12:34:45.856Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:34:45 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:34:46 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:34:46 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:34:46 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:34:46 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:34:45.861Z","fecha_inicio":"2025-05-22T12:34:45.861Z"}
+[22-May-2025 14:34:46 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:34:45.861Z
+    [fecha_inicio] => 2025-05-22T12:34:45.861Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:34:46 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:34:46 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:34:46 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:34:46 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:34:46 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:34:45.861Z","fecha_inicio":"2025-05-22T12:34:45.861Z"}
+[22-May-2025 14:34:46 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:34:45.861Z
+    [fecha_inicio] => 2025-05-22T12:34:45.861Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:34:46 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:34:57 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:34:57 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:34:57 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:34:57 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:34:57.791Z","fecha_inicio":"2025-05-22T12:34:57.791Z"}
+[22-May-2025 14:34:57 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:34:57.791Z
+    [fecha_inicio] => 2025-05-22T12:34:57.791Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:34:57 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:34:57 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:34:57 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:34:57 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:34:57 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:34:57.795Z","fecha_inicio":"2025-05-22T12:34:57.795Z"}
+[22-May-2025 14:34:57 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:34:57.795Z
+    [fecha_inicio] => 2025-05-22T12:34:57.795Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:34:57 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:34:57 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:34:57 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:34:57 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:34:57 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:34:57.794Z","fecha_inicio":"2025-05-22T12:34:57.794Z"}
+[22-May-2025 14:34:57 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:34:57.794Z
+    [fecha_inicio] => 2025-05-22T12:34:57.794Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:34:57 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:34:57 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:34:58 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:34:58 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:34:58 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:34:57.790Z","fecha_inicio":"2025-05-22T12:34:57.790Z"}
+[22-May-2025 14:34:58 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:34:57.790Z
+    [fecha_inicio] => 2025-05-22T12:34:57.790Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:34:58 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:35:12 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:35:12 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:35:12 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:35:12 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","id":null,"titulo":"EWRWQERWERWER","descripcion":"EWRWERWERWERWR","inicio":"2025-05-22 00:00:00","fecha_inicio":"2025-05-22 00:00:00","fin":"2025-05-22 01:00:00","fecha_fin":"2025-05-22 01:00:00","tipo":"evento","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":1,"tipo_usuario":"admin"}
+[22-May-2025 14:35:12 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => crear_evento
+    [id] => 
+    [titulo] => EWRWQERWERWER
+    [descripcion] => EWRWERWERWERWR
+    [inicio] => 2025-05-22 00:00:00
+    [fecha_inicio] => 2025-05-22 00:00:00
+    [fin] => 2025-05-22 01:00:00
+    [fecha_fin] => 2025-05-22 01:00:00
+    [tipo] => evento
+    [color] => #8b5cf6
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 1
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:35:12 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:35:14 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:35:14 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:35:14 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:35:14 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:35:14.402Z","fecha_inicio":"2025-05-22T12:35:14.402Z"}
+[22-May-2025 14:35:14 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:35:14.402Z
+    [fecha_inicio] => 2025-05-22T12:35:14.402Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:35:14 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:35:14 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:35:14 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:35:14 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:35:14 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:35:14.403Z","fecha_inicio":"2025-05-22T12:35:14.403Z"}
+[22-May-2025 14:35:14 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:35:14.403Z
+    [fecha_inicio] => 2025-05-22T12:35:14.403Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:35:14 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:35:14 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:35:14 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:35:14 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:35:14 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:35:14.407Z","fecha_inicio":"2025-05-22T12:35:14.407Z"}
+[22-May-2025 14:35:14 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:35:14.407Z
+    [fecha_inicio] => 2025-05-22T12:35:14.407Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:35:14 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:35:14 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 14:35:14 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 14:35:14 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 14:35:14 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T12:35:14.406Z","fecha_inicio":"2025-05-22T12:35:14.406Z"}
+[22-May-2025 14:35:14 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => obtener_todos_eventos
+    [tipo_usuario] => admin
+    [titulo] => dummy_titulo
+    [inicio] => 2025-05-22T12:35:14.406Z
+    [fecha_inicio] => 2025-05-22T12:35:14.406Z
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 14:35:14 Europe/Berlin] PHP Warning:  Undefined array key "tipo_evento" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1092
+[22-May-2025 14:48:03 Europe/Berlin] PHP Parse error:  syntax error, unexpected token "catch", expecting "function" or "const" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1255
+[22-May-2025 14:48:03 Europe/Berlin] PHP Parse error:  syntax error, unexpected token "catch", expecting "function" or "const" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1255
+[22-May-2025 14:48:03 Europe/Berlin] PHP Parse error:  syntax error, unexpected token "catch", expecting "function" or "const" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1255
+[22-May-2025 14:48:03 Europe/Berlin] PHP Parse error:  syntax error, unexpected token "catch", expecting "function" or "const" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1255
+[22-May-2025 14:48:21 Europe/Berlin] PHP Parse error:  syntax error, unexpected token "catch", expecting "function" or "const" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1255
+[22-May-2025 14:48:21 Europe/Berlin] PHP Parse error:  syntax error, unexpected token "catch", expecting "function" or "const" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1255
+[22-May-2025 14:48:21 Europe/Berlin] PHP Parse error:  syntax error, unexpected token "catch", expecting "function" or "const" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1255
+[22-May-2025 14:48:21 Europe/Berlin] PHP Parse error:  syntax error, unexpected token "catch", expecting "function" or "const" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1255
+[22-May-2025 14:48:24 Europe/Berlin] PHP Parse error:  syntax error, unexpected token "catch", expecting "function" or "const" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1255
+[22-May-2025 14:48:24 Europe/Berlin] PHP Parse error:  syntax error, unexpected token "catch", expecting "function" or "const" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1255
+[22-May-2025 14:48:24 Europe/Berlin] PHP Parse error:  syntax error, unexpected token "catch", expecting "function" or "const" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1255
+[22-May-2025 14:48:24 Europe/Berlin] PHP Parse error:  syntax error, unexpected token "catch", expecting "function" or "const" in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1255
+[22-May-2025 14:57:15 Europe/Berlin] PHP Fatal error:  Cannot redeclare Evento::verificarExistenciaEvento() in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1236
+[22-May-2025 14:57:15 Europe/Berlin] PHP Fatal error:  Cannot redeclare Evento::verificarExistenciaEvento() in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1236
+[22-May-2025 14:57:15 Europe/Berlin] PHP Fatal error:  Cannot redeclare Evento::verificarExistenciaEvento() in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1236
+[22-May-2025 14:57:15 Europe/Berlin] PHP Fatal error:  Cannot redeclare Evento::verificarExistenciaEvento() in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1236
+[22-May-2025 14:59:10 Europe/Berlin] PHP Fatal error:  Cannot redeclare Evento::verificarExistenciaEvento() in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1236
+[22-May-2025 14:59:10 Europe/Berlin] PHP Fatal error:  Cannot redeclare Evento::verificarExistenciaEvento() in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1236
+[22-May-2025 15:00:46 Europe/Berlin] PHP Fatal error:  Cannot redeclare Evento::verificarExistenciaEvento() in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1236
+[22-May-2025 15:00:46 Europe/Berlin] PHP Fatal error:  Cannot redeclare Evento::verificarExistenciaEvento() in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1236
+[22-May-2025 15:00:46 Europe/Berlin] PHP Fatal error:  Cannot redeclare Evento::verificarExistenciaEvento() in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1236
+[22-May-2025 15:00:46 Europe/Berlin] PHP Fatal error:  Cannot redeclare Evento::verificarExistenciaEvento() in C:\xampp\htdocs\ImpulsaTelecom\backend\modelos\Evento.php on line 1236
+[22-May-2025 15:01:38 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:01:38 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:01:38 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:01:38 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:01:38.340Z","fecha_inicio":"2025-05-22T13:01:38.340Z"}
+[22-May-2025 15:01:38 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:01:38 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:01:38 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:01:38 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:01:38.344Z","fecha_inicio":"2025-05-22T13:01:38.344Z"}
+[22-May-2025 15:01:38 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:01:38 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:01:38 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:01:38 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:01:38.344Z","fecha_inicio":"2025-05-22T13:01:38.344Z"}
+[22-May-2025 15:01:38 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:01:38 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:01:38 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:01:38 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:01:38.339Z","fecha_inicio":"2025-05-22T13:01:38.339Z"}
+[22-May-2025 15:02:01 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:02:01 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:02:01 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:02:01 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","id":null,"titulo":"HOLA A TODOS","descripcion":"","inicio":"2025-05-25 00:00:00","fecha_inicio":"2025-05-25 00:00:00","fin":"2025-05-25 01:00:00","fecha_fin":"2025-05-25 01:00:00","tipo":"evento","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":1,"tipo_usuario":"admin"}
+[22-May-2025 15:02:01 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => crear_evento
+    [id] => 
+    [titulo] => HOLA A TODOS
+    [descripcion] => 
+    [inicio] => 2025-05-25 00:00:00
+    [fecha_inicio] => 2025-05-25 00:00:00
+    [fin] => 2025-05-25 01:00:00
+    [fecha_fin] => 2025-05-25 01:00:00
+    [tipo] => evento
+    [color] => #8b5cf6
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 1
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 15:02:01 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::guardarEvento() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:236
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 236
+[22-May-2025 15:02:04 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:02:04 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:02:04 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:02:04 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:02:04.842Z","fecha_inicio":"2025-05-22T13:02:04.842Z"}
+[22-May-2025 15:02:04 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:02:04 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:02:04 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:02:04 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:02:04.842Z","fecha_inicio":"2025-05-22T13:02:04.842Z"}
+[22-May-2025 15:02:04 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:02:05 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:02:05 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:02:05 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:02:04.844Z","fecha_inicio":"2025-05-22T13:02:04.844Z"}
+[22-May-2025 15:02:05 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:02:05 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:02:05 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:02:05 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:02:04.845Z","fecha_inicio":"2025-05-22T13:02:04.845Z"}
+[22-May-2025 15:03:00 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:03:00 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:05:08 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:05:08 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:05:08 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:05:08 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:05:08.477Z","fecha_inicio":"2025-05-22T13:05:08.477Z"}
+[22-May-2025 15:05:08 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:05:08 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:05:08 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:05:08 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:05:08.477Z","fecha_inicio":"2025-05-22T13:05:08.477Z"}
+[22-May-2025 15:05:08 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:05:08 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:05:08 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:05:08 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:05:08.477Z","fecha_inicio":"2025-05-22T13:05:08.477Z"}
+[22-May-2025 15:05:08 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:05:08 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:05:08 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:05:08 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:05:08.477Z","fecha_inicio":"2025-05-22T13:05:08.477Z"}
+[22-May-2025 15:05:52 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:05:52 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:05:52 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:05:52 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:05:52.345Z","fecha_inicio":"2025-05-22T13:05:52.345Z"}
+[22-May-2025 15:05:52 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:05:52 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:05:52 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:05:52 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:05:52.346Z","fecha_inicio":"2025-05-22T13:05:52.346Z"}
+[22-May-2025 15:05:52 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:05:52 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:05:52 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:05:52 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:05:52.346Z","fecha_inicio":"2025-05-22T13:05:52.346Z"}
+[22-May-2025 15:05:52 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:05:52 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:05:52 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:05:52 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:05:52.346Z","fecha_inicio":"2025-05-22T13:05:52.346Z"}
+[22-May-2025 15:05:55 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:05:55 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:05:55 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:05:55 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:05:55.230Z","fecha_inicio":"2025-05-22T13:05:55.230Z"}
+[22-May-2025 15:05:55 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:05:55 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:05:55 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:05:55 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:05:55.230Z","fecha_inicio":"2025-05-22T13:05:55.230Z"}
+[22-May-2025 15:05:55 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:05:55 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:05:55 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:05:55 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:05:55.233Z","fecha_inicio":"2025-05-22T13:05:55.233Z"}
+[22-May-2025 15:05:55 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:05:55 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:05:55 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:05:55 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:05:55.233Z","fecha_inicio":"2025-05-22T13:05:55.233Z"}
+[22-May-2025 15:06:42 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:06:42 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:06:42 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:06:42 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","id":null,"titulo":"ALEJANDRA LA MEJOR","descripcion":"","inicio":"2025-05-26 00:00:00","fecha_inicio":"2025-05-26 00:00:00","fin":"2025-05-26 01:00:00","fecha_fin":"2025-05-26 01:00:00","tipo":"evento","color":"#ff0000","id_departamento":null,"recurrente":0,"dia_completo":0,"tipo_usuario":"admin"}
+[22-May-2025 15:06:42 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => crear_evento
+    [id] => 
+    [titulo] => ALEJANDRA LA MEJOR
+    [descripcion] => 
+    [inicio] => 2025-05-26 00:00:00
+    [fecha_inicio] => 2025-05-26 00:00:00
+    [fin] => 2025-05-26 01:00:00
+    [fecha_fin] => 2025-05-26 01:00:00
+    [tipo] => evento
+    [color] => #ff0000
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 0
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 15:06:42 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::guardarEvento() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:236
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 236
+[22-May-2025 15:06:52 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:06:52 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:06:52 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:06:52 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:06:52.255Z","fecha_inicio":"2025-05-22T13:06:52.255Z"}
+[22-May-2025 15:06:52 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:06:52 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:06:52 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:06:52 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:06:52.250Z","fecha_inicio":"2025-05-22T13:06:52.250Z"}
+[22-May-2025 15:06:52 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:06:52 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:06:52 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:06:52 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:06:52.250Z","fecha_inicio":"2025-05-22T13:06:52.250Z"}
+[22-May-2025 15:06:52 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:06:52 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:06:52 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:06:52 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:06:52.254Z","fecha_inicio":"2025-05-22T13:06:52.254Z"}
+[22-May-2025 15:40:32 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:40:32 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:40:32 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:40:32 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","id":null,"titulo":"VAMOS A VER SI AHORA FUNCIONA","descripcion":"","inicio":"2025-05-26 00:00:00","fecha_inicio":"2025-05-26 00:00:00","fin":"2025-05-26 01:00:00","fecha_fin":"2025-05-26 01:00:00","tipo":"evento","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":1,"tipo_usuario":"admin"}
+[22-May-2025 15:40:32 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => crear_evento
+    [id] => 
+    [titulo] => VAMOS A VER SI AHORA FUNCIONA
+    [descripcion] => 
+    [inicio] => 2025-05-26 00:00:00
+    [fecha_inicio] => 2025-05-26 00:00:00
+    [fin] => 2025-05-26 01:00:00
+    [fecha_fin] => 2025-05-26 01:00:00
+    [tipo] => evento
+    [color] => #8b5cf6
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 1
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 15:40:35 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:40:35 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:40:35 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:40:35 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:40:35.241Z","fecha_inicio":"2025-05-22T13:40:35.241Z"}
+[22-May-2025 15:40:35 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:40:35 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:40:35 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:40:35 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:40:35.241Z","fecha_inicio":"2025-05-22T13:40:35.241Z"}
+[22-May-2025 15:40:35 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:40:35 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:40:35 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:40:35 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:40:35.245Z","fecha_inicio":"2025-05-22T13:40:35.245Z"}
+[22-May-2025 15:40:35 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:40:35 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:40:35 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:40:35 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:40:35.246Z","fecha_inicio":"2025-05-22T13:40:35.246Z"}
+[22-May-2025 15:43:17 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:43:17 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:43:17 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:43:17 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:43:17.210Z","fecha_inicio":"2025-05-22T13:43:17.210Z"}
+[22-May-2025 15:43:17 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:43:17 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:43:17 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:43:17 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:43:17.209Z","fecha_inicio":"2025-05-22T13:43:17.209Z"}
+[22-May-2025 15:45:07 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:45:07 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:45:07 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:45:07 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:45:07.491Z","fecha_inicio":"2025-05-22T13:45:07.491Z"}
+[22-May-2025 15:45:07 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:45:07 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:45:07 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:45:07 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:45:07.496Z","fecha_inicio":"2025-05-22T13:45:07.496Z"}
+[22-May-2025 15:45:07 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:45:07 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:45:07 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:45:07 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:45:07.492Z","fecha_inicio":"2025-05-22T13:45:07.492Z"}
+[22-May-2025 15:45:07 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:45:07 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:45:07 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:45:07 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:45:07.495Z","fecha_inicio":"2025-05-22T13:45:07.495Z"}
+[22-May-2025 15:47:03 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:47:03 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:47:03 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:47:03 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:47:03.220Z","fecha_inicio":"2025-05-22T13:47:03.220Z"}
+[22-May-2025 15:47:03 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:47:03 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:47:03 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:47:03 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:47:03.222Z","fecha_inicio":"2025-05-22T13:47:03.222Z"}
+[22-May-2025 15:48:20 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:48:20 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:48:20 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:48:20 Europe/Berlin] Datos JSON recibidos: {"accion":"actualizar_evento","id":"37","titulo":"VAMOS A VER SI AHORA","descripcion":"","inicio":"2025-05-26 00:00:00","fecha_inicio":"2025-05-26 00:00:00","fin":"2025-05-26 01:00:00","fecha_fin":"2025-05-26 01:00:00","tipo":"evento","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":0,"tipo_usuario":"admin"}
+[22-May-2025 15:48:20 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => actualizar_evento
+    [id] => 37
+    [titulo] => VAMOS A VER SI AHORA
+    [descripcion] => 
+    [inicio] => 2025-05-26 00:00:00
+    [fecha_inicio] => 2025-05-26 00:00:00
+    [fin] => 2025-05-26 01:00:00
+    [fecha_fin] => 2025-05-26 01:00:00
+    [tipo] => evento
+    [color] => #8b5cf6
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 0
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 15:48:37 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:48:37 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:48:37 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:48:37 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:48:37.480Z","fecha_inicio":"2025-05-22T13:48:37.480Z"}
+[22-May-2025 15:48:37 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:48:37 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:48:37 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:48:37 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:48:37.480Z","fecha_inicio":"2025-05-22T13:48:37.480Z"}
+[22-May-2025 15:48:37 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:48:37 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:48:37 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:48:37 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:48:37.485Z","fecha_inicio":"2025-05-22T13:48:37.485Z"}
+[22-May-2025 15:48:37 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:48:37 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:48:37 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:48:37 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:48:37.484Z","fecha_inicio":"2025-05-22T13:48:37.484Z"}
+[22-May-2025 15:48:55 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:48:55 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:48:55 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:48:55 Europe/Berlin] Datos JSON recibidos: {"accion":"actualizar_evento","id":"37","titulo":"VAMOS A VER SI","descripcion":"","inicio":"2025-05-26 00:00:00","fecha_inicio":"2025-05-26 00:00:00","fin":"2025-05-26 01:00:00","fecha_fin":"2025-05-26 01:00:00","tipo":"evento","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":0,"tipo_usuario":"admin"}
+[22-May-2025 15:48:55 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => actualizar_evento
+    [id] => 37
+    [titulo] => VAMOS A VER SI
+    [descripcion] => 
+    [inicio] => 2025-05-26 00:00:00
+    [fecha_inicio] => 2025-05-26 00:00:00
+    [fin] => 2025-05-26 01:00:00
+    [fecha_fin] => 2025-05-26 01:00:00
+    [tipo] => evento
+    [color] => #8b5cf6
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 0
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 15:49:01 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:49:01 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:49:01 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:49:01 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:49:01.908Z","fecha_inicio":"2025-05-22T13:49:01.908Z"}
+[22-May-2025 15:49:01 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:49:01 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:49:01 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:49:01 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:49:01.904Z","fecha_inicio":"2025-05-22T13:49:01.904Z"}
+[22-May-2025 15:49:02 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:49:02 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:49:02 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:49:02 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:49:01.908Z","fecha_inicio":"2025-05-22T13:49:01.908Z"}
+[22-May-2025 15:49:02 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:49:02 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:49:02 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:49:02 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:49:01.904Z","fecha_inicio":"2025-05-22T13:49:01.904Z"}
+[22-May-2025 15:49:14 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:49:14 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:49:19 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:49:20 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:49:23 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:49:23 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:49:28 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:49:28 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:49:28 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:49:29 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:49:31 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:49:31 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:50:24 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:50:24 Europe/Berlin] PHP Fatal error:  Uncaught Error: Call to undefined method Evento::obtenerEventosHibridos() in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php:450
+Stack trace:
+#0 {main}
+  thrown in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 450
+[22-May-2025 15:52:24 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:24 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:28 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:31 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:31 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:31 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:32 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:32 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:32 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:33 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:33 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:33 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:34 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:46 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:48 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:48 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:49 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:49 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:52:57 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:53:24 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:53:24 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:53:24 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:53:24 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:53:24.039Z","fecha_inicio":"2025-05-22T13:53:24.039Z"}
+[22-May-2025 15:53:24 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:53:24 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:53:24 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:53:24 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:53:24.040Z","fecha_inicio":"2025-05-22T13:53:24.040Z"}
+[22-May-2025 15:53:24 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:53:24 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:53:24 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:53:24 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:53:24.040Z","fecha_inicio":"2025-05-22T13:53:24.040Z"}
+[22-May-2025 15:53:24 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:53:24 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:53:24 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:53:24 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:53:24.041Z","fecha_inicio":"2025-05-22T13:53:24.041Z"}
+[22-May-2025 15:55:23 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:55:23 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:55:23 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:55:23 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:55:23.034Z","fecha_inicio":"2025-05-22T13:55:23.034Z"}
+[22-May-2025 15:55:23 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:55:23 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:55:23 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:55:23 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:55:23.036Z","fecha_inicio":"2025-05-22T13:55:23.036Z"}
+[22-May-2025 15:56:03 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:56:03 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:56:03 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:56:03 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:56:03.180Z","fecha_inicio":"2025-05-22T13:56:03.180Z"}
+[22-May-2025 15:56:03 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:56:03 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:56:03 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:56:03 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:56:03.178Z","fecha_inicio":"2025-05-22T13:56:03.178Z"}
+[22-May-2025 15:56:43 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:56:43 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:56:43 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:56:43 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","id":null,"titulo":"PRUEBA","descripcion":"","inicio":"2025-05-27 00:00:00","fecha_inicio":"2025-05-27 00:00:00","fin":"2025-05-29 00:00:00","fecha_fin":"2025-05-29 00:00:00","tipo":"evento","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":1,"tipo_usuario":"admin"}
+[22-May-2025 15:56:43 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => crear_evento
+    [id] => 
+    [titulo] => PRUEBA
+    [descripcion] => 
+    [inicio] => 2025-05-27 00:00:00
+    [fecha_inicio] => 2025-05-27 00:00:00
+    [fin] => 2025-05-29 00:00:00
+    [fecha_fin] => 2025-05-29 00:00:00
+    [tipo] => evento
+    [color] => #8b5cf6
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 1
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[22-May-2025 15:56:46 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:56:46 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:56:46 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:56:46 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:56:46.139Z","fecha_inicio":"2025-05-22T13:56:46.139Z"}
+[22-May-2025 15:56:46 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:56:46 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:56:46 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:56:46 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:56:46.140Z","fecha_inicio":"2025-05-22T13:56:46.140Z"}
+[22-May-2025 15:56:46 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:56:46 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:56:46 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:56:46 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:56:46.144Z","fecha_inicio":"2025-05-22T13:56:46.144Z"}
+[22-May-2025 15:56:46 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 15:56:46 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 15:56:46 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 15:56:46 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T13:56:46.145Z","fecha_inicio":"2025-05-22T13:56:46.145Z"}
+[22-May-2025 15:57:32 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:57:32 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:57:36 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:57:37 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 15:57:38 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:01:41 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:01:41 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:01:44 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:01:45 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:01:45 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:01:48 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:01:48 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:07:42 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:07:42 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:07:42 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:07:42 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:07:42.682Z","fecha_inicio":"2025-05-22T14:07:42.682Z"}
+[22-May-2025 16:07:42 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:07:42 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:07:42 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:07:42 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:07:42.681Z","fecha_inicio":"2025-05-22T14:07:42.681Z"}
+[22-May-2025 16:07:42 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:07:42 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:07:42 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:07:42 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:07:42.682Z","fecha_inicio":"2025-05-22T14:07:42.682Z"}
+[22-May-2025 16:07:42 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:07:42 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:07:42 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:07:42 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:07:42.682Z","fecha_inicio":"2025-05-22T14:07:42.682Z"}
+[22-May-2025 16:11:48 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:11:48 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:11:48 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:11:48 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:11:48.611Z","fecha_inicio":"2025-05-22T14:11:48.611Z"}
+[22-May-2025 16:11:48 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:11:48 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:11:48 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:11:48 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:11:48.612Z","fecha_inicio":"2025-05-22T14:11:48.612Z"}
+[22-May-2025 16:11:48 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:11:48 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:11:48 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:11:48 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:11:48.615Z","fecha_inicio":"2025-05-22T14:11:48.615Z"}
+[22-May-2025 16:11:48 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:11:48 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:11:48 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:11:48 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:11:48.614Z","fecha_inicio":"2025-05-22T14:11:48.614Z"}
+[22-May-2025 16:12:00 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:12:00 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:12:00 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:12:00 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:12:00.518Z","fecha_inicio":"2025-05-22T14:12:00.518Z"}
+[22-May-2025 16:12:00 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:12:00 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:12:00 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:12:00 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:12:00.518Z","fecha_inicio":"2025-05-22T14:12:00.518Z"}
+[22-May-2025 16:12:00 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:12:00 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:12:00 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:12:00 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:12:00.522Z","fecha_inicio":"2025-05-22T14:12:00.522Z"}
+[22-May-2025 16:12:00 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:12:00 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:12:00 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:12:00 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:12:00.523Z","fecha_inicio":"2025-05-22T14:12:00.523Z"}
+[22-May-2025 16:12:56 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:12:56 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:12:56 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:12:56 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:12:56.746Z","fecha_inicio":"2025-05-22T14:12:56.746Z"}
+[22-May-2025 16:12:56 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:12:56 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:12:56 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:12:56 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:12:56.746Z","fecha_inicio":"2025-05-22T14:12:56.746Z"}
+[22-May-2025 16:12:56 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:12:56 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:12:56 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:12:56 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:12:56.746Z","fecha_inicio":"2025-05-22T14:12:56.746Z"}
+[22-May-2025 16:12:56 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[22-May-2025 16:12:56 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[22-May-2025 16:12:56 Europe/Berlin] Content-Type recibido: application/json
+[22-May-2025 16:12:56 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T14:12:56.745Z","fecha_inicio":"2025-05-22T14:12:56.745Z"}
+[22-May-2025 16:19:30 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:19:30 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:21:34 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:21:34 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:25:35 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:25:36 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:25:37 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:25:37 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:25:38 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:25:38 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:25:38 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:25:40 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[22-May-2025 16:25:40 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:16:44 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:16:44 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:16:45 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:16:47 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:16:47 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:16:49 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:16:49 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:23:57 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:23:57 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:23:59 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:31:26 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:31:26 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:31:26 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:31:26 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:31:26.148Z","fecha_inicio":"2025-05-22T22:31:26.148Z"}
+[23-May-2025 00:31:26 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:31:26 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:31:26 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:31:26 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:31:26.147Z","fecha_inicio":"2025-05-22T22:31:26.147Z"}
+[23-May-2025 00:31:26 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:31:26 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:31:26 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:31:26 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:31:26.148Z","fecha_inicio":"2025-05-22T22:31:26.148Z"}
+[23-May-2025 00:31:26 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:31:26 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:31:26 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:31:26 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:31:26.148Z","fecha_inicio":"2025-05-22T22:31:26.148Z"}
+[23-May-2025 00:31:52 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:31:52 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:31:52 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:31:52 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","id":null,"titulo":"Prueba definitiva para todos los usuarios ROJO","descripcion":"","inicio":"2025-05-29 00:00:00","fecha_inicio":"2025-05-29 00:00:00","fin":"2025-05-29 01:00:00","fecha_fin":"2025-05-29 01:00:00","tipo":"evento","color":"#ff0000","id_departamento":null,"recurrente":0,"dia_completo":1,"tipo_usuario":"admin"}
+[23-May-2025 00:31:52 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => crear_evento
+    [id] => 
+    [titulo] => Prueba definitiva para todos los usuarios ROJO
+    [descripcion] => 
+    [inicio] => 2025-05-29 00:00:00
+    [fecha_inicio] => 2025-05-29 00:00:00
+    [fin] => 2025-05-29 01:00:00
+    [fecha_fin] => 2025-05-29 01:00:00
+    [tipo] => evento
+    [color] => #ff0000
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 1
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[23-May-2025 00:32:11 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:32:11 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:32:13 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:32:14 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:32:15 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:32:17 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:32:17 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:32:17 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:32:18 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:32:18 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:32:18 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:34:46 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:34:46 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:35:09 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:35:09 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:35:09 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:35:09 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:35:09.147Z","fecha_inicio":"2025-05-22T22:35:09.147Z"}
+[23-May-2025 00:35:09 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:35:09 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:35:09 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:35:09 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:35:09.148Z","fecha_inicio":"2025-05-22T22:35:09.148Z"}
+[23-May-2025 00:35:09 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:35:09 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:35:09 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:35:09 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:35:09.148Z","fecha_inicio":"2025-05-22T22:35:09.148Z"}
+[23-May-2025 00:35:09 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:35:09 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:35:09 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:35:09 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:35:09.148Z","fecha_inicio":"2025-05-22T22:35:09.148Z"}
+[23-May-2025 00:35:18 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:35:18 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:35:18 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:35:18 Europe/Berlin] Datos JSON recibidos: {"accion":"actualizar_evento","id":"39","titulo":"Prueba definitiva para todos los usuarios ROJO","descripcion":"","inicio":"2025-05-29 00:00:00","fecha_inicio":"2025-05-29 00:00:00","fin":"2025-05-29 01:00:00","fecha_fin":"2025-05-29 01:00:00","tipo":"evento","color":"#ff0000","id_departamento":null,"recurrente":0,"dia_completo":0,"tipo_usuario":"admin"}
+[23-May-2025 00:35:18 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => actualizar_evento
+    [id] => 39
+    [titulo] => Prueba definitiva para todos los usuarios ROJO
+    [descripcion] => 
+    [inicio] => 2025-05-29 00:00:00
+    [fecha_inicio] => 2025-05-29 00:00:00
+    [fin] => 2025-05-29 01:00:00
+    [fecha_fin] => 2025-05-29 01:00:00
+    [tipo] => evento
+    [color] => #ff0000
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 0
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[23-May-2025 00:35:21 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:35:21 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:35:21 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:35:21 Europe/Berlin] Datos JSON recibidos: {"accion":"actualizar_evento","id":"39","titulo":"Prueba definitiva para todos los usuarios ROJO","descripcion":"","inicio":"2025-05-29 00:00:00","fecha_inicio":"2025-05-29 00:00:00","fin":"2025-05-29 01:00:00","fecha_fin":"2025-05-29 01:00:00","tipo":"evento","color":"#ff0000","id_departamento":null,"recurrente":0,"dia_completo":0,"tipo_usuario":"admin"}
+[23-May-2025 00:35:21 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => actualizar_evento
+    [id] => 39
+    [titulo] => Prueba definitiva para todos los usuarios ROJO
+    [descripcion] => 
+    [inicio] => 2025-05-29 00:00:00
+    [fecha_inicio] => 2025-05-29 00:00:00
+    [fin] => 2025-05-29 01:00:00
+    [fecha_fin] => 2025-05-29 01:00:00
+    [tipo] => evento
+    [color] => #ff0000
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 0
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[23-May-2025 00:40:12 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:40:12 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:40:12 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:40:12 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:40:12.379Z","fecha_inicio":"2025-05-22T22:40:12.379Z"}
+[23-May-2025 00:40:12 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:40:12 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:40:12 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:40:12 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:40:12.380Z","fecha_inicio":"2025-05-22T22:40:12.380Z"}
+[23-May-2025 00:43:28 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:43:28 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:43:28 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:43:28 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:43:28.568Z","fecha_inicio":"2025-05-22T22:43:28.568Z"}
+[23-May-2025 00:43:28 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:43:28 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:43:28 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:43:28 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:43:28.568Z","fecha_inicio":"2025-05-22T22:43:28.568Z"}
+[23-May-2025 00:43:28 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:43:28 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:43:28 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:43:28 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:43:28.570Z","fecha_inicio":"2025-05-22T22:43:28.570Z"}
+[23-May-2025 00:43:28 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:43:28 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:43:28 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:43:28 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T22:43:28.571Z","fecha_inicio":"2025-05-22T22:43:28.571Z"}
+[23-May-2025 00:43:35 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:43:35 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:43:35 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:43:35 Europe/Berlin] Datos JSON recibidos: {"accion":"actualizar_evento","id":"39","titulo":"Prueba definitiva para todos los usuarios ROJO","descripcion":"","inicio":"2025-05-29 00:00:00","fecha_inicio":"2025-05-29 00:00:00","fin":"2025-05-29 01:00:00","fecha_fin":"2025-05-29 01:00:00","tipo":"evento","tipo_evento":"global","color":"#ff0000","id_departamento":null,"recurrente":0,"dia_completo":0,"tipo_usuario":"admin"}
+[23-May-2025 00:43:35 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => actualizar_evento
+    [id] => 39
+    [titulo] => Prueba definitiva para todos los usuarios ROJO
+    [descripcion] => 
+    [inicio] => 2025-05-29 00:00:00
+    [fecha_inicio] => 2025-05-29 00:00:00
+    [fin] => 2025-05-29 01:00:00
+    [fecha_fin] => 2025-05-29 01:00:00
+    [tipo] => evento
+    [tipo_evento] => global
+    [color] => #ff0000
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 0
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[23-May-2025 00:43:38 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:43:38 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:43:38 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:43:38 Europe/Berlin] Datos JSON recibidos: {"accion":"actualizar_evento","id":"39","titulo":"Prueba definitiva para todos los usuarios ROJO","descripcion":"","inicio":"2025-05-29 00:00:00","fecha_inicio":"2025-05-29 00:00:00","fin":"2025-05-29 01:00:00","fecha_fin":"2025-05-29 01:00:00","tipo":"evento","tipo_evento":"global","color":"#ff0000","id_departamento":null,"recurrente":0,"dia_completo":0,"tipo_usuario":"admin"}
+[23-May-2025 00:43:38 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => actualizar_evento
+    [id] => 39
+    [titulo] => Prueba definitiva para todos los usuarios ROJO
+    [descripcion] => 
+    [inicio] => 2025-05-29 00:00:00
+    [fecha_inicio] => 2025-05-29 00:00:00
+    [fin] => 2025-05-29 01:00:00
+    [fecha_fin] => 2025-05-29 01:00:00
+    [tipo] => evento
+    [tipo_evento] => global
+    [color] => #ff0000
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 0
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[23-May-2025 00:43:48 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:43:48 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:43:48 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:43:48 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","id":null,"titulo":"werwerwer","descripcion":"werwerwer","inicio":"2025-05-30 00:00:00","fecha_inicio":"2025-05-30 00:00:00","fin":"2025-05-30 01:00:00","fecha_fin":"2025-05-30 01:00:00","tipo":"evento","tipo_evento":"personal","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":1,"tipo_usuario":"admin"}
+[23-May-2025 00:43:48 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => crear_evento
+    [id] => 
+    [titulo] => werwerwer
+    [descripcion] => werwerwer
+    [inicio] => 2025-05-30 00:00:00
+    [fecha_inicio] => 2025-05-30 00:00:00
+    [fin] => 2025-05-30 01:00:00
+    [fecha_fin] => 2025-05-30 01:00:00
+    [tipo] => evento
+    [tipo_evento] => personal
+    [color] => #8b5cf6
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 1
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[23-May-2025 00:43:51 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 00:43:51 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 00:43:51 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 00:43:51 Europe/Berlin] Datos JSON recibidos: {"accion":"actualizar_evento","id":"40","titulo":"werwerwer","descripcion":"werwerwer","inicio":"2025-05-30 00:00:00","fecha_inicio":"2025-05-30 00:00:00","fin":"2025-05-30 00:00:00","fecha_fin":"2025-05-30 00:00:00","tipo":"evento","tipo_evento":"global","color":"#8b5cf6","id_departamento":null,"recurrente":0,"dia_completo":1,"tipo_usuario":"admin"}
+[23-May-2025 00:43:51 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => actualizar_evento
+    [id] => 40
+    [titulo] => werwerwer
+    [descripcion] => werwerwer
+    [inicio] => 2025-05-30 00:00:00
+    [fecha_inicio] => 2025-05-30 00:00:00
+    [fin] => 2025-05-30 00:00:00
+    [fecha_fin] => 2025-05-30 00:00:00
+    [tipo] => evento
+    [tipo_evento] => global
+    [color] => #8b5cf6
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 1
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[23-May-2025 00:44:01 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:44:01 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:44:04 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:44:05 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:44:07 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:44:08 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:44:08 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:44:09 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:44:10 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:44:20 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:44:21 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:51:34 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:51:56 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:54:06 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:54:06 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 00:55:51 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:09 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:10 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:12 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:12 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:13 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:13 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:14 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:14 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:14 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:18 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:20 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:20 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:21 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:00:35 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:00:35 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:00:35 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:00:35 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:00:35.641Z","fecha_inicio":"2025-05-22T23:00:35.641Z"}
+[23-May-2025 01:00:35 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:00:35 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:00:35 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:00:35 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:00:35.641Z","fecha_inicio":"2025-05-22T23:00:35.641Z"}
+[23-May-2025 01:00:35 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:00:35 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:00:35 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:00:35 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:00:35.642Z","fecha_inicio":"2025-05-22T23:00:35.642Z"}
+[23-May-2025 01:00:35 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:00:35 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:00:35 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:00:35 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:00:35.641Z","fecha_inicio":"2025-05-22T23:00:35.641Z"}
+[23-May-2025 01:00:43 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:00:43 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:00:43 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:00:43 Europe/Berlin] Datos JSON recibidos: {"accion":"actualizar_evento","id":"39","titulo":"Prueba definitiva para todos los usuarios ROJO","descripcion":"","inicio":"2025-05-29 00:00:00","fecha_inicio":"2025-05-29 00:00:00","fin":"2025-05-29 01:00:00","fecha_fin":"2025-05-29 01:00:00","tipo":"evento","tipo_evento":"global","color":"#ff0000","id_departamento":null,"recurrente":0,"dia_completo":0,"tipo_usuario":"admin"}
+[23-May-2025 01:00:43 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => actualizar_evento
+    [id] => 39
+    [titulo] => Prueba definitiva para todos los usuarios ROJO
+    [descripcion] => 
+    [inicio] => 2025-05-29 00:00:00
+    [fecha_inicio] => 2025-05-29 00:00:00
+    [fin] => 2025-05-29 01:00:00
+    [fecha_fin] => 2025-05-29 01:00:00
+    [tipo] => evento
+    [tipo_evento] => global
+    [color] => #ff0000
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 0
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[23-May-2025 01:00:54 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:00:54 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:00:54 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:00:54 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:00:54.680Z","fecha_inicio":"2025-05-22T23:00:54.680Z"}
+[23-May-2025 01:00:54 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:00:54 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:00:54 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:00:54 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:00:54.686Z","fecha_inicio":"2025-05-22T23:00:54.686Z"}
+[23-May-2025 01:00:54 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:00:54 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:00:54 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:00:54 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:00:54.687Z","fecha_inicio":"2025-05-22T23:00:54.687Z"}
+[23-May-2025 01:00:54 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:00:55 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:00:55 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:00:55 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:00:54.679Z","fecha_inicio":"2025-05-22T23:00:54.679Z"}
+[23-May-2025 01:03:58 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:03:58 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:03:58 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:03:58 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:03:58.030Z","fecha_inicio":"2025-05-22T23:03:58.030Z"}
+[23-May-2025 01:03:58 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:03:58 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:03:58 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:03:58 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:03:58.025Z","fecha_inicio":"2025-05-22T23:03:58.025Z"}
+[23-May-2025 01:03:58 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:03:58 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:03:58 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:03:58 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:03:58.033Z","fecha_inicio":"2025-05-22T23:03:58.033Z"}
+[23-May-2025 01:03:58 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:03:58 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:03:58 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:03:58 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:03:58.024Z","fecha_inicio":"2025-05-22T23:03:58.024Z"}
+[23-May-2025 01:04:05 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:04:05 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:04:05 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:04:05 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:04:05.784Z","fecha_inicio":"2025-05-22T23:04:05.784Z"}
+[23-May-2025 01:04:05 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:04:05 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:04:05 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:04:05 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:04:05.785Z","fecha_inicio":"2025-05-22T23:04:05.785Z"}
+[23-May-2025 01:04:05 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:04:05 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:04:05 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:04:05 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:04:05.790Z","fecha_inicio":"2025-05-22T23:04:05.790Z"}
+[23-May-2025 01:04:05 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:04:06 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:04:06 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:04:06 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:04:05.790Z","fecha_inicio":"2025-05-22T23:04:05.790Z"}
+[23-May-2025 01:04:36 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:04:36 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:04:44 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:20:34 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:20:34 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:20:41 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:20:41 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:20:42 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:20:43 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:20:44 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:20:45 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:20:45 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:20:46 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:20:46 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:22:51 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:24:50 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:24:50 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:24:59 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:01 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:02 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:03 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:04 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:05 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:05 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:06 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:07 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:08 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:09 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:10 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:12 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:13 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:14 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:14 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:25:24 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:25:24 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:25:24 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:25:24 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:25:24.751Z","fecha_inicio":"2025-05-22T23:25:24.751Z"}
+[23-May-2025 01:25:24 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:25:24 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:25:24 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:25:24 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:25:24.752Z","fecha_inicio":"2025-05-22T23:25:24.752Z"}
+[23-May-2025 01:25:24 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:25:24 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:25:24 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:25:24 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:25:24.752Z","fecha_inicio":"2025-05-22T23:25:24.752Z"}
+[23-May-2025 01:25:24 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:25:24 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:25:24 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:25:24 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:25:24.752Z","fecha_inicio":"2025-05-22T23:25:24.752Z"}
+[23-May-2025 01:25:42 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:25:42 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:25:42 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:25:42 Europe/Berlin] Datos JSON recibidos: {"accion":"crear_evento","id":null,"titulo":"SOLO PARA TODA LA EMPRESA DE PARTE DEL ADMIN","descripcion":"","inicio":"2025-05-31 00:00:00","fecha_inicio":"2025-05-31 00:00:00","fin":"2025-05-31 01:00:00","fecha_fin":"2025-05-31 01:00:00","tipo":"proyecto","tipo_evento":"global","color":"#ec4899","id_departamento":null,"recurrente":0,"dia_completo":1,"tipo_usuario":"admin"}
+[23-May-2025 01:25:42 Europe/Berlin] Datos preparados para guardar: Array
+(
+    [accion] => crear_evento
+    [id] => 
+    [titulo] => SOLO PARA TODA LA EMPRESA DE PARTE DEL ADMIN
+    [descripcion] => 
+    [inicio] => 2025-05-31 00:00:00
+    [fecha_inicio] => 2025-05-31 00:00:00
+    [fin] => 2025-05-31 01:00:00
+    [fecha_fin] => 2025-05-31 01:00:00
+    [tipo] => proyecto
+    [tipo_evento] => global
+    [color] => #ec4899
+    [id_departamento] => 
+    [recurrente] => 0
+    [dia_completo] => 1
+    [tipo_usuario] => admin
+    [NIF] => 12345678A
+    [NIF_usuario] => 12345678A
+)
+
+[23-May-2025 01:25:45 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:25:45 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:25:45 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:25:45 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:25:45.252Z","fecha_inicio":"2025-05-22T23:25:45.252Z"}
+[23-May-2025 01:25:45 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:25:45 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:25:45 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:25:45 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:25:45.253Z","fecha_inicio":"2025-05-22T23:25:45.253Z"}
+[23-May-2025 01:25:45 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:25:45 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:25:45 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:25:45 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:25:45.256Z","fecha_inicio":"2025-05-22T23:25:45.256Z"}
+[23-May-2025 01:25:45 Europe/Berlin] PHP Warning:  Undefined array key "user_id" in C:\xampp\htdocs\ImpulsaTelecom\backend\api\calendario.php on line 117
+[23-May-2025 01:25:45 Europe/Berlin] Procesando solicitud POST para guardar evento. NIF: 12345678A
+[23-May-2025 01:25:45 Europe/Berlin] Content-Type recibido: application/json
+[23-May-2025 01:25:45 Europe/Berlin] Datos JSON recibidos: {"accion":"obtener_todos_eventos","tipo_usuario":"admin","titulo":"dummy_titulo","inicio":"2025-05-22T23:25:45.257Z","fecha_inicio":"2025-05-22T23:25:45.257Z"}
+[23-May-2025 01:26:22 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:26:22 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:26:24 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:26:26 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:26:32 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:26:34 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:26:48 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:29:03 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:39 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:39 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:41 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:42 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:42 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:43 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:44 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:44 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:45 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:46 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:46 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:47 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:47 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:47 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:37:56 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:38:05 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:38:12 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:38:14 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:39:36 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:41:23 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:41:47 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:02 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:04 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:04 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:05 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:06 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:07 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:07 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:08 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:09 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:10 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:10 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:11 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:12 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:15 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C
+[23-May-2025 01:47:17 Europe/Berlin] Procesando solicitud GET para obtener eventos. NIF: 56789012C

@@ -52,7 +52,7 @@ const Header = ({ className }) => {
     >
       <div className="flex items-center">
         <img 
-          src="./src/img/logo/logoimpulsa.png" 
+          src="/src/img/logo/logoimpulsa.png" 
           alt="Impulsa Telecom Logo" 
           className={`h-10 mr-4 ${isDarkMode ? 'filter brightness-150 drop-shadow-lg' : ''} transition-all duration-500`} 
         />

@@ -400,8 +400,8 @@ const EventoModal = ({ evento, onClose, onSave, onDelete, tiposEventos, isDarkMo
                   disabled={soloLectura}
                 >
                   {tiposEventos.map((tipo) => (
-                    <option key={tipo.value} value={tipo.value}>
-                      {tipo.label}
+                    <option key={tipo.valor} value={tipo.valor}>
+                      {tipo.etiqueta}
                     </option>
                   ))}
                 </select>
@@ -438,9 +438,9 @@ const EventoModal = ({ evento, onClose, onSave, onDelete, tiposEventos, isDarkMo
                   <FaUsers className="mr-1.5 text-green-500" /> Visibilidad
                 </label>
                 <select
-                  id="tipo_evento"
-                  name="tipo_evento"
-                  value={eventoEditado.tipo_evento || 'personal'}
+                  id="visibilidad"
+                  name="visibilidad"
+                  value={eventoEditado.visibilidad || 'personal'}
                   onChange={handleChange}
                   className={`w-full px-3 py-2.5 rounded-lg ${
                     isDarkMode
@@ -449,9 +449,9 @@ const EventoModal = ({ evento, onClose, onSave, onDelete, tiposEventos, isDarkMo
                   } border shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50`}
                   disabled={soloLectura}
                 >
-                  <option key="personal" value="personal">Personal (solo yo)</option>
-                  <option key="departamental" value="departamental">Departamental</option>
-                  <option key="global" value="global">Toda la empresa</option>
+                  <option value="personal">Personal (solo yo)</option>
+                  <option value="departamental">Departamental</option>
+                  <option value="empresa">Toda la empresa</option>
                 </select>
               </div>
 

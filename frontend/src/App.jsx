@@ -7,7 +7,7 @@ import Inicio from './pages/Inicio'
 import Plantilla from './layout/Plantilla'
 import Perfil from './pages/Perfil'
 import Fichaje from './pages/Fichaje'
-import Usuario from './pages/Usuario'
+
 import Tareas from './pages/Tareas'
 import Calendario from './pages/Calendario'
 import Solicitudes from './pages/Solicitudes'
@@ -15,6 +15,8 @@ import AdminUsuarios from './pages/AdminUsuarios'
 import AdminFichajes from './pages/AdminFichajes'
 import AdminReportes from './pages/AdminReportes'
 import AdminMapa from './pages/AdminMapa'
+import AdminDocumentos from './pages/AdminDocumentos'
+import EventosAdmin from './pages/admin/EventosAdmin'
 import Documentacion from './pages/Documentacion'
 import { AuthProvider, ProtectedRoute, PublicRoute } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
@@ -50,7 +52,7 @@ function App() {
               <Route path="/inicio" element={<Inicio />} />
               <Route path="/perfil" element={<Perfil />} />
               <Route path="/fichaje" element={<Fichaje />} />
-              <Route path="/usuario" element={<Usuario />} />
+
               <Route path="/tareas" element={<Tareas />} />
               <Route path="/calendario" element={<Calendario />} />
               <Route path="/solicitudes" element={<Solicitudes />} />
@@ -59,6 +61,8 @@ function App() {
               <Route path="/admin/fichajes" element={<AdminFichajes />} />
               <Route path="/admin/reportes" element={<AdminReportes />} />
               <Route path="/admin/mapa" element={<AdminMapa />} />
+              <Route path="/admin/documentos" element={<AdminDocumentos />} />
+              <Route path="/admin/eventos" element={<EventosAdmin />} />
             </Route>
             <Route path="*" element={<Navigate to="/login" replace />} />
           </Routes>
