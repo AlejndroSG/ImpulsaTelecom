@@ -119,6 +119,23 @@ const Sidebar = ({ expanded }) => {
             </NavLink>
             
             <NavLink 
+              to="/reportes" 
+              className={({isActive}) => 
+                `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                    ? 'bg-[#78bd00] text-white' 
+                    : isDarkMode 
+                      ? 'hover:bg-gray-800 text-gray-300' 
+                      : 'hover:bg-gray-200 text-gray-700'
+                } ${expanded ? 'mx-2' : 'justify-center'}`
+              }
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Reportes</span>
+            </NavLink>
+            
+            <NavLink 
               to="/tareas" 
               className={({isActive}) => 
                 `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
@@ -181,7 +198,6 @@ const Sidebar = ({ expanded }) => {
                   </svg>
                   <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Usuarios</span>
                 </NavLink>
-                
 
                 <NavLink 
                   to="/admin/fichajes" 
@@ -198,6 +214,23 @@ const Sidebar = ({ expanded }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Fichajes</span>
+                </NavLink>
+                
+                <NavLink 
+                  to="/admin/incidencias" 
+                  className={({isActive}) => 
+                    `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                        ? 'bg-[#78bd00] text-white' 
+                        : isDarkMode 
+                          ? 'hover:bg-gray-800 text-gray-300' 
+                          : 'hover:bg-gray-200 text-gray-700'
+                    } ${expanded ? 'mx-2' : 'justify-center'}`
+                  }
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  </svg>
+                  <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Gestión de Incidencias</span>
                 </NavLink>
 
                 <NavLink 

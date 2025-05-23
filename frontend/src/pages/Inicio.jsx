@@ -11,6 +11,7 @@ import MapaWidget from '../components/MapaWidget'
 import HistorialFichajesWidget from '../components/HistorialFichajesWidget'
 import PerfilHorarioWidget from '../components/PerfilHorarioWidget'
 import GraficoFichajesWidget from '../components/GraficoFichajesWidget'
+import ReportesWidget from '../components/ReportesWidget'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import { motion } from 'framer-motion'
@@ -18,7 +19,7 @@ import InitialsAvatar from '../components/InitialsAvatar'
 import { Link } from 'react-router-dom'
 import { format } from 'date-fns'
 import { es } from 'date-fns/locale'
-import { FaCalendarAlt, FaFilter, FaUserClock, FaBuilding, FaSearch, FaClipboardList, FaChartPie, FaEdit, FaTrash, FaUser, FaCheckCircle, FaTimesCircle, FaMap, FaMapMarkedAlt, FaMapMarkerAlt } from 'react-icons/fa'
+import { FaCalendarAlt, FaFilter, FaUserClock, FaBuilding, FaSearch, FaClipboardList, FaChartPie, FaEdit, FaTrash, FaUser, FaCheckCircle, FaTimesCircle, FaMap, FaMapMarkedAlt, FaMapMarkerAlt, FaExclamationTriangle } from 'react-icons/fa'
 import AdminStatsChart from '../components/AdminStatsChart'
 
 const ReactGridLayout = WidthProvider(RGL);
@@ -181,8 +182,9 @@ const Inicio = () => {
     const [layout, setLayout] = useState([
       { i: 'fichaje', x: 0, y: 0, w: 6, h: 6 },
       { i: 'historial', x: 6, y: 0, w: 6, h: 6 },
-      { i: 'perfil-horario', x: 0, y: 6, w: 6, h: 8 },
-      { i: 'grafico', x: 6, y: 6, w: 6, h: 8 },
+      { i: 'reportes', x: 0, y: 6, w: 6, h: 8 },
+      { i: 'perfil-horario', x: 6, y: 6, w: 6, h: 8 },
+      { i: 'grafico', x: 0, y: 14, w: 12, h: 8 },
     ]);
   
     const onLayoutChange = (newLayout) => {
@@ -381,6 +383,10 @@ const Inicio = () => {
                             
                             <div key="historial" className="widget-container" style={widgetContainerStyle}>
                                 <HistorialFichajesWidget />
+                            </div>
+                            
+                            <div key="reportes" className="widget-container" style={widgetContainerStyle}>
+                                <ReportesWidget />
                             </div>
 
                             <div key="perfil-horario" className="widget-container" style={widgetContainerStyle}>

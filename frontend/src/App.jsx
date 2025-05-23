@@ -11,11 +11,13 @@ import Fichaje from './pages/Fichaje'
 import Tareas from './pages/Tareas'
 import Calendario from './pages/Calendario'
 import Solicitudes from './pages/Solicitudes'
+import Reportes from './pages/Reportes'
 import AdminUsuarios from './pages/AdminUsuarios'
 import AdminFichajes from './pages/AdminFichajes'
 import AdminReportes from './pages/AdminReportes'
 import AdminMapa from './pages/AdminMapa'
 import AdminDocumentos from './pages/AdminDocumentos'
+import AdminIncidencias from './pages/AdminIncidencias'
 import EventosAdmin from './pages/admin/EventosAdmin'
 import Documentacion from './pages/Documentacion'
 import { AuthProvider, ProtectedRoute, PublicRoute } from './context/AuthContext'
@@ -56,12 +58,14 @@ function App() {
               <Route path="/tareas" element={<Tareas />} />
               <Route path="/calendario" element={<Calendario />} />
               <Route path="/solicitudes" element={<Solicitudes />} />
+              <Route path="/reportes" element={<Reportes />} />
               <Route path="/documentacion" element={<Documentacion />} />
               <Route path="/admin/usuarios" element={<AdminUsuarios />} />
               <Route path="/admin/fichajes" element={<AdminFichajes />} />
               <Route path="/admin/reportes" element={<AdminReportes />} />
               <Route path="/admin/mapa" element={<AdminMapa />} />
               <Route path="/admin/documentos" element={<AdminDocumentos />} />
+              <Route path="/admin/incidencias" element={<AdminIncidencias />} />
               <Route path="/admin/eventos" element={<EventosAdmin />} />
             </Route>
             <Route path="*" element={<Navigate to="/login" replace />} />

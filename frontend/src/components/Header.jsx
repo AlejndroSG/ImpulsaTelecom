@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useTheme } from '../context/ThemeContext'
 import InitialsAvatar from './InitialsAvatar'
+import NotificacionesHeader from './NotificacionesHeader'
 
 const Header = ({ className }) => {
   const { user, logout } = useAuth();
@@ -71,6 +72,13 @@ const Header = ({ className }) => {
             {formattedDate}
           </p>
         </div>
+
+        {/* Componente de notificaciones - solo visible para administradores */}
+        {user?.tipo_usuario === 'admin' && (
+          <div className="mr-4">
+            <NotificacionesHeader />
+          </div>
+        )}
 
         {/* Toggle de modo oscuro */}
         <button

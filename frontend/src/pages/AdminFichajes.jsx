@@ -88,15 +88,9 @@ const AdminFichajes = () => {
                 timeout: 10000
             });
             
-            // Mostrar la respuesta completa para depuración
-            console.log('Respuesta completa del servidor:', response);
-            console.log('Datos recibidos:', response.data);
-            
             if (response.data && response.data.success) {
-                console.log('Fichajes recibidos:', response.data.fichajes);
                 setFichajes(response.data.fichajes || []);
             } else {
-                console.log('Error en respuesta:', response.data ? response.data.error : 'No hay datos');
                 setError(response.data ? (response.data.error || 'Error al cargar fichajes') : 'No se recibieron datos');
                 setFichajes([]);
             }
@@ -128,8 +122,7 @@ const AdminFichajes = () => {
                 setDepartamentos(response.data.departamentos || []);
             }
         } catch (err) {
-            console.error('Error al cargar departamentos:', err);
-            // No mostrar error en interfaz de usuario para departamentos, solo log
+            // No mostrar error en interfaz de usuario para departamentos
             // ya que este error no es crítico para la funcionalidad principal
             setDepartamentos([]);
         }
@@ -176,10 +169,7 @@ const AdminFichajes = () => {
     
     // Calcular duración del fichaje en formato legible
     const formatDuration = (seconds) => {
-        // Debug del valor recibido
-        console.log('formatDuration recibiu00f3:', seconds);
-        
-        // Asegurar que es un nu00famero válido
+        // Asegurar que es un número válido
         if (!seconds || isNaN(seconds) || seconds <= 0) return '0h 0m';
         
         // Convertir a nu00famero si es string
@@ -552,9 +542,9 @@ const AdminFichajes = () => {
                         </div>
                         
                         {/* Tabla de fichajes */}
-                        <div className={`rounded-xl shadow-md overflow-hidden border ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                            <div className={`p-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-                                <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                        <div className="rounded-xl shadow-md overflow-hidden border border-gray-200">
+                            <div className="p-4 bg-white">
+                                <h2 className="text-xl font-semibold text-gray-800">
                                     Listado de fichajes
                                 </h2>
                             </div>
@@ -563,57 +553,47 @@ const AdminFichajes = () => {
                                 {loading ? (
                                     <div className="p-10 text-center">
                                         <div className="animate-spin inline-block w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full mb-4"></div>
-                                        <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>Cargando fichajes...</p>
+                                        <p className="text-gray-600">Cargando fichajes...</p>
                                     </div>
                                 ) : fichajes.length === 0 ? (
                                     <div className="p-10 text-center">
-                                        <p className={isDarkMode ? 'text-gray-300' : 'text-gray-600'}>No se encontraron fichajes con los filtros aplicados.</p>
+                                        <p className="text-gray-600">No se encontraron fichajes con los filtros aplicados.</p>
                                     </div>
                                 ) : (
                                     <>
-                                        {/* Panel de depuraciu00f3n - solo visible durante desarrollo */}
-                                        <div className="p-4 bg-yellow-50 border-yellow-200 border text-sm">
-                                            <h3 className="font-bold mb-2">Información de depuración:</h3>
-                                            <p>Total fichajes cargados: {fichajes.length}</p>
-                                            <p>Primer fichaje (si existe):</p>
-                                            {fichajes.length > 0 && (
-                                                <pre className="mt-2 p-2 bg-gray-100 rounded overflow-auto max-h-40">
-                                                    {JSON.stringify(fichajes[0], null, 2)}
-                                                </pre>
-                                            )}
-                                        </div>
-                                        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                                            <thead className={isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}>
+                                        {/* El panel de depuración ha sido eliminado */}
+                                        <table className="min-w-full divide-y divide-gray-200">
+                                            <thead className="bg-gray-50">
                                                 <tr>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Empleado
                                                     </th>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Departamento
                                                     </th>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Fecha
                                                     </th>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Entrada
                                                     </th>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Salida
                                                     </th>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Tiempo trabajado
                                                     </th>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Estado
                                                     </th>
-                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                                         Acciones
                                                     </th>
                                                 </tr>
                                             </thead>
-                                            <tbody className={`divide-y divide-gray-200 dark:divide-gray-700 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                                            <tbody className="divide-y divide-gray-200 bg-white">
                                                 {fichajes.map((fichaje) => (
-                                                    <tr key={fichaje.idRegistro} className={isDarkMode ? 'hover:bg-gray-700' : 'hover:bg-gray-50'}>
+                                                    <tr key={fichaje.idRegistro} className="hover:bg-gray-50">
                                                         <td className="px-6 py-4 whitespace-nowrap">
                                                             <div className="flex items-center">
                                                                 <div className="flex-shrink-0">
@@ -635,22 +615,22 @@ const AdminFichajes = () => {
                                                                     )}
                                                                 </div>
                                                                 <div className="ml-3">
-                                                                    <div className={`text-sm font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                                    <div className="text-sm font-medium text-gray-900">
                                                                         {fichaje.nombreCompleto || 'Sin nombre'}
                                                                     </div>
-                                                                    <div className="text-sm text-gray-500 dark:text-gray-400">
+                                                                    <div className="text-sm text-gray-500">
                                                                         {fichaje.NIF}
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
-                                                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                                                            <div className="text-sm text-gray-500">
                                                                 {fichaje.departamento || 'No asignado'}
                                                             </div>
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
-                                                            <div className={`text-sm ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                                            <div className="text-sm text-gray-900">
                                                                 {formatDate(fichaje.fecha)}
                                                             </div>
                                                         </td>
@@ -665,7 +645,7 @@ const AdminFichajes = () => {
                                                             </div>
                                                         </td>
                                                         <td className="px-6 py-4 whitespace-nowrap">
-                                                            <div className="text-sm text-gray-500 dark:text-gray-400">
+                                                            <div className="text-sm text-gray-500">
                                                                 {formatDuration(fichaje.tiempoTrabajado)}
                                                             </div>
                                                             {fichaje.tiempoPausa > 0 && (
@@ -685,14 +665,14 @@ const AdminFichajes = () => {
                                                             <div className="flex space-x-2">
                                                                 <button
                                                                     onClick={() => handleOpenEdit(fichaje)}
-                                                                    className={`text-blue-600 hover:text-blue-900 ${isDarkMode ? 'hover:text-blue-400' : ''}`}
+                                                                    className="text-blue-600 hover:text-blue-900"
                                                                     title="Editar fichaje"
                                                                 >
                                                                     <FaEdit />
                                                                 </button>
                                                                 <button
                                                                     onClick={() => handleOpenDelete(fichaje)}
-                                                                    className={`text-red-600 hover:text-red-900 ${isDarkMode ? 'hover:text-red-400' : ''}`}
+                                                                    className="text-red-600 hover:text-red-900"
                                                                     title="Eliminar fichaje"
                                                                 >
                                                                     <FaTrash />
@@ -711,11 +691,11 @@ const AdminFichajes = () => {
                 )}
                 
                 {activeTab === 'estadisticas' && (
-                    <div className={`rounded-xl shadow-md p-6 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
-                        <h2 className={`text-xl font-semibold mb-4 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                    <div className="rounded-xl shadow-md p-6 bg-white">
+                        <h2 className="text-xl font-semibold mb-4 text-gray-800">
                             Estadísticas de fichajes
                         </h2>
-                        <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                        <p className="text-gray-600">
                             Esta sección mostrará gráficos y estadísticas basadas en los fichajes de los empleados.
                         </p>
                         <div className="text-center mt-6">
@@ -728,16 +708,16 @@ const AdminFichajes = () => {
             {/* Modal de edición */}
             {showEditModal && selectedFichaje && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className={`w-full max-w-lg rounded-lg shadow-xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} overflow-hidden`}>
-                        <div className={`p-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                            <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                    <div className="w-full max-w-lg rounded-lg shadow-xl bg-white overflow-hidden">
+                        <div className="p-4 border-b border-gray-200">
+                            <h2 className="text-xl font-semibold text-gray-800">
                                 Editar Fichaje
                             </h2>
                         </div>
                         <div className="p-6">
                             <div className="grid grid-cols-1 gap-4">
                                 <div>
-                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    <label className="block text-sm font-medium mb-1 text-gray-700">
                                         Fecha
                                     </label>
                                     <input
@@ -745,11 +725,11 @@ const AdminFichajes = () => {
                                         name="fecha"
                                         value={editForm.fecha}
                                         onChange={handleEditFormChange}
-                                        className={`block w-full p-2 rounded-md shadow-sm border ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                        className="block w-full p-2 rounded-md shadow-sm border bg-white border-gray-300 text-gray-900"
                                     />
                                 </div>
                                 <div>
-                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    <label className="block text-sm font-medium mb-1 text-gray-700">
                                         Hora de entrada
                                     </label>
                                     <input
@@ -757,11 +737,11 @@ const AdminFichajes = () => {
                                         name="horaInicio"
                                         value={editForm.horaInicio}
                                         onChange={handleEditFormChange}
-                                        className={`block w-full p-2 rounded-md shadow-sm border ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                        className="block w-full p-2 rounded-md shadow-sm border bg-white border-gray-300 text-gray-900"
                                     />
                                 </div>
                                 <div>
-                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    <label className="block text-sm font-medium mb-1 text-gray-700">
                                         Hora de salida
                                     </label>
                                     <input
@@ -769,18 +749,18 @@ const AdminFichajes = () => {
                                         name="horaFin"
                                         value={editForm.horaFin}
                                         onChange={handleEditFormChange}
-                                        className={`block w-full p-2 rounded-md shadow-sm border ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                        className="block w-full p-2 rounded-md shadow-sm border bg-white border-gray-300 text-gray-900"
                                     />
                                 </div>
                                 <div>
-                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                    <label className="block text-sm font-medium mb-1 text-gray-700">
                                         Estado
                                     </label>
                                     <select
                                         name="estado"
                                         value={editForm.estado}
                                         onChange={handleEditFormChange}
-                                        className={`block w-full p-2 rounded-md shadow-sm border ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'}`}
+                                        className="block w-full p-2 rounded-md shadow-sm border bg-white border-gray-300 text-gray-900"
                                     >
                                         <option value="trabajando">Trabajando</option>
                                         <option value="pausado">En pausa</option>
@@ -789,10 +769,10 @@ const AdminFichajes = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className={`p-4 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} flex justify-end space-x-3`}>
+                        <div className="p-4 border-t border-gray-200 flex justify-end space-x-3">
                             <button
                                 onClick={() => setShowEditModal(false)}
-                                className={`px-4 py-2 rounded-lg ${isDarkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+                                className="px-4 py-2 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300"
                             >
                                 Cancelar
                             </button>
@@ -811,14 +791,14 @@ const AdminFichajes = () => {
             {/* Modal de confirmación para eliminar */}
             {showDeleteModal && selectedFichaje && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-                    <div className={`w-full max-w-md rounded-lg shadow-xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} overflow-hidden`}>
-                        <div className={`p-4 border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
-                            <h2 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+                    <div className="w-full max-w-md rounded-lg shadow-xl bg-white overflow-hidden">
+                        <div className="p-4 border-b border-gray-200">
+                            <h2 className="text-xl font-semibold text-gray-800">
                                 Confirmar eliminación
                             </h2>
                         </div>
                         <div className="p-6">
-                            <p className={`${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-4`}>
+                            <p className="text-gray-600 mb-4">
                                 ¿Estás seguro que deseas eliminar este fichaje?
                             </p>
                             <div className="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
@@ -836,21 +816,21 @@ const AdminFichajes = () => {
                                 </div>
                             </div>
                             <div className="mt-2">
-                                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                <p className="text-sm text-gray-600">
                                     Empleado: <span className="font-semibold">{selectedFichaje.nombreCompleto}</span>
                                 </p>
-                                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                <p className="text-sm text-gray-600">
                                     Fecha: <span className="font-semibold">{formatDate(selectedFichaje.fecha)}</span>
                                 </p>
-                                <p className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                                <p className="text-sm text-gray-600">
                                     Horario: <span className="font-semibold">{formatTime(selectedFichaje.horaInicio)} - {formatTime(selectedFichaje.horaFin)}</span>
                                 </p>
                             </div>
                         </div>
-                        <div className={`p-4 border-t ${isDarkMode ? 'border-gray-700' : 'border-gray-200'} flex justify-end space-x-3`}>
+                        <div className="p-4 border-t border-gray-200 flex justify-end space-x-3">
                             <button
                                 onClick={() => setShowDeleteModal(false)}
-                                className={`px-4 py-2 rounded-lg ${isDarkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
+                                className="px-4 py-2 rounded-lg bg-gray-200 text-gray-800 hover:bg-gray-300"
                             >
                                 Cancelar
                             </button>
