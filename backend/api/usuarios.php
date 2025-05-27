@@ -856,5 +856,105 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
     exit();
 }
 
+// Endpoint para verificar la sesión del usuario
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['action']) && $_GET['action'] === 'verificar') {
+    // Respuesta por defecto en caso de error
+    $respuesta = [
+        'success' => false,
+        'message' => 'No hay sesión activa'
+    ];
+    
+    error_log("--- INICIO VERIFICACIÓN DE SESIÓN ---");
+    error_log("Datos de sesión: " . json_encode($_SESSION));
+    
+    if (isset($_SESSION['NIF']) && !empty($_SESSION['NIF'])) {
+        $nif = $_SESSION['NIF'];
+        error_log("NIF encontrado en sesión: $nif");
+        
+        // 1. Preparar consulta para obtener usuario
+        $stmt = $modelo->getConn()->prepare("SELECT * FROM usuarios WHERE NIF = ?");
+        if (!$stmt) {
+            $respuesta['message'] = 'Error en la preparación de la consulta';
+            echo json_encode($respuesta);
+            exit();
+        }
+        
+        // 2. Vincular parámetros y ejecutar
+        $stmt->bind_param("s", $nif);
+        if (!$stmt->execute()) {
+            $respuesta['message'] = 'Error al ejecutar la consulta';
+            echo json_encode($respuesta);
+            exit();
+        }
+        
+        // 3. Obtener resultado
+        $result = $stmt->get_result();
+        
+        // 4. Si encontramos el usuario en la base de datos
+        if ($result->num_rows > 0) {
+            $usuario = $result->fetch_assoc();
+            error_log("Usuario encontrado en DB: " . json_encode($usuario));
+            
+            // 5. Determinar campos correctos
+            $checkTableQuery = "SHOW COLUMNS FROM usuarios";
+            $tableResult = $modelo->getConn()->query($checkTableQuery);
+            $columns = [];
+            
+            if ($tableResult) {
+                while ($row = $tableResult->fetch_assoc()) {
+                    $columns[] = $row['Field'];
+                }
+            }
+            
+            $emailField = in_array('email', $columns) ? 'email' : 'correo';
+            $idField = in_array('NIF', $columns) ? 'NIF' : 'id';
+            
+            // 6. Crear objeto de usuario
+            $usuarioResponse = [
+                'id' => $usuario[$idField],
+                'NIF' => $usuario[$idField], // Agregar NIF explícitamente
+                'nombre' => $usuario['nombre'],
+                'apellidos' => $usuario['apellidos'] ?? '',
+                'correo' => $usuario[$emailField],
+                'tipo_usuario' => $usuario['tipo_Usu'] ?? $usuario['tipo_usuario'] ?? 'empleado'
+            ];
+            
+            // 7. Comprobar id
+            if (empty($usuarioResponse['id'])) {
+                $usuarioResponse['id'] = $nif;
+            }
+            
+            error_log("Respuesta final: " . json_encode($usuarioResponse));
+            
+            // 8. Enviar respuesta exitosa
+            echo json_encode([
+                'success' => true,
+                'message' => 'Sesión válida',
+                'usuario' => $usuarioResponse
+            ]);
+        } else {
+            // 9. Usuario no encontrado pero con sesión válida
+            $usuarioResponse = [
+                'id' => $nif,
+                'NIF' => $nif,
+                'nombre' => $_SESSION['nombre'] ?? 'Usuario',
+                'tipo_usuario' => $_SESSION['tipo_usuario'] ?? 'empleado'
+            ];
+            
+            echo json_encode([
+                'success' => true,
+                'message' => 'Sesión válida (usando datos de sesión)',
+                'usuario' => $usuarioResponse
+            ]);
+        }
+    } else {
+        // 10. No hay sesión activa
+        echo json_encode($respuesta);
+    }
+    
+    error_log("--- FIN VERIFICACIÓN DE SESIÓN ---");
+    exit();
+}
+
 $modelo->getConn()->close();
 ?>

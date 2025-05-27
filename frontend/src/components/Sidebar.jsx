@@ -4,6 +4,8 @@ import { useAuth } from '../context/AuthContext'
 import InitialsAvatar from './InitialsAvatar'
 import { useTheme } from '../context/ThemeContext'
 import '../styles/sidebar.css' // Importar estilos para ocultar scrollbar
+import TurnosCalendarioSidebar from './TurnosCalendarioSidebar'
+import { FaUserClock } from 'react-icons/fa'
 
 const Sidebar = ({ expanded }) => {
   const { user } = useAuth();
@@ -99,7 +101,20 @@ const Sidebar = ({ expanded }) => {
               <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Fichaje</span>
             </NavLink>
             
-
+            <NavLink 
+              to="/turnos" 
+              className={({isActive}) => 
+                `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                    ? 'bg-[#78bd00] text-white' 
+                    : isDarkMode 
+                      ? 'hover:bg-gray-800 text-gray-300' 
+                      : 'hover:bg-gray-200 text-gray-700'
+                } ${expanded ? 'mx-2' : 'justify-center'}`
+              }
+            >
+              <FaUserClock className="h-6 w-6 flex-shrink-0" />
+              <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Mis Turnos</span>
+            </NavLink>
             
             <NavLink 
               to="/calendario" 
@@ -346,6 +361,13 @@ const Sidebar = ({ expanded }) => {
           <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Documentación Legal</span>
         </NavLink>
       </nav>
+      
+      {/* Calendario de turnos para empleados */}
+      {expanded && user?.tipo_usuario !== 'admin' && (
+        <div className="px-2 pb-4 mt-auto">
+          <TurnosCalendarioSidebar />
+        </div>
+      )}
     </aside>
   )
 }

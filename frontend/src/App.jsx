@@ -12,6 +12,7 @@ import Tareas from './pages/Tareas'
 import Calendario from './pages/Calendario'
 import Solicitudes from './pages/Solicitudes'
 import Reportes from './pages/Reportes'
+import Turnos from './pages/Turnos'
 import AdminUsuarios from './pages/AdminUsuarios'
 import AdminFichajes from './pages/AdminFichajes'
 import AdminReportes from './pages/AdminReportes'
@@ -60,6 +61,7 @@ function App() {
               <Route path="/calendario" element={<Calendario />} />
               <Route path="/solicitudes" element={<Solicitudes />} />
               <Route path="/reportes" element={<Reportes />} />
+              <Route path="/turnos" element={<Turnos />} />
               <Route path="/documentacion" element={<Documentacion />} />
               <Route path="/admin/usuarios" element={<AdminUsuarios />} />
               <Route path="/admin/fichajes" element={<AdminFichajes />} />

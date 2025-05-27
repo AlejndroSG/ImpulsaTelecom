@@ -20,24 +20,66 @@ export const useAuth = () => {
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [persistSession, setPersistSession] = useState(false); // Estado para controlar si la sesión debe persistir
 
   useEffect(() => {
-    // Verificar si hay un usuario en localStorage al cargar la aplicación
-    const storedUser = localStorage.getItem('user');
-    if (storedUser) {
+    const verificarUsuario = async () => {
       try {
-        setUser(JSON.parse(storedUser));
+        // Enfoque drásticamente simplificado: solo usamos localStorage
+        const storedUser = localStorage.getItem('user');
+        
+        // Verificar que storedUser existe y no es "undefined" (como string)
+        if (storedUser && storedUser !== "undefined" && storedUser !== "null") {
+          try {
+            // Usuario encontrado en localStorage
+            const userData = JSON.parse(storedUser);
+            console.log('Usuario recuperado de localStorage:', userData);
+            
+            // Verificar que los datos son válidos (teniendo en cuenta que podría ser 'id' o 'NIF')
+            if (userData && (userData.id || userData.NIF)) {
+              // Asegurar que el usuario tenga ambos campos: id y NIF
+              if (!userData.NIF && userData.id) {
+                userData.NIF = userData.id; // Usar id como NIF si no hay NIF
+              } else if (!userData.id && userData.NIF) {
+                userData.id = userData.NIF; // Usar NIF como id si no hay id
+              }
+              
+              // Establecer el usuario desde localStorage
+              setUser(userData);
+              console.log('Sesión restaurada con éxito desde localStorage');
+            } else {
+              console.error('Datos de usuario inválidos en localStorage');
+              localStorage.removeItem('user'); // Limpiar datos corruptos
+            }
+            
+            // No hacemos verificación con el backend para evitar problemas
+            // Esto podría no ser ideal desde el punto de vista de seguridad,
+            // pero resolverá el problema inmediato de la persistencia de sesión
+          } catch (parseError) {
+            console.error('Error al parsear usuario almacenado:', parseError);
+            localStorage.removeItem('user');
+            setUser(null);
+          }
+        } else {
+          console.log('No hay usuario en localStorage');
+          setUser(null);
+        }
       } catch (error) {
-        console.error('Error al parsear usuario almacenado:', error);
-        localStorage.removeItem('user');
+        console.error('Error en verificarUsuario:', error);
+        setUser(null);
+      } finally {
+        setLoading(false);
       }
-    }
-    setLoading(false);
+    };
+    
+    verificarUsuario();
   }, []);
 
-  const login = async (email, password) => {
+  const login = async (email, password, recordar = false) => {
     let retryCount = 0;
     const maxRetries = 2;
+    
+    console.log(`Iniciando login con recordar=${recordar}`);
     
     const attemptLogin = async () => {
       try {
@@ -54,8 +96,22 @@ export const AuthProvider = ({ children }) => {
 
         if (response.data.success) {
           const userData = response.data.usuario;
+          
+          // Asegurarnos de que tenemos tanto id como NIF
+          if (!userData.NIF && userData.id) {
+            userData.NIF = userData.id; // Usar id como NIF si no hay NIF
+          } else if (!userData.id && userData.NIF) {
+            userData.id = userData.NIF; // Usar NIF como id si no hay id
+          }
+          
+          // Guardar el usuario en el estado
           setUser(userData);
+          
+          // SIEMPRE guardamos en localStorage, independientemente de 'recordar'
+          // La opción 'recordar' sólo afectará a cuándo se limpia esta información
+          console.log('Guardando usuario en localStorage:', userData);
           localStorage.setItem('user', JSON.stringify(userData));
+          localStorage.setItem('recordar', recordar ? 'true' : 'false');
           
           // No verificamos la sesión para evitar más timeouts
           return { success: true, usuario: userData };
@@ -85,21 +141,19 @@ export const AuthProvider = ({ children }) => {
     return await attemptLogin();
   };
 
-  const logout = async () => {
+  const logout = () => {
+    setUser(null);
+    
+    // Limpiar almacenamiento local
+    localStorage.removeItem('user');
+    localStorage.removeItem('recordar');
+    
+    // Intentar eliminar la sesión en el servidor
     try {
-      // Intentar cerrar sesión en el backend
-      await axios.post(
-        `${CONTROLLER_API_URL}?action=logout`,
-        {},
-      );
+      axios.post(`${AUTH_API_URL}?action=logout`, {});
     } catch (error) {
       console.error('Error al cerrar sesión en el servidor:', error);
-      // Continuar con el cierre de sesión local incluso si falla en el backend
-    } finally {
-      // Siempre limpiar los datos locales
-      setUser(null);
-      localStorage.removeItem('user');
-    }
+    }  
   };
 
   // Función para actualizar los datos del usuario

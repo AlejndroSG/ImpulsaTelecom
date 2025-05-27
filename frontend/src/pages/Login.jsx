@@ -10,6 +10,7 @@ const Login = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [recordar, setRecordar] = useState(false);
     const { login } = useAuth();
     
     const iniciarSesion = async (e) => {
@@ -24,8 +25,8 @@ const Login = () => {
         setMensaje('');
         
         try {
-            console.log('Intentando iniciar sesión con:', { email, password });
-            const result = await login(email, password);
+            console.log('Intentando iniciar sesión con:', { email, password, recordar });
+            const result = await login(email, password, recordar);
             if (result.success) {
                 setMensaje('Credenciales correctas');
                 navigate('/inicio');
@@ -74,7 +75,13 @@ const Login = () => {
                 </div>
                 <div className="flex justify-between">
                     <div>
-                        <input type="checkbox" id="remember" className="mr-2"/>
+                        <input 
+                            type="checkbox" 
+                            id="remember" 
+                            className="mr-2" 
+                            checked={recordar}
+                            onChange={(e) => setRecordar(e.target.checked)}
+                        />
                         <label htmlFor="remember" className="text-gray-600">Recordarme</label>
                     </div>
                     <a href="#" className="text-gray-600 hover:text-blue-500 transition-colors duration-200">¿Olvidaste tu contraseña?</a>
