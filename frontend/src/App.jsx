@@ -18,6 +18,7 @@ import AdminReportes from './pages/AdminReportes'
 import AdminMapa from './pages/AdminMapa'
 import AdminDocumentos from './pages/AdminDocumentos'
 import AdminIncidencias from './pages/AdminIncidencias'
+import AdminTurnos from './pages/AdminTurnos'
 import EventosAdmin from './pages/admin/EventosAdmin'
 import Documentacion from './pages/Documentacion'
 import { AuthProvider, ProtectedRoute, PublicRoute } from './context/AuthContext'
@@ -66,6 +67,7 @@ function App() {
               <Route path="/admin/mapa" element={<AdminMapa />} />
               <Route path="/admin/documentos" element={<AdminDocumentos />} />
               <Route path="/admin/incidencias" element={<AdminIncidencias />} />
+              <Route path="/admin/turnos" element={<AdminTurnos />} />
               <Route path="/admin/eventos" element={<EventosAdmin />} />
             </Route>
             <Route path="*" element={<Navigate to="/login" replace />} />

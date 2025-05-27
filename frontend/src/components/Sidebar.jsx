@@ -251,6 +251,23 @@ const Sidebar = ({ expanded }) => {
                 </NavLink>
 
                 <NavLink 
+                  to="/admin/turnos" 
+                  className={({isActive}) => 
+                    `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                        ? 'bg-[#78bd00] text-white' 
+                        : isDarkMode 
+                          ? 'hover:bg-gray-800 text-gray-300' 
+                          : 'hover:bg-gray-200 text-gray-700'
+                    } ${expanded ? 'mx-2' : 'justify-center'}`
+                  }
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                  </svg>
+                  <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Gestión de Turnos</span>
+                </NavLink>
+
+                <NavLink 
                   to="/admin/eventos" 
                   className={({isActive}) => 
                     `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 

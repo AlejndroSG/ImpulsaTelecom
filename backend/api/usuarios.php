@@ -563,7 +563,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
     $checkResult = $checkStmt->get_result();
     
     if ($checkResult->num_rows > 0) {
-        echo json_encode(['success' => false, 'message' => 'Ya existe un usuario con ese NIF']);
+        // Verificar si el usuario está inactivo
+        $existingUser = $checkResult->fetch_assoc();
+        if (in_array('activo', $columns) && isset($existingUser['activo']) && $existingUser['activo'] == 0) {
+            echo json_encode([
+                'success' => false, 
+                'message' => 'Usuario inactivo', 
+                'userExists' => true, 
+                'isInactive' => true,
+                'userId' => $existingUser[$idField]
+            ]);
+        } else {
+            echo json_encode(['success' => false, 'message' => 'Ya existe un usuario con ese NIF']);
+        }
         exit();
     }
     
@@ -734,6 +746,111 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['ac
     } catch (Exception $e) {
         $modelo->getConn()->rollback();
         echo json_encode(['success' => false, 'message' => 'Error al eliminar usuario: ' . $e->getMessage()]);
+    }
+    
+    exit();
+}
+
+// Reactivar usuario que estaba dado de baja
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'reactivate' && isset($_GET['id'])) {
+    $userId = $_GET['id'];
+    $data = json_decode(file_get_contents('php://input'), true);
+    
+    // Verificar si la tabla tiene la estructura esperada
+    $checkTableQuery = "SHOW COLUMNS FROM usuarios";
+    $tableResult = $modelo->getConn()->query($checkTableQuery);
+    $columns = [];
+    
+    if ($tableResult) {
+        while ($row = $tableResult->fetch_assoc()) {
+            $columns[] = $row['Field'];
+        }
+    }
+    
+    // Determinar el nombre de columna correcto para el ID
+    $idField = in_array('NIF', $columns) ? 'NIF' : 'id';
+    
+    // Verificar si existe la columna activo
+    if (!in_array('activo', $columns)) {
+        echo json_encode(['success' => false, 'message' => 'La tabla no tiene un campo de activación']);
+        exit();
+    }
+    
+    // Iniciar transacción
+    $modelo->getConn()->begin_transaction();
+    
+    try {
+        // Actualizar datos si se proporcionan
+        $updateFields = [];
+        $updateParams = [];
+        $updateTypes = "";
+        
+        // Si se proporciona contraseña, actualizarla
+        if (isset($data['password']) && !empty($data['password'])) {
+            $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+            $passwordField = in_array('pswd', $columns) ? 'pswd' : 'password';
+            $updateFields[] = "$passwordField = ?";
+            $updateParams[] = $hashedPassword;
+            $updateTypes .= "s";
+        }
+        
+        // Actualizar otros campos si se proporcionan
+        $fieldMappings = [
+            'nombre' => 'nombre',
+            'apellidos' => 'apellidos',
+            'correo' => in_array('email', $columns) ? 'email' : 'correo',
+            'telefono' => in_array('telefono', $columns) ? 'telefono' : null,
+            'dpto' => 'dpto',
+            'id_avatar' => 'id_avatar',
+            'tipo_usuario' => in_array('tipo_Usu', $columns) ? 'tipo_Usu' : 'tipo_usuario',
+            'permitir_pausas' => in_array('permitir_pausas', $columns) ? 'permitir_pausas' : null
+        ];
+        
+        foreach ($fieldMappings as $key => $field) {
+            if ($field && isset($data[$key])) {
+                $type = ($key === 'permitir_pausas') ? "i" : "s";
+                $value = ($key === 'permitir_pausas') ? ($data[$key] ? 1 : 0) : $data[$key];
+                
+                $updateFields[] = "$field = ?";
+                $updateParams[] = $value;
+                $updateTypes .= $type;
+            }
+        }
+        
+        // Siempre actualizar el campo activo a 1
+        $updateFields[] = "activo = ?";
+        $updateParams[] = 1;
+        $updateTypes .= "i";
+        
+        // Preparar la consulta de actualización
+        $updateQuery = "UPDATE usuarios SET " . implode(", ", $updateFields) . " WHERE $idField = ?";
+        $updateParams[] = $userId;
+        $updateTypes .= "s";
+        
+        // Preparar y ejecutar la consulta
+        $stmt = $modelo->getConn()->prepare($updateQuery);
+        
+        if ($stmt === false) {
+            throw new Exception("Error en la preparación de la consulta: " . $modelo->getConn()->error);
+        }
+        
+        // Vincular parámetros dinámicamente
+        $stmt->bind_param($updateTypes, ...$updateParams);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+        }
+        
+        // Verificar si se actualizó correctamente
+        if ($stmt->affected_rows > 0) {
+            $modelo->getConn()->commit();
+            echo json_encode(['success' => true, 'message' => 'Usuario reactivado correctamente']);
+        } else {
+            throw new Exception("No se pudo reactivar el usuario o no existe");
+        }
+    } catch (Exception $e) {
+        $modelo->getConn()->rollback();
+        echo json_encode(['success' => false, 'message' => 'Error al reactivar usuario: ' . $e->getMessage()]);
     }
     
     exit();

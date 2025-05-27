@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-05-2025 a las 04:06:04
+-- Tiempo de generación: 27-05-2025 a las 17:37:42
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -326,7 +326,6 @@ INSERT INTO `registros` (`idRegistro`, `NIF`, `fecha`, `horaInicio`, `horaFin`, 
 (44, '56789012C', '2025-04-24', '15:24:08', '17:35:49', NULL, NULL, 0, 37.15356510, -3.59965780, '37.1535651, -3.5996578', 'entrada'),
 (45, '56789012C', '2025-04-25', '12:20:11', '17:26:34', NULL, NULL, 0, 37.15356240, -3.59966210, '37.1535624, -3.5996621', 'entrada'),
 (46, '56789012C', '2025-05-05', '15:51:26', '15:51:42', '15:51:41', '15:51:34', 5, NULL, NULL, NULL, 'entrada'),
-(47, '56789012C', '2025-05-05', '16:49:02', NULL, NULL, NULL, 0, NULL, NULL, NULL, 'entrada'),
 (48, '56789012C', '2025-05-06', '11:41:45', '11:41:59', NULL, NULL, 0, 37.20262330, -3.62219100, '37.2026233, -3.622191', 'entrada'),
 (50, '56789012C', '2025-05-12', '11:58:37', '12:01:24', NULL, NULL, 0, 37.15356610, -3.59964840, '37.1535661, -3.5996484', 'entrada'),
 (51, '56789012C', '2025-05-12', '12:01:25', '12:01:29', NULL, NULL, 0, 37.15356610, -3.59964840, '37.1535661, -3.5996484', 'entrada'),
@@ -392,8 +391,8 @@ INSERT INTO `solicitudes` (`idSolicitud`, `NIF`, `tipo`, `fecha_inicio`, `fecha_
 (5, '98765432B', 'horaria', '2025-05-05', NULL, '09:00:00', '14:00:00', 'rtyerftyedftertert', 'aprobada', '2025-05-05 15:10:31', '2025-05-05 15:10:45', ''),
 (7, '56789012C', 'diaria', '2025-05-12', '2025-05-12', NULL, NULL, 'Tengo medico', 'rechazada', '2025-05-12 10:05:35', '2025-05-12 10:06:04', 'No puedes'),
 (24, '56789012C', 'horaria', '2025-05-18', NULL, '09:00:00', '14:00:00', 'ertertert', 'pendiente', '2025-05-18 11:32:07', NULL, NULL),
-(25, '56789012C', 'medica', '2025-05-18', '2025-05-18', NULL, NULL, 'retertert', 'pendiente', '2025-05-18 11:32:13', NULL, NULL),
-(26, '56789012C', 'vacaciones', '2025-05-18', '2025-05-18', NULL, NULL, 'ertertertert', 'pendiente', '2025-05-18 11:32:18', NULL, NULL),
+(25, '56789012C', 'medica', '2025-05-18', '2025-05-18', NULL, NULL, 'retertert', 'aprobada', '2025-05-18 11:32:13', '2025-05-23 10:17:42', ''),
+(26, '56789012C', 'vacaciones', '2025-05-18', '2025-05-18', NULL, NULL, 'ertertertert', 'rechazada', '2025-05-18 11:32:18', '2025-05-23 10:18:03', ''),
 (27, '56789012C', 'horaria', '2025-05-19', NULL, '09:00:00', '14:00:00', 'rwerwrwer', 'pendiente', '2025-05-19 09:55:35', NULL, NULL);
 
 -- --------------------------------------------------------
@@ -497,6 +496,35 @@ INSERT INTO `tokens_fichaje` (`id`, `token`, `NIF`, `tipo_fichaje`, `fecha_creac
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `turnos`
+--
+
+CREATE TABLE `turnos` (
+  `id` int(11) NOT NULL,
+  `nif_usuario` varchar(20) NOT NULL,
+  `id_horario` int(11) NOT NULL,
+  `orden` int(11) NOT NULL,
+  `dias_semana` varchar(50) DEFAULT '1,2,3,4,5',
+  `nombre` varchar(100) DEFAULT NULL,
+  `activo` tinyint(1) DEFAULT 1,
+  `fecha_creacion` timestamp NOT NULL DEFAULT current_timestamp(),
+  `semanas_mes` varchar(20) DEFAULT '1,2,3,4,5' COMMENT 'Semanas del mes en las que aplica este turno'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `turnos`
+--
+
+INSERT INTO `turnos` (`id`, `nif_usuario`, `id_horario`, `orden`, `dias_semana`, `nombre`, `activo`, `fecha_creacion`, `semanas_mes`) VALUES
+(1, '12345678A', 1, 1, '1,2,3,4,5', 'Turno de Prueba', 1, '2025-05-27 14:08:03', '1,2,3,4,5'),
+(2, '11111111A', 1, 1, '1,2,3,4,5', 'Turno 1', 1, '2025-05-27 14:18:08', '1,2,3,4'),
+(3, '11111111A', 4, 2, '1,2,3,4,5', 'Turno 2', 0, '2025-05-27 14:18:23', '1,2,3,4,5'),
+(18, '98765432B', 1, 1, '1,2,3,4,5', 'Turno 1', 1, '2025-05-27 15:17:36', '1,2,3'),
+(19, '98765432B', 2, 2, '1,2,3,4,5', 'Turno 2', 1, '2025-05-27 15:18:18', '4');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `usuarios`
 --
 
@@ -520,9 +548,10 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`NIF`, `nombre`, `apellidos`, `email`, `pswd`, `dpto`, `centro`, `tipo_Usu`, `id_avatar`, `permitir_pausas`, `activo`, `id_horario`) VALUES
+('11111111A', 'Alejandra', 'Saez Rodriguez', 'alejandra@gmail.com', '$2y$10$3MIX35NgO7iNJtb6K/KW5ujscv2A/KLmHOGXrLExGjVNQ0/DjM8MW', '', NULL, 'empleado', 0, 0, 1, 1),
 ('12345678A', 'Admin', 'Sistema', 'admin@impulsatelecom.com', '$2y$10$IQg48EWDa1IgU3I0tpHEQ.Wp1YVXDhOvEwZtzbC1gNrtMUMKxRhV.', 'IT', 'Sede Central', 'admin', 240, 0, 1, NULL),
 ('34567890D', 'Carlos', 'Rodríguez Sánchez', 'carlos.rodriguez@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Soporte', 'Valencia', 'supervisor', 4, 0, 1, NULL),
-('56789012C', 'María', 'García Martínez', 'elreibo30@gmail.com', '$2y$10$29suFOJkJS0tpRaLKs.b9eo1xI8TAdGrZhHUFkbog32styexnPRMe', 'Ventas', 'Barcelona', 'empleado', 219, 0, 1, 4),
+('56789012C', 'María', 'García Martínez', 'elreibo30@gmail.com', '$2y$10$29suFOJkJS0tpRaLKs.b9eo1xI8TAdGrZhHUFkbog32styexnPRMe', 'Ventas', 'Barcelona', 'empleado', 225, 1, 1, 4),
 ('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 0, 1, 1),
 ('TEST123', 'Usuario', 'Prueba', 'test@example.com', '', NULL, NULL, 'empleado', NULL, 0, 1, NULL);
 
@@ -605,6 +634,15 @@ ALTER TABLE `tokens_fichaje`
   ADD KEY `NIF` (`NIF`);
 
 --
+-- Indices de la tabla `turnos`
+--
+ALTER TABLE `turnos`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_turno` (`nif_usuario`,`id_horario`,`orden`),
+  ADD KEY `id_horario` (`id_horario`),
+  ADD KEY `nif_usuario` (`nif_usuario`);
+
+--
 -- Indices de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
@@ -657,7 +695,7 @@ ALTER TABLE `recordatorios_enviados`
 -- AUTO_INCREMENT de la tabla `registros`
 --
 ALTER TABLE `registros`
-  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitudes`
@@ -676,6 +714,12 @@ ALTER TABLE `tareas`
 --
 ALTER TABLE `tokens_fichaje`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
+
+--
+-- AUTO_INCREMENT de la tabla `turnos`
+--
+ALTER TABLE `turnos`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- Restricciones para tablas volcadas
@@ -699,6 +743,12 @@ ALTER TABLE `solicitudes`
 ALTER TABLE `tareas`
   ADD CONSTRAINT `tareas_ibfk_1` FOREIGN KEY (`NIF_creador`) REFERENCES `usuarios` (`NIF`),
   ADD CONSTRAINT `tareas_ibfk_2` FOREIGN KEY (`NIF_asignado`) REFERENCES `usuarios` (`NIF`);
+
+--
+-- Filtros para la tabla `turnos`
+--
+ALTER TABLE `turnos`
+  ADD CONSTRAINT `turnos_ibfk_1` FOREIGN KEY (`id_horario`) REFERENCES `horarios` (`id`);
 
 --
 -- Filtros para la tabla `usuarios`

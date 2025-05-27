@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Fragment, createElement } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { FaFileAlt, FaFilePdf, FaFileWord, FaFileExcel, FaFileImage, FaFile, FaDownload, FaTrash, FaEdit, FaPlus, FaUser } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { motion } from 'framer-motion';
+// Eliminamos la importación de motion para evitar problemas con keys
 
 const API_URL = 'http://localhost/ImpulsaTelecom/backend/api';
 
@@ -33,14 +33,24 @@ const AdminDocumentos = () => {
   // Estado para el archivo
   const [archivo, setArchivo] = useState(null);
   
-  // Tipos de documentos
-  const tiposDocumentos = [
-    { id: 'nomina', nombre: 'Nu00f3mina', icono: (props) => <FaFileAlt {...props} /> },
-    { id: 'contrato', nombre: 'Contrato', icono: (props) => <FaFilePdf {...props} /> },
-    { id: 'formacion', nombre: 'Formaciu00f3n', icono: (props) => <FaFileWord {...props} /> },
-    { id: 'evaluacion', nombre: 'Evaluaciu00f3n', icono: (props) => <FaFileExcel {...props} /> },
-    { id: 'personal', nombre: 'Personal', icono: (props) => <FaFileImage {...props} /> },
-    { id: 'otro', nombre: 'Otro', icono: (props) => <FaFile {...props} /> }
+  // Definir un mapa simple para los tipos de documentos
+  const tiposDocumentosData = {
+    nomina: { nombre: 'Nómina' },
+    contrato: { nombre: 'Contrato' },
+    formacion: { nombre: 'Formación' },
+    evaluacion: { nombre: 'Evaluación' },
+    personal: { nombre: 'Personal' },
+    otro: { nombre: 'Otro' }
+  };
+  
+  // Lista de tipos para iterar en selectores
+  const tiposList = [
+    { id: 'nomina', nombre: 'Nómina' },
+    { id: 'contrato', nombre: 'Contrato' },
+    { id: 'formacion', nombre: 'Formación' },
+    { id: 'evaluacion', nombre: 'Evaluación' },
+    { id: 'personal', nombre: 'Personal' },
+    { id: 'otro', nombre: 'Otro' }
   ];
   
   // Cargar usuarios
@@ -117,10 +127,9 @@ const AdminDocumentos = () => {
     }
   };
   
-  // Obtener nombre segu00fan tipo
+  // Obtener nombre según tipo
   const getNombreTipo = (tipo) => {
-    const tipoEncontrado = tiposDocumentos.find(t => t.id === tipo);
-    return tipoEncontrado ? tipoEncontrado.nombre : 'Otro';
+    return tiposDocumentosData[tipo]?.nombre || 'Otro';
   };
   
   // Obtener nombre de usuario
@@ -129,11 +138,23 @@ const AdminDocumentos = () => {
     return usuario ? `${usuario.nombre} ${usuario.apellidos}` : nif;
   };
   
-  // Obtener icono segu00fan tipo
-  const getIconoTipo = (tipo, key) => {
-    const tipoEncontrado = tiposDocumentos.find(t => t.id === tipo);
-    const IconComponent = tipoEncontrado ? tipoEncontrado.icono : FaFile;
-    return <IconComponent key={key} />;
+  // Renderizar icono según tipo
+  const renderIconoTipo = (tipo, docId) => {
+    const props = { key: `icon-${docId}` };
+    switch(tipo) {
+      case 'nomina':
+        return <FaFileAlt {...props} />;
+      case 'contrato':
+        return <FaFilePdf {...props} />;
+      case 'formacion':
+        return <FaFileWord {...props} />;
+      case 'evaluacion':
+        return <FaFileExcel {...props} />;
+      case 'personal':
+        return <FaFileImage {...props} />;
+      default:
+        return <FaFile {...props} />;
+    }
   };
   
   // Formatear fecha
@@ -307,14 +328,17 @@ const AdminDocumentos = () => {
         };
       }
       
-      usuariosConDocumentos[doc.nif_usuario].documentos.push(doc);
+      usuariosConDocumentos[doc.nif_usuario].documentos.push({...doc});
     });
     
     return Object.values(usuariosConDocumentos);
-  }, [documentosFiltrados, usuarios, getNombreUsuario]);
+  }, [documentosFiltrados, getNombreUsuario]);
+  
+  // Usar una ID única para cada renderizado
+  const renderKey = React.useMemo(() => Math.random().toString(36).substring(2, 9), []);
   
   return (
-    <div className={`container mx-auto px-4 py-6 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+    <div key={`admin-documentos-${renderKey}`} className={`container mx-auto px-4 py-6 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Gestiu00f3n de Documentos</h1>
         <button
@@ -357,7 +381,7 @@ const AdminDocumentos = () => {
             }`}
           >
             <option value="">Todos los tipos</option>
-            {tiposDocumentos.map(tipo => (
+            {tiposList.map(tipo => (
               <option key={tipo.id} value={tipo.id}>
                 {tipo.nombre}
               </option>
@@ -389,7 +413,7 @@ const AdminDocumentos = () => {
           {error}
         </div>
       ) : (
-        <>
+        <Fragment>
           {/* Contenido principal - Vista por usuario */}
           {documentosPorUsuario().length === 0 ? (
             <div className={`p-6 text-center rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
@@ -398,11 +422,8 @@ const AdminDocumentos = () => {
           ) : (
             <div className="space-y-6">
               {documentosPorUsuario().map(grupo => (
-                <motion.div
+                <div
                   key={grupo.nif}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
                   className={`rounded-lg overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-white'} shadow`}
                 >
                   <div className={`p-4 flex justify-between items-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
@@ -423,36 +444,36 @@ const AdminDocumentos = () => {
                     <div className="overflow-x-auto">
                       <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead className={isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}>
-                          <tr>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                          <tr key="header-row">
+                            <th key="header-documento" scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                               Documento
                             </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            <th key="header-tipo" scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                               Tipo
                             </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            <th key="header-fecha" scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                               Fecha Subida
                             </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            <th key="header-acceso" scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                               Acceso
                             </th>
-                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                            <th key="header-acciones" scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
                               Acciones
                             </th>
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                          {grupo.documentos.map(doc => (
-                            <tr key={doc.id} className={isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-50'}>
+                          {grupo.documentos.map((doc, index) => (
+                            <tr key={`${doc.id}-${index}`} className={isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-50'}>
                               <td className="px-6 py-4 whitespace-nowrap">
                                 <div className="flex items-center">
                                   <div className="flex-shrink-0 text-blue-500 mr-3">
-                                    {getIconoTipo(doc.tipo_documento, `icon-${doc.id}`)}
+                                    {renderIconoTipo(doc.tipo_documento, doc.id)}
                                   </div>
                                   <div>
                                     <div className="text-sm font-medium">{doc.titulo}</div>
                                     {doc.descripcion && (
-                                      <div className="text-xs text-gray-500 dark:text-gray-400">{doc.descripcion}</div>
+                                      <div key={`desc-${doc.id}`} className="text-xs text-gray-500 dark:text-gray-400">{doc.descripcion}</div>
                                     )}
                                   </div>
                                 </div>
@@ -463,7 +484,7 @@ const AdminDocumentos = () => {
                               <td className="px-6 py-4 whitespace-nowrap text-sm">
                                 {formatearFecha(doc.fecha_subida)}
                                 {doc.fecha_expiracion && (
-                                  <div className="text-xs text-red-500">
+                                  <div key={`exp-${doc.id}`} className="text-xs text-red-500">
                                     Exp: {formatearFecha(doc.fecha_expiracion)}
                                   </div>
                                 )}
@@ -474,25 +495,28 @@ const AdminDocumentos = () => {
                               <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                 <div className="flex justify-end gap-2">
                                   <button 
+                                    key={`download-${doc.id}`}
                                     onClick={() => descargarDocumento(doc.id, doc.titulo)}
                                     className="text-blue-500 hover:text-blue-700"
                                     title="Descargar"
                                   >
-                                    <FaDownload />
+                                    <FaDownload key={`download-icon-${doc.id}`} />
                                   </button>
                                   <button 
+                                    key={`edit-${doc.id}`}
                                     onClick={() => abrirModalEditar(doc)}
                                     className="text-yellow-500 hover:text-yellow-700"
                                     title="Editar"
                                   >
-                                    <FaEdit />
+                                    <FaEdit key={`edit-icon-${doc.id}`} />
                                   </button>
                                   <button 
+                                    key={`delete-${doc.id}`}
                                     onClick={() => eliminarDocumento(doc.id)}
                                     className="text-red-500 hover:text-red-700"
                                     title="Eliminar"
                                   >
-                                    <FaTrash />
+                                    <FaTrash key={`delete-icon-${doc.id}`} />
                                   </button>
                                 </div>
                               </td>
@@ -502,26 +526,24 @@ const AdminDocumentos = () => {
                       </table>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           )}
-        </>
+        </Fragment>
       )}
       
       {/* Modal para subir/editar documento */}
       {modalVisible && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
+          <div 
             className={`relative w-full max-w-2xl rounded-lg shadow-xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} p-6`}
           >
             <button 
               onClick={() => setModalVisible(false)}
               className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
             >
-              u2715
+              ×
             </button>
             
             <h2 className="text-xl font-bold mb-6">
@@ -574,7 +596,7 @@ const AdminDocumentos = () => {
                     }`}
                     required
                   >
-                    {tiposDocumentos.map(tipo => (
+                    {tiposList.map(tipo => (
                       <option key={tipo.id} value={tipo.id}>
                         {tipo.nombre}
                       </option>
@@ -674,7 +696,7 @@ const AdminDocumentos = () => {
                 </button>
               </div>
             </form>
-          </motion.div>
+          </div>
         </div>
       )}
     </div>

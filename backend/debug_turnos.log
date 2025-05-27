@@ -1,0 +1,3 @@
+Depuración iniciada: 2025-05-27 16:08:03
+Datos de prueba: {"nif_usuario":"12345678A","id_horario":1,"orden":1,"dias_semana":"1,2,3,4,5","semanas_mes":"1,2,3,4,5","nombre":"Turno de Prueba"}
+Resultado: {"success":true,"message":"Turno creado correctamente","id":1}
