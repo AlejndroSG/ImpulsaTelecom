@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { FaUserCog, FaUserClock, FaCheckCircle, FaTimesCircle, FaSearch, FaFilter, FaCalendarAlt, FaUserAlt, FaEnvelope, FaIdCard, FaBuilding, FaEdit, FaKey, FaPhone, FaBriefcase, FaSave } from 'react-icons/fa';
+import { FaUserCog, FaUserClock, FaCheckCircle, FaTimesCircle, FaSearch, FaFilter, FaCalendarAlt, FaUserAlt, FaEnvelope, FaIdCard, FaBuilding, FaEdit, FaKey, FaPhone, FaBriefcase, FaSave, FaUserPlus, FaTrash, FaExclamationTriangle } from 'react-icons/fa';
 import InitialsAvatar from '../components/InitialsAvatar';
 
 // URL base para las peticiones API
@@ -25,6 +25,23 @@ const AdminUsuarios = () => {
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
+    
+    // Estados para crear y eliminar usuarios
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+    const [createFormData, setCreateFormData] = useState({
+        nif: '',
+        nombre: '',
+        apellidos: '',
+        correo: '',
+        telefono: '',
+        dpto: '',
+        id_avatar: '',
+        tipo_usuario: 'empleado',
+        password: '',
+        permitir_pausas: false
+    });
+    const [createFormErrors, setCreateFormErrors] = useState({});
     
     // Estados para edición de usuario
     const [editMode, setEditMode] = useState(false);
@@ -139,9 +156,8 @@ const AdminUsuarios = () => {
         if (!selectedUser) return;
 
         try {
-            const response = await axios.post(`${API_URL}/usuarios.php`, {
-                action: 'asignarHorario',
-                nif: selectedUser.NIF || selectedUser.id,
+            const response = await axios.post(`${API_URL}/horarios.php?asignar=true`, {
+                NIF: selectedUser.NIF || selectedUser.id,
                 id_horario: selectedHorario
             }, {
                 withCredentials: true
@@ -248,6 +264,148 @@ const AdminUsuarios = () => {
             console.error('Error al actualizar usuario:', err);
         }
     }, [selectedUser, editFormData, showPasswordField, fetchUsuarios]);
+    
+    // Función para manejar cambios en el formulario de creación
+    const handleCreateFormChange = useCallback((e) => {
+        const { name, value, type, checked } = e.target;
+        setCreateFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+        
+        // Limpiar error del campo si se está editando
+        if (createFormErrors[name]) {
+            setCreateFormErrors(prev => ({
+                ...prev,
+                [name]: ''
+            }));
+        }
+    }, [createFormErrors]);
+    
+    // Función para validar el formulario de creación
+    const validateCreateForm = useCallback(() => {
+        const errors = {};
+        
+        // Validar NIF
+        if (!createFormData.nif) {
+            errors.nif = 'El NIF es obligatorio';
+        } else if (!/^[0-9]{8}[A-Za-z]$/.test(createFormData.nif)) {
+            errors.nif = 'El NIF debe tener 8 números seguidos de una letra';
+        }
+        
+        // Validar nombre
+        if (!createFormData.nombre) {
+            errors.nombre = 'El nombre es obligatorio';
+        }
+        
+        // Validar correo
+        if (!createFormData.correo) {
+            errors.correo = 'El correo es obligatorio';
+        } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(createFormData.correo)) {
+            errors.correo = 'El correo no es válido';
+        }
+        
+        // Validar contraseña
+        if (!createFormData.password) {
+            errors.password = 'La contraseña es obligatoria';
+        } else if (createFormData.password.length < 6) {
+            errors.password = 'La contraseña debe tener al menos 6 caracteres';
+        }
+        
+        setCreateFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    }, [createFormData]);
+    
+    // Función para crear un nuevo usuario
+    const handleCreateUser = useCallback(async () => {
+        // Validar formulario
+        if (!validateCreateForm()) {
+            return;
+        }
+        
+        try {
+            const response = await axios.post(`${API_URL}/usuarios.php?action=create`, {
+                ...createFormData,
+                permitir_pausas: createFormData.permitir_pausas ? 1 : 0
+            }, {
+                withCredentials: true
+            });
+            
+            if (response.data.success) {
+                // Volver a cargar la lista de usuarios
+                await fetchUsuarios();
+                
+                // Cerrar modal y limpiar formulario
+                setShowCreateModal(false);
+                setCreateFormData({
+                    nif: '',
+                    nombre: '',
+                    apellidos: '',
+                    correo: '',
+                    telefono: '',
+                    dpto: '',
+                    id_avatar: '',
+                    tipo_usuario: 'empleado',
+                    password: '',
+                    permitir_pausas: false
+                });
+                setCreateFormErrors({});
+                
+                // Mostrar mensaje de éxito
+                setSuccessMessage('Usuario creado correctamente');
+                setErrorMessage('');
+                
+                // Limpiar mensaje después de 3 segundos
+                setTimeout(() => {
+                    setSuccessMessage('');
+                }, 3000);
+            } else {
+                setErrorMessage(`Error: ${response.data.message || 'Error desconocido'}`);
+                setSuccessMessage('');
+            }
+        } catch (err) {
+            setErrorMessage(`Error de conexión: ${err.message}`);
+            setSuccessMessage('');
+            console.error('Error al crear usuario:', err);
+        }
+    }, [createFormData, validateCreateForm, fetchUsuarios]);
+    
+    // Función para eliminar un usuario
+    const handleDeleteUser = useCallback(async () => {
+        if (!selectedUser) return;
+        
+        try {
+            const userId = selectedUser.NIF || selectedUser.id;
+            const response = await axios.post(`${API_URL}/usuarios.php?action=delete&id=${userId}`, {}, {
+                withCredentials: true
+            });
+            
+            if (response.data.success) {
+                // Volver a cargar la lista de usuarios
+                await fetchUsuarios();
+                
+                // Cerrar confirmación y deseleccionar usuario
+                setShowDeleteConfirm(false);
+                setSelectedUser(null);
+                
+                // Mostrar mensaje de éxito
+                setSuccessMessage('Usuario eliminado correctamente');
+                setErrorMessage('');
+                
+                // Limpiar mensaje después de 3 segundos
+                setTimeout(() => {
+                    setSuccessMessage('');
+                }, 3000);
+            } else {
+                setErrorMessage(`Error: ${response.data.message || 'Error desconocido'}`);
+                setSuccessMessage('');
+            }
+        } catch (err) {
+            setErrorMessage(`Error de conexión: ${err.message}`);
+            setSuccessMessage('');
+            console.error('Error al eliminar usuario:', err);
+        }
+    }, [selectedUser, fetchUsuarios]);
 
     // Filtrar usuarios por término de búsqueda
     const filteredUsuarios = usuarios.filter(usuario => {
@@ -358,6 +516,13 @@ const AdminUsuarios = () => {
                             </div>
                             <button className={`ml-3 p-2 rounded-lg ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-700'} hover:bg-blue-500 hover:text-white transition-colors`}>
                                 <FaFilter className="h-4 w-4" />
+                            </button>
+                            <button 
+                                onClick={() => setShowCreateModal(true)}
+                                className={`ml-3 px-4 py-2 rounded-lg font-medium flex items-center ${isDarkMode ? 'bg-green-700 hover:bg-green-600' : 'bg-green-600 hover:bg-green-700'} text-white shadow-sm transition-all duration-200`}
+                            >
+                                <FaUserPlus className="mr-2" />
+                                Nuevo Usuario
                             </button>
                         </div>
                     </div>
@@ -474,14 +639,21 @@ const AdminUsuarios = () => {
                                 </div>
                                 
                                 <div className="p-6">
-                                    {/* Botón para activar modo edición */}
-                                    <div className="flex justify-end mb-4">
+                                    {/* Botones para acciones de usuario */}
+                                    <div className="flex justify-end mb-4 space-x-3">
                                         <button
                                             onClick={() => setEditMode(!editMode)}
                                             className={`px-4 py-2 rounded-lg font-medium flex items-center ${isDarkMode ? 'bg-blue-700 hover:bg-blue-600' : 'bg-blue-500 hover:bg-blue-600'} text-white shadow-sm transition-all duration-200`}
                                         >
                                             <FaEdit className="mr-2" />
                                             {editMode ? 'Cancelar Edición' : 'Editar Usuario'}
+                                        </button>
+                                        <button
+                                            onClick={() => setShowDeleteConfirm(true)}
+                                            className={`px-4 py-2 rounded-lg font-medium flex items-center ${isDarkMode ? 'bg-red-700 hover:bg-red-600' : 'bg-red-600 hover:bg-red-700'} text-white shadow-sm transition-all duration-200`}
+                                        >
+                                            <FaTrash className="mr-2" />
+                                            Eliminar Usuario
                                         </button>
                                     </div>
                                     {!editMode ? (
@@ -815,6 +987,264 @@ const AdminUsuarios = () => {
                     </div>
                 </motion.div>
             </div>
+            
+            {/* Modal para crear nuevo usuario */}
+            {showCreateModal && (
+                <div className="fixed inset-0 z-50 overflow-y-auto">
+                    <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                            <div className={`absolute inset-0 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-500'} opacity-75`}></div>
+                        </div>
+                        
+                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                        
+                        <div className={`inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                            <div className={`px-4 pt-5 pb-4 sm:p-6 sm:pb-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                                <div className="sm:flex sm:items-start">
+                                    <div className={`mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full ${isDarkMode ? 'bg-blue-900' : 'bg-blue-100'} sm:mx-0 sm:h-10 sm:w-10`}>
+                                        <FaUserPlus className={`h-6 w-6 ${isDarkMode ? 'text-blue-300' : 'text-blue-600'}`} />
+                                    </div>
+                                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                                        <h3 className={`text-lg leading-6 font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                            Crear Nuevo Usuario
+                                        </h3>
+                                        <div className="mt-4">
+                                            <form className="space-y-4">
+                                                {/* NIF */}
+                                                <div>
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        NIF *
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="nif"
+                                                        value={createFormData.nif}
+                                                        onChange={handleCreateFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                        placeholder="12345678A"
+                                                    />
+                                                    {createFormErrors.nif && (
+                                                        <p className="mt-1 text-sm text-red-500">{createFormErrors.nif}</p>
+                                                    )}
+                                                </div>
+                                                
+                                                {/* Nombre */}
+                                                <div>
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Nombre *
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="nombre"
+                                                        value={createFormData.nombre}
+                                                        onChange={handleCreateFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                    />
+                                                    {createFormErrors.nombre && (
+                                                        <p className="mt-1 text-sm text-red-500">{createFormErrors.nombre}</p>
+                                                    )}
+                                                </div>
+                                                
+                                                {/* Apellidos */}
+                                                <div>
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Apellidos
+                                                    </label>
+                                                    <input
+                                                        type="text"
+                                                        name="apellidos"
+                                                        value={createFormData.apellidos}
+                                                        onChange={handleCreateFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                    />
+                                                </div>
+                                                
+                                                {/* Correo */}
+                                                <div>
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Correo Electrónico *
+                                                    </label>
+                                                    <input
+                                                        type="email"
+                                                        name="correo"
+                                                        value={createFormData.correo}
+                                                        onChange={handleCreateFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                        placeholder="ejemplo@correo.com"
+                                                    />
+                                                    {createFormErrors.correo && (
+                                                        <p className="mt-1 text-sm text-red-500">{createFormErrors.correo}</p>
+                                                    )}
+                                                </div>
+                                                
+                                                {/* Contraseña */}
+                                                <div>
+                                                    <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Contraseña *
+                                                    </label>
+                                                    <input
+                                                        type="password"
+                                                        name="password"
+                                                        value={createFormData.password}
+                                                        onChange={handleCreateFormChange}
+                                                        className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                    />
+                                                    {createFormErrors.password && (
+                                                        <p className="mt-1 text-sm text-red-500">{createFormErrors.password}</p>
+                                                    )}
+                                                </div>
+                                                
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {/* Teléfono */}
+                                                    <div>
+                                                        <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                            Teléfono
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            name="telefono"
+                                                            value={createFormData.telefono}
+                                                            onChange={handleCreateFormChange}
+                                                            className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                        />
+                                                    </div>
+                                                    
+                                                    {/* Departamento */}
+                                                    <div>
+                                                        <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                            Departamento
+                                                        </label>
+                                                        <input
+                                                            type="text"
+                                                            name="dpto"
+                                                            value={createFormData.dpto}
+                                                            onChange={handleCreateFormChange}
+                                                            className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    {/* Tipo de Usuario */}
+                                                    <div>
+                                                        <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                            Tipo de Usuario
+                                                        </label>
+                                                        <select
+                                                            name="tipo_usuario"
+                                                            value={createFormData.tipo_usuario}
+                                                            onChange={handleCreateFormChange}
+                                                            className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                        >
+                                                            <option value="empleado">Empleado</option>
+                                                            <option value="gestor">Gestor</option>
+                                                            <option value="admin">Administrador</option>
+                                                        </select>
+                                                    </div>
+                                                    
+                                                    {/* ID Avatar */}
+                                                    <div>
+                                                        <label className={`block text-sm font-medium mb-1 ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                            ID Avatar
+                                                        </label>
+                                                        <input
+                                                            type="number"
+                                                            name="id_avatar"
+                                                            value={createFormData.id_avatar}
+                                                            onChange={handleCreateFormChange}
+                                                            className={`w-full rounded-lg shadow-sm border px-3 py-2 ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-900'} focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
+                                                        />
+                                                    </div>
+                                                </div>
+                                                
+                                                {/* Permitir pausas */}
+                                                <div className="flex items-center">
+                                                    <input
+                                                        type="checkbox"
+                                                        id="create_permitir_pausas"
+                                                        name="permitir_pausas"
+                                                        checked={createFormData.permitir_pausas}
+                                                        onChange={handleCreateFormChange}
+                                                        className="h-4 w-4 text-blue-600 rounded focus:ring-blue-500"
+                                                    />
+                                                    <label htmlFor="create_permitir_pausas" className={`ml-2 block text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                                                        Permitir pausas en fichajes
+                                                    </label>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={`px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse ${isDarkMode ? 'bg-gray-800 border-t border-gray-700' : 'bg-gray-50 border-t border-gray-200'}`}>
+                                <button
+                                    type="button"
+                                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                    onClick={handleCreateUser}
+                                >
+                                    Crear Usuario
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`mt-3 w-full inline-flex justify-center rounded-md border ${isDarkMode ? 'border-gray-600 bg-gray-700 text-gray-300 hover:bg-gray-600' : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'} shadow-sm px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm`}
+                                    onClick={() => setShowCreateModal(false)}
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+            
+            {/* Modal de confirmación para eliminar usuario */}
+            {showDeleteConfirm && selectedUser && (
+                <div className="fixed inset-0 z-50 overflow-y-auto">
+                    <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                        <div className="fixed inset-0 transition-opacity" aria-hidden="true">
+                            <div className={`absolute inset-0 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-500'} opacity-75`}></div>
+                        </div>
+                        
+                        <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                        
+                        <div className={`inline-block align-bottom rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                            <div className={`px-4 pt-5 pb-4 sm:p-6 sm:pb-4 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
+                                <div className="sm:flex sm:items-start">
+                                    <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                        <FaExclamationTriangle className="h-6 w-6 text-red-600" />
+                                    </div>
+                                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                                        <h3 className={`text-lg leading-6 font-medium ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>
+                                            Eliminar Usuario
+                                        </h3>
+                                        <div className="mt-2">
+                                            <p className={`text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-500'}`}>
+                                                ¿Está seguro de que desea eliminar al usuario <strong>{selectedUser.nombre} {selectedUser.apellidos}</strong>? Esta acción no se puede deshacer.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className={`px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse ${isDarkMode ? 'bg-gray-800 border-t border-gray-700' : 'bg-gray-50 border-t border-gray-200'}`}>
+                                <button
+                                    type="button"
+                                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                                    onClick={handleDeleteUser}
+                                >
+                                    Eliminar
+                                </button>
+                                <button
+                                    type="button"
+                                    className={`mt-3 w-full inline-flex justify-center rounded-md border ${isDarkMode ? 'border-gray-600 bg-gray-700 text-gray-300 hover:bg-gray-600' : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'} shadow-sm px-4 py-2 text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm`}
+                                    onClick={() => setShowDeleteConfirm(false)}
+                                >
+                                    Cancelar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </motion.div>
     );
 };

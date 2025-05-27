@@ -521,5 +521,223 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && !isset($_GET['id'])) {
     exit();
 } 
 
+// Crear nuevo usuario
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'create') {
+    $data = json_decode(file_get_contents('php://input'), true);
+    
+    // Validar que existan los campos mínimos
+    if (!isset($data['nombre']) || !isset($data['correo']) || !isset($data['password']) || !isset($data['nif'])) {
+        echo json_encode(['success' => false, 'message' => 'Datos incompletos']);
+        exit();
+    }
+    
+    // Verificar si la tabla tiene la estructura esperada
+    $checkTableQuery = "SHOW COLUMNS FROM usuarios";
+    $tableResult = $modelo->getConn()->query($checkTableQuery);
+    $columns = [];
+    
+    if ($tableResult) {
+        while ($row = $tableResult->fetch_assoc()) {
+            $columns[] = $row['Field'];
+        }
+    }
+    
+    // Determinar los nombres de columna correctos
+    $emailField = in_array('email', $columns) ? 'email' : 'correo';
+    $passwordField = in_array('pswd', $columns) ? 'pswd' : 'password';
+    $idField = in_array('NIF', $columns) ? 'NIF' : 'id';
+    $tipoUsuarioField = in_array('tipo_Usu', $columns) ? 'tipo_Usu' : 'tipo_usuario';
+    $avatarField = 'id_avatar'; // Usar siempre id_avatar como nombre de columna
+    
+    // Verificar si existe la columna permitir_pausas
+    $permitirPausasField = in_array('permitir_pausas', $columns) ? 'permitir_pausas' : null;
+    
+    // Verificar si existe la columna telefono
+    $telefonoField = in_array('telefono', $columns) ? 'telefono' : null;
+    
+    // Verificar si el usuario ya existe
+    $checkQuery = "SELECT * FROM usuarios WHERE $idField = ?";
+    $checkStmt = $modelo->getConn()->prepare($checkQuery);
+    $checkStmt->bind_param("s", $data['nif']);
+    $checkStmt->execute();
+    $checkResult = $checkStmt->get_result();
+    
+    if ($checkResult->num_rows > 0) {
+        echo json_encode(['success' => false, 'message' => 'Ya existe un usuario con ese NIF']);
+        exit();
+    }
+    
+    // Verificar si el correo ya está en uso
+    $checkEmailQuery = "SELECT * FROM usuarios WHERE $emailField = ?";
+    $checkEmailStmt = $modelo->getConn()->prepare($checkEmailQuery);
+    $checkEmailStmt->bind_param("s", $data['correo']);
+    $checkEmailStmt->execute();
+    $checkEmailResult = $checkEmailStmt->get_result();
+    
+    if ($checkEmailResult->num_rows > 0) {
+        echo json_encode(['success' => false, 'message' => 'El correo electrónico ya está en uso']);
+        exit();
+    }
+    
+    // Construir la consulta SQL para insertar
+    $fields = [$idField, "nombre", $emailField, $passwordField];
+    $values = ["?", "?", "?", "?"];
+    $params = [$data['nif'], $data['nombre'], $data['correo']];
+    
+    // Hashear la contraseña para almacenarla de forma segura
+    $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+    $params[] = $hashedPassword;
+    
+    $types = "ssss"; // string, string, string, string
+    
+    // Añadir campo apellidos si se proporciona
+    if (isset($data['apellidos']) && in_array('apellidos', $columns)) {
+        $fields[] = "apellidos";
+        $values[] = "?";
+        $params[] = $data['apellidos'];
+        $types .= "s"; // string
+    }
+    
+    // Añadir campo telefono si existe y se proporciona
+    if ($telefonoField && isset($data['telefono'])) {
+        $fields[] = $telefonoField;
+        $values[] = "?";
+        $params[] = $data['telefono'];
+        $types .= "s"; // string
+    }
+    
+    // Añadir campo dpto si se proporciona
+    if (isset($data['dpto']) && in_array('dpto', $columns)) {
+        $fields[] = "dpto";
+        $values[] = "?";
+        $params[] = $data['dpto'];
+        $types .= "s"; // string
+    }
+    
+    // Añadir campo tipo_usuario
+    if (isset($data['tipo_usuario'])) {
+        $fields[] = $tipoUsuarioField;
+        $values[] = "?";
+        $params[] = $data['tipo_usuario'];
+        $types .= "s"; // string
+    }
+    
+    // Añadir campo avatar si se proporciona
+    if (isset($data['id_avatar'])) {
+        $fields[] = $avatarField;
+        $values[] = "?";
+        $params[] = $data['id_avatar'] !== '' ? $data['id_avatar'] : null;
+        $types .= "i"; // integer
+    }
+    
+    // Añadir campo permitir_pausas si existe
+    if ($permitirPausasField) {
+        $fields[] = $permitirPausasField;
+        $values[] = "?";
+        $params[] = isset($data['permitir_pausas']) && $data['permitir_pausas'] ? 1 : 0;
+        $types .= "i"; // integer
+    }
+    
+    // Añadir campo activo si existe
+    if (in_array('activo', $columns)) {
+        $fields[] = "activo";
+        $values[] = "?";
+        $params[] = 1; // Por defecto, el usuario está activo
+        $types .= "i"; // integer
+    }
+    
+    // Iniciar transacción
+    $modelo->getConn()->begin_transaction();
+    
+    try {
+        // Preparar la consulta de inserción
+        $query = "INSERT INTO usuarios (" . implode(", ", $fields) . ") VALUES (" . implode(", ", $values) . ")";
+        
+        // Preparar y ejecutar la consulta
+        $stmt = $modelo->getConn()->prepare($query);
+        
+        if ($stmt === false) {
+            throw new Exception("Error en la preparación de la consulta: " . $modelo->getConn()->error);
+        }
+        
+        $stmt->bind_param($types, ...$params);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+        }
+        
+        // Verificar si se insertó correctamente
+        if ($stmt->affected_rows > 0) {
+            $modelo->getConn()->commit();
+            echo json_encode(['success' => true, 'message' => 'Usuario creado correctamente']);
+        } else {
+            throw new Exception("No se pudo crear el usuario");
+        }
+    } catch (Exception $e) {
+        $modelo->getConn()->rollback();
+        echo json_encode(['success' => false, 'message' => 'Error al crear usuario: ' . $e->getMessage()]);
+    }
+    
+    exit();
+}
+
+// Eliminar usuario
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_GET['action']) && $_GET['action'] === 'delete' && isset($_GET['id'])) {
+    $userId = $_GET['id'];
+    
+    // Verificar si la tabla tiene la estructura esperada
+    $checkTableQuery = "SHOW COLUMNS FROM usuarios";
+    $tableResult = $modelo->getConn()->query($checkTableQuery);
+    $columns = [];
+    
+    if ($tableResult) {
+        while ($row = $tableResult->fetch_assoc()) {
+            $columns[] = $row['Field'];
+        }
+    }
+    
+    // Determinar el nombre de columna correcto para el ID
+    $idField = in_array('NIF', $columns) ? 'NIF' : 'id';
+    
+    // Iniciar transacción
+    $modelo->getConn()->begin_transaction();
+    
+    try {
+        // Si existe la columna activo, hacer una eliminación lógica
+        if (in_array('activo', $columns)) {
+            $query = "UPDATE usuarios SET activo = 0 WHERE $idField = ?";
+        } else {
+            // Si no existe, hacer una eliminación física
+            $query = "DELETE FROM usuarios WHERE $idField = ?";
+        }
+        
+        // Preparar y ejecutar la consulta
+        $stmt = $modelo->getConn()->prepare($query);
+        
+        if ($stmt === false) {
+            throw new Exception("Error en la preparación de la consulta: " . $modelo->getConn()->error);
+        }
+        
+        $stmt->bind_param("s", $userId);
+        
+        if (!$stmt->execute()) {
+            throw new Exception("Error al ejecutar la consulta: " . $stmt->error);
+        }
+        
+        // Verificar si se eliminó correctamente
+        if ($stmt->affected_rows > 0) {
+            $modelo->getConn()->commit();
+            echo json_encode(['success' => true, 'message' => 'Usuario eliminado correctamente']);
+        } else {
+            throw new Exception("No se pudo eliminar el usuario o no existe");
+        }
+    } catch (Exception $e) {
+        $modelo->getConn()->rollback();
+        echo json_encode(['success' => false, 'message' => 'Error al eliminar usuario: ' . $e->getMessage()]);
+    }
+    
+    exit();
+}
+
 $modelo->getConn()->close();
 ?>
