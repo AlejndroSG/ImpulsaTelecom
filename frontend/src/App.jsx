@@ -23,6 +23,7 @@ import AdminTurnos from './pages/AdminTurnos'
 import AdminHorarios from './pages/AdminHorarios'
 import EventosAdmin from './pages/admin/EventosAdmin'
 import Documentacion from './pages/Documentacion'
+import MisDocumentos from './pages/MisDocumentos'
 import { AuthProvider, ProtectedRoute, PublicRoute } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 
@@ -64,6 +65,7 @@ function App() {
               <Route path="/reportes" element={<Reportes />} />
               <Route path="/turnos" element={<Turnos />} />
               <Route path="/documentacion" element={<Documentacion />} />
+              <Route path="/mis-documentos" element={<MisDocumentos />} />
               <Route path="/admin/usuarios" element={<AdminUsuarios />} />
               <Route path="/admin/fichajes" element={<AdminFichajes />} />
               <Route path="/admin/reportes" element={<AdminReportes />} />

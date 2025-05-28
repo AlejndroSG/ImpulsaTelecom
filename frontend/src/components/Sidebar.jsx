@@ -186,6 +186,23 @@ const Sidebar = ({ expanded }) => {
           <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Perfil</span>
         </NavLink>
         
+        <NavLink 
+          to="/mis-documentos" 
+          className={({isActive}) => 
+            `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                ? 'bg-[#78bd00] text-white' 
+                : isDarkMode 
+                  ? 'hover:bg-gray-800 text-gray-300' 
+                  : 'hover:bg-gray-200 text-gray-700'
+            } ${expanded ? 'mx-2' : 'justify-center'}`
+          }
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+          </svg>
+          <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Mis Documentos</span>
+        </NavLink>
+        
         {/* Sección de administración - visible para administradores y supervisores (con limitaciones) */}
         {(user?.tipo_usuario === 'admin' || user?.tipo_usuario === 'supervisor') && (
           <>

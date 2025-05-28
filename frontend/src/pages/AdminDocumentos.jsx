@@ -1,16 +1,28 @@
-import React, { useState, useEffect, useCallback, Fragment, createElement } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import { FaFileAlt, FaFilePdf, FaFileWord, FaFileExcel, FaFileImage, FaFile, FaDownload, FaTrash, FaEdit, FaPlus, FaUser } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-// Eliminamos la importación de motion para evitar problemas con keys
 
 const API_URL = 'http://localhost/ImpulsaTelecom/backend/api';
 
 const AdminDocumentos = () => {
   const { isDarkMode } = useTheme();
-  const { usuario } = useAuth();
+  // Obtener todo el contexto de autenticación
+  const authContext = useAuth();
+  // Acceder correctamente al usuario y extraer datos relevantes
+  const { user } = authContext;
+  
+  // Verificar la información disponible del usuario para depuración
+  useEffect(() => {
+    console.log('Estado de autenticación:', authContext);
+    console.log('Datos de usuario disponibles:', user);
+    
+    // Verificar si tenemos localStorage
+    const storedUser = localStorage.getItem('user');
+    console.log('Usuario en localStorage:', storedUser ? JSON.parse(storedUser) : 'No disponible');
+  }, [authContext, user]);
   const [documentos, setDocumentos] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -56,13 +68,16 @@ const AdminDocumentos = () => {
   // Cargar usuarios
   const cargarUsuarios = useCallback(async () => {
     try {
+      console.log('Solicitando lista de usuarios...');
       const response = await axios.get(`${API_URL}/usuarios.php?action=list`, {
         withCredentials: true
       });
       
       if (response.data && response.data.usuarios) {
+        console.log('Usuarios cargados correctamente:', response.data.usuarios.length);
         setUsuarios(response.data.usuarios);
       } else {
+        console.error('Respuesta sin usuarios:', response.data);
         setError('No se pudieron cargar los usuarios');
       }
     } catch (err) {
@@ -74,15 +89,26 @@ const AdminDocumentos = () => {
   // Cargar documentos
   const cargarDocumentos = useCallback(async () => {
     setLoading(true);
+    setError(null);
     try {
-      const response = await axios.get(`${API_URL}/documentos.php?action=list`, {
+      console.log('Solicitando lista de documentos como administrador...');
+      
+      // Asegurarse de que la solicitud incluya indicadores de que es administrador
+      const response = await axios.get(`${API_URL}/documentos.php?action=list&admin=true`, {
         withCredentials: true
       });
       
+      console.log('Respuesta de documentos:', response.data);
+      
       if (response.data && response.data.documentos) {
+        console.log(`Se encontraron ${response.data.documentos.length} documentos`);
         setDocumentos(response.data.documentos);
       } else {
+        console.error('No se encontraron documentos o formato de respuesta incorrecto:', response.data);
         setDocumentos([]);
+        if (response.data && response.data.error) {
+          setError(response.data.error);
+        }
       }
       setError(null);
     } catch (err) {
@@ -100,17 +126,6 @@ const AdminDocumentos = () => {
     cargarDocumentos();
   }, [cargarUsuarios, cargarDocumentos]);
   
-  // Filtrar documentos
-  const documentosFiltrados = documentos.filter(doc => {
-    // Filtrar por usuario
-    const pasaFiltroUsuario = !filtroUsuario || doc.nif_usuario === filtroUsuario;
-    
-    // Filtrar por tipo
-    const pasaFiltroTipo = !filtroTipo || doc.tipo_documento === filtroTipo;
-    
-    return pasaFiltroUsuario && pasaFiltroTipo;
-  });
-  
   // Manejar cambio en el formulario
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -126,34 +141,33 @@ const AdminDocumentos = () => {
       setArchivo(e.target.files[0]);
     }
   };
-  
+
   // Obtener nombre según tipo
   const getNombreTipo = (tipo) => {
     return tiposDocumentosData[tipo]?.nombre || 'Otro';
   };
   
-  // Obtener nombre de usuario
-  const getNombreUsuario = (nif) => {
-    const usuario = usuarios.find(u => u.NIF === nif);
-    return usuario ? `${usuario.nombre} ${usuario.apellidos}` : nif;
-  };
+  // Obtener nombre de usuario - envuelto en useCallback para evitar recreaciones
+  const getNombreUsuario = useCallback((nif) => {
+    const user = usuarios.find(u => u.id === nif);
+    return user ? `${user.nombre} ${user.apellidos}` : nif;
+  }, [usuarios]);
   
   // Renderizar icono según tipo
-  const renderIconoTipo = (tipo, docId) => {
-    const props = { key: `icon-${docId}` };
+  const renderIconoTipo = (tipo) => {
     switch(tipo) {
       case 'nomina':
-        return <FaFileAlt {...props} />;
+        return <FaFileAlt />;
       case 'contrato':
-        return <FaFilePdf {...props} />;
+        return <FaFilePdf />;
       case 'formacion':
-        return <FaFileWord {...props} />;
+        return <FaFileWord />;
       case 'evaluacion':
-        return <FaFileExcel {...props} />;
+        return <FaFileExcel />;
       case 'personal':
-        return <FaFileImage {...props} />;
+        return <FaFileImage />;
       default:
-        return <FaFile {...props} />;
+        return <FaFile />;
     }
   };
   
@@ -199,9 +213,12 @@ const AdminDocumentos = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    console.log('Iniciando subida de documento...');
+    console.log('Datos del formulario:', formData);
+    
     // Validaciones
     if (!formData.titulo.trim()) {
-      toast.error('El tu00edtulo es obligatorio');
+      toast.error('El título es obligatorio');
       return;
     }
     
@@ -212,16 +229,19 @@ const AdminDocumentos = () => {
     
     // Si estamos editando y no tenemos ID
     if (documentoEditar && !formData.id) {
-      toast.error('ID de documento no vu00e1lido');
+      toast.error('ID de documento no válido');
       return;
     }
     
     try {
       if (documentoEditar) {
         // Actualizar documento existente
+        console.log('Actualizando documento existente:', documentoEditar.id);
         const response = await axios.post(`${API_URL}/documentos.php?action=update`, formData, {
           withCredentials: true
         });
+        
+        console.log('Respuesta de actualización:', response.data);
         
         if (response.data && response.data.success) {
           toast.success('Documento actualizado correctamente');
@@ -237,6 +257,9 @@ const AdminDocumentos = () => {
           return;
         }
         
+        console.log('Preparando FormData para nuevo documento');
+        console.log('Archivo seleccionado:', archivo.name, archivo.type, archivo.size);
+        
         const formDataObj = new FormData();
         formDataObj.append('titulo', formData.titulo);
         formDataObj.append('descripcion', formData.descripcion);
@@ -246,12 +269,35 @@ const AdminDocumentos = () => {
         formDataObj.append('fecha_expiracion', formData.fecha_expiracion);
         formDataObj.append('archivo', archivo);
         
-        const response = await axios.post(`${API_URL}/documentos.php?action=upload`, formDataObj, {
-          withCredentials: true,
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
+              // Obtener datos de usuario de todas las fuentes posibles
+        const userFromContext = user;
+        const userFromStorage = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+        const effectiveUser = userFromContext || userFromStorage;
+        
+        console.log('Datos para autenticación:');
+        console.log('- De contexto:', userFromContext);
+        console.log('- De localStorage:', userFromStorage);
+        
+        // Incluir todos los identificadores posibles para máxima compatibilidad
+        if (effectiveUser) {
+          if (effectiveUser.id) formDataObj.append('usuario_id', effectiveUser.id);
+          if (effectiveUser.NIF) formDataObj.append('usuario_nif', effectiveUser.NIF);
+          if (effectiveUser.email) formDataObj.append('usuario_email', effectiveUser.email);
+        } else {
+          // Fallback - usar el NIF del formulario como identificador de usuario
+          formDataObj.append('usuario_nif', formData.nif_usuario);
+        }
+        
+        console.log('Enviando como usuario:', effectiveUser?.id || effectiveUser?.NIF, effectiveUser?.nombre);
+        // Usar el nuevo endpoint simplificado para subir documentos
+        console.log('Enviando solicitud a:', `${API_URL}/upload_documento.php`);
+        
+        // Usar FormData con credenciales y sin establecer Content-Type
+        const response = await axios.post(`${API_URL}/upload_documento.php`, formDataObj, {
+          withCredentials: true
         });
+        
+        console.log('Respuesta de subida:', response.data);
         
         if (response.data && response.data.success) {
           toast.success('Documento subido correctamente');
@@ -262,14 +308,15 @@ const AdminDocumentos = () => {
         }
       }
     } catch (err) {
-      console.error('Error en la operaciu00f3n:', err);
+      console.error('Error en la operación:', err);
+      console.error('Detalles del error:', err.response?.data || err.message);
       toast.error('Error: ' + (err.response?.data?.error || err.message));
     }
   };
   
   // Eliminar documento
   const eliminarDocumento = async (id) => {
-    if (!window.confirm('u00bfEstu00e1s seguro de eliminar este documento?')) {
+    if (!window.confirm('¿Estás seguro de eliminar este documento?')) {
       return;
     }
     
@@ -313,225 +360,198 @@ const AdminDocumentos = () => {
       toast.error('Error: ' + (err.response?.data?.error || err.message));
     }
   };
-
-  // Mostrar documentos por usuario
-  const documentosPorUsuario = useCallback(() => {
-    // Agrupar documentos por usuario
+  
+  // Filtramos documentos cada vez que cambian los filtros - usando useMemo para evitar cálculos innecesarios
+  const documentosFiltrados = useMemo(() => {
+    return documentos.filter(doc => {
+      // Filtrar por usuario
+      const pasaFiltroUsuario = !filtroUsuario || doc.nif_usuario === filtroUsuario;
+      // Filtrar por tipo
+      const pasaFiltroTipo = !filtroTipo || doc.tipo_documento === filtroTipo;
+      return pasaFiltroUsuario && pasaFiltroTipo;
+    });
+  }, [documentos, filtroUsuario, filtroTipo]);
+  
+  // Agrupamos documentos filtrados por usuario - usando useMemo para evitar cálculos innecesarios
+  const docsAgrupados = useMemo(() => {
     const usuariosConDocumentos = {};
     
-    documentosFiltrados.forEach(doc => {
-      if (!usuariosConDocumentos[doc.nif_usuario]) {
-        usuariosConDocumentos[doc.nif_usuario] = {
-          usuario: getNombreUsuario(doc.nif_usuario),
-          nif: doc.nif_usuario,
+    // Asignamos un ID único a cada documento para evitar problemas de keys
+    documentosFiltrados.forEach((doc, index) => {
+      const nifUsuario = doc.nif_usuario || 'sin-nif'; // Usamos NIF como identificador principal
+      
+      if (!usuariosConDocumentos[nifUsuario]) {
+        const nombreUsuario = usuarios.find(u => u.id === nifUsuario);
+        usuariosConDocumentos[nifUsuario] = {
+          usuario: nombreUsuario ? `${nombreUsuario.nombre} ${nombreUsuario.apellidos}` : nifUsuario,
+          nif: nifUsuario,
           documentos: []
         };
       }
       
-      usuariosConDocumentos[doc.nif_usuario].documentos.push({...doc});
+      // Asegurarnos de que cada documento tenga un ID único
+      const docConId = {...doc};
+      if (!docConId.id) {
+        docConId.id = `doc-${nifUsuario}-${index}`;
+      }
+      
+      usuariosConDocumentos[nifUsuario].documentos.push(docConId);
     });
     
     return Object.values(usuariosConDocumentos);
-  }, [documentosFiltrados, getNombreUsuario]);
-  
-  // Usar una ID única para cada renderizado
-  const renderKey = React.useMemo(() => Math.random().toString(36).substring(2, 9), []);
-  
+  }, [documentosFiltrados, usuarios]);
+
   return (
-    <div key={`admin-documentos-${renderKey}`} className={`container mx-auto px-4 py-6 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Gestiu00f3n de Documentos</h1>
-        <button
-          onClick={() => abrirModalNuevo()}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2 hover:bg-blue-700 transition duration-200"
-        >
-          <FaPlus /> Subir Documento
-        </button>
-      </div>
-      
-      {/* Filtros */}
-      <div className={`p-4 mb-6 rounded-lg flex flex-wrap gap-4 ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
-        <div className="flex-1 min-w-[200px]">
-          <label className="block mb-2 text-sm font-medium">Filtrar por Empleado</label>
-          <select
-            value={filtroUsuario}
-            onChange={(e) => setFiltroUsuario(e.target.value)}
-            className={`w-full p-2 rounded-lg border ${
-              isDarkMode 
-                ? 'bg-gray-700 border-gray-600 text-white' 
-                : 'bg-white border-gray-300 text-gray-900'
-            }`}
-          >
-            <option value="">Todos los empleados</option>
-            {usuarios.map(usuario => (
-              <option key={usuario.NIF} value={usuario.NIF}>{usuario.nombre} {usuario.apellidos}</option>
-            ))}
-          </select>
-        </div>
+    <div className={`container mx-auto px-4 py-6 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+        <h1 className="text-2xl font-bold mb-4 md:mb-0">Gestión de Documentos</h1>
         
-        <div className="flex-1 min-w-[200px]">
-          <label className="block mb-2 text-sm font-medium">Filtrar por Tipo</label>
-          <select
-            value={filtroTipo}
-            onChange={(e) => setFiltroTipo(e.target.value)}
-            className={`w-full p-2 rounded-lg border ${
-              isDarkMode 
-                ? 'bg-gray-700 border-gray-600 text-white' 
-                : 'bg-white border-gray-300 text-gray-900'
-            }`}
-          >
-            <option value="">Todos los tipos</option>
-            {tiposList.map(tipo => (
-              <option key={tipo.id} value={tipo.id}>
-                {tipo.nombre}
-              </option>
-            ))}
-          </select>
-        </div>
-        
-        <div className="flex items-end justify-end flex-1 min-w-[200px]">
+        <div className="flex flex-col md:flex-row gap-2 w-full md:w-auto">
+          <div className="relative">
+            <select
+              value={filtroUsuario}
+              onChange={(e) => setFiltroUsuario(e.target.value)}
+              className={`block w-full p-2 text-sm rounded-md border ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600 text-white' 
+                  : 'bg-white border-gray-300 text-gray-700'
+              }`}
+            >
+              <option key="filter-user-all" value="">Todos los empleados</option>
+              {usuarios.map((user, index) => (
+                <option key={`filter-user-${user.id || index}`} value={user.id || ''}>
+                  {user.nombre} {user.apellidos}
+                </option>
+              ))}
+            </select>
+          </div>
+          
+          <div className="relative">
+            <select
+              value={filtroTipo}
+              onChange={(e) => setFiltroTipo(e.target.value)}
+              className={`block w-full p-2 text-sm rounded-md border ${
+                isDarkMode 
+                  ? 'bg-gray-700 border-gray-600 text-white' 
+                  : 'bg-white border-gray-300 text-gray-700'
+              }`}
+            >
+              <option key="filter-type-all" value="">Todos los tipos</option>
+              {tiposList.map((tipo, index) => (
+                <option key={`filter-type-${tipo.id || index}`} value={tipo.id || ''}>
+                  {tipo.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+          
           <button
-            onClick={() => { setFiltroUsuario(''); setFiltroTipo(''); }}
-            className={`px-4 py-2 rounded-lg ${
-              isDarkMode 
-                ? 'bg-gray-700 hover:bg-gray-600' 
-                : 'bg-gray-200 hover:bg-gray-300'
-            } transition duration-200`}
+            onClick={() => abrirModalNuevo()}
+            className="px-4 py-2 bg-blue-600 text-white rounded flex items-center justify-center gap-1 hover:bg-blue-700 transition duration-200"
           >
-            Limpiar filtros
+            <FaPlus size={14} /> Nuevo Documento
           </button>
         </div>
       </div>
       
-      {/* Estado de carga o error */}
-      {loading ? (
-        <div className="flex justify-center py-10">
-          <div className="loader"></div>
-        </div>
-      ) : error ? (
-        <div className="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-200 dark:text-red-800">
-          {error}
-        </div>
-      ) : (
-        <Fragment>
-          {/* Contenido principal - Vista por usuario */}
-          {documentosPorUsuario().length === 0 ? (
-            <div className={`p-6 text-center rounded-lg ${isDarkMode ? 'bg-gray-800' : 'bg-gray-100'}`}>
-              <p className="text-lg">No hay documentos disponibles</p>
-            </div>
-          ) : (
-            <div className="space-y-6">
-              {documentosPorUsuario().map(grupo => (
-                <div
-                  key={grupo.nif}
-                  className={`rounded-lg overflow-hidden ${isDarkMode ? 'bg-gray-800' : 'bg-white'} shadow`}
-                >
-                  <div className={`p-4 flex justify-between items-center ${isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}`}>
-                    <div className="flex items-center gap-2">
-                      <FaUser className="text-blue-500" />
-                      <h2 className="text-lg font-semibold">{grupo.usuario}</h2>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">({grupo.documentos.length} documentos)</span>
-                    </div>
-                    <button
-                      onClick={() => abrirModalNuevo(grupo.nif)}
-                      className="px-3 py-1 bg-green-600 text-white rounded flex items-center gap-1 hover:bg-green-700 transition duration-200 text-sm"
-                    >
-                      <FaPlus size={12} /> Au00f1adir
-                    </button>
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
+        {/* Listado de documentos por usuario */}
+        {loading ? (
+          <div className="flex justify-center my-10">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+          </div>
+        ) : error ? (
+          <div className="bg-red-100 text-red-700 p-4 rounded my-4">
+            {error}
+          </div>
+        ) : docsAgrupados.length === 0 ? (
+          <div className="text-center my-10">
+            <p className="text-lg">No hay documentos que coincidan con los filtros seleccionados.</p>
+          </div>
+        ) : (
+          <div className="space-y-6">
+            {docsAgrupados.map((grupo) => (
+              <div key={`grupo-${grupo.nif}`} className="mb-6 bg-white dark:bg-gray-800 rounded-lg shadow-md overflow-hidden">
+                <div className="bg-primary text-white px-4 py-3 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <FaUser className="mr-2" />
+                    <h3 className="text-lg font-semibold">{grupo.usuario}</h3>
                   </div>
-                  
-                  <div className="p-0">
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                        <thead className={isDarkMode ? 'bg-gray-700' : 'bg-gray-50'}>
-                          <tr key="header-row">
-                            <th key="header-documento" scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                              Documento
-                            </th>
-                            <th key="header-tipo" scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                              Tipo
-                            </th>
-                            <th key="header-fecha" scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                              Fecha Subida
-                            </th>
-                            <th key="header-acceso" scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                              Acceso
-                            </th>
-                            <th key="header-acciones" scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
-                              Acciones
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                          {grupo.documentos.map((doc, index) => (
-                            <tr key={`${doc.id}-${index}`} className={isDarkMode ? 'bg-gray-800 hover:bg-gray-700' : 'bg-white hover:bg-gray-50'}>
-                              <td className="px-6 py-4 whitespace-nowrap">
-                                <div className="flex items-center">
-                                  <div className="flex-shrink-0 text-blue-500 mr-3">
-                                    {renderIconoTipo(doc.tipo_documento, doc.id)}
-                                  </div>
-                                  <div>
-                                    <div className="text-sm font-medium">{doc.titulo}</div>
-                                    {doc.descripcion && (
-                                      <div key={`desc-${doc.id}`} className="text-xs text-gray-500 dark:text-gray-400">{doc.descripcion}</div>
-                                    )}
-                                  </div>
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                {getNombreTipo(doc.tipo_documento)}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                {formatearFecha(doc.fecha_subida)}
-                                {doc.fecha_expiracion && (
-                                  <div key={`exp-${doc.id}`} className="text-xs text-red-500">
-                                    Exp: {formatearFecha(doc.fecha_expiracion)}
-                                  </div>
-                                )}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-sm">
-                                {parseInt(doc.acceso_publico) === 1 ? 'Pu00fablico' : 'Privado'}
-                              </td>
-                              <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <div className="flex justify-end gap-2">
-                                  <button 
-                                    key={`download-${doc.id}`}
-                                    onClick={() => descargarDocumento(doc.id, doc.titulo)}
-                                    className="text-blue-500 hover:text-blue-700"
-                                    title="Descargar"
-                                  >
-                                    <FaDownload key={`download-icon-${doc.id}`} />
-                                  </button>
-                                  <button 
-                                    key={`edit-${doc.id}`}
-                                    onClick={() => abrirModalEditar(doc)}
-                                    className="text-yellow-500 hover:text-yellow-700"
-                                    title="Editar"
-                                  >
-                                    <FaEdit key={`edit-icon-${doc.id}`} />
-                                  </button>
-                                  <button 
-                                    key={`delete-${doc.id}`}
-                                    onClick={() => eliminarDocumento(doc.id)}
-                                    className="text-red-500 hover:text-red-700"
-                                    title="Eliminar"
-                                  >
-                                    <FaTrash key={`delete-icon-${doc.id}`} />
-                                  </button>
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
+                  <button
+                    onClick={() => abrirModalNuevo(grupo.nif)}
+                    className="bg-white text-primary hover:bg-gray-100 px-3 py-1 rounded text-sm flex items-center"
+                  >
+                    <FaPlus className="mr-1" /> Añadir
+                  </button>
                 </div>
-              ))}
-            </div>
-          )}
-        </Fragment>
-      )}
+                
+                <div className="overflow-x-auto">
+                  <table className="min-w-full">
+                    <thead className="bg-gray-50 dark:bg-gray-700">
+                      <tr>
+                        <th key="th-doc" className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Documento</th>
+                        <th key="th-tipo" className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Tipo</th>
+                        <th key="th-fecha" className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Fecha</th>
+                        <th key="th-acciones" className="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Acciones</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-600">
+                      {grupo.documentos.map((doc, idx) => (
+                        <tr key={`doc-${doc.id || doc.nif_usuario}-${idx}`} className="hover:bg-gray-50 dark:hover:bg-gray-700">
+                          <td className="px-4 py-3">
+                            <div className="flex items-center">
+                              <div className="text-primary mr-3">
+                                {renderIconoTipo(doc.tipo_documento)}
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-900 dark:text-white">{doc.titulo}</div>
+                                {doc.descripcion && (
+                                  <div className="text-sm text-gray-500 dark:text-gray-400">{doc.descripcion}</div>
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                            {getNombreTipo(doc.tipo_documento)}
+                          </td>
+                          <td className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400">
+                            {formatearFecha(doc.fecha_subida)}
+                          </td>
+                          <td className="px-4 py-3 text-sm">
+                            <div className="flex space-x-2">
+                              <button
+                                onClick={() => descargarDocumento(doc.id, doc.titulo)}
+                                className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-200"
+                                aria-label="Descargar"
+                              >
+                                <FaDownload />
+                              </button>
+                              <button
+                                onClick={() => abrirModalEditar(doc)}
+                                className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-200"
+                                aria-label="Editar"
+                              >
+                                <FaEdit />
+                              </button>
+                              <button
+                                onClick={() => eliminarDocumento(doc.id)}
+                                className="text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-200"
+                                aria-label="Eliminar"
+                              >
+                                <FaTrash />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
       
       {/* Modal para subir/editar documento */}
       {modalVisible && (
@@ -539,47 +559,47 @@ const AdminDocumentos = () => {
           <div 
             className={`relative w-full max-w-2xl rounded-lg shadow-xl ${isDarkMode ? 'bg-gray-800' : 'bg-white'} p-6`}
           >
-            <button 
+            <button
               onClick={() => setModalVisible(false)}
-              className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
             >
-              ×
+              &times;
             </button>
             
-            <h2 className="text-xl font-bold mb-6">
+            <h2 className="text-xl font-bold mb-4">
               {documentoEditar ? 'Editar Documento' : 'Subir Nuevo Documento'}
             </h2>
             
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium">Tu00edtulo*</label>
+                <label className="block mb-2 text-sm font-medium">Título*</label>
                 <input
                   type="text"
                   name="titulo"
                   value={formData.titulo}
                   onChange={handleChange}
-                  className={`w-full p-2 rounded-lg border ${
+                  className={`w-full p-2 border rounded ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
+                      : 'bg-white border-gray-300'
                   }`}
                   required
                 />
               </div>
               
               <div className="mb-4">
-                <label className="block mb-2 text-sm font-medium">Descripciu00f3n</label>
+                <label className="block mb-2 text-sm font-medium">Descripción</label>
                 <textarea
                   name="descripcion"
                   value={formData.descripcion}
                   onChange={handleChange}
-                  className={`w-full p-2 rounded-lg border ${
+                  className={`w-full p-2 border rounded ${
                     isDarkMode 
                       ? 'bg-gray-700 border-gray-600 text-white' 
-                      : 'bg-white border-gray-300 text-gray-900'
+                      : 'bg-white border-gray-300'
                   }`}
                   rows="3"
-                />
+                ></textarea>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -589,15 +609,15 @@ const AdminDocumentos = () => {
                     name="tipo_documento"
                     value={formData.tipo_documento}
                     onChange={handleChange}
-                    className={`w-full p-2 rounded-lg border ${
+                    className={`w-full p-2 border rounded ${
                       isDarkMode 
                         ? 'bg-gray-700 border-gray-600 text-white' 
-                        : 'bg-white border-gray-300 text-gray-900'
+                        : 'bg-white border-gray-300'
                     }`}
                     required
                   >
-                    {tiposList.map(tipo => (
-                      <option key={tipo.id} value={tipo.id}>
+                    {tiposList.map((tipo, index) => (
+                      <option key={`modal-type-${tipo.id || index}`} value={tipo.id || ''}>
                         {tipo.nombre}
                       </option>
                     ))}
@@ -610,18 +630,18 @@ const AdminDocumentos = () => {
                     name="nif_usuario"
                     value={formData.nif_usuario}
                     onChange={handleChange}
-                    className={`w-full p-2 rounded-lg border ${
+                    className={`w-full p-2 border rounded ${
                       isDarkMode 
                         ? 'bg-gray-700 border-gray-600 text-white' 
-                        : 'bg-white border-gray-300 text-gray-900'
+                        : 'bg-white border-gray-300'
                     }`}
                     required
                     disabled={!!documentoEditar}
                   >
-                    <option value="">Seleccionar empleado</option>
-                    {usuarios.map(usuario => (
-                      <option key={usuario.NIF} value={usuario.NIF}>
-                        {usuario.nombre} {usuario.apellidos}
+                    <option key="modal-user-default" value="">Seleccionar empleado</option>
+                    {usuarios.map((user, index) => (
+                      <option key={`modal-user-${user.id || index}`} value={user.id || ''}>
+                        {user.nombre} {user.apellidos}
                       </option>
                     ))}
                   </select>
@@ -630,67 +650,63 @@ const AdminDocumentos = () => {
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                  <label className="block mb-2 text-sm font-medium">Fecha de Expiraciu00f3n</label>
+                  <label className="block mb-2 text-sm font-medium">Fecha de Expiración</label>
                   <input
                     type="date"
                     name="fecha_expiracion"
                     value={formData.fecha_expiracion}
                     onChange={handleChange}
-                    className={`w-full p-2 rounded-lg border ${
+                    className={`w-full p-2 border rounded ${
                       isDarkMode 
                         ? 'bg-gray-700 border-gray-600 text-white' 
-                        : 'bg-white border-gray-300 text-gray-900'
+                        : 'bg-white border-gray-300'
                     }`}
                   />
                 </div>
                 
-                <div className="flex items-center h-full pt-6">
-                  <label className="inline-flex items-center cursor-pointer">
+                <div>
+                  <label className="block mb-2 text-sm font-medium">Acceso Público</label>
+                  <div className="flex items-center mt-2">
                     <input
                       type="checkbox"
                       name="acceso_publico"
                       checked={formData.acceso_publico === 1}
                       onChange={handleChange}
-                      className="sr-only peer"
+                      className="mr-2"
                     />
-                    <div className="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                    <span className="ml-3 text-sm font-medium">Documento visible para todos</span>
-                  </label>
+                    <span>Documento visible para todos los empleados</span>
+                  </div>
                 </div>
               </div>
               
               {!documentoEditar && (
-                <div className="mb-6">
+                <div className="mb-4">
                   <label className="block mb-2 text-sm font-medium">Archivo*</label>
                   <input
                     type="file"
                     onChange={handleFileChange}
-                    className={`w-full p-2 rounded-lg border ${
+                    className={`w-full p-2 border rounded ${
                       isDarkMode 
                         ? 'bg-gray-700 border-gray-600 text-white' 
-                        : 'bg-white border-gray-300 text-gray-900'
+                        : 'bg-white border-gray-300'
                     }`}
                     required
                   />
                 </div>
               )}
               
-              <div className="flex justify-end gap-3">
+              <div className="flex justify-end gap-2 mt-6">
                 <button
                   type="button"
                   onClick={() => setModalVisible(false)}
-                  className={`px-4 py-2 rounded-lg ${
-                    isDarkMode 
-                      ? 'bg-gray-700 hover:bg-gray-600 text-white' 
-                      : 'bg-gray-200 hover:bg-gray-300 text-gray-800'
-                  }`}
+                  className="px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 dark:border-gray-600 dark:hover:bg-gray-700"
                 >
                   Cancelar
                 </button>
-                
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+                  onClick={(e) => handleSubmit(e)} // Añadimos un onClick para garantizar la ejecución
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                 >
                   {documentoEditar ? 'Guardar Cambios' : 'Subir Documento'}
                 </button>
