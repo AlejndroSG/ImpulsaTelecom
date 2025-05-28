@@ -206,21 +206,36 @@ const Turnos = () => {
                       </div>
                     </div>
                     
-                    <div className={`p-3 h-32 
+                    <div className={`p-3 h-36 
                       ${isDarkMode 
                         ? turno ? 'bg-gray-700' : 'bg-gray-750' 
                         : turno ? 'bg-white' : 'bg-gray-50'}`}>
                       {turno ? (
                         <div className="h-full flex flex-col">
-                          <div className="font-medium mb-2">{turno.nombre}</div>
-                          <div className="text-sm flex items-center mb-1">
-                            <FaClock className={`mr-1 text-green-500`} size={12} />
-                            <span>Entrada: {turno.hora_inicio}</span>
+                          <div className="font-medium mb-2 text-sm truncate">{turno.nombre}</div>
+                          
+                          <div className="grid grid-cols-1 gap-2 mt-1">
+                            {/* Entrada con mejor formato */}
+                            <div className={`flex items-center py-1.5 px-2 rounded-md
+                              ${isDarkMode ? 'bg-gray-600' : 'bg-blue-50'}`}>
+                              <FaClock className="text-green-500 mr-2" size={14} />
+                              <div>
+                                <div className="text-xs font-medium opacity-80">Entrada</div>
+                                <div className="text-sm font-bold">{turno.hora_inicio}</div>
+                              </div>
+                            </div>
+                            
+                            {/* Salida con mejor formato */}
+                            <div className={`flex items-center py-1.5 px-2 rounded-md
+                              ${isDarkMode ? 'bg-gray-600' : 'bg-red-50'}`}>
+                              <FaClock className="text-red-500 mr-2" size={14} />
+                              <div>
+                                <div className="text-xs font-medium opacity-80">Salida</div>
+                                <div className="text-sm font-bold">{turno.hora_fin}</div>
+                              </div>
+                            </div>
                           </div>
-                          <div className="text-sm flex items-center">
-                            <FaClock className={`mr-1 text-red-500`} size={12} />
-                            <span>Salida: {turno.hora_fin}</span>
-                          </div>
+                          
                           <div className={`mt-auto text-xs py-1 px-2 rounded-md self-start 
                             ${isDarkMode ? 'bg-blue-900 text-blue-200' : 'bg-blue-50 text-blue-800'}`}>
                             {turno.nombre_horario}

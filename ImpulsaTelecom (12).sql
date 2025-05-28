@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-05-2025 a las 17:37:42
+-- Tiempo de generación: 28-05-2025 a las 02:06:45
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -520,7 +520,11 @@ INSERT INTO `turnos` (`id`, `nif_usuario`, `id_horario`, `orden`, `dias_semana`,
 (2, '11111111A', 1, 1, '1,2,3,4,5', 'Turno 1', 1, '2025-05-27 14:18:08', '1,2,3,4'),
 (3, '11111111A', 4, 2, '1,2,3,4,5', 'Turno 2', 0, '2025-05-27 14:18:23', '1,2,3,4,5'),
 (18, '98765432B', 1, 1, '1,2,3,4,5', 'Turno 1', 1, '2025-05-27 15:17:36', '1,2,3'),
-(19, '98765432B', 2, 2, '1,2,3,4,5', 'Turno 2', 1, '2025-05-27 15:18:18', '4');
+(19, '98765432B', 2, 2, '1,2,3,4,5', 'Turno 2', 1, '2025-05-27 15:18:18', '4'),
+(20, '56789012C', 2, 1, '1,2,3,4,5,6,7', 'Alejandro Prueba Turno', 1, '2025-05-27 21:35:58', '1'),
+(21, 'TEST123', 4, 1, '1,2,3,4,5', 'Turno de Lunes a Viernes', 1, '2025-05-27 21:45:00', '1,2,3,4,5'),
+(22, 'TEST123', 1, 2, '6,7', 'Turno Fin de Semana', 1, '2025-05-27 21:45:00', '1,2,3,4,5'),
+(23, '56789012C', 1, 2, '3,4,5,6,7', 'Turno 2', 1, '2025-05-27 23:54:06', '4,5');
 
 -- --------------------------------------------------------
 
@@ -548,7 +552,7 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`NIF`, `nombre`, `apellidos`, `email`, `pswd`, `dpto`, `centro`, `tipo_Usu`, `id_avatar`, `permitir_pausas`, `activo`, `id_horario`) VALUES
-('11111111A', 'Alejandra', 'Saez Rodriguez', 'alejandra@gmail.com', '$2y$10$3MIX35NgO7iNJtb6K/KW5ujscv2A/KLmHOGXrLExGjVNQ0/DjM8MW', '', NULL, 'empleado', 0, 0, 1, 1),
+('11111111A', 'Alejandra', 'Saez Rodriguez', 'alejandra@gmail.com', '$2y$10$3MIX35NgO7iNJtb6K/KW5ujscv2A/KLmHOGXrLExGjVNQ0/DjM8MW', '', NULL, 'empleado', 221, 0, 1, 1),
 ('12345678A', 'Admin', 'Sistema', 'admin@impulsatelecom.com', '$2y$10$IQg48EWDa1IgU3I0tpHEQ.Wp1YVXDhOvEwZtzbC1gNrtMUMKxRhV.', 'IT', 'Sede Central', 'admin', 240, 0, 1, NULL),
 ('34567890D', 'Carlos', 'Rodríguez Sánchez', 'carlos.rodriguez@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Soporte', 'Valencia', 'supervisor', 4, 0, 1, NULL),
 ('56789012C', 'María', 'García Martínez', 'elreibo30@gmail.com', '$2y$10$29suFOJkJS0tpRaLKs.b9eo1xI8TAdGrZhHUFkbog32styexnPRMe', 'Ventas', 'Barcelona', 'empleado', 225, 1, 1, 4),
@@ -719,7 +723,7 @@ ALTER TABLE `tokens_fichaje`
 -- AUTO_INCREMENT de la tabla `turnos`
 --
 ALTER TABLE `turnos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- Restricciones para tablas volcadas

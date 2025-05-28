@@ -194,20 +194,22 @@ const TurnosWidget = ({ height }) => {
                   {renderEstadoTurno()}
                 </div>
                 
-                <div className="grid grid-cols-2 gap-2 mt-3">
-                  <div className="flex items-center">
-                    <FaSun className={`mr-2 ${isDarkMode ? 'text-yellow-400' : 'text-yellow-500'}`} />
-                    <div>
-                      <div className="text-xs uppercase opacity-70">Entrada</div>
-                      <div className="font-semibold">{turnoActual.hora_inicio}</div>
+                <div className="grid grid-cols-2 gap-4 mt-4">
+                  <div className="flex items-center bg-opacity-60 rounded-lg p-2 shadow-sm
+                    ${isDarkMode ? 'bg-gray-600' : 'bg-blue-100'}">
+                    <FaSun className={`mr-3 text-lg ${isDarkMode ? 'text-yellow-400' : 'text-yellow-500'}`} />
+                    <div className="w-full">
+                      <div className="text-xs uppercase font-medium opacity-70">Entrada</div>
+                      <div className="font-bold text-base tracking-wide truncate">{turnoActual.hora_inicio}</div>
                     </div>
                   </div>
                   
-                  <div className="flex items-center">
-                    <FaMoon className={`mr-2 ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
-                    <div>
-                      <div className="text-xs uppercase opacity-70">Salida</div>
-                      <div className="font-semibold">{turnoActual.hora_fin}</div>
+                  <div className="flex items-center bg-opacity-60 rounded-lg p-2 shadow-sm
+                    ${isDarkMode ? 'bg-gray-600' : 'bg-indigo-100'}">
+                    <FaMoon className={`mr-3 text-lg ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
+                    <div className="w-full">
+                      <div className="text-xs uppercase font-medium opacity-70">Salida</div>
+                      <div className="font-bold text-base tracking-wide truncate">{turnoActual.hora_fin}</div>
                     </div>
                   </div>
                 </div>
@@ -228,23 +230,32 @@ const TurnosWidget = ({ height }) => {
               <div className="space-y-3">
                 {proximosTurnos.length > 0 ? (
                   proximosTurnos.map((turno, index) => (
-                    <div key={index} className={`p-3 rounded-md flex items-center justify-between 
+                    <div key={index} className={`p-3 rounded-lg shadow-sm flex items-stretch 
                       ${isDarkMode ? 'bg-gray-700 hover:bg-gray-650' : 'bg-gray-50 hover:bg-gray-100'} 
                       transition-colors`}>
-                      <div className="flex items-center">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center mr-3
-                          ${isDarkMode ? 'bg-gray-600' : 'bg-white border border-gray-200'}`}>
-                          <FaCalendarAlt className="text-blue-500" />
+                      <div className={`w-12 h-12 rounded-full flex items-center justify-center mr-3 self-center
+                        ${isDarkMode ? 'bg-gray-600' : 'bg-white border border-gray-200'}`}>
+                        <FaCalendarAlt className="text-blue-500" size={18} />
+                      </div>
+                      <div className="flex-grow">
+                        <div className="font-semibold text-base truncate">{turno.nombre}</div>
+                        <div className="text-xs opacity-80 mb-1">
+                          {turno.fecha && renderizarFecha(turno.fecha)} - {turno.fecha && obtenerNombreDia(parseISO(turno.fecha))}
                         </div>
-                        <div>
-                          <div className="font-semibold">{turno.nombre}</div>
-                          <div className="text-xs opacity-80">
-                            {turno.fecha && renderizarFecha(turno.fecha)} - {turno.fecha && obtenerNombreDia(parseISO(turno.fecha))}
+                        <div className="flex items-center mt-1 space-x-4">
+                          <div className="flex items-center">
+                            <FaSun className={`mr-1 text-xs ${isDarkMode ? 'text-yellow-400' : 'text-yellow-500'}`} />
+                            <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {turno.hora_inicio}
+                            </span>
+                          </div>
+                          <div className="flex items-center">
+                            <FaMoon className={`mr-1 text-xs ${isDarkMode ? 'text-indigo-400' : 'text-indigo-600'}`} />
+                            <span className={`text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'}`}>
+                              {turno.hora_fin}
+                            </span>
                           </div>
                         </div>
-                      </div>
-                      <div className={`text-sm font-medium ${isDarkMode ? 'text-blue-300' : 'text-blue-600'}`}>
-                        {turno.hora_inicio} - {turno.hora_fin}
                       </div>
                     </div>
                   ))
