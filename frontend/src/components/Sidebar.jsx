@@ -281,6 +281,21 @@ const Sidebar = ({ expanded }) => {
                   </svg>
                   <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Gestión de Turnos</span>
                 </NavLink>
+                
+                <NavLink 
+                  to="/admin/horarios" 
+                  className={({isActive}) => 
+                    `flex items-center p-3 mt-4 rounded-lg transition-colors duration-200 ${isActive 
+                        ? 'bg-[#78bd00] text-white' 
+                        : isDarkMode 
+                          ? 'hover:bg-gray-800 text-gray-300' 
+                          : 'hover:bg-gray-200 text-gray-700'
+                    } ${expanded ? 'mx-2' : 'justify-center'}`
+                  }
+                >
+                  <FaUserClock className="h-6 w-6 flex-shrink-0" />
+                  <span className={`ml-2 whitespace-nowrap ${expanded ? 'block' : 'hidden'} transition-all duration-300`}>Gestión de Horarios</span>
+                </NavLink>
 
                 <NavLink 
                   to="/admin/eventos" 

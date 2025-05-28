@@ -13,15 +13,28 @@ class Horario {
     }
     
     /**
-     * Obtener todos los horarios activos
+     * Obtener todos los horarios
      * @return array Resultado de la operación
      */
     public function getHorarios() {
-        $query = "SELECT * FROM {$this->table_name} WHERE activo = 1 ORDER BY nombre ASC";
+        // Se eliminó la condición WHERE activo = 1 para mostrar todos los horarios
+        $query = "SELECT * FROM {$this->table_name} ORDER BY nombre ASC";
         
         $result = $this->conn->query($query);
         
         if ($result === false) {
+            // Verificar si la tabla existe
+            $check_table = "SHOW TABLES LIKE '{$this->table_name}'";
+            $table_exists = $this->conn->query($check_table);
+            
+            if ($table_exists && $table_exists->num_rows == 0) {
+                error_log("La tabla de horarios no existe");
+                return [
+                    'success' => false,
+                    'error' => 'La tabla de horarios no existe en la base de datos'
+                ];
+            }
+            
             error_log("Error al obtener horarios: " . $this->conn->error);
             return [
                 'success' => false,
@@ -238,7 +251,8 @@ class Horario {
     }
     
     /**
-     * Eliminar un horario (marcarlo como inactivo)
+     * Eliminar un horario (eliminación física o marcado como inactivo)
+     * 
      * @param int $id ID del horario a eliminar
      * @return array Resultado de la operación
      */
@@ -246,22 +260,46 @@ class Horario {
         // Verificar que el horario existe
         $horario = $this->getHorarioById($id);
         if (!$horario['success']) {
-            return $horario; // Devuelve el error de que no existe
-        }
-        
-        // Marcar como inactivo en lugar de eliminar físicamente
-        $query = "UPDATE {$this->table_name} SET activo = 0 WHERE id = ?";
-        
-        $stmt = $this->conn->prepare($query);
-        
-        if ($stmt === false) {
-            error_log("Error en la preparación de la consulta: " . $this->conn->error);
             return [
                 'success' => false,
-                'error' => 'Error en la consulta: ' . $this->conn->error
+                'error' => 'El horario no existe o ya ha sido eliminado'
             ];
         }
         
+        // Primero intentamos eliminar físicamente (DELETE)
+        $query = "DELETE FROM {$this->table_name} WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        
+        if ($stmt === false) {
+            error_log("Error en la preparación de la consulta para eliminar: " . $this->conn->error);
+            
+            // Si falla, intentamos un soft delete
+            $query_soft = "UPDATE {$this->table_name} SET activo = 0 WHERE id = ?";
+            $stmt_soft = $this->conn->prepare($query_soft);
+            
+            if ($stmt_soft === false) {
+                return [
+                    'success' => false,
+                    'error' => 'Error al eliminar el horario: ' . $this->conn->error
+                ];
+            }
+            
+            $stmt_soft->bind_param("i", $id);
+            
+            if ($stmt_soft->execute()) {
+                return [
+                    'success' => true,
+                    'message' => 'Horario desactivado correctamente'
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'error' => 'Error al desactivar el horario: ' . $stmt_soft->error
+                ];
+            }
+        }
+        
+        // Ejecutar la eliminación física
         $stmt->bind_param("i", $id);
         
         if ($stmt->execute()) {
