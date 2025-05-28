@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 28-05-2025 a las 02:06:45
+-- Tiempo de generación: 28-05-2025 a las 16:03:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.0.30
 
@@ -112,6 +112,16 @@ CREATE TABLE `documentos` (
   `fecha_expiracion` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `documentos`
+--
+
+INSERT INTO `documentos` (`id`, `titulo`, `descripcion`, `ruta_archivo`, `tipo_documento`, `tamanio`, `nif_usuario`, `creado_por`, `fecha_subida`, `acceso_publico`, `fecha_expiracion`) VALUES
+(1, 'Nomina Maria', '', '/uploads/documentos/56789012C/6836f6aa8bdae_Nomina_Maria.pdf', 'nomina', 0, '56789012C', '', '2025-05-28 13:42:34', 0, '2025-05-31'),
+(2, 'Maria Prueba', '', '/uploads/documentos/56789012C/6836fc1de1e14_Maria_Prueba.pdf', 'nomina', 0, '56789012C', '', '2025-05-28 14:05:49', 0, '2025-05-31'),
+(3, 'EDFSWDFSWFSDFSDFSDF', '', '/uploads/documentos/56789012C/6836fdc6a954e_EDFSWDFSWFSDFSDFSDF.pdf', 'nomina', 0, '56789012C', '', '2025-05-28 14:12:54', 0, '2025-05-31'),
+(4, 'PACO', '', '/uploads/documentos/56789012C/68370c039c388_PACO.pdf', 'contrato', 0, '56789012C', '', '2025-05-28 15:13:39', 0, '2025-06-07');
+
 -- --------------------------------------------------------
 
 --
@@ -193,7 +203,7 @@ INSERT INTO `horarios` (`id`, `nombre`, `descripcion`, `hora_inicio`, `hora_fin`
 (1, 'Jornada Completa', 'Horario estándar de oficina de lunes a viernes', '09:00:00', '18:00:00', 1, 1, 1, 1, 1, 0, 0, 60, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
 (2, 'Media Jornada Mañana', 'Horario de media jornada por la mañana', '09:00:00', '13:00:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
 (3, 'Media Jornada Tarde', 'Horario de media jornada por la tarde', '14:00:00', '18:00:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16'),
-(4, 'Jornada Intensiva', 'Horario intensivo sin pausa para comida', '10:29:00', '16:47:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-05-05 14:47:47'),
+(4, 'Jornada Intensiva', 'Horario intensivo sin pausa para comida', '08:30:00', '20:30:00', 1, 1, 1, 1, 1, 0, 0, 30, 1, '2025-04-21 09:57:16', '2025-05-28 10:05:32'),
 (5, 'Fin de Semana', 'Horario para trabajadores de fin de semana', '10:00:00', '19:00:00', 0, 0, 0, 0, 0, 1, 1, 60, 1, '2025-04-21 09:57:16', '2025-04-21 09:57:16');
 
 -- --------------------------------------------------------
@@ -521,10 +531,11 @@ INSERT INTO `turnos` (`id`, `nif_usuario`, `id_horario`, `orden`, `dias_semana`,
 (3, '11111111A', 4, 2, '1,2,3,4,5', 'Turno 2', 0, '2025-05-27 14:18:23', '1,2,3,4,5'),
 (18, '98765432B', 1, 1, '1,2,3,4,5', 'Turno 1', 1, '2025-05-27 15:17:36', '1,2,3'),
 (19, '98765432B', 2, 2, '1,2,3,4,5', 'Turno 2', 1, '2025-05-27 15:18:18', '4'),
-(20, '56789012C', 2, 1, '1,2,3,4,5,6,7', 'Alejandro Prueba Turno', 1, '2025-05-27 21:35:58', '1'),
+(20, '56789012C', 2, 1, '1,2,3,4,5,6,7', 'Alejandro Prueba Turno', 0, '2025-05-27 21:35:58', '1'),
 (21, 'TEST123', 4, 1, '1,2,3,4,5', 'Turno de Lunes a Viernes', 1, '2025-05-27 21:45:00', '1,2,3,4,5'),
 (22, 'TEST123', 1, 2, '6,7', 'Turno Fin de Semana', 1, '2025-05-27 21:45:00', '1,2,3,4,5'),
-(23, '56789012C', 1, 2, '3,4,5,6,7', 'Turno 2', 1, '2025-05-27 23:54:06', '4,5');
+(23, '56789012C', 1, 2, '3,4,5,6,7', 'Turno 2', 0, '2025-05-27 23:54:06', '4,5'),
+(24, '56789012C', 4, 3, '1,2,3,4,5', 'Intenso', 1, '2025-05-28 10:06:32', '1,2,3,4,5');
 
 -- --------------------------------------------------------
 
@@ -552,10 +563,10 @@ CREATE TABLE `usuarios` (
 --
 
 INSERT INTO `usuarios` (`NIF`, `nombre`, `apellidos`, `email`, `pswd`, `dpto`, `centro`, `tipo_Usu`, `id_avatar`, `permitir_pausas`, `activo`, `id_horario`) VALUES
-('11111111A', 'Alejandra', 'Saez Rodriguez', 'alejandra@gmail.com', '$2y$10$3MIX35NgO7iNJtb6K/KW5ujscv2A/KLmHOGXrLExGjVNQ0/DjM8MW', '', NULL, 'empleado', 221, 0, 1, 1),
+('11111111A', 'Alejandra', 'Saez Rodriguez', 'alejandra@gmail.com', '$2y$10$3MIX35NgO7iNJtb6K/KW5ujscv2A/KLmHOGXrLExGjVNQ0/DjM8MW', '', NULL, 'empleado', 220, 0, 1, 1),
 ('12345678A', 'Admin', 'Sistema', 'admin@impulsatelecom.com', '$2y$10$IQg48EWDa1IgU3I0tpHEQ.Wp1YVXDhOvEwZtzbC1gNrtMUMKxRhV.', 'IT', 'Sede Central', 'admin', 240, 0, 1, NULL),
 ('34567890D', 'Carlos', 'Rodríguez Sánchez', 'carlos.rodriguez@impulsatelecom.com', '$2y$10$hKu9B.K9.r1rnMePvKj81OBsLNxGIOdxOQJLqpXjDn1alwv8YK7Uy', 'Soporte', 'Valencia', 'supervisor', 4, 0, 1, NULL),
-('56789012C', 'María', 'García Martínez', 'elreibo30@gmail.com', '$2y$10$29suFOJkJS0tpRaLKs.b9eo1xI8TAdGrZhHUFkbog32styexnPRMe', 'Ventas', 'Barcelona', 'empleado', 225, 1, 1, 4),
+('56789012C', 'María', 'García Martínez', 'elreibo30@gmail.com', '$2y$10$29suFOJkJS0tpRaLKs.b9eo1xI8TAdGrZhHUFkbog32styexnPRMe', 'Ventas', 'Barcelona', 'empleado', 226, 1, 1, 4),
 ('98765432B', 'Juan', 'Pérez López', 'juan.perez@impulsatelecom.com', '$2y$10$LicS6g26QCmH1IXJdtlMJe1bbsw.CJb4l5vA3wegbhLRlMvcq9puq', 'Ventas', 'Madrid', 'empleado', 214, 0, 1, 1),
 ('TEST123', 'Usuario', 'Prueba', 'test@example.com', '', NULL, NULL, 'empleado', NULL, 0, 1, NULL);
 
@@ -669,7 +680,7 @@ ALTER TABLE `avatares`
 -- AUTO_INCREMENT de la tabla `documentos`
 --
 ALTER TABLE `documentos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `eventos`
@@ -681,7 +692,7 @@ ALTER TABLE `eventos`
 -- AUTO_INCREMENT de la tabla `horarios`
 --
 ALTER TABLE `horarios`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `recordatorios_config`
@@ -699,7 +710,7 @@ ALTER TABLE `recordatorios_enviados`
 -- AUTO_INCREMENT de la tabla `registros`
 --
 ALTER TABLE `registros`
-  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=88;
+  MODIFY `idRegistro` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=89;
 
 --
 -- AUTO_INCREMENT de la tabla `solicitudes`
@@ -723,7 +734,7 @@ ALTER TABLE `tokens_fichaje`
 -- AUTO_INCREMENT de la tabla `turnos`
 --
 ALTER TABLE `turnos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- Restricciones para tablas volcadas
